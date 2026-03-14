@@ -6,4 +6,4 @@ parameters:
         - app/
     level: 5
     ignoreErrors:
-        - '#Unsafe usage of new static#'
+        - '#Parameter \#1 \$user of class Illuminate\\Auth\\Events\\Verified constructor expects#'
