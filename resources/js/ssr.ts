@@ -15,7 +15,7 @@ createServer((page) =>
         resolve: (name) =>
             resolvePageComponent(
                 `./Pages/${name}.vue`,
-                import.meta.glob<DefineComponent>('./Pages/**/*.vue'),
+                import.meta.glob<DefineComponent>('./Pages/**/*.vue')
             ),
         setup({ App, props, plugin }) {
             return createSSRApp({ render: () => h(App, props) })
@@ -25,5 +25,5 @@ createServer((page) =>
                     location: new URL(page.props.ziggy.location),
                 });
         },
-    }),
+    })
 );
