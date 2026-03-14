@@ -1,0 +1,93 @@
+##############################################
+# Laravel Standard
+##############################################
+/vendor/
+/node_modules/
+.env
+.env.*
+!.env.example
+/storage/app/private/
+/storage/app/public/
+/storage/framework/
+/storage/logs/
+/public/build/
+/public/hot
+/public/storage
+/bootstrap/ssr/
+/bootstrap/cache/
+/storage/*.key
+/storage/pail
+*.log
+Thumbs.db
+.DS_Store
+.phpunit.result.cache
+/.phpunit.cache
+.phpactor.json
+Homestead.json
+Homestead.yaml
+/auth.json
+
+##############################################
+# AI Agent Instruction Files
+##############################################
+
+# OpenAI Codex
+AGENTS.md
+.codex/
+codex.yaml
+
+# Google Gemini
+.gemini/
+gemini.yaml
+GEMINI.md
+
+# Claude Code (Anthropic)
+.claude/*
+!.claude/commands/
+
+# GitHub Copilot
+.copilot/
+.github/copilot-instructions.md
+
+# Cursor
+.cursor/
+.cursorignore
+.cursorrules
+
+# Windsurf (Codeium)
+.windsurf/
+.windsurfignore
+.windsurfrules
+
+# Aider
+.aider*
+aider.conf.yml
+
+# Continue
+.continue/
+
+# Codeium
+.codeium/
+
+# Tabnine
+.tabnine*
+
+# Amazon Q / AWS
+.amazonq/
+.aws/amazonq/
+
+# Sourcegraph Cody
+.cody/
+
+##############################################
+# IDE Files
+##############################################
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
