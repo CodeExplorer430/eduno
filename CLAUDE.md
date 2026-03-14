@@ -158,6 +158,45 @@ Add to `package.json` scripts:
 
 ---
 
+## Quality Gate (Mandatory Before Every Commit)
+
+Every change — whether a new feature, bug fix, refactor, or migration — must pass all quality gates before committing:
+
+| Gate | Command | Scope |
+|---|---|---|
+| PHP formatting | `./vendor/bin/pint` | `app/`, `database/`, `routes/` |
+| PHP static analysis | `./vendor/bin/phpstan analyse --level=5` | `app/` |
+| PHP tests | `php artisan test` | `tests/Feature/`, `tests/Unit/` |
+| TS type check | `npm run type-check` | `resources/js/` |
+| JS/Vue linting | `npm run lint` | `resources/js/` |
+| Formatting | `npm run format -- --check` | `resources/js/` |
+| JS build | `npm run build` | Ensures no compilation errors |
+
+Husky enforces lint-staged + type-check on pre-commit and commitlint on commit-msg automatically.
+
+---
+
+## Branching Strategy (GitHub Flow + develop)
+
+```
+main       ← always deployable; requires passing CI + PR review
+develop    ← integration branch; feature branches merge here first
+feat/<scope>/<short-description>   e.g. feat/course/create-course-action
+fix/<scope>/<short-description>    e.g. fix/submission/late-flag-timezone
+a11y/<short-description>           e.g. a11y/focus-trap-modal
+chore/<short-description>          e.g. chore/add-eslint-config
+release/<semver>                   e.g. release/1.0.0  (from develop → main)
+```
+
+Rules:
+- Never commit directly to `main` or `develop`
+- All branches cut from `develop`; PR back to `develop`
+- `develop` → `main` via release PR only
+- CI must pass before merging any PR
+- Squash merge preferred for `feat/*` branches
+
+---
+
 ## Critical Reference Files
 
 | File | Purpose |
