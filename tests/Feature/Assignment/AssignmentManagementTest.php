@@ -122,8 +122,8 @@ test('student sees only published assignments in index', function (): void {
         ->get(route('sections.assignments.index', $section))
         ->assertOk();
 
-    $assignments = $response->original->getData()['page']['props']['assignments'];
-    $ids = collect($assignments)->pluck('id')->all();
+    $assignmentsPaginated = $response->original->getData()['page']['props']['assignments'];
+    $ids = collect($assignmentsPaginated['data'])->pluck('id')->all();
     expect($ids)->toContain($published->id)
         ->and($ids)->not->toContain($draft->id);
 });
@@ -137,8 +137,8 @@ test('instructor sees all assignments including drafts', function (): void {
         ->get(route('sections.assignments.index', $section))
         ->assertOk();
 
-    $assignments = $response->original->getData()['page']['props']['assignments'];
-    $ids = collect($assignments)->pluck('id')->all();
+    $assignmentsPaginated = $response->original->getData()['page']['props']['assignments'];
+    $ids = collect($assignmentsPaginated['data'])->pluck('id')->all();
     expect($ids)->toContain($published->id)
         ->and($ids)->toContain($draft->id);
 });

@@ -135,8 +135,8 @@ test('student sees only published announcements in index', function (): void {
         ->get(route('sections.announcements.index', $section))
         ->assertOk();
 
-    $announcements = $response->original->getData()['page']['props']['announcements'];
-    $ids = collect($announcements)->pluck('id')->all();
+    $announcementsPaginated = $response->original->getData()['page']['props']['announcements'];
+    $ids = collect($announcementsPaginated['data'])->pluck('id')->all();
     expect($ids)->toContain($published->id)
         ->and($ids)->not->toContain($draft->id);
 });

@@ -1,0 +1,78 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Domain\Course\Models\Course;
+use App\Domain\Course\Models\CourseSection;
+use App\Domain\Module\Models\Lesson;
+use App\Domain\Module\Models\Module;
+use App\Domain\Module\Models\Resource;
+use App\Enums\UserRole;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+
+function makeSectionWithLessonForResource(): array
+{
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $course = Course::create([
+        'code' => 'RM'.fake()->unique()->numberBetween(100, 999),
+        'title' => 'Test Course',
+        'department' => 'CCS',
+        'term' => '1st Semester',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $instructor->id,
+    ]);
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'Section A',
+        'instructor_id' => $instructor->id,
+    ]);
+    $module = Module::create([
+        'course_section_id' => $section->id,
+        'title' => 'Test Module',
+        'order_no' => 1,
+        'published_at' => now()->subMinute(),
+    ]);
+    $lesson = Lesson::create([
+        'module_id' => $module->id,
+        'title' => 'Test Lesson',
+        'type' => 'text',
+        'order_no' => 1,
+        'published_at' => now()->subMinute(),
+    ]);
+
+    return [$instructor, $section, $lesson];
+}
+
+function makeResourceForLesson(Lesson $lesson, string $visibility = 'enrolled'): Resource
+{
+    Storage::fake('private');
+    $filePath = 'resources/test.pdf';
+    Storage::disk('private')->put($filePath, 'content');
+
+    return Resource::create([
+        'lesson_id' => $lesson->id,
+        'title' => 'Test Resource',
+        'file_path' => $filePath,
+        'mime_type' => 'application/pdf',
+        'size_bytes' => 100,
+        'visibility' => $visibility,
+    ]);
+}
+
+test('unauthenticated user cannot download a resource', function (): void {
+    [, , $lesson] = makeSectionWithLessonForResource();
+    $resource = makeResourceForLesson($lesson);
+
+    $this->get(route('resources.download', $resource))
+        ->assertRedirect(route('login'));
+});
+
+test('returns 404 when downloading a non-existent resource', function (): void {
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->get(route('resources.download', 999999))
+        ->assertNotFound();
+});
