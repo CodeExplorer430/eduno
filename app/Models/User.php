@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Domain\Accessibility\Models\UserPreference;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\Enrollment;
+use App\Domain\Submission\Models\Submission;
 use App\Domain\User\Models\InstructorProfile;
 use App\Domain\User\Models\StudentProfile;
 use App\Enums\UserRole;
@@ -89,5 +90,10 @@ class User extends Authenticatable
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(Submission::class, 'student_id');
     }
 }
