@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
+use App\Domain\Course\Models\Enrollment;
 use App\Domain\Module\Models\Lesson;
 use App\Domain\Module\Models\Module;
 use App\Domain\Module\Models\Resource;
@@ -75,4 +76,45 @@ test('returns 404 when downloading a non-existent resource', function (): void {
     $this->actingAs($student)
         ->get(route('resources.download', 999999))
         ->assertNotFound();
+});
+
+test('non-enrolled student cannot download an enrolled-visibility resource', function (): void {
+    [, , $lesson] = makeSectionWithLessonForResource();
+    $resource = makeResourceForLesson($lesson, 'enrolled');
+
+    $unenrolledStudent = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($unenrolledStudent)
+        ->get(route('resources.download', $resource))
+        ->assertForbidden();
+});
+
+test('enrolled student can download an enrolled-visibility resource', function (): void {
+    [$instructor, $section, $lesson] = makeSectionWithLessonForResource();
+    $resource = makeResourceForLesson($lesson, 'enrolled');
+
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    Enrollment::create([
+        'user_id' => $student->id,
+        'course_section_id' => $section->id,
+        'status' => 'active',
+        'enrolled_at' => now(),
+    ]);
+
+    // The controller generates a temporary URL and redirects away — expect a redirect response
+    $this->actingAs($student)
+        ->get(route('resources.download', $resource))
+        ->assertRedirect();
+});
+
+test('instructor-only resource is inaccessible to students', function (): void {
+    [, , $lesson] = makeSectionWithLessonForResource();
+    $resource = makeResourceForLesson($lesson, 'instructor');
+
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->get(route('resources.download', $resource))
+        ->assertForbidden();
 });
