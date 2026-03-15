@@ -117,6 +117,7 @@ export interface Grade {
     score: number;
     feedback: string | null;
     released_at: string | null;
+    submission?: Submission;
     created_at: string;
     updated_at: string;
 }
@@ -145,6 +146,7 @@ export interface Announcement {
     published_at: string | null;
     created_by: number;
     author?: User;
+    section?: CourseSection;
     created_at: string;
     updated_at: string;
 }
