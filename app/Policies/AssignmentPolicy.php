@@ -51,4 +51,9 @@ class AssignmentPolicy
     {
         return $user->isAdmin() || $user->id === $assignment->section->instructor_id;
     }
+
+    public function export(User $user, Assignment $assignment): bool
+    {
+        return $user->isAdmin() || $user->id === $assignment->section->instructor_id;
+    }
 }

@@ -25,12 +25,26 @@ class EnrollStudent
         }
 
         return DB::transaction(function () use ($student, $section): Enrollment {
-            return Enrollment::create([
+            $enrollment = Enrollment::create([
                 'user_id' => $student->id,
                 'course_section_id' => $section->id,
                 'status' => 'active',
                 'enrolled_at' => now(),
             ]);
+
+            DB::table('audit_logs')->insert([
+                'actor_id' => $student->id,
+                'action' => 'enrollment.created',
+                'entity_type' => Enrollment::class,
+                'entity_id' => $enrollment->id,
+                'metadata' => json_encode([
+                    'student_id' => $student->id,
+                    'course_section_id' => $section->id,
+                ]),
+                'created_at' => now(),
+            ]);
+
+            return $enrollment;
         });
     }
 }

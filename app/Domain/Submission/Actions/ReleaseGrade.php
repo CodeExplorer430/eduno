@@ -6,13 +6,14 @@ namespace App\Domain\Submission\Actions;
 
 use App\Domain\Submission\Models\Grade;
 use App\Enums\SubmissionStatus;
+use App\Notifications\GradeReleasedNotification;
 use Illuminate\Support\Facades\DB;
 
 class ReleaseGrade
 {
     public function handle(Grade $grade): Grade
     {
-        return DB::transaction(function () use ($grade): Grade {
+        $result = DB::transaction(function () use ($grade): Grade {
             $grade->update(['released_at' => now()]);
 
             $grade->submission->update(['status' => SubmissionStatus::Returned]);
@@ -31,5 +32,10 @@ class ReleaseGrade
 
             return $grade;
         });
+
+        $result->load(['submission.student', 'submission.assignment']);
+        $result->submission->student->notify(new GradeReleasedNotification($result));
+
+        return $result;
     }
 }

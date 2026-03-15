@@ -13,6 +13,7 @@ use App\Domain\Module\Models\Module;
 use App\Domain\Module\Models\Resource;
 use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
+use App\Models\User;
 use App\Policies\AnnouncementPolicy;
 use App\Policies\AssignmentPolicy;
 use App\Policies\CoursePolicy;
@@ -52,5 +53,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Assignment::class, AssignmentPolicy::class);
         Gate::policy(Submission::class, SubmissionPolicy::class);
         Gate::policy(Grade::class, GradePolicy::class);
+
+        Gate::define('admin', fn (User $user) => $user->isAdmin());
     }
 }

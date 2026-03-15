@@ -19,6 +19,9 @@ class SubmissionController extends Controller
     {
         $this->authorize('viewAny', [Submission::class, $assignment]);
 
+        /** @var User $user */
+        $user = auth()->user();
+
         $assignment->load('section.course');
 
         $submissions = $assignment->submissions()
@@ -26,9 +29,12 @@ class SubmissionController extends Controller
             ->latest()
             ->get();
 
+        $canManage = $user->isAdmin() || $user->id === $assignment->section->instructor_id;
+
         return Inertia::render('Submission/Index', [
             'assignment' => $assignment,
             'submissions' => $submissions,
+            'canManage' => $canManage,
         ]);
     }
 
