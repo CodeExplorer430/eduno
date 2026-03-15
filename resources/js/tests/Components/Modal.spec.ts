@@ -14,6 +14,11 @@ describe('Modal', () => {
         expect(wrapper.find('dialog').exists()).toBe(true);
     });
 
+    it('has aria-modal="true" on the dialog element', () => {
+        const wrapper = mount(Modal);
+        expect(wrapper.find('dialog').attributes('aria-modal')).toBe('true');
+    });
+
     it('emits close when Escape is pressed and show=true and closeable=true', async () => {
         const wrapper = mount(Modal, {
             props: { show: true, closeable: true },

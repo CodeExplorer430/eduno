@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import type { Course, CourseSection, Lesson, Module, Resource } from '@/Types/models';
+import { useFileSize } from '@/composables/useFileSize';
 
 interface LessonWithRelations extends Lesson {
     module: Module & {
@@ -52,11 +54,7 @@ function submitUpload(): void {
     });
 }
 
-function formatBytes(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
+const { formatBytes } = useFileSize();
 </script>
 
 <template>
@@ -66,31 +64,19 @@ function formatBytes(bytes: number): string {
         <template #header>
             <div class="flex items-start justify-between">
                 <div>
-                    <nav aria-label="Breadcrumb">
-                        <ol class="flex items-center gap-2 text-sm text-gray-500">
-                            <li>
-                                <Link
-                                    :href="route('courses.show', lesson.module.section.course_id)"
-                                    class="hover:text-gray-700 focus:underline focus:outline-none"
-                                >
-                                    {{ lesson.module.section.course?.title ?? 'Course' }}
-                                </Link>
-                            </li>
-                            <li aria-hidden="true">/</li>
-                            <li>
-                                <Link
-                                    :href="route('modules.show', lesson.module_id)"
-                                    class="hover:text-gray-700 focus:underline focus:outline-none"
-                                >
-                                    {{ lesson.module.title }}
-                                </Link>
-                            </li>
-                            <li aria-hidden="true">/</li>
-                            <li class="font-medium text-gray-800" aria-current="page">
-                                {{ lesson.title }}
-                            </li>
-                        </ol>
-                    </nav>
+                    <Breadcrumb
+                        :crumbs="[
+                            {
+                                label: lesson.module.section.course?.title ?? 'Course',
+                                href: route('courses.show', lesson.module.section.course_id),
+                            },
+                            {
+                                label: lesson.module.title,
+                                href: route('modules.show', lesson.module_id),
+                            },
+                            { label: lesson.title },
+                        ]"
+                    />
                     <div class="mt-1 flex items-center gap-2">
                         <h2 class="text-xl font-semibold leading-tight text-gray-800">
                             {{ lesson.title }}

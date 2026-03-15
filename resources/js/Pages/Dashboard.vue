@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import type { PageProps } from '@/types';
 import type { Announcement, Assignment, CourseSection, Grade, Submission } from '@/Types/models';
+import { useFormatDate } from '@/composables/useFormatDate';
 
 interface AdminReport {
     total_courses: number;
@@ -28,11 +30,7 @@ const props = defineProps<{
 
 const page = usePage<PageProps>();
 const role = page.props.auth.user.role;
-
-function formatDate(iso: string | null | undefined): string {
-    if (!iso) return '—';
-    return new Intl.DateTimeFormat('en-PH', { dateStyle: 'medium' }).format(new Date(iso));
-}
+const { formatDate } = useFormatDate();
 </script>
 
 <template>
@@ -57,13 +55,10 @@ function formatDate(iso: string | null | undefined): string {
                                 ({{ props.enrolledSections?.length ?? 0 }})
                             </span>
                         </h3>
-                        <div
+                        <EmptyState
                             v-if="!props.enrolledSections?.length"
-                            class="rounded border border-dashed border-gray-300 px-6 py-8 text-center text-gray-500"
-                            role="status"
-                        >
-                            You are not enrolled in any courses yet.
-                        </div>
+                            message="You are not enrolled in any courses yet."
+                        />
                         <ul v-else class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             <li
                                 v-for="section in props.enrolledSections"
@@ -89,13 +84,10 @@ function formatDate(iso: string | null | undefined): string {
                         >
                             Upcoming Assignments
                         </h3>
-                        <div
+                        <EmptyState
                             v-if="!props.upcomingAssignments?.length"
-                            class="rounded border border-dashed border-gray-300 px-6 py-8 text-center text-gray-500"
-                            role="status"
-                        >
-                            No assignments due in the next 7 days.
-                        </div>
+                            message="No assignments due in the next 7 days."
+                        />
                         <ul
                             v-else
                             class="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white shadow-sm"
@@ -126,13 +118,10 @@ function formatDate(iso: string | null | undefined): string {
                         >
                             Recent Announcements
                         </h3>
-                        <div
+                        <EmptyState
                             v-if="!props.recentAnnouncements?.length"
-                            class="rounded border border-dashed border-gray-300 px-6 py-8 text-center text-gray-500"
-                            role="status"
-                        >
-                            No recent announcements.
-                        </div>
+                            message="No recent announcements."
+                        />
                         <ul
                             v-else
                             class="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white shadow-sm"
@@ -161,13 +150,10 @@ function formatDate(iso: string | null | undefined): string {
                         <h3 id="grades-heading" class="mb-3 text-lg font-semibold text-gray-900">
                             Recent Grades
                         </h3>
-                        <div
+                        <EmptyState
                             v-if="!props.recentGrades?.length"
-                            class="rounded border border-dashed border-gray-300 px-6 py-8 text-center text-gray-500"
-                            role="status"
-                        >
-                            No released grades yet.
-                        </div>
+                            message="No released grades yet."
+                        />
                         <ul
                             v-else
                             class="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white shadow-sm"
@@ -201,13 +187,10 @@ function formatDate(iso: string | null | undefined): string {
                                 ({{ props.sections?.length ?? 0 }})
                             </span>
                         </h3>
-                        <div
+                        <EmptyState
                             v-if="!props.sections?.length"
-                            class="rounded border border-dashed border-gray-300 px-6 py-8 text-center text-gray-500"
-                            role="status"
-                        >
-                            You have no sections yet.
-                        </div>
+                            message="You have no sections yet."
+                        />
                         <ul v-else class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             <li
                                 v-for="section in props.sections"
@@ -236,13 +219,10 @@ function formatDate(iso: string | null | undefined): string {
                                 ({{ props.pendingSubmissions?.length ?? 0 }})
                             </span>
                         </h3>
-                        <div
+                        <EmptyState
                             v-if="!props.pendingSubmissions?.length"
-                            class="rounded border border-dashed border-gray-300 px-6 py-8 text-center text-gray-500"
-                            role="status"
-                        >
-                            No ungraded submissions.
-                        </div>
+                            message="No ungraded submissions."
+                        />
                         <ul
                             v-else
                             class="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white shadow-sm"

@@ -28,6 +28,14 @@ describe('InputLabel', () => {
         expect(wrapper.text()).not.toContain('From Slot');
     });
 
+    it('passes through the for attribute to the <label> element', () => {
+        const wrapper = mount(InputLabel, {
+            props: { value: 'Email' },
+            attrs: { for: 'test-input' },
+        });
+        expect(wrapper.find('label').attributes('for')).toBe('test-input');
+    });
+
     it('has no axe violations', async () => {
         const wrapper = mount(InputLabel, { props: { value: 'Email' } });
         expect(
