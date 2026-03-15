@@ -9,6 +9,7 @@ use App\Domain\Submission\Models\Submission;
 use App\Domain\Submission\Models\SubmissionFile;
 use App\Enums\SubmissionStatus;
 use App\Models\User;
+use App\Notifications\NewSubmissionNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -20,7 +21,7 @@ class SubmitAssignment
      */
     public function handle(Assignment $assignment, User $student, array $files): Submission
     {
-        return DB::transaction(function () use ($assignment, $student, $files): Submission {
+        $submission = DB::transaction(function () use ($assignment, $student, $files): Submission {
             $isLate = $assignment->due_at !== null && now()->isAfter($assignment->due_at);
 
             $attemptNo = Submission::where('assignment_id', $assignment->id)
@@ -52,5 +53,13 @@ class SubmitAssignment
 
             return $submission->load('files');
         });
+
+        $submission->load(['assignment.section.instructor', 'student']);
+
+        /** @var User $instructor */
+        $instructor = $submission->assignment->section->instructor;
+        $instructor->notify(new NewSubmissionNotification($submission));
+
+        return $submission;
     }
 }

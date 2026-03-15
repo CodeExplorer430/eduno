@@ -6,11 +6,16 @@ namespace App\Domain\Course\Actions;
 
 use App\Domain\Course\Models\Course;
 use App\Enums\CourseStatus;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UpdateCourse
 {
-    public function handle(Course $course, array $data): Course
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function handle(Course $course, array $data, User $actor): Course
     {
         $previousStatus = $course->status;
 
@@ -34,6 +39,15 @@ class UpdateCourse
         }
 
         $course->save();
+
+        DB::table('audit_logs')->insert([
+            'actor_id' => $actor->id,
+            'action' => 'course.updated',
+            'entity_type' => Course::class,
+            'entity_id' => $course->id,
+            'metadata' => json_encode(['code' => $course->code, 'title' => $course->title]),
+            'created_at' => now(),
+        ]);
 
         return $course;
     }

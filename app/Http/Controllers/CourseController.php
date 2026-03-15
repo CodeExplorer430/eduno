@@ -80,7 +80,10 @@ class CourseController extends Controller
     {
         $this->authorize('update', $course);
 
-        $action->handle($course, $request->validated());
+        /** @var User $user */
+        $user = $request->user();
+
+        $action->handle($course, $request->validated(), $user);
 
         return redirect()->route('courses.show', $course)
             ->with('success', 'Course updated successfully.');
