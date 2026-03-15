@@ -28,4 +28,14 @@ class CourseSectionPolicy
     {
         return $user->isAdmin() || $user->id === $section->instructor_id;
     }
+
+    public function enroll(User $user, CourseSection $section): bool
+    {
+        return $user->isStudent();
+    }
+
+    public function unenroll(User $user, CourseSection $section): bool
+    {
+        return $user->isStudent();
+    }
 }
