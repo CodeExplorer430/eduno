@@ -41,6 +41,8 @@ export interface CourseSection {
     schedule_text: string | null;
     course?: Course;
     instructor?: User;
+    enrollments_count?: number;
+    assignments_count?: number;
     created_at: string;
     updated_at: string;
 }
@@ -149,4 +151,32 @@ export interface Announcement {
     section?: CourseSection;
     created_at: string;
     updated_at: string;
+}
+
+export interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+export interface PaginatedResponse<T> {
+    data: T[];
+    links: PaginationLink[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+}
+
+export interface AuditLog {
+    id: number;
+    actor_id: number;
+    action: string;
+    entity_type: string;
+    entity_id: number;
+    metadata: Record<string, unknown> | null;
+    created_at: string;
+    actor?: User;
 }

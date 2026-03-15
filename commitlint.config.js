@@ -20,6 +20,10 @@ export default {
                 'migration',
                 'scaffold',
                 'deps',
+                'enrollment',
+                'dashboard',
+                'seeder',
+                'factory',
             ],
         ],
         'type-enum': [
