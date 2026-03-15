@@ -20,7 +20,7 @@ test('it creates a section with correct fields', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new CreateCourseSection;
+    $action = new CreateCourseSection();
 
     $section = $action->handle($course, $instructor, [
         'section_name' => 'Section A',
@@ -45,7 +45,7 @@ test('it sets instructor_id from the provided user', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new CreateCourseSection;
+    $action = new CreateCourseSection();
 
     $section = $action->handle($course, $instructor, ['section_name' => 'Section B']);
 
@@ -64,7 +64,7 @@ test('schedule_text is optional and defaults to null', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new CreateCourseSection;
+    $action = new CreateCourseSection();
 
     $section = $action->handle($course, $instructor, ['section_name' => 'Section C']);
 
@@ -83,7 +83,7 @@ test('it stores the section in the database', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new CreateCourseSection;
+    $action = new CreateCourseSection();
     $action->handle($course, $instructor, ['section_name' => 'Section D']);
 
     $this->assertDatabaseHas('course_sections', [

@@ -42,7 +42,7 @@ function makeExportActionSetup(): array
 test('export returns string with csv header row', function (): void {
     [, , $assignment] = makeExportActionSetup();
 
-    $csv = (new ExportSubmissions)->handle($assignment);
+    $csv = (new ExportSubmissions())->handle($assignment);
 
     expect($csv)->toContain('student_name,student_email,submitted_at,is_late,attempt_no,score,feedback');
 });
@@ -60,7 +60,7 @@ test('export includes all submissions for the assignment', function (): void {
         'attempt_no' => 1,
     ]);
 
-    $csv = (new ExportSubmissions)->handle($assignment);
+    $csv = (new ExportSubmissions())->handle($assignment);
     $lines = array_filter(explode("\n", trim($csv)));
 
     expect(count($lines))->toBe(2); // header + 1 submission

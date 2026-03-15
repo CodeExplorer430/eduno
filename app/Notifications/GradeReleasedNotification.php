@@ -14,7 +14,9 @@ class GradeReleasedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public readonly Grade $grade) {}
+    public function __construct(public readonly Grade $grade)
+    {
+    }
 
     /**
      * @return array<int, string>
@@ -28,7 +30,7 @@ class GradeReleasedNotification extends Notification implements ShouldQueue
     {
         $assignment = $this->grade->submission->assignment;
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject("Grade Released: {$assignment->title}")
             ->greeting('Hello!')
             ->line("Your score: {$this->grade->score} / {$assignment->max_score}")

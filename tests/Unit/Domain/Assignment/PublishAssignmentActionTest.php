@@ -38,7 +38,7 @@ function makeAssignmentForPublish(bool $published = false): Assignment
 
 test('it sets published_at when publishing', function (): void {
     $assignment = makeAssignmentForPublish(false);
-    $action = new PublishAssignment;
+    $action = new PublishAssignment();
 
     $result = $action->handle($assignment);
 
@@ -47,7 +47,7 @@ test('it sets published_at when publishing', function (): void {
 
 test('it clears published_at when unpublishing', function (): void {
     $assignment = makeAssignmentForPublish(true);
-    $action = new PublishAssignment;
+    $action = new PublishAssignment();
 
     $result = $action->handle($assignment);
 
@@ -56,7 +56,7 @@ test('it clears published_at when unpublishing', function (): void {
 
 test('it persists publish state to the database', function (): void {
     $assignment = makeAssignmentForPublish(false);
-    $action = new PublishAssignment;
+    $action = new PublishAssignment();
 
     $action->handle($assignment);
 

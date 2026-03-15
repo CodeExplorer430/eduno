@@ -64,7 +64,7 @@ test('publishing announcement sends notification to enrolled students', function
         'published_at' => null,
     ]);
 
-    (new PublishAnnouncement)->handle($announcement);
+    (new PublishAnnouncement())->handle($announcement);
 
     Notification::assertSentTo($student, AnnouncementPublishedNotification::class);
 });
@@ -82,7 +82,7 @@ test('unpublishing announcement does not send notification', function (): void {
         'published_at' => now(),
     ]);
 
-    (new PublishAnnouncement)->handle($announcement);
+    (new PublishAnnouncement())->handle($announcement);
 
     Notification::assertNothingSent();
 });
@@ -103,7 +103,7 @@ test('student submitting assignment sends notification to instructor', function 
 
     $file = UploadedFile::fake()->create('test.pdf', 100, 'application/pdf');
 
-    (new SubmitAssignment)->handle($assignment, $student, [$file]);
+    (new SubmitAssignment())->handle($assignment, $student, [$file]);
 
     Notification::assertSentTo($instructor, NewSubmissionNotification::class);
 });
@@ -138,7 +138,7 @@ test('releasing grade sends notification to student', function (): void {
         'released_at' => null,
     ]);
 
-    (new ReleaseGrade)->handle($grade);
+    (new ReleaseGrade())->handle($grade);
 
     Notification::assertSentTo($student, GradeReleasedNotification::class);
 });

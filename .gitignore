@@ -91,3 +91,9 @@ aider.conf.yml
 !.vscode/extensions.json
 *.swp
 *.swo
+
+# Playwright
+/playwright-report/
+/test-results/
+/e2e/.auth/
+.env.e2e

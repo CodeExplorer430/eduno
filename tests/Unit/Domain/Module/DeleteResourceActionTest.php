@@ -60,7 +60,7 @@ test('it deletes the database record', function (): void {
     $resource = makeResource();
     $resourceId = $resource->id;
 
-    $action = new DeleteResource;
+    $action = new DeleteResource();
     $action->handle($resource);
 
     $this->assertDatabaseMissing('resources', ['id' => $resourceId]);
@@ -70,7 +70,7 @@ test('it deletes the file from the private disk', function (): void {
     $resource = makeResource();
     $filePath = $resource->file_path;
 
-    $action = new DeleteResource;
+    $action = new DeleteResource();
     $action->handle($resource);
 
     Storage::disk('private')->assertMissing($filePath);

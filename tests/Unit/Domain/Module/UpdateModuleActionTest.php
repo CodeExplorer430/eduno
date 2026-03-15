@@ -37,7 +37,7 @@ function makeModuleForUpdate(): Module
 
 test('it updates module title and description', function (): void {
     $module = makeModuleForUpdate();
-    $action = new UpdateModule;
+    $action = new UpdateModule();
 
     $updated = $action->handle($module, [
         'title' => 'Updated Module',
@@ -50,7 +50,7 @@ test('it updates module title and description', function (): void {
 
 test('it clears description when not provided', function (): void {
     $module = makeModuleForUpdate();
-    $action = new UpdateModule;
+    $action = new UpdateModule();
 
     $updated = $action->handle($module, ['title' => 'Updated']);
 
@@ -59,7 +59,7 @@ test('it clears description when not provided', function (): void {
 
 test('it updates order_no when provided', function (): void {
     $module = makeModuleForUpdate();
-    $action = new UpdateModule;
+    $action = new UpdateModule();
 
     $updated = $action->handle($module, [
         'title' => 'Module',
@@ -71,7 +71,7 @@ test('it updates order_no when provided', function (): void {
 
 test('it persists changes to the database', function (): void {
     $module = makeModuleForUpdate();
-    $action = new UpdateModule;
+    $action = new UpdateModule();
 
     $action->handle($module, ['title' => 'Persisted Title']);
 

@@ -14,7 +14,9 @@ class DeadlineReminderNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public readonly Assignment $assignment) {}
+    public function __construct(public readonly Assignment $assignment)
+    {
+    }
 
     /**
      * @return array<int, string>
@@ -26,7 +28,7 @@ class DeadlineReminderNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject("Reminder: {$this->assignment->title} due soon")
             ->greeting('Hello!')
             ->line("Your assignment \"{$this->assignment->title}\" is due soon.")

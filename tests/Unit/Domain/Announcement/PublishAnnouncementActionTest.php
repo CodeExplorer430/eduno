@@ -41,7 +41,7 @@ test('publishing an unpublished announcement sets published_at', function (): vo
         'published_at' => null,
     ]);
 
-    (new PublishAnnouncement)->handle($announcement);
+    (new PublishAnnouncement())->handle($announcement);
 
     expect($announcement->fresh()->published_at)->not->toBeNull();
 });
@@ -57,7 +57,7 @@ test('toggling a published announcement sets published_at to null', function ():
         'published_at' => now()->subMinute(),
     ]);
 
-    (new PublishAnnouncement)->handle($announcement);
+    (new PublishAnnouncement())->handle($announcement);
 
     expect($announcement->fresh()->published_at)->toBeNull();
 });
@@ -73,7 +73,7 @@ test('handle returns the announcement instance', function (): void {
         'published_at' => null,
     ]);
 
-    $result = (new PublishAnnouncement)->handle($announcement);
+    $result = (new PublishAnnouncement())->handle($announcement);
 
     expect($result)->toBeInstanceOf(Announcement::class)
         ->and($result->id)->toBe($announcement->id);

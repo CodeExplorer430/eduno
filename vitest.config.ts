@@ -8,6 +8,7 @@ export default defineConfig({
         globals: true,
         environment: 'happy-dom',
         setupFiles: ['./resources/js/tests/setup.ts'],
+        exclude: ['**/node_modules/**', 'e2e/**'],
     },
     resolve: {
         alias: { '@': resolve(__dirname, 'resources/js') },

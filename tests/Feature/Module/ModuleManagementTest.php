@@ -349,7 +349,7 @@ test('instructor can delete a resource', function (): void {
     $lesson = makeLesson($module);
     $lesson->load('module');
 
-    $uploadAction = new UploadResource;
+    $uploadAction = new UploadResource();
     $file = UploadedFile::fake()->create('notes.pdf', 512, 'application/pdf');
     $resource = $uploadAction->handle($lesson, $file, 'Notes', ResourceVisibility::Enrolled);
 
@@ -367,7 +367,7 @@ test('file is deleted from private disk when resource is destroyed', function ()
     $lesson = makeLesson($module);
     $lesson->load('module');
 
-    $uploadAction = new UploadResource;
+    $uploadAction = new UploadResource();
     $file = UploadedFile::fake()->create('notes.pdf', 512, 'application/pdf');
     $resource = $uploadAction->handle($lesson, $file, 'Notes', ResourceVisibility::Enrolled);
 
@@ -391,7 +391,7 @@ test('enrolled student can access enrolled-visibility resource download', functi
     $student = User::factory()->create(['role' => UserRole::Student]);
     enrollStudent($student, $section);
 
-    $uploadAction = new UploadResource;
+    $uploadAction = new UploadResource();
     $file = UploadedFile::fake()->create('notes.pdf', 512, 'application/pdf');
     $resource = $uploadAction->handle($lesson, $file, 'Notes', ResourceVisibility::Enrolled);
 
@@ -409,7 +409,7 @@ test('enrolled student cannot access instructor-only resource', function (): voi
     $student = User::factory()->create(['role' => UserRole::Student]);
     enrollStudent($student, $section);
 
-    $uploadAction = new UploadResource;
+    $uploadAction = new UploadResource();
     $file = UploadedFile::fake()->create('answer-key.pdf', 512, 'application/pdf');
     $resource = $uploadAction->handle($lesson, $file, 'Answer Key', ResourceVisibility::Instructor);
 

@@ -31,7 +31,7 @@ function makeAssignmentTestSection(): CourseSection
 
 test('it creates an assignment with defaults for max_score and allow_resubmission', function (): void {
     $section = makeAssignmentTestSection();
-    $action = new CreateAssignment;
+    $action = new CreateAssignment();
 
     $assignment = $action->handle($section, ['title' => 'Default Assignment']);
 
@@ -43,7 +43,7 @@ test('it creates an assignment with defaults for max_score and allow_resubmissio
 
 test('it respects explicit due_at', function (): void {
     $section = makeAssignmentTestSection();
-    $action = new CreateAssignment;
+    $action = new CreateAssignment();
     $due = now()->addWeek();
 
     $assignment = $action->handle($section, [
@@ -56,7 +56,7 @@ test('it respects explicit due_at', function (): void {
 
 test('it respects custom max_score', function (): void {
     $section = makeAssignmentTestSection();
-    $action = new CreateAssignment;
+    $action = new CreateAssignment();
 
     $assignment = $action->handle($section, [
         'title' => 'Custom Score Assignment',
@@ -68,7 +68,7 @@ test('it respects custom max_score', function (): void {
 
 test('it enables allow_resubmission when set', function (): void {
     $section = makeAssignmentTestSection();
-    $action = new CreateAssignment;
+    $action = new CreateAssignment();
 
     $assignment = $action->handle($section, [
         'title' => 'Resubmission Assignment',
@@ -80,7 +80,7 @@ test('it enables allow_resubmission when set', function (): void {
 
 test('it persists the assignment in the database', function (): void {
     $section = makeAssignmentTestSection();
-    $action = new CreateAssignment;
+    $action = new CreateAssignment();
 
     $action->handle($section, ['title' => 'Stored Assignment']);
 

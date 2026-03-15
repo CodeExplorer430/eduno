@@ -37,7 +37,7 @@ function makeAnnouncementForUpdate(): Announcement
 
 test('it updates announcement title', function (): void {
     $announcement = makeAnnouncementForUpdate();
-    $action = new UpdateAnnouncement;
+    $action = new UpdateAnnouncement();
 
     $updated = $action->handle($announcement, [
         'title' => 'New Title',
@@ -49,7 +49,7 @@ test('it updates announcement title', function (): void {
 
 test('it updates announcement body', function (): void {
     $announcement = makeAnnouncementForUpdate();
-    $action = new UpdateAnnouncement;
+    $action = new UpdateAnnouncement();
 
     $updated = $action->handle($announcement, [
         'title' => 'Original Title',
@@ -61,7 +61,7 @@ test('it updates announcement body', function (): void {
 
 test('it persists changes to the database', function (): void {
     $announcement = makeAnnouncementForUpdate();
-    $action = new UpdateAnnouncement;
+    $action = new UpdateAnnouncement();
 
     $action->handle($announcement, ['title' => 'Saved Title', 'body' => 'Saved body']);
 
