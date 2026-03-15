@@ -176,11 +176,11 @@ test('deadline reminder is not sent to student who has already submitted', funct
 
     Submission::create([
         'assignment_id' => $assignment->id,
-        'student_id'    => $student->id,
-        'status'        => SubmissionStatus::Submitted,
-        'submitted_at'  => now(),
-        'is_late'       => false,
-        'attempt_no'    => 1,
+        'student_id' => $student->id,
+        'status' => SubmissionStatus::Submitted,
+        'submitted_at' => now(),
+        'is_late' => false,
+        'attempt_no' => 1,
     ]);
 
     $this->artisan('schedule:deadline-reminders')->assertSuccessful();
