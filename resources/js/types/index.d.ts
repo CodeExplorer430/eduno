@@ -4,6 +4,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    role: 'student' | 'instructor' | 'admin';
     email_verified_at?: string;
 }
 
