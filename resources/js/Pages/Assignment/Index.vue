@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import type { Assignment, CourseSection } from '@/Types/models';
+import Pagination from '@/Components/Pagination.vue';
+import type { Assignment, CourseSection, PaginatedResponse } from '@/Types/models';
 
-defineProps<{
+const props = defineProps<{
     section: CourseSection;
-    assignments: Assignment[];
+    assignments: PaginatedResponse<Assignment>;
     canManage: boolean;
 }>();
 
@@ -61,7 +62,7 @@ function statusClass(assignment: Assignment): string {
         </header>
 
         <div
-            v-if="assignments.length === 0"
+            v-if="assignments.data.length === 0"
             class="rounded border border-dashed border-gray-300 px-6 py-12 text-center text-gray-500"
             role="status"
         >
@@ -80,7 +81,7 @@ function statusClass(assignment: Assignment): string {
             </thead>
             <tbody>
                 <tr
-                    v-for="assignment in assignments"
+                    v-for="assignment in assignments.data"
                     :key="assignment.id"
                     class="border-b border-gray-100 hover:bg-gray-50"
                 >
@@ -135,5 +136,7 @@ function statusClass(assignment: Assignment): string {
                 </tr>
             </tbody>
         </table>
+
+        <Pagination v-if="assignments.links.length > 3" :links="assignments.links" />
     </main>
 </template>

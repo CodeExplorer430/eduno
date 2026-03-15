@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import type { Assignment, Submission } from '@/Types/models';
+import Pagination from '@/Components/Pagination.vue';
+import type { Assignment, PaginatedResponse, Submission } from '@/Types/models';
 
-defineProps<{
+const props = defineProps<{
     assignment: Assignment;
-    submissions: Submission[];
+    submissions: PaginatedResponse<Submission>;
     canManage: boolean;
 }>();
 </script>
@@ -29,7 +30,7 @@ defineProps<{
             <h1 class="text-2xl font-bold">
                 Submissions
                 <span class="ml-2 text-lg font-normal text-gray-500"
-                    >({{ submissions.length }})</span
+                    >({{ submissions.meta.total }})</span
                 >
             </h1>
 
@@ -43,7 +44,7 @@ defineProps<{
         </div>
 
         <div
-            v-if="submissions.length === 0"
+            v-if="submissions.data.length === 0"
             class="rounded border border-dashed border-gray-300 px-6 py-12 text-center text-gray-500"
             role="status"
         >
@@ -63,7 +64,7 @@ defineProps<{
             </thead>
             <tbody>
                 <tr
-                    v-for="submission in submissions"
+                    v-for="submission in submissions.data"
                     :key="submission.id"
                     class="border-b border-gray-100 hover:bg-gray-50"
                 >
@@ -99,5 +100,7 @@ defineProps<{
                 </tr>
             </tbody>
         </table>
+
+        <Pagination v-if="submissions.links.length > 3" :links="submissions.links" />
     </main>
 </template>
