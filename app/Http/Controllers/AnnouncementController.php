@@ -33,7 +33,7 @@ class AnnouncementController extends Controller
             $query->whereNotNull('published_at')->where('published_at', '<=', now());
         }
 
-        $announcements = $query->get();
+        $announcements = $query->paginate(15);
 
         return Inertia::render('Announcement/Index', [
             'section' => $section,

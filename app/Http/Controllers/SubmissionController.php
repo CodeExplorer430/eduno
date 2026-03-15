@@ -27,7 +27,7 @@ class SubmissionController extends Controller
         $submissions = $assignment->submissions()
             ->with(['student', 'files', 'grade'])
             ->latest()
-            ->get();
+            ->paginate(15);
 
         $canManage = $user->isAdmin() || $user->id === $assignment->section->instructor_id;
 
