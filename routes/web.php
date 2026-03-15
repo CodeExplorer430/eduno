@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseSectionController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\SubmissionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,6 +52,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('lessons/{lesson}/resources', [ResourceController::class, 'store'])->name('lessons.resources.store');
     Route::delete('resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
     Route::get('resources/{resource}/download', [ResourceController::class, 'show'])->name('resources.download');
+
+    // Announcements (nested under sections, shallow)
+    Route::resource('sections.announcements', AnnouncementController::class)->shallow();
+    Route::post('announcements/{announcement}/publish', [AnnouncementController::class, 'publish'])
+        ->name('announcements.publish');
+
+    // Assignments (nested under sections, shallow)
+    Route::resource('sections.assignments', AssignmentController::class)->shallow();
+    Route::post('assignments/{assignment}/publish', [AssignmentController::class, 'publish'])
+        ->name('assignments.publish');
+
+    // Submissions
+    Route::get('assignments/{assignment}/submissions', [SubmissionController::class, 'index'])
+        ->name('assignments.submissions.index');
+    Route::post('assignments/{assignment}/submissions', [SubmissionController::class, 'store'])
+        ->name('assignments.submissions.store');
+    Route::get('submissions/{submission}', [SubmissionController::class, 'show'])
+        ->name('submissions.show');
+    Route::delete('submissions/{submission}', [SubmissionController::class, 'destroy'])
+        ->name('submissions.destroy');
+
+    // Grading
+    Route::post('submissions/{submission}/grade', [GradeController::class, 'store'])
+        ->name('submissions.grade.store');
+    Route::patch('grades/{grade}', [GradeController::class, 'update'])
+        ->name('grades.update');
+    Route::post('grades/{grade}/release', [GradeController::class, 'release'])
+        ->name('grades.release');
 });
 
 require __DIR__.'/auth.php';
