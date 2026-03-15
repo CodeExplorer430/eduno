@@ -222,8 +222,8 @@ function formatDate(iso: string | null | undefined): string {
                                 </Link>
                                 <p class="mt-1 text-sm text-gray-500">{{ section.section_name }}</p>
                                 <p class="mt-1 text-xs text-gray-400">
-                                    {{ (section as any).enrollments_count }} students ·
-                                    {{ (section as any).assignments_count }} assignments
+                                    {{ section.enrollments_count }} students ·
+                                    {{ section.assignments_count }} assignments
                                 </p>
                             </li>
                         </ul>
