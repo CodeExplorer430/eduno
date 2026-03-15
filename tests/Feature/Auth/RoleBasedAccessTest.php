@@ -11,59 +11,59 @@ test('admin can view any user', function (): void {
 
     $this->actingAs($admin);
 
-    expect((new UserPolicy)->viewAny($admin))->toBeTrue();
+    expect((new UserPolicy())->viewAny($admin))->toBeTrue();
 });
 
 test('student cannot view any user', function (): void {
     $student = User::factory()->create(['role' => UserRole::Student]);
 
-    expect((new UserPolicy)->viewAny($student))->toBeFalse();
+    expect((new UserPolicy())->viewAny($student))->toBeFalse();
 });
 
 test('instructor cannot view any user', function (): void {
     $instructor = User::factory()->create(['role' => UserRole::Instructor]);
 
-    expect((new UserPolicy)->viewAny($instructor))->toBeFalse();
+    expect((new UserPolicy())->viewAny($instructor))->toBeFalse();
 });
 
 test('user can view their own profile', function (): void {
     $user = User::factory()->create(['role' => UserRole::Student]);
 
-    expect((new UserPolicy)->view($user, $user))->toBeTrue();
+    expect((new UserPolicy())->view($user, $user))->toBeTrue();
 });
 
 test('student cannot view another student profile', function (): void {
     $student = User::factory()->create(['role' => UserRole::Student]);
     $other = User::factory()->create(['role' => UserRole::Student]);
 
-    expect((new UserPolicy)->view($student, $other))->toBeFalse();
+    expect((new UserPolicy())->view($student, $other))->toBeFalse();
 });
 
 test('admin can view any individual user profile', function (): void {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
     $student = User::factory()->create(['role' => UserRole::Student]);
 
-    expect((new UserPolicy)->view($admin, $student))->toBeTrue();
+    expect((new UserPolicy())->view($admin, $student))->toBeTrue();
 });
 
 test('admin cannot delete themselves', function (): void {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
 
-    expect((new UserPolicy)->delete($admin, $admin))->toBeFalse();
+    expect((new UserPolicy())->delete($admin, $admin))->toBeFalse();
 });
 
 test('admin can delete another user', function (): void {
     $admin = User::factory()->create(['role' => UserRole::Admin]);
     $student = User::factory()->create(['role' => UserRole::Student]);
 
-    expect((new UserPolicy)->delete($admin, $student))->toBeTrue();
+    expect((new UserPolicy())->delete($admin, $student))->toBeTrue();
 });
 
 test('student cannot delete any user', function (): void {
     $student = User::factory()->create(['role' => UserRole::Student]);
     $other = User::factory()->create(['role' => UserRole::Student]);
 
-    expect((new UserPolicy)->delete($student, $other))->toBeFalse();
+    expect((new UserPolicy())->delete($student, $other))->toBeFalse();
 });
 
 test('authenticated user can access dashboard', function (): void {

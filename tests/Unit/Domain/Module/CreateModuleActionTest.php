@@ -31,7 +31,7 @@ function makeTestSection(): CourseSection
 
 test('it creates a module with valid data', function (): void {
     $section = makeTestSection();
-    $action = new CreateModule;
+    $action = new CreateModule();
 
     $module = $action->handle($section, [
         'title' => 'Week 1: Introduction',
@@ -46,7 +46,7 @@ test('it creates a module with valid data', function (): void {
 
 test('it auto-increments order_no from existing module count', function (): void {
     $section = makeTestSection();
-    $action = new CreateModule;
+    $action = new CreateModule();
 
     $first = $action->handle($section, ['title' => 'Module 1']);
     $second = $action->handle($section, ['title' => 'Module 2']);
@@ -57,7 +57,7 @@ test('it auto-increments order_no from existing module count', function (): void
 
 test('it respects explicit order_no when provided', function (): void {
     $section = makeTestSection();
-    $action = new CreateModule;
+    $action = new CreateModule();
 
     $module = $action->handle($section, ['title' => 'Module 5', 'order_no' => 5]);
 
@@ -66,7 +66,7 @@ test('it respects explicit order_no when provided', function (): void {
 
 test('description is optional and defaults to null', function (): void {
     $section = makeTestSection();
-    $action = new CreateModule;
+    $action = new CreateModule();
 
     $module = $action->handle($section, ['title' => 'No Description']);
 
@@ -75,7 +75,7 @@ test('description is optional and defaults to null', function (): void {
 
 test('it persists the module in the database', function (): void {
     $section = makeTestSection();
-    $action = new CreateModule;
+    $action = new CreateModule();
 
     $action->handle($section, ['title' => 'Stored Module']);
 

@@ -44,7 +44,7 @@ function makeLessonForUpdate(): Lesson
 
 test('it updates lesson title and content', function (): void {
     $lesson = makeLessonForUpdate();
-    $action = new UpdateLesson;
+    $action = new UpdateLesson();
 
     $updated = $action->handle($lesson, [
         'title' => 'Updated Title',
@@ -58,7 +58,7 @@ test('it updates lesson title and content', function (): void {
 
 test('it updates the lesson type', function (): void {
     $lesson = makeLessonForUpdate();
-    $action = new UpdateLesson;
+    $action = new UpdateLesson();
 
     $updated = $action->handle($lesson, [
         'title' => 'Lesson',
@@ -70,7 +70,7 @@ test('it updates the lesson type', function (): void {
 
 test('it updates order_no when provided', function (): void {
     $lesson = makeLessonForUpdate();
-    $action = new UpdateLesson;
+    $action = new UpdateLesson();
 
     $updated = $action->handle($lesson, [
         'title' => 'Lesson',
@@ -83,7 +83,7 @@ test('it updates order_no when provided', function (): void {
 
 test('it persists changes to the database', function (): void {
     $lesson = makeLessonForUpdate();
-    $action = new UpdateLesson;
+    $action = new UpdateLesson();
 
     $action->handle($lesson, ['title' => 'Saved Title', 'type' => 'video']);
 

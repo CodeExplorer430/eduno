@@ -14,7 +14,9 @@ class AnnouncementPublishedNotification extends Notification implements ShouldQu
 {
     use Queueable;
 
-    public function __construct(public readonly Announcement $announcement) {}
+    public function __construct(public readonly Announcement $announcement)
+    {
+    }
 
     /**
      * @return array<int, string>
@@ -28,7 +30,7 @@ class AnnouncementPublishedNotification extends Notification implements ShouldQu
     {
         $excerpt = mb_substr($this->announcement->body, 0, 200);
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject("New Announcement: {$this->announcement->title}")
             ->greeting('Hello!')
             ->line($excerpt)

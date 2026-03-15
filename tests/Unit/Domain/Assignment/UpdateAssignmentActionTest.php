@@ -39,7 +39,7 @@ function makeAssignmentForUpdate(): Assignment
 
 test('it updates title and instructions', function (): void {
     $assignment = makeAssignmentForUpdate();
-    $action = new UpdateAssignment;
+    $action = new UpdateAssignment();
 
     $updated = $action->handle($assignment, [
         'title' => 'Updated Assignment',
@@ -53,7 +53,7 @@ test('it updates title and instructions', function (): void {
 
 test('it updates due_at', function (): void {
     $assignment = makeAssignmentForUpdate();
-    $action = new UpdateAssignment;
+    $action = new UpdateAssignment();
     $newDue = now()->addDays(14)->toDateTimeString();
 
     $updated = $action->handle($assignment, [
@@ -67,7 +67,7 @@ test('it updates due_at', function (): void {
 
 test('it updates max_score', function (): void {
     $assignment = makeAssignmentForUpdate();
-    $action = new UpdateAssignment;
+    $action = new UpdateAssignment();
 
     $updated = $action->handle($assignment, [
         'title' => 'Assignment',
@@ -79,7 +79,7 @@ test('it updates max_score', function (): void {
 
 test('it persists changes to the database', function (): void {
     $assignment = makeAssignmentForUpdate();
-    $action = new UpdateAssignment;
+    $action = new UpdateAssignment();
 
     $action->handle($assignment, ['title' => 'Saved Title', 'max_score' => 80]);
 

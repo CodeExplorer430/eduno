@@ -51,7 +51,7 @@ function makeSubmitSetup(): array
 test('it creates a submission with correct attempt_no', function (): void {
     Storage::fake('private');
     [$assignment, $student] = makeSubmitSetup();
-    $action = new SubmitAssignment;
+    $action = new SubmitAssignment();
     $file = UploadedFile::fake()->create('essay.pdf', 512, 'application/pdf');
 
     $submission = $action->handle($assignment, $student, [$file]);
@@ -62,7 +62,7 @@ test('it creates a submission with correct attempt_no', function (): void {
 test('second submission increments attempt_no', function (): void {
     Storage::fake('private');
     [$assignment, $student] = makeSubmitSetup();
-    $action = new SubmitAssignment;
+    $action = new SubmitAssignment();
     $file1 = UploadedFile::fake()->create('essay1.pdf', 512, 'application/pdf');
     $file2 = UploadedFile::fake()->create('essay2.pdf', 512, 'application/pdf');
 
@@ -77,7 +77,7 @@ test('it sets is_late true when assignment is past due', function (): void {
     Storage::fake('private');
     [$assignment, $student] = makeSubmitSetup();
     $assignment->update(['due_at' => now()->subHour()]);
-    $action = new SubmitAssignment;
+    $action = new SubmitAssignment();
     $file = UploadedFile::fake()->create('essay.pdf', 512, 'application/pdf');
 
     $submission = $action->handle($assignment, $student, [$file]);
@@ -89,7 +89,7 @@ test('it sets is_late false when assignment is not past due', function (): void 
     Storage::fake('private');
     [$assignment, $student] = makeSubmitSetup();
     $assignment->update(['due_at' => now()->addDay()]);
-    $action = new SubmitAssignment;
+    $action = new SubmitAssignment();
     $file = UploadedFile::fake()->create('essay.pdf', 512, 'application/pdf');
 
     $submission = $action->handle($assignment, $student, [$file]);
@@ -100,7 +100,7 @@ test('it sets is_late false when assignment is not past due', function (): void 
 test('it stores files on private disk with UUID filenames', function (): void {
     Storage::fake('private');
     [$assignment, $student] = makeSubmitSetup();
-    $action = new SubmitAssignment;
+    $action = new SubmitAssignment();
     $file = UploadedFile::fake()->create('essay.pdf', 512, 'application/pdf');
 
     $submission = $action->handle($assignment, $student, [$file]);
@@ -113,7 +113,7 @@ test('it stores files on private disk with UUID filenames', function (): void {
 test('it sets status to submitted', function (): void {
     Storage::fake('private');
     [$assignment, $student] = makeSubmitSetup();
-    $action = new SubmitAssignment;
+    $action = new SubmitAssignment();
     $file = UploadedFile::fake()->create('essay.pdf', 512, 'application/pdf');
 
     $submission = $action->handle($assignment, $student, [$file]);

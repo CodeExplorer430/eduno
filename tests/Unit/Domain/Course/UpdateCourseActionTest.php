@@ -20,7 +20,7 @@ test('it updates mutable course fields', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new UpdateCourse;
+    $action = new UpdateCourse();
 
     $updated = $action->handle($course, [
         'code' => 'CS101',
@@ -50,7 +50,7 @@ test('it updates course status when provided', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new UpdateCourse;
+    $action = new UpdateCourse();
 
     $updated = $action->handle($course, [
         'code' => 'CS201',
@@ -76,7 +76,7 @@ test('it persists changes to the database', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new UpdateCourse;
+    $action = new UpdateCourse();
     $action->handle($course, [
         'code' => 'CS301',
         'title' => 'Persisted Title',
@@ -104,7 +104,7 @@ test('description is optional and can be cleared to null', function (): void {
         'created_by' => $instructor->id,
     ]);
 
-    $action = new UpdateCourse;
+    $action = new UpdateCourse();
     $updated = $action->handle($course, [
         'code' => 'CS401',
         'title' => 'Test',

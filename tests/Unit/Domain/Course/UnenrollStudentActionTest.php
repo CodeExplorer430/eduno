@@ -39,7 +39,7 @@ function makeEnrollment(): Enrollment
 test('it sets enrollment status to withdrawn', function (): void {
     $enrollment = makeEnrollment();
 
-    $action = new UnenrollStudent;
+    $action = new UnenrollStudent();
     $action->handle($enrollment);
 
     expect($enrollment->fresh()->status)->toBe('withdrawn');
@@ -48,7 +48,7 @@ test('it sets enrollment status to withdrawn', function (): void {
 test('it records the action in audit_logs', function (): void {
     $enrollment = makeEnrollment();
 
-    $action = new UnenrollStudent;
+    $action = new UnenrollStudent();
     $action->handle($enrollment);
 
     $this->assertDatabaseHas('audit_logs', [

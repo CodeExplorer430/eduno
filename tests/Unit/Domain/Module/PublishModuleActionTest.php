@@ -36,7 +36,7 @@ function makeUnpublishedModule(): Module
 
 test('it publishes an unpublished module by setting published_at', function (): void {
     $module = makeUnpublishedModule();
-    $action = new PublishModule;
+    $action = new PublishModule();
 
     expect($module->published_at)->toBeNull();
 
@@ -54,7 +54,7 @@ test('it unpublishes a published module by clearing published_at', function (): 
     $module->published_at = now()->subMinute();
     $module->save();
 
-    $action = new PublishModule;
+    $action = new PublishModule();
     $updated = $action->handle($module);
 
     expect($updated->published_at)->toBeNull();

@@ -44,7 +44,7 @@ function makeLessonForPublish(bool $published = false): Lesson
 
 test('it sets published_at when publishing an unpublished lesson', function (): void {
     $lesson = makeLessonForPublish(false);
-    $action = new PublishLesson;
+    $action = new PublishLesson();
 
     $result = $action->handle($lesson);
 
@@ -53,7 +53,7 @@ test('it sets published_at when publishing an unpublished lesson', function (): 
 
 test('it clears published_at when unpublishing a published lesson', function (): void {
     $lesson = makeLessonForPublish(true);
-    $action = new PublishLesson;
+    $action = new PublishLesson();
 
     $result = $action->handle($lesson);
 
@@ -62,7 +62,7 @@ test('it clears published_at when unpublishing a published lesson', function ():
 
 test('it persists publish state to the database', function (): void {
     $lesson = makeLessonForPublish(false);
-    $action = new PublishLesson;
+    $action = new PublishLesson();
 
     $action->handle($lesson);
 

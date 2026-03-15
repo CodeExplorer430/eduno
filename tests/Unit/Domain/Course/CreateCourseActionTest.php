@@ -11,7 +11,7 @@ use Illuminate\Validation\ValidationException;
 
 test('it creates a course with valid data', function (): void {
     $instructor = User::factory()->create(['role' => UserRole::Instructor]);
-    $action = new CreateCourse;
+    $action = new CreateCourse();
 
     $course = $action->handle($instructor, [
         'code' => 'CS101',
@@ -30,7 +30,7 @@ test('it creates a course with valid data', function (): void {
 
 test('it stores the course in the database', function (): void {
     $instructor = User::factory()->create(['role' => UserRole::Instructor]);
-    $action = new CreateCourse;
+    $action = new CreateCourse();
 
     $action->handle($instructor, [
         'code' => 'CCS202',
@@ -59,7 +59,7 @@ test('it throws a validation exception for duplicate course code', function (): 
         'created_by' => $instructor->id,
     ]);
 
-    $action = new CreateCourse;
+    $action = new CreateCourse();
 
     expect(fn () => $action->handle($instructor, [
         'code' => 'CS101',
@@ -72,7 +72,7 @@ test('it throws a validation exception for duplicate course code', function (): 
 
 test('description is optional and defaults to null', function (): void {
     $instructor = User::factory()->create(['role' => UserRole::Instructor]);
-    $action = new CreateCourse;
+    $action = new CreateCourse();
 
     $course = $action->handle($instructor, [
         'code' => 'OPT100',

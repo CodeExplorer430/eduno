@@ -52,7 +52,7 @@ function makeGradeActionSetup(): array
 
 test('it creates a grade record', function (): void {
     [$instructor, $submission] = makeGradeActionSetup();
-    $action = new GradeSubmission;
+    $action = new GradeSubmission();
 
     $grade = $action->handle($submission, $instructor, ['score' => 85, 'feedback' => 'Good']);
 
@@ -63,7 +63,7 @@ test('it creates a grade record', function (): void {
 
 test('it updates submission status to graded', function (): void {
     [$instructor, $submission] = makeGradeActionSetup();
-    $action = new GradeSubmission;
+    $action = new GradeSubmission();
 
     $action->handle($submission, $instructor, ['score' => 90]);
 
@@ -72,7 +72,7 @@ test('it updates submission status to graded', function (): void {
 
 test('it creates audit_log entry on grade creation', function (): void {
     [$instructor, $submission] = makeGradeActionSetup();
-    $action = new GradeSubmission;
+    $action = new GradeSubmission();
 
     $action->handle($submission, $instructor, ['score' => 75]);
 
@@ -84,7 +84,7 @@ test('it creates audit_log entry on grade creation', function (): void {
 
 test('it creates audit_log with grade.updated on second call', function (): void {
     [$instructor, $submission] = makeGradeActionSetup();
-    $action = new GradeSubmission;
+    $action = new GradeSubmission();
 
     $action->handle($submission, $instructor, ['score' => 70]);
     $action->handle($submission, $instructor, ['score' => 80]);
@@ -102,7 +102,7 @@ test('ReleaseGrade sets released_at and status to returned', function (): void {
         'graded_by' => $instructor->id,
         'score' => 88,
     ]);
-    $action = new ReleaseGrade;
+    $action = new ReleaseGrade();
 
     $action->handle($grade);
 
@@ -117,7 +117,7 @@ test('ReleaseGrade creates audit_log entry', function (): void {
         'graded_by' => $instructor->id,
         'score' => 90,
     ]);
-    $action = new ReleaseGrade;
+    $action = new ReleaseGrade();
 
     $action->handle($grade);
 

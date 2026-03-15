@@ -32,7 +32,7 @@ function makeAnnouncementTestSection(): array
 
 test('it creates an announcement with correct fields', function (): void {
     [$instructor, $section] = makeAnnouncementTestSection();
-    $action = new CreateAnnouncement;
+    $action = new CreateAnnouncement();
 
     $announcement = $action->handle($section, [
         'title' => 'Test Announcement',
@@ -49,7 +49,7 @@ test('it creates an announcement with correct fields', function (): void {
 
 test('it persists the announcement in the database', function (): void {
     [$instructor, $section] = makeAnnouncementTestSection();
-    $action = new CreateAnnouncement;
+    $action = new CreateAnnouncement();
 
     $action->handle($section, ['title' => 'Stored', 'body' => 'Body'], $instructor);
 

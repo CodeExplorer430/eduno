@@ -38,7 +38,7 @@ function makeModuleForCreateLesson(): Module
 
 test('it creates a lesson with the correct type', function (): void {
     $module = makeModuleForCreateLesson();
-    $action = new CreateLesson;
+    $action = new CreateLesson();
 
     $lesson = $action->handle($module, [
         'title' => 'Introduction',
@@ -62,7 +62,7 @@ test('it auto-increments order_no based on existing lessons', function (): void 
         'order_no' => 1,
     ]);
 
-    $action = new CreateLesson;
+    $action = new CreateLesson();
     $lesson = $action->handle($module, ['title' => 'New Lesson', 'type' => 'text']);
 
     expect($lesson->order_no)->toBe(2);
@@ -70,7 +70,7 @@ test('it auto-increments order_no based on existing lessons', function (): void 
 
 test('it uses provided order_no when given', function (): void {
     $module = makeModuleForCreateLesson();
-    $action = new CreateLesson;
+    $action = new CreateLesson();
 
     $lesson = $action->handle($module, [
         'title' => 'Lesson',
@@ -83,7 +83,7 @@ test('it uses provided order_no when given', function (): void {
 
 test('content is optional and defaults to null', function (): void {
     $module = makeModuleForCreateLesson();
-    $action = new CreateLesson;
+    $action = new CreateLesson();
 
     $lesson = $action->handle($module, ['title' => 'Lesson', 'type' => 'text']);
 
