@@ -60,7 +60,11 @@ class CourseController extends Controller
     {
         $this->authorize('view', $course);
 
-        $course->load(['creator', 'sections.instructor', 'sections.enrollments']);
+        $course->load([
+            'creator',
+            'sections.instructor',
+            'sections.enrollments' => fn ($q) => $q->select(['id', 'user_id', 'course_section_id']),
+        ]);
 
         return Inertia::render('Course/Show', [
             'course' => $course,

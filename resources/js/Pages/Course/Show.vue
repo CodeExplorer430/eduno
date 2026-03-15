@@ -5,7 +5,7 @@ import type { Course, CourseSection, User } from '@/Types/models';
 
 interface EnrichedSection extends CourseSection {
     instructor: User;
-    enrollments: { id: number }[];
+    enrollments: { id: number; user_id: number }[];
 }
 
 interface EnrichedCourse extends Course {
@@ -31,7 +31,7 @@ function unenroll(sectionId: number): void {
 }
 
 function isEnrolled(section: EnrichedSection): boolean {
-    return false;
+    return section.enrollments.some((e) => e.user_id === authUser.id);
 }
 </script>
 
@@ -168,12 +168,24 @@ function isEnrolled(section: EnrichedSection): boolean {
                                 </div>
                                 <div v-if="authUser.role === 'student'" class="flex gap-2">
                                     <button
+                                        v-if="!isEnrolled(section)"
                                         type="button"
                                         class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                         :aria-label="`Enroll in ${section.section_name}`"
+                                        :disabled="enrollForm.processing"
                                         @click="enroll(section.id)"
                                     >
                                         Enroll
+                                    </button>
+                                    <button
+                                        v-else
+                                        type="button"
+                                        class="rounded-md border border-red-300 bg-white px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                        :aria-label="`Unenroll from ${section.section_name}`"
+                                        :disabled="enrollForm.processing"
+                                        @click="unenroll(section.id)"
+                                    >
+                                        Unenroll
                                     </button>
                                 </div>
                             </div>
