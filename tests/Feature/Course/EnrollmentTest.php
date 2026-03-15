@@ -92,3 +92,21 @@ test('unenroll fails when not enrolled', function (): void {
         ->delete(route('sections.unenroll', $section))
         ->assertNotFound();
 });
+
+test('instructor cannot enroll in a section', function (): void {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $section = makeSectionForEnrollment();
+
+    $this->actingAs($instructor)
+        ->post(route('sections.enroll', $section))
+        ->assertForbidden();
+});
+
+test('admin cannot enroll in a section', function (): void {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $section = makeSectionForEnrollment();
+
+    $this->actingAs($admin)
+        ->post(route('sections.enroll', $section))
+        ->assertForbidden();
+});
