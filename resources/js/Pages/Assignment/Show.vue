@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
+import StatusBadge from '@/Components/StatusBadge.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import type { Assignment, Submission } from '@/Types/models';
 
@@ -50,20 +52,16 @@ function isPastDue(): boolean {
     <Head :title="assignment.title" />
 
     <main class="mx-auto max-w-4xl px-4 py-8">
-        <nav aria-label="Breadcrumb" class="mb-4">
-            <ol class="flex gap-2 text-sm text-gray-500">
-                <li>
-                    <Link
-                        :href="route('sections.assignments.index', assignment.course_section_id)"
-                        class="hover:underline"
-                    >
-                        Assignments
-                    </Link>
-                </li>
-                <li aria-hidden="true">/</li>
-                <li aria-current="page">{{ assignment.title }}</li>
-            </ol>
-        </nav>
+        <Breadcrumb
+            class="mb-4"
+            :crumbs="[
+                {
+                    label: 'Assignments',
+                    href: route('sections.assignments.index', assignment.course_section_id),
+                },
+                { label: assignment.title },
+            ]"
+        />
 
         <article>
             <header class="mb-6 flex items-start justify-between gap-4">
@@ -146,12 +144,11 @@ function isPastDue(): boolean {
                             </td>
                             <td class="py-3 pr-4 text-gray-600">
                                 {{ new Date(submission.submitted_at).toLocaleString() }}
-                                <span
+                                <StatusBadge
                                     v-if="submission.is_late"
-                                    class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700"
-                                >
-                                    Late
-                                </span>
+                                    variant="late"
+                                    class="ml-1"
+                                />
                             </td>
                             <td class="py-3 pr-4 text-gray-600">#{{ submission.attempt_no }}</td>
                             <td class="py-3 pr-4 text-gray-600 capitalize">
@@ -171,12 +168,7 @@ function isPastDue(): boolean {
                     <h2 class="mb-2 text-lg font-semibold">Your Submission</h2>
                     <p class="text-sm text-gray-600">
                         Submitted: {{ new Date(mySubmission.submitted_at).toLocaleString() }}
-                        <span
-                            v-if="mySubmission.is_late"
-                            class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700"
-                        >
-                            Late
-                        </span>
+                        <StatusBadge v-if="mySubmission.is_late" variant="late" class="ml-1" />
                     </p>
                     <p class="mt-1 text-sm text-gray-600 capitalize">
                         Status: {{ mySubmission.status }}

@@ -26,6 +26,11 @@ describe('InputError', () => {
         expect(wrapper.find('p').text()).toBe('Error text.');
     });
 
+    it('has role="alert" on the <p> element', () => {
+        const wrapper = mount(InputError, { props: { message: 'Required field.' } });
+        expect(wrapper.find('p').attributes('role')).toBe('alert');
+    });
+
     it('has no axe violations when displaying an error', async () => {
         const wrapper = mount(InputError, { props: { message: 'Invalid email address.' } });
         // Disable the region rule: components are tested in isolation, not as full pages
