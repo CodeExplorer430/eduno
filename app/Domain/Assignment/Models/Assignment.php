@@ -9,7 +9,19 @@ use App\Domain\Submission\Models\Submission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $course_section_id
+ * @property string $title
+ * @property string|null $instructions
+ * @property Carbon|null $due_at
+ * @property float $max_score
+ * @property bool $allow_resubmission
+ * @property Carbon|null $published_at
+ * @property-read CourseSection $courseSection
+ */
 class Assignment extends Model
 {
     protected $fillable = [

@@ -12,6 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int $course_id
+ * @property string $section_name
+ * @property int $instructor_id
+ * @property string|null $schedule_text
+ */
 class CourseSection extends Model
 {
     protected $fillable = [

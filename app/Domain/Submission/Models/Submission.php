@@ -12,7 +12,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $assignment_id
+ * @property int $student_id
+ * @property SubmissionStatus $status
+ * @property Carbon|null $submitted_at
+ * @property bool $is_late
+ * @property int $attempt_no
+ * @property-read Assignment $assignment
+ */
 class Submission extends Model
 {
     protected $fillable = [

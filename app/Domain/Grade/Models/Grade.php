@@ -8,7 +8,17 @@ use App\Domain\Submission\Models\Submission;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $submission_id
+ * @property int $graded_by
+ * @property float $score
+ * @property string|null $feedback
+ * @property Carbon|null $released_at
+ * @property-read Submission $submission
+ */
 class Grade extends Model
 {
     protected $fillable = [
