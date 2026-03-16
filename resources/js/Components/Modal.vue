@@ -6,11 +6,13 @@ const props = withDefaults(
         show?: boolean;
         maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
         closeable?: boolean;
+        labelledby?: string;
     }>(),
     {
         show: false,
         maxWidth: '2xl',
         closeable: true,
+        labelledby: undefined,
     }
 );
 
@@ -75,6 +77,8 @@ const maxWidthClass = computed(() => {
 <template>
     <dialog
         ref="dialog"
+        aria-modal="true"
+        :aria-labelledby="labelledby"
         class="z-50 m-0 min-h-full min-w-full overflow-y-auto bg-transparent backdrop:bg-transparent"
     >
         <div class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0" scroll-region>

@@ -41,7 +41,12 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
-            'preferences' => $request->user()?->preferences,
+            'userPrefs' => fn () => $request->user()?->preferences?->only([
+                'reduced_motion',
+                'high_contrast',
+                'dyslexia_font',
+                'font_size',
+            ]),
         ];
     }
 }

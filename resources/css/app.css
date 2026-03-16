@@ -1,6 +1,18 @@
 @import "tailwindcss";
 
-.font-small  { font-size: 0.875rem; }
-.font-large  { font-size: 1.125rem; }
-.high-contrast { filter: contrast(1.5); }
-.reduced-motion * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+/* Accessibility preset utilities */
+.dyslexia-font,
+.dyslexia-font * {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+    transition: none !important;
+    animation: none !important;
+}
+
+.high-contrast {
+    filter: contrast(1.5);
+}
