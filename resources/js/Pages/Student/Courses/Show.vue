@@ -143,7 +143,12 @@ const lessonTypeLabel = (type: string): string => {
                                         :key="lesson.id"
                                         class="flex items-center justify-between py-2 text-sm"
                                     >
-                                        <span class="text-gray-800">{{ lesson.title }}</span>
+                                        <Link
+                                            :href="route('student.lessons.show', lesson.id)"
+                                            class="font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                                        >
+                                            {{ lesson.title }}
+                                        </Link>
                                         <span
                                             class="ms-3 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500"
                                             aria-label="Lesson type"

@@ -32,7 +32,13 @@ class CourseController extends Controller
             403
         );
 
-        $section->load(['course', 'instructor', 'modules.lessons', 'assignments']);
+        $section->load([
+            'course',
+            'instructor',
+            'modules' => fn ($q) => $q->whereNotNull('published_at')->orderBy('order_no'),
+            'modules.lessons' => fn ($q) => $q->whereNotNull('published_at')->orderBy('order_no'),
+            'assignments',
+        ]);
 
         return Inertia::render('Student/Courses/Show', [
             'section' => $section,
