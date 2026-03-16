@@ -140,3 +140,25 @@ export interface Announcement {
     created_at: string;
     updated_at: string;
 }
+
+export interface Enrollment {
+    id: number;
+    user_id: number;
+    course_section_id: number;
+    status: string;
+    enrolled_at: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface AuditLog {
+    id: number;
+    actor_id: number | null;
+    action: string;
+    entity_type: string;
+    entity_id: number | null;
+    metadata: Record<string, unknown> | null;
+    created_at: string;
+}
+
+export type Role = 'student' | 'instructor' | 'admin';
