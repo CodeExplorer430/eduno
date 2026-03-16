@@ -1,4 +1,4 @@
-import { computed } from 'vue';
+import { computed, type ComputedRef } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import type { PageProps } from '@/types';
 import type { UserPreferences } from '@/Types/models';
@@ -15,7 +15,15 @@ type AccessibilityPageProps = PageProps<{
     auth: { user: AuthUser };
 }>;
 
-export function useAccessibility() {
+interface AccessibilityReturn {
+    preferences: ComputedRef<UserPreferences | undefined>;
+    fontSizeClass: ComputedRef<string>;
+    isHighContrast: ComputedRef<boolean>;
+    isReducedMotion: ComputedRef<boolean>;
+    isSimplifiedLayout: ComputedRef<boolean>;
+}
+
+export function useAccessibility(): AccessibilityReturn {
     const page = usePage<AccessibilityPageProps>();
 
     const preferences = computed(() => page.props.auth?.user?.preferences);
