@@ -17,6 +17,7 @@ class CreateAnnouncementRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'course_section_id' => ['required', 'integer', 'exists:course_sections,id'],
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
         ];
