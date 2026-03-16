@@ -6,6 +6,9 @@ namespace App\Providers;
 
 use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Assignment\Models\Assignment;
+use App\Domain\Content\Models\Lesson;
+use App\Domain\Content\Models\Module;
+use App\Domain\Content\Models\Resource;
 use App\Domain\Course\Models\Course;
 use App\Domain\Grade\Models\Grade;
 use App\Domain\Submission\Models\Submission;
@@ -13,6 +16,9 @@ use App\Policies\AnnouncementPolicy;
 use App\Policies\AssignmentPolicy;
 use App\Policies\CoursePolicy;
 use App\Policies\GradePolicy;
+use App\Policies\LessonPolicy;
+use App\Policies\ModulePolicy;
+use App\Policies\ResourcePolicy;
 use App\Policies\SubmissionPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Vite;
@@ -40,5 +46,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Submission::class, SubmissionPolicy::class);
         Gate::policy(Grade::class, GradePolicy::class);
         Gate::policy(Announcement::class, AnnouncementPolicy::class);
+        Gate::policy(Module::class, ModulePolicy::class);
+        Gate::policy(Lesson::class, LessonPolicy::class);
+        Gate::policy(Resource::class, ResourcePolicy::class);
     }
 }

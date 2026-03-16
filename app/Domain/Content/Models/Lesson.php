@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace App\Domain\Content\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read Module $module
+ * @property-read Collection<int, resource> $resources
+ */
 class Lesson extends Model
 {
     protected $fillable = [

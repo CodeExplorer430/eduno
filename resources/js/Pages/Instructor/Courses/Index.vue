@@ -6,6 +6,7 @@ import { Head, Link } from '@inertiajs/vue3';
 interface Section {
     id: number;
     section_name: string;
+    course_id: number;
 }
 
 interface Course {
@@ -118,15 +119,37 @@ const safeStatus = (s: string): ValidStatus =>
                                                 }}
                                             </td>
                                             <td class="px-6 py-4 text-right text-sm">
-                                                <Link
-                                                    :href="
-                                                        route('instructor.courses.edit', course.id)
-                                                    "
-                                                    class="font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
-                                                    :aria-label="`Edit course ${course.title}`"
-                                                >
-                                                    Edit
-                                                </Link>
+                                                <div class="flex items-center justify-end gap-4">
+                                                    <template
+                                                        v-for="section in course.sections"
+                                                        :key="section.id"
+                                                    >
+                                                        <Link
+                                                            :href="
+                                                                route(
+                                                                    'instructor.courses.modules.index',
+                                                                    section.id
+                                                                )
+                                                            "
+                                                            class="font-medium text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
+                                                            :aria-label="`Manage modules for ${course.title} — ${section.section_name}`"
+                                                        >
+                                                            Modules
+                                                        </Link>
+                                                    </template>
+                                                    <Link
+                                                        :href="
+                                                            route(
+                                                                'instructor.courses.edit',
+                                                                course.id
+                                                            )
+                                                        "
+                                                        class="font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
+                                                        :aria-label="`Edit course ${course.title}`"
+                                                    >
+                                                        Edit
+                                                    </Link>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>

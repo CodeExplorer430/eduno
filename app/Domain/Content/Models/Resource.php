@@ -7,6 +7,9 @@ namespace App\Domain\Content\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read Lesson $lesson
+ */
 class Resource extends Model
 {
     protected $fillable = [

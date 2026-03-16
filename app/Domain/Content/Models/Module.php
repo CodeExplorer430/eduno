@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace App\Domain\Content\Models;
 
 use App\Domain\Course\Models\CourseSection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read CourseSection $courseSection
+ * @property-read Collection<int, Lesson> $lessons
+ */
 class Module extends Model
 {
     protected $fillable = [
