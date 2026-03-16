@@ -8,6 +8,7 @@ use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Content\Models\Module;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $section_name
  * @property int $instructor_id
  * @property string|null $schedule_text
+ * @property-read User $instructor
+ * @property-read Collection<int, Enrollment> $enrollments
  */
 class CourseSection extends Model
 {

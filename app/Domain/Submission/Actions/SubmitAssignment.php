@@ -7,6 +7,7 @@ namespace App\Domain\Submission\Actions;
 use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Submission\Models\Submission;
 use App\Domain\Submission\Models\SubmissionFile;
+use App\Jobs\NotifyInstructorNewSubmission;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,11 @@ class SubmitAssignment
                 ]);
             }
 
-            return $submission->load('files');
+            $submission->load('files');
+
+            NotifyInstructorNewSubmission::dispatch($submission);
+
+            return $submission;
         });
     }
 }

@@ -9,6 +9,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read CourseSection $courseSection
+ */
 class Announcement extends Model
 {
     protected $fillable = [
