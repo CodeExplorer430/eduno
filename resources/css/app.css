@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+/* Accessibility preset utilities */
+.dyslexia-font,
+.dyslexia-font * {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+    transition: none !important;
+    animation: none !important;
+}
+
+.high-contrast {
+    filter: contrast(1.5);
+}

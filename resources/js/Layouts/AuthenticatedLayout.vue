@@ -6,12 +6,21 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import { useA11yPrefs } from '@/composables/useA11yPrefs';
 
 const showingNavigationDropdown = ref(false);
+
+useA11yPrefs();
 </script>
 
 <template>
     <div>
+        <a
+            href="#main-content"
+            class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded focus:m-2"
+        >
+            Skip to main content
+        </a>
         <div class="min-h-screen bg-gray-100">
             <nav aria-label="Site navigation" class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
@@ -168,7 +177,7 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main id="main-content">
                 <slot />
             </main>
         </div>

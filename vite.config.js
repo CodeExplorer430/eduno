@@ -54,6 +54,18 @@ export default defineConfig({
                             networkTimeoutSeconds: 5,
                         },
                     },
+                    {
+                        urlPattern: /\/storage\/resources\/.+\.(pdf|docx?|pptx?)/i,
+                        handler: 'CacheFirst',
+                        options: {
+                            cacheName: 'eduno-resources',
+                            expiration: {
+                                maxEntries: 50,
+                                maxAgeSeconds: 7 * 24 * 60 * 60,
+                            },
+                            cacheableResponse: { statuses: [0, 200] },
+                        },
+                    },
                 ],
             },
             manifest: {
