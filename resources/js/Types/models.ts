@@ -137,6 +137,7 @@ export interface Announcement {
     published_at: string | null;
     created_by: number;
     author?: User;
+    course_section?: CourseSection & { course: Course };
     created_at: string;
     updated_at: string;
 }

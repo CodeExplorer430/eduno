@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Instructor;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student;
@@ -17,9 +18,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,6 +37,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/assignments/{assignment}/submit', [Student\SubmissionController::class, 'store'])->name('submissions.store');
         Route::get('/submissions/{submission}', [Student\SubmissionController::class, 'show'])->name('submissions.show');
         Route::get('/grades', [Student\GradeController::class, 'index'])->name('grades.index');
+        Route::get('/announcements', [Student\AnnouncementController::class, 'index'])->name('announcements.index');
+        Route::get('/lessons/{lesson}', [Student\LessonController::class, 'show'])->name('lessons.show');
+        Route::get('/resources/{resource}/download', [Student\ResourceController::class, 'download'])->name('resources.download');
     });
 
     // Instructor routes
@@ -56,6 +58,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('grades.release');
         Route::resource('announcements', Instructor\AnnouncementController::class)
             ->except(['show']);
+
+        // Module / Lesson / Resource management
+        Route::prefix('courses/{section}/modules')->name('courses.modules.')->group(function () {
+            Route::get('/', [Instructor\ModuleController::class, 'index'])->name('index');
+            Route::get('/create', [Instructor\ModuleController::class, 'create'])->name('create');
+            Route::post('/', [Instructor\ModuleController::class, 'store'])->name('store');
+            Route::get('/{module}/edit', [Instructor\ModuleController::class, 'edit'])->name('edit');
+            Route::patch('/{module}', [Instructor\ModuleController::class, 'update'])->name('update');
+            Route::delete('/{module}', [Instructor\ModuleController::class, 'destroy'])->name('destroy');
+
+            Route::prefix('{module}/lessons')->name('lessons.')->group(function () {
+                Route::get('/create', [Instructor\LessonController::class, 'create'])->name('create');
+                Route::post('/', [Instructor\LessonController::class, 'store'])->name('store');
+                Route::get('/{lesson}/edit', [Instructor\LessonController::class, 'edit'])->name('edit');
+                Route::patch('/{lesson}', [Instructor\LessonController::class, 'update'])->name('update');
+                Route::delete('/{lesson}', [Instructor\LessonController::class, 'destroy'])->name('destroy');
+
+                Route::prefix('{lesson}/resources')->name('resources.')->group(function () {
+                    Route::get('/upload', [Instructor\ResourceController::class, 'create'])->name('create');
+                    Route::post('/', [Instructor\ResourceController::class, 'store'])->name('store');
+                    Route::delete('/{resource}', [Instructor\ResourceController::class, 'destroy'])->name('destroy');
+                });
+            });
+        });
     });
 
     // Admin routes
