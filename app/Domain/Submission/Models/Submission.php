@@ -23,6 +23,8 @@ use Illuminate\Support\Carbon;
  * @property bool $is_late
  * @property int $attempt_no
  * @property-read Assignment $assignment
+ * @property-read User $student
+ * @property-read Grade|null $grade
  */
 class Submission extends Model
 {
