@@ -33,4 +33,9 @@ class CoursePolicy
     {
         return $user->isAdmin();
     }
+
+    public function changeStatus(User $user): bool
+    {
+        return $user->isAdmin();
+    }
 }
