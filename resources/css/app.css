@@ -1,2 +1,22 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
+
+/* Accessibility preference classes applied to <html> by AuthenticatedLayout */
+
+.font-small  { font-size: 14px; }
+.font-medium { font-size: 16px; }
+.font-large  { font-size: 18px; }
+.font-xlarge { font-size: 20px; }
+
+.high-contrast { filter: contrast(1.5); }
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}
+
+.simplified .decorative { display: none; }

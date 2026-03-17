@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Instructor;
+use App\Http\Controllers\Profile\AccessibilityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student;
 use Illuminate\Foundation\Application;
@@ -24,6 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/profile/accessibility', [AccessibilityController::class, 'edit'])
+        ->name('profile.accessibility.edit');
+    Route::patch('/profile/accessibility', [AccessibilityController::class, 'update'])
+        ->name('profile.accessibility.update');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -50,6 +56,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->shallow();
         Route::get('/assignments/{assignment}/submissions', [Instructor\SubmissionController::class, 'index'])
             ->name('submissions.index');
+        Route::get('/assignments/{assignment}/submissions/export', [Instructor\SubmissionController::class, 'export'])
+            ->name('submissions.export');
         Route::get('/submissions/{submission}', [Instructor\SubmissionController::class, 'show'])
             ->name('submissions.show');
         Route::post('/submissions/{submission}/grade', [Instructor\GradeController::class, 'store'])
@@ -90,6 +98,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->only(['index', 'edit', 'update']);
         Route::get('/reports', [Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/export', [Admin\ReportController::class, 'export'])->name('reports.export');
+        Route::get('/courses', [Admin\CourseController::class, 'index'])->name('courses.index');
+        Route::patch('/courses/{course}/status', [Admin\CourseController::class, 'updateStatus'])->name('courses.updateStatus');
+        Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
     });
 });
 

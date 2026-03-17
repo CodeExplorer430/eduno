@@ -1,13 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import type { PageProps } from '@/types';
 
 const showingNavigationDropdown = ref(false);
+
+const page = usePage<PageProps>();
+const prefs = computed(() => page.props.auth?.preferences);
+const userRole = computed(() => page.props.auth?.user?.role);
+
+watchEffect(() => {
+    const html = document.documentElement;
+    const p = prefs.value;
+
+    html.classList.remove('font-small', 'font-medium', 'font-large', 'font-xlarge');
+    html.classList.add(`font-${p?.font_size ?? 'medium'}`);
+
+    html.classList.toggle('high-contrast', p?.high_contrast ?? false);
+    html.classList.toggle('reduce-motion', p?.reduced_motion ?? false);
+    html.classList.toggle('simplified', p?.simplified_layout ?? false);
+});
 </script>
 
 <template>
@@ -70,6 +87,23 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink :href="route('profile.edit')">
                                             Profile
                                         </DropdownLink>
+                                        <DropdownLink :href="route('profile.accessibility.edit')">
+                                            Accessibility
+                                        </DropdownLink>
+                                        <template v-if="userRole === 'admin'">
+                                            <DropdownLink :href="route('admin.users.index')">
+                                                Users
+                                            </DropdownLink>
+                                            <DropdownLink :href="route('admin.courses.index')">
+                                                Courses
+                                            </DropdownLink>
+                                            <DropdownLink :href="route('admin.reports.index')">
+                                                Reports
+                                            </DropdownLink>
+                                            <DropdownLink :href="route('admin.audit-logs.index')">
+                                                Audit Logs
+                                            </DropdownLink>
+                                        </template>
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
@@ -152,6 +186,23 @@ const showingNavigationDropdown = ref(false);
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 Profile
                             </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.accessibility.edit')">
+                                Accessibility
+                            </ResponsiveNavLink>
+                            <template v-if="userRole === 'admin'">
+                                <ResponsiveNavLink :href="route('admin.users.index')">
+                                    Users
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink :href="route('admin.courses.index')">
+                                    Courses
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink :href="route('admin.reports.index')">
+                                    Reports
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink :href="route('admin.audit-logs.index')">
+                                    Audit Logs
+                                </ResponsiveNavLink>
+                            </template>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>

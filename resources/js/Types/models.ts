@@ -1,7 +1,7 @@
 export interface UserPreferences {
     id: number;
     user_id: number;
-    font_size: 'small' | 'medium' | 'large';
+    font_size: 'small' | 'medium' | 'large' | 'xlarge';
     high_contrast: boolean;
     reduced_motion: boolean;
     simplified_layout: boolean;
