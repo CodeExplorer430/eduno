@@ -13,17 +13,19 @@ const showingNavigationDropdown = ref(false);
 const page = usePage<PageProps>();
 const prefs = computed(() => page.props.auth?.preferences);
 const userRole = computed(() => page.props.auth?.user?.role);
+const features = computed(() => page.props.features);
 
 watchEffect(() => {
     const html = document.documentElement;
     const p = prefs.value;
+    const f = features.value;
 
     html.classList.remove('font-small', 'font-medium', 'font-large', 'font-xlarge');
     html.classList.add(`font-${p?.font_size ?? 'medium'}`);
 
-    html.classList.toggle('high-contrast', p?.high_contrast ?? false);
+    html.classList.toggle('high-contrast', f?.['high-contrast'] ?? p?.high_contrast ?? false);
     html.classList.toggle('reduce-motion', p?.reduced_motion ?? false);
-    html.classList.toggle('simplified', p?.simplified_layout ?? false);
+    html.classList.toggle('simplified', f?.['simplified-layout'] ?? p?.simplified_layout ?? false);
 });
 </script>
 
