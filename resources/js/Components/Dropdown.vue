@@ -44,8 +44,12 @@ const open = ref(false);
 
 <template>
     <div class="relative">
-        <div @click="open = !open">
-            <slot name="trigger" />
+        <div
+            @click="open = !open"
+            @keydown.enter.prevent="open = !open"
+            @keydown.space.prevent="open = !open"
+        >
+            <slot name="trigger" :open="open" />
         </div>
 
         <!-- Full Screen Dropdown Overlay -->
@@ -61,6 +65,8 @@ const open = ref(false);
         >
             <div
                 v-show="open"
+                role="menu"
+                aria-orientation="vertical"
                 class="absolute z-50 mt-2 rounded-md shadow-lg"
                 :class="[widthClass, alignmentClasses]"
                 style="display: none"
