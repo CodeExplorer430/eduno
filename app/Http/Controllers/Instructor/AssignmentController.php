@@ -23,52 +23,52 @@ class AssignmentController extends Controller
         private readonly UpdateAssignment $updateAssignment,
     ) {}
 
-    public function index(Request $request, CourseSection $section): Response
+    public function index(Request $request, CourseSection $course): Response
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
-        $this->authorize('update', $section->assignments()->first() ?? new Assignment);
+        $this->authorize('update', $course->assignments()->first() ?? new Assignment);
 
-        $assignments = $section->assignments()->orderBy('due_at')->get();
+        $assignments = $course->assignments()->orderBy('due_at')->get();
 
         return Inertia::render('Instructor/Assignments/Index', [
-            'section' => $section,
+            'section' => $course,
             'assignments' => $assignments,
         ]);
     }
 
-    public function create(Request $request, CourseSection $section): Response
+    public function create(Request $request, CourseSection $course): Response
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Assignment::class);
 
         return Inertia::render('Instructor/Assignments/Create', [
-            'section' => $section,
+            'section' => $course,
         ]);
     }
 
-    public function store(CreateAssignmentRequest $request, CourseSection $section): RedirectResponse
+    public function store(CreateAssignmentRequest $request, CourseSection $course): RedirectResponse
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Assignment::class);
 
-        $this->createAssignment->execute($section, $request->validated());
+        $this->createAssignment->execute($course, $request->validated());
 
         return redirect()->route('instructor.courses.index')
             ->with('success', 'Assignment created.');
     }
 
-    public function edit(Request $request, CourseSection $section, Assignment $assignment): Response
+    public function edit(Request $request, Assignment $assignment): Response
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $assignment);
 
         return Inertia::render('Instructor/Assignments/Edit', [
-            'section' => $section,
+            'section' => $assignment->courseSection,
             'assignment' => $assignment,
         ]);
     }
 
-    public function update(UpdateAssignmentRequest $request, CourseSection $section, Assignment $assignment): RedirectResponse
+    public function update(UpdateAssignmentRequest $request, Assignment $assignment): RedirectResponse
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $assignment);
@@ -79,7 +79,7 @@ class AssignmentController extends Controller
             ->with('success', 'Assignment updated.');
     }
 
-    public function destroy(Request $request, CourseSection $section, Assignment $assignment): RedirectResponse
+    public function destroy(Request $request, Assignment $assignment): RedirectResponse
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('delete', $assignment);
