@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
-
-const passwordInput = ref<HTMLInputElement | null>(null);
-const currentPasswordInput = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
     current_password: '',
@@ -24,11 +20,11 @@ const updatePassword = () => {
         onError: () => {
             if (form.errors.password) {
                 form.reset('password', 'password_confirmation');
-                passwordInput.value?.focus();
+                window.document.getElementById('password')?.focus();
             }
             if (form.errors.current_password) {
                 form.reset('current_password');
-                currentPasswordInput.value?.focus();
+                window.document.getElementById('current_password')?.focus();
             }
         },
     });
@@ -49,9 +45,8 @@ const updatePassword = () => {
             <div>
                 <InputLabel for="current_password" value="Current Password" />
 
-                <TextInput
+                <InputText
                     id="current_password"
-                    ref="currentPasswordInput"
                     v-model="form.current_password"
                     type="password"
                     class="mt-1 block w-full"
@@ -69,9 +64,8 @@ const updatePassword = () => {
             <div>
                 <InputLabel for="password" value="New Password" />
 
-                <TextInput
+                <InputText
                     id="password"
-                    ref="passwordInput"
                     v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
@@ -85,7 +79,7 @@ const updatePassword = () => {
             <div>
                 <InputLabel for="password_confirmation" value="Confirm Password" />
 
-                <TextInput
+                <InputText
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
@@ -102,7 +96,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <Button type="submit" :disabled="form.processing">Save</Button>
 
                 <Transition
                     enter-active-class="transition ease-in-out"

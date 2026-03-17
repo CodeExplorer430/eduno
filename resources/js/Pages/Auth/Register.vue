@@ -2,8 +2,8 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -30,7 +30,7 @@ const submit = () => {
             <div>
                 <InputLabel for="name" value="Name" />
 
-                <TextInput
+                <InputText
                     id="name"
                     v-model="form.name"
                     type="text"
@@ -47,7 +47,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <InputText
                     id="email"
                     v-model="form.email"
                     type="email"
@@ -63,7 +63,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
 
-                <TextInput
+                <InputText
                     id="password"
                     v-model="form.password"
                     type="password"
@@ -79,7 +79,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password_confirmation" value="Confirm Password" />
 
-                <TextInput
+                <InputText
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
@@ -104,13 +104,15 @@ const submit = () => {
                     Already registered?
                 </Link>
 
-                <PrimaryButton
+                <Button
+                    type="submit"
                     class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
+                    :aria-busy="form.processing"
                 >
-                    Register
-                </PrimaryButton>
+                    <span v-if="form.processing">Registering&hellip;</span>
+                    <span v-else>Register</span>
+                </Button>
             </div>
         </form>
     </GuestLayout>

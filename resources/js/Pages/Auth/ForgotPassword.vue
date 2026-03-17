@@ -2,8 +2,8 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps<{
@@ -36,7 +36,7 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <InputText
                     id="email"
                     v-model="form.email"
                     type="email"
@@ -51,12 +51,10 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Email Password Reset Link
-                </PrimaryButton>
+                <Button type="submit" :disabled="form.processing" :aria-busy="form.processing">
+                    <span v-if="form.processing">Sending&hellip;</span>
+                    <span v-else>Email Password Reset Link</span>
+                </Button>
             </div>
         </form>
     </GuestLayout>
