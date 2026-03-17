@@ -59,11 +59,13 @@ watchEffect(() => {
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
-                                    <template #trigger>
+                                    <template #trigger="{ open }">
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                aria-haspopup="true"
+                                                :aria-expanded="open"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -119,7 +121,10 @@ watchEffect(() => {
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                                aria-label="Toggle navigation"
+                                :aria-expanded="showingNavigationDropdown"
+                                aria-controls="responsive-nav"
+                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                             >
                                 <svg
@@ -156,6 +161,7 @@ watchEffect(() => {
 
                 <!-- Responsive Navigation Menu -->
                 <div
+                    id="responsive-nav"
                     :class="{
                         block: showingNavigationDropdown,
                         hidden: !showingNavigationDropdown,
