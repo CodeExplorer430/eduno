@@ -25,8 +25,7 @@ class AssignmentController extends Controller
 
     public function index(Request $request, CourseSection $course): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
-        $this->authorize('update', $course->assignments()->first() ?? new Assignment);
+        $this->authorize('viewAny', Assignment::class);
 
         $assignments = $course->assignments()->orderBy('due_at')->get();
 
@@ -38,7 +37,6 @@ class AssignmentController extends Controller
 
     public function create(Request $request, CourseSection $course): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Assignment::class);
 
         return Inertia::render('Instructor/Assignments/Create', [
@@ -48,7 +46,6 @@ class AssignmentController extends Controller
 
     public function store(CreateAssignmentRequest $request, CourseSection $course): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Assignment::class);
 
         $this->createAssignment->execute($course, $request->validated());
@@ -59,7 +56,6 @@ class AssignmentController extends Controller
 
     public function edit(Request $request, Assignment $assignment): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $assignment);
 
         return Inertia::render('Instructor/Assignments/Edit', [
@@ -70,7 +66,6 @@ class AssignmentController extends Controller
 
     public function update(UpdateAssignmentRequest $request, Assignment $assignment): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $assignment);
 
         $this->updateAssignment->execute($assignment, $request->validated());
@@ -81,7 +76,6 @@ class AssignmentController extends Controller
 
     public function destroy(Request $request, Assignment $assignment): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('delete', $assignment);
 
         $assignment->delete();

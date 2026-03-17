@@ -9,6 +9,11 @@ use App\Models\User;
 
 class AssignmentPolicy
 {
+    public function viewAny(User $user): bool
+    {
+        return $user->isInstructor() || $user->isAdmin();
+    }
+
     public function view(User $user, Assignment $assignment): bool
     {
         if ($user->isAdmin()) {

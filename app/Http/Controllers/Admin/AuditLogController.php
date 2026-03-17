@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Domain\Audit\Models\AuditLog;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -14,7 +15,7 @@ class AuditLogController extends Controller
 {
     public function index(Request $request): Response
     {
-        abort_unless($request->user()->isAdmin(), 403);
+        $this->authorize('viewAny', User::class);
 
         $query = AuditLog::with('actor')
             ->orderByDesc('created_at');

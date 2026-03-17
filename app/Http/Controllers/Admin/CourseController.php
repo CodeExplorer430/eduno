@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Domain\Course\Actions\UpdateCourseStatus;
 use App\Domain\Course\Models\Course;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Support\Enums\CourseStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,8 +19,7 @@ class CourseController extends Controller
 {
     public function index(Request $request): Response
     {
-        abort_unless($request->user()->isAdmin(), 403);
-        $this->authorize('viewAny', Course::class);
+        $this->authorize('viewAny', User::class);
 
         $status = $request->query('status');
 
@@ -41,7 +41,6 @@ class CourseController extends Controller
 
     public function updateStatus(Request $request, Course $course, UpdateCourseStatus $action): RedirectResponse
     {
-        abort_unless($request->user()->isAdmin(), 403);
         $this->authorize('changeStatus', $course);
 
         $validated = $request->validate([

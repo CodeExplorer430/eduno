@@ -20,7 +20,7 @@ class AnnouncementController extends Controller
 
     public function index(Request $request): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
+        $this->authorize('viewAny', Announcement::class);
 
         $sectionIds = CourseSection::where('instructor_id', $request->user()->id)->pluck('id');
         $announcements = Announcement::whereIn('course_section_id', $sectionIds)
@@ -35,7 +35,6 @@ class AnnouncementController extends Controller
 
     public function create(Request $request): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Announcement::class);
 
         return Inertia::render('Instructor/Announcements/Create');
@@ -43,7 +42,6 @@ class AnnouncementController extends Controller
 
     public function store(CreateAnnouncementRequest $request): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Announcement::class);
 
         $section = CourseSection::findOrFail($request->validated('course_section_id'));
@@ -56,7 +54,6 @@ class AnnouncementController extends Controller
 
     public function edit(Request $request, Announcement $announcement): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $announcement);
 
         return Inertia::render('Instructor/Announcements/Edit', [
@@ -66,7 +63,6 @@ class AnnouncementController extends Controller
 
     public function update(CreateAnnouncementRequest $request, Announcement $announcement): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $announcement);
 
         $announcement->update($request->validated());
@@ -77,7 +73,6 @@ class AnnouncementController extends Controller
 
     public function destroy(Request $request, Announcement $announcement): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('delete', $announcement);
 
         $announcement->delete();

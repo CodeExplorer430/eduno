@@ -9,6 +9,11 @@ use App\Models\User;
 
 class AnnouncementPolicy
 {
+    public function viewAny(User $user): bool
+    {
+        return $user->isInstructor() || $user->isAdmin();
+    }
+
     public function view(User $user, Announcement $announcement): bool
     {
         if ($user->isAdmin() || $user->isInstructor()) {

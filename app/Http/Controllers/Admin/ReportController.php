@@ -18,7 +18,6 @@ class ReportController extends Controller
 {
     public function index(Request $request): Response
     {
-        abort_unless($request->user()->isAdmin(), 403);
         $this->authorize('viewAny', User::class);
 
         return Inertia::render('Admin/Reports/Index', [
@@ -33,7 +32,6 @@ class ReportController extends Controller
 
     public function export(Request $request, ExportSubmissionsAsCsv $action): StreamedResponse
     {
-        abort_unless($request->user()->isAdmin(), 403);
         $this->authorize('viewAny', User::class);
 
         return $action();

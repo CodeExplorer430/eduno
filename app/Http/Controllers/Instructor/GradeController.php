@@ -22,7 +22,6 @@ class GradeController extends Controller
 
     public function store(GradeSubmissionRequest $request, Submission $submission): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', [Grade::class, $submission]);
 
         $this->gradeSubmission->execute(
@@ -37,7 +36,6 @@ class GradeController extends Controller
 
     public function release(Request $request, Grade $grade): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $grade);
 
         $this->releaseGrade->execute($request->user(), $grade);

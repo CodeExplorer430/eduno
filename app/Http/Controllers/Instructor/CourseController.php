@@ -24,7 +24,6 @@ class CourseController extends Controller
 
     public function index(Request $request): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('viewAny', Course::class);
 
         $courses = Course::where('created_by', $request->user()->id)
@@ -39,7 +38,6 @@ class CourseController extends Controller
 
     public function create(Request $request): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Course::class);
 
         return Inertia::render('Instructor/Courses/Create');
@@ -47,7 +45,6 @@ class CourseController extends Controller
 
     public function store(CreateCourseRequest $request): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Course::class);
 
         $this->createCourse->execute($request->user(), $request->validated());
@@ -58,7 +55,6 @@ class CourseController extends Controller
 
     public function edit(Request $request, Course $course): Response
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $course);
 
         return Inertia::render('Instructor/Courses/Edit', [
@@ -68,7 +64,6 @@ class CourseController extends Controller
 
     public function update(UpdateCourseRequest $request, Course $course): RedirectResponse
     {
-        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $course);
 
         $this->updateCourse->execute($request->user(), $course, $request->validated());

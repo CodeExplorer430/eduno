@@ -11,7 +11,7 @@ class CoursePolicy
 {
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->isInstructor() || $user->isAdmin();
     }
 
     public function view(User $user, Course $course): bool
