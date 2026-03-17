@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import StatusBadge from '@/Components/StatusBadge.vue';
+import Tag from 'primevue/tag';
 import { Link } from '@inertiajs/vue3';
 
 interface Props {
@@ -26,11 +26,13 @@ const formatDate = (dateString: string): string =>
         minute: '2-digit',
     }).format(new Date(dateString));
 
-const validStatuses = ['submitted', 'graded', 'returned', 'late', 'pending'] as const;
-type ValidStatus = (typeof validStatuses)[number];
-
-const safeStatus = (s: string): ValidStatus =>
-    validStatuses.includes(s as ValidStatus) ? (s as ValidStatus) : 'pending';
+const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger' | 'warn'> = {
+    submitted: 'info',
+    graded: 'success',
+    returned: 'secondary',
+    late: 'danger',
+    pending: 'warn',
+};
 
 const scoreLabel = (): string => {
     if (!props.submission.grade) return '—';
@@ -72,7 +74,11 @@ const scoreLabel = (): string => {
             </span>
         </td>
         <td class="px-6 py-4 text-sm">
-            <StatusBadge :status="safeStatus(submission.status)" />
+            <Tag
+                :severity="statusSeverity[submission.status] ?? 'warn'"
+                :value="submission.status"
+                class="capitalize"
+            />
         </td>
         <td class="px-6 py-4 text-sm">
             <Link

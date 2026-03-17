@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import { useForm } from '@inertiajs/vue3';
 
 interface Props {
@@ -43,7 +43,7 @@ const submit = (): void => {
                         <span class="sr-only">(required)</span>
                     </InputLabel>
                     <div class="mt-1 flex items-center gap-2">
-                        <TextInput
+                        <InputText
                             id="grade-score"
                             v-model="form.score"
                             type="number"
@@ -98,14 +98,10 @@ const submit = (): void => {
             </div>
 
             <div class="mt-4 flex justify-end">
-                <PrimaryButton
-                    type="submit"
-                    :disabled="form.processing"
-                    :aria-busy="form.processing"
-                >
+                <Button type="submit" :disabled="form.processing" :aria-busy="form.processing">
                     <span v-if="form.processing">Saving&hellip;</span>
                     <span v-else>{{ existingGrade ? 'Update Grade' : 'Save Grade' }}</span>
-                </PrimaryButton>
+                </Button>
             </div>
         </form>
     </section>
