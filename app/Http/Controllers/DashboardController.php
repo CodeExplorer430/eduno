@@ -13,6 +13,7 @@ use App\Domain\Submission\Models\Submission;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -32,90 +33,102 @@ class DashboardController extends Controller
 
     private function studentDashboard(User $user): Response
     {
-        $sectionIds = $user->enrollments()->pluck('course_section_id');
+        /** @var array{enrolled_courses_count: int, upcoming_assignments: mixed, recent_announcements: mixed, latest_grade: mixed} $data */
+        $data = Cache::remember("dashboard.student.{$user->id}", 300, function () use ($user): array {
+            $sectionIds = $user->enrollments()->pluck('course_section_id');
 
-        $upcomingAssignments = Assignment::whereIn('course_section_id', $sectionIds)
-            ->whereNotNull('published_at')
-            ->where('due_at', '>=', now())
-            ->where('due_at', '<=', now()->addDays(7))
-            ->orderBy('due_at')
-            ->limit(5)
-            ->get();
+            $upcomingAssignments = Assignment::whereIn('course_section_id', $sectionIds)
+                ->whereNotNull('published_at')
+                ->where('due_at', '>=', now())
+                ->where('due_at', '<=', now()->addDays(7))
+                ->orderBy('due_at')
+                ->limit(5)
+                ->get();
 
-        $recentAnnouncements = Announcement::whereIn('course_section_id', $sectionIds)
-            ->whereNotNull('published_at')
-            ->with(['courseSection.course', 'author'])
-            ->orderByDesc('published_at')
-            ->limit(3)
-            ->get();
+            $recentAnnouncements = Announcement::whereIn('course_section_id', $sectionIds)
+                ->whereNotNull('published_at')
+                ->with(['courseSection.course', 'author'])
+                ->orderByDesc('published_at')
+                ->limit(3)
+                ->get();
 
-        $latestGrade = Grade::whereHas('submission', fn ($q) => $q->where('student_id', $user->id))
-            ->whereNotNull('released_at')
-            ->with(['submission.assignment'])
-            ->orderByDesc('released_at')
-            ->first();
+            $latestGrade = Grade::whereHas('submission', fn ($q) => $q->where('student_id', $user->id))
+                ->whereNotNull('released_at')
+                ->with(['submission.assignment'])
+                ->orderByDesc('released_at')
+                ->first();
 
-        return Inertia::render('Dashboard', [
-            'role' => 'student',
-            'enrolled_courses_count' => $user->enrollments()->count(),
-            'upcoming_assignments' => $upcomingAssignments,
-            'recent_announcements' => $recentAnnouncements,
-            'latest_grade' => $latestGrade,
-        ]);
+            return [
+                'enrolled_courses_count' => $user->enrollments()->count(),
+                'upcoming_assignments' => $upcomingAssignments,
+                'recent_announcements' => $recentAnnouncements,
+                'latest_grade' => $latestGrade,
+            ];
+        });
+
+        return Inertia::render('Dashboard', [...$data, 'role' => 'student']);
     }
 
     private function instructorDashboard(User $user): Response
     {
-        $sectionIds = CourseSection::where('instructor_id', $user->id)->pluck('id');
+        /** @var array{courses_count: int, pending_submissions_count: int, recent_submissions: mixed, upcoming_deadlines: mixed} $data */
+        $data = Cache::remember("dashboard.instructor.{$user->id}", 300, function () use ($user): array {
+            $sectionIds = CourseSection::where('instructor_id', $user->id)->pluck('id');
 
-        $pendingSubmissionsCount = Submission::whereHas(
-            'assignment',
-            fn ($q) => $q->whereIn('course_section_id', $sectionIds)
-        )
-            ->whereDoesntHave('grade')
-            ->where('status', 'submitted')
-            ->count();
+            $pendingSubmissionsCount = Submission::whereHas(
+                'assignment',
+                fn ($q) => $q->whereIn('course_section_id', $sectionIds)
+            )
+                ->whereDoesntHave('grade')
+                ->where('status', 'submitted')
+                ->count();
 
-        $recentSubmissions = Submission::whereHas(
-            'assignment',
-            fn ($q) => $q->whereIn('course_section_id', $sectionIds)
-        )
-            ->with(['assignment', 'student'])
-            ->orderByDesc('submitted_at')
-            ->limit(5)
-            ->get();
+            $recentSubmissions = Submission::whereHas(
+                'assignment',
+                fn ($q) => $q->whereIn('course_section_id', $sectionIds)
+            )
+                ->with(['assignment', 'student'])
+                ->orderByDesc('submitted_at')
+                ->limit(5)
+                ->get();
 
-        $upcomingDeadlines = Assignment::whereIn('course_section_id', $sectionIds)
-            ->whereNotNull('published_at')
-            ->where('due_at', '>=', now())
-            ->where('due_at', '<=', now()->addDays(7))
-            ->orderBy('due_at')
-            ->limit(5)
-            ->get();
+            $upcomingDeadlines = Assignment::whereIn('course_section_id', $sectionIds)
+                ->whereNotNull('published_at')
+                ->where('due_at', '>=', now())
+                ->where('due_at', '<=', now()->addDays(7))
+                ->orderBy('due_at')
+                ->limit(5)
+                ->get();
 
-        return Inertia::render('Dashboard', [
-            'role' => 'instructor',
-            'courses_count' => $sectionIds->count(),
-            'pending_submissions_count' => $pendingSubmissionsCount,
-            'recent_submissions' => $recentSubmissions,
-            'upcoming_deadlines' => $upcomingDeadlines,
-        ]);
+            return [
+                'courses_count' => $sectionIds->count(),
+                'pending_submissions_count' => $pendingSubmissionsCount,
+                'recent_submissions' => $recentSubmissions,
+                'upcoming_deadlines' => $upcomingDeadlines,
+            ];
+        });
+
+        return Inertia::render('Dashboard', [...$data, 'role' => 'instructor']);
     }
 
     private function adminDashboard(): Response
     {
-        $usersByRole = [
-            'student' => User::where('role', UserRole::Student)->count(),
-            'instructor' => User::where('role', UserRole::Instructor)->count(),
-            'admin' => User::where('role', UserRole::Admin)->count(),
-        ];
+        /** @var array{users_by_role: array<string, int>, total_courses: int, total_submissions: int, total_grades_released: int} $data */
+        $data = Cache::remember('dashboard.admin', 300, function (): array {
+            $usersByRole = [
+                'student' => User::where('role', UserRole::Student)->count(),
+                'instructor' => User::where('role', UserRole::Instructor)->count(),
+                'admin' => User::where('role', UserRole::Admin)->count(),
+            ];
 
-        return Inertia::render('Dashboard', [
-            'role' => 'admin',
-            'users_by_role' => $usersByRole,
-            'total_courses' => Course::count(),
-            'total_submissions' => Submission::count(),
-            'total_grades_released' => Grade::whereNotNull('released_at')->count(),
-        ]);
+            return [
+                'users_by_role' => $usersByRole,
+                'total_courses' => Course::count(),
+                'total_submissions' => Submission::count(),
+                'total_grades_released' => Grade::whereNotNull('released_at')->count(),
+            ];
+        });
+
+        return Inertia::render('Dashboard', [...$data, 'role' => 'admin']);
     }
 }
