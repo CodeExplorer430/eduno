@@ -8,6 +8,7 @@ use App\Domain\Audit\Actions\LogAction;
 use App\Domain\Grade\Models\Grade;
 use App\Jobs\NotifyStudentGradeReleased;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class ReleaseGrade
 {
@@ -15,18 +16,22 @@ class ReleaseGrade
 
     public function execute(User $actor, Grade $grade): Grade
     {
-        $grade->update(['released_at' => now()]);
+        $released = DB::transaction(function () use ($actor, $grade): Grade {
+            $grade->update(['released_at' => now()]);
 
-        NotifyStudentGradeReleased::dispatch($grade);
+            $this->logAction->execute(
+                $actor->id,
+                'grade.released',
+                Grade::class,
+                $grade->id,
+                ['submission_id' => $grade->submission_id],
+            );
 
-        $this->logAction->execute(
-            $actor->id,
-            'grade.released',
-            Grade::class,
-            $grade->id,
-            ['submission_id' => $grade->submission_id],
-        );
+            return $grade->fresh();
+        });
 
-        return $grade->fresh();
+        NotifyStudentGradeReleased::dispatch($released);
+
+        return $released;
     }
 }
