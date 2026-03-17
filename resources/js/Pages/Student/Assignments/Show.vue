@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import StatusBadge from '@/Components/StatusBadge.vue';
+import Tag from 'primevue/tag';
 import { Head, Link } from '@inertiajs/vue3';
 
 interface Grade {
@@ -46,6 +46,14 @@ const formatDate = (dateString: string): string =>
         hour: '2-digit',
         minute: '2-digit',
     }).format(new Date(dateString));
+
+const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger' | 'warn'> = {
+    submitted: 'info',
+    graded: 'success',
+    returned: 'secondary',
+    late: 'danger',
+    pending: 'warn',
+};
 
 const submissionStatus = computed<'submitted' | 'graded' | 'returned' | 'late' | 'pending'>(() => {
     if (!props.submission) return 'pending';
@@ -106,7 +114,11 @@ const canSubmit = computed<boolean>(() => {
                                     {{ assignment.course_section.section_name }}
                                 </p>
                             </div>
-                            <StatusBadge :status="submissionStatus" />
+                            <Tag
+                                :severity="statusSeverity[submissionStatus] ?? 'warn'"
+                                :value="submissionStatus"
+                                class="capitalize"
+                            />
                         </div>
                     </header>
 

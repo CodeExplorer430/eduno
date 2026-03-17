@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputText from 'primevue/inputtext';
 import InputError from '@/Components/InputError.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Button from 'primevue/button';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Section {
@@ -67,7 +67,7 @@ const submit = (): void => {
                     <form class="space-y-5 px-6 py-6" @submit.prevent="submit">
                         <div>
                             <InputLabel for="title" value="Title" />
-                            <TextInput
+                            <InputText
                                 id="title"
                                 v-model="form.title"
                                 type="text"
@@ -136,7 +136,7 @@ const submit = (): void => {
                             >
                                 Cancel
                             </Link>
-                            <PrimaryButton :disabled="form.processing">Save Module</PrimaryButton>
+                            <Button type="submit" :disabled="form.processing">Save Module</Button>
                         </div>
                     </form>
                 </div>

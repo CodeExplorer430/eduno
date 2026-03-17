@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import StatusBadge from '@/Components/StatusBadge.vue';
+import Tag from 'primevue/tag';
 import { Head, Link } from '@inertiajs/vue3';
 
 interface Section {
@@ -21,11 +21,13 @@ defineProps<{
     courses: Course[];
 }>();
 
-const validStatuses = ['submitted', 'graded', 'returned', 'late', 'pending'] as const;
-type ValidStatus = (typeof validStatuses)[number];
-
-const safeStatus = (s: string): ValidStatus =>
-    validStatuses.includes(s as ValidStatus) ? (s as ValidStatus) : 'pending';
+const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger' | 'warn'> = {
+    submitted: 'info',
+    graded: 'success',
+    returned: 'secondary',
+    late: 'danger',
+    pending: 'warn',
+};
 </script>
 
 <template>
@@ -108,7 +110,13 @@ const safeStatus = (s: string): ValidStatus =>
                                                 {{ course.title }}
                                             </td>
                                             <td class="px-6 py-4 text-sm">
-                                                <StatusBadge :status="safeStatus(course.status)" />
+                                                <Tag
+                                                    :severity="
+                                                        statusSeverity[course.status] ?? 'warn'
+                                                    "
+                                                    :value="course.status"
+                                                    class="capitalize"
+                                                />
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-600">
                                                 {{ course.sections.length }}

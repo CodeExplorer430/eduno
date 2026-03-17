@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
+import Button from 'primevue/button';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Announcement {
@@ -36,7 +35,7 @@ const deleteAnnouncement = (id: number): void => {
             <div class="flex items-center justify-between">
                 <h1 class="text-xl font-bold text-gray-900">Announcements</h1>
                 <Link :href="route('instructor.announcements.create')">
-                    <PrimaryButton type="button">New Announcement</PrimaryButton>
+                    <Button type="button">New Announcement</Button>
                 </Link>
             </div>
         </template>
@@ -107,13 +106,14 @@ const deleteAnnouncement = (id: number): void => {
                                                         deleteAnnouncement(announcement.id)
                                                     "
                                                 >
-                                                    <DangerButton
+                                                    <Button
                                                         type="submit"
-                                                        class="text-xs px-2 py-1"
+                                                        severity="danger"
+                                                        size="small"
                                                         :aria-label="`Delete ${announcement.title}`"
                                                     >
                                                         Delete
-                                                    </DangerButton>
+                                                    </Button>
                                                 </form>
                                             </div>
                                         </header>

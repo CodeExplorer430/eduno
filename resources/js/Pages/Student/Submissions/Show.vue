@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import StatusBadge from '@/Components/StatusBadge.vue';
+import Tag from 'primevue/tag';
 import { Head, Link } from '@inertiajs/vue3';
 
 interface SubmissionFile {
@@ -52,6 +52,14 @@ const formatSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger' | 'warn'> = {
+    submitted: 'info',
+    graded: 'success',
+    returned: 'secondary',
+    late: 'danger',
+    pending: 'warn',
 };
 
 const submissionStatus = computed<'submitted' | 'graded' | 'returned' | 'late' | 'pending'>(() => {
@@ -114,7 +122,11 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                                     {{ submission.assignment.course_section.section_name }}
                                 </p>
                             </div>
-                            <StatusBadge :status="submissionStatus" />
+                            <Tag
+                                :severity="statusSeverity[submissionStatus] ?? 'warn'"
+                                :value="submissionStatus"
+                                class="capitalize"
+                            />
                         </div>
                     </header>
 
