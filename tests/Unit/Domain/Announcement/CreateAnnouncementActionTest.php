@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Domain\Announcement\Actions\CreateAnnouncement;
 use App\Domain\Announcement\Models\Announcement;
+use App\Domain\Audit\Actions\LogAction;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Enums\UserRole;
@@ -14,7 +15,10 @@ use Illuminate\Support\Facades\Queue;
 it('creates an Announcement record', function () {
     Queue::fake();
 
-    $action = new CreateAnnouncement;
+    $logAction = Mockery::mock(LogAction::class);
+    $logAction->shouldReceive('execute')->once();
+
+    $action = new CreateAnnouncement($logAction);
 
     $instructor = User::factory()->create(['role' => UserRole::Instructor]);
 
@@ -56,7 +60,10 @@ it('creates an Announcement record', function () {
 it('dispatches SendAnnouncementNotification job after creating announcement', function () {
     Queue::fake();
 
-    $action = new CreateAnnouncement;
+    $logAction = Mockery::mock(LogAction::class);
+    $logAction->shouldReceive('execute')->once();
+
+    $action = new CreateAnnouncement($logAction);
 
     $instructor = User::factory()->create(['role' => UserRole::Instructor]);
 
