@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property-read Module $module
- * @property-read Collection<int, resource> $resources
+ * @property-read Collection<int, \App\Domain\Content\Models\Resource> $resources
  */
 class Lesson extends Model
 {
