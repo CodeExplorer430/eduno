@@ -1,4 +1,8 @@
-import { vi } from 'vitest';
+import { vi, expect } from 'vitest';
+// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
+const { toHaveNoViolations } = require('vitest-axe/matchers') as Record<string, any>;
+
+expect.extend({ toHaveNoViolations });
 
 vi.mock('@inertiajs/vue3', () => ({
     Head: { template: '<slot />' },

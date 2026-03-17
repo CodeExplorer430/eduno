@@ -10,8 +10,8 @@ describe('GradeForm', () => {
                 stubs: {
                     InputLabel: { template: '<label><slot /></label>' },
                     InputError: { template: '<span />' },
-                    PrimaryButton: { template: '<button type="submit"><slot /></button>' },
-                    TextInput: { template: '<input />' },
+                    Button: { template: '<button type="submit"><slot /></button>' },
+                    InputText: { template: '<input />' },
                 },
             },
         });
@@ -25,8 +25,8 @@ describe('GradeForm', () => {
                 stubs: {
                     InputLabel: { template: '<label><slot /></label>' },
                     InputError: { template: '<span />' },
-                    PrimaryButton: { template: '<button type="submit"><slot /></button>' },
-                    TextInput: { template: '<input id="grade-score" />' },
+                    Button: { template: '<button type="submit"><slot /></button>' },
+                    InputText: { template: '<input id="grade-score" />' },
                 },
             },
         });
@@ -40,8 +40,8 @@ describe('GradeForm', () => {
                 stubs: {
                     InputLabel: { template: '<label><slot /></label>' },
                     InputError: { template: '<span />' },
-                    PrimaryButton: { template: '<button type="submit"><slot /></button>' },
-                    TextInput: { template: '<input />' },
+                    Button: { template: '<button type="submit"><slot /></button>' },
+                    InputText: { template: '<input />' },
                 },
             },
         });
@@ -55,8 +55,8 @@ describe('GradeForm', () => {
                 stubs: {
                     InputLabel: { template: '<label><slot /></label>' },
                     InputError: { template: '<span />' },
-                    PrimaryButton: { template: '<button type="submit"><slot /></button>' },
-                    TextInput: { template: '<input />' },
+                    Button: { template: '<button type="submit"><slot /></button>' },
+                    InputText: { template: '<input />' },
                 },
             },
         });
