@@ -35,6 +35,14 @@ const submit = () => {
             {{ status }}
         </div>
 
+        <div
+            v-if="form.hasErrors && !form.errors.email && !form.errors.password"
+            role="alert"
+            class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-800"
+        >
+            An error occurred. Please try again.
+        </div>
+
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />
