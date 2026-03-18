@@ -58,6 +58,9 @@ const formatDate = (iso: string): string => {
         day: 'numeric',
     });
 };
+
+const decodePaginationLabel = (label: string): string =>
+    label.replace(/&laquo;/g, '«').replace(/&raquo;/g, '»');
 </script>
 
 <template>
@@ -144,14 +147,14 @@ const formatDate = (iso: string): string => {
                                         : 'text-gray-600 hover:bg-gray-100'
                                 "
                                 :aria-current="link.active ? 'page' : undefined"
-                                v-html="link.label"
-                            />
+                                >{{ decodePaginationLabel(link.label) }}</Link
+                            >
                             <span
                                 v-else
                                 class="rounded px-3 py-1 text-sm text-gray-300"
                                 aria-disabled="true"
-                                v-html="link.label"
-                            />
+                                >{{ decodePaginationLabel(link.label) }}</span
+                            >
                         </template>
                     </nav>
                 </main>

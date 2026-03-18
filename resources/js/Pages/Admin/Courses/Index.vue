@@ -65,6 +65,9 @@ function changeStatus(course: Course): void {
         { preserveScroll: true }
     );
 }
+
+const decodePaginationLabel = (label: string): string =>
+    label.replace(/&laquo;/g, '«').replace(/&raquo;/g, '»');
 </script>
 
 <template>
@@ -245,13 +248,11 @@ function changeStatus(course: Course): void {
                                         ? 'bg-indigo-600 text-white'
                                         : 'bg-white text-gray-700 hover:bg-gray-50'
                                 "
-                                v-html="link.label"
-                            />
-                            <span
-                                v-else
-                                class="rounded-md px-3 py-2 text-sm text-gray-400"
-                                v-html="link.label"
-                            />
+                                >{{ decodePaginationLabel(link.label) }}</Link
+                            >
+                            <span v-else class="rounded-md px-3 py-2 text-sm text-gray-400">{{
+                                decodePaginationLabel(link.label)
+                            }}</span>
                         </template>
                     </nav>
                 </main>
