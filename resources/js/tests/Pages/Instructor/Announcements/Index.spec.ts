@@ -32,6 +32,10 @@ const stubs = {
         template: '<button :aria-label="$attrs[\'aria-label\']"><slot /></button>',
         inheritAttrs: false,
     },
+    Dialog: {
+        template: '<div v-if="$attrs.visible !== false"><slot /><slot name="footer" /></div>',
+        inheritAttrs: false,
+    },
 };
 
 const routeMock = vi.fn(() => '/');
@@ -86,6 +90,14 @@ describe('Instructor/Announcements/Index', () => {
             global: globalOpts,
         });
         expect(wrapper.find('[role="status"]').exists()).toBe(true);
+    });
+
+    it('delete confirmation dialog is not shown initially', () => {
+        const wrapper = mount(IndexPage, {
+            props: { announcements: [announcementFixture] },
+            global: globalOpts,
+        });
+        expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
     });
 
     it('passes WCAG axe check', async () => {
