@@ -77,23 +77,19 @@ const cards: StatCard[] = [
                             <div
                                 v-for="card in cards"
                                 :key="card.key"
-                                class="overflow-hidden rounded-lg bg-white shadow-sm"
+                                class="overflow-hidden rounded-lg bg-white shadow-sm px-6 py-5"
                             >
-                                <div class="px-6 py-5">
-                                    <dt class="truncate text-sm font-medium text-gray-500">
-                                        {{ card.label }}
-                                    </dt>
-                                    <dd
-                                        class="mt-2 text-3xl font-bold"
-                                        :class="card.colorClass"
-                                        :aria-label="`${card.label}: ${stats[card.key]}`"
-                                    >
+                                <dt class="truncate text-sm font-medium text-gray-500">
+                                    {{ card.label }}
+                                </dt>
+                                <dd class="mt-2" :aria-label="`${card.label}: ${stats[card.key]}`">
+                                    <span class="text-3xl font-bold" :class="card.colorClass">
                                         {{ stats[card.key].toLocaleString() }}
-                                    </dd>
+                                    </span>
                                     <p class="mt-1 text-xs text-gray-400">
                                         {{ card.description }}
                                     </p>
-                                </div>
+                                </dd>
                             </div>
                         </dl>
                     </section>
