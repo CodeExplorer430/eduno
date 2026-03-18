@@ -123,3 +123,83 @@ it('guest is redirected when accessing announcement store', function () {
 
     $response->assertRedirect(route('login'));
 });
+
+it('instructor can update their own announcement', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $course = Course::create([
+        'code' => 'CS204',
+        'title' => 'Announcement Update Course',
+        'department' => 'CS',
+        'term' => '1st',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'D',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $announcement = Announcement::create([
+        'course_section_id' => $section->id,
+        'title' => 'Original Title',
+        'body' => 'Original body content.',
+        'published_at' => now(),
+        'created_by' => $instructor->id,
+    ]);
+
+    $response = $this->actingAs($instructor)->patch(
+        route('instructor.announcements.update', $announcement),
+        [
+            'title' => 'Updated Title',
+            'body' => 'Updated body content.',
+            'course_section_id' => $section->id,
+        ]
+    );
+
+    $response->assertRedirect(route('instructor.announcements.index'));
+    $this->assertDatabaseHas('announcements', ['id' => $announcement->id, 'title' => 'Updated Title']);
+});
+
+it('non-owner instructor cannot update announcement', function () {
+    $owner = User::factory()->create(['role' => UserRole::Instructor]);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $course = Course::create([
+        'code' => 'CS205',
+        'title' => 'Announcement Block Course',
+        'department' => 'CS',
+        'term' => '1st',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $owner->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'E',
+        'instructor_id' => $owner->id,
+    ]);
+
+    $announcement = Announcement::create([
+        'course_section_id' => $section->id,
+        'title' => 'Owner Announcement',
+        'body' => 'Should not be updated by other.',
+        'published_at' => now(),
+        'created_by' => $owner->id,
+    ]);
+
+    $response = $this->actingAs($other)->patch(
+        route('instructor.announcements.update', $announcement),
+        [
+            'title' => 'Hijacked Title',
+            'body' => 'Unauthorized update.',
+            'course_section_id' => $section->id,
+        ]
+    );
+
+    $response->assertStatus(403);
+});
