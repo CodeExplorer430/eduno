@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { axe } from 'vitest-axe';
 import IndexPage from '@/Pages/Instructor/Modules/Index.vue';
@@ -14,6 +14,11 @@ const stubs = {
     AuthenticatedLayout: { template: '<div><slot /><slot name="header" /></div>' },
     Head: true,
     Link: { template: '<a v-bind="$attrs"><slot /></a>', inheritAttrs: false },
+    Dialog: {
+        template: '<div v-if="$attrs.visible"><slot /><slot name="footer" /></div>',
+        inheritAttrs: false,
+    },
+    Button: { template: '<button><slot /></button>' },
 };
 
 const section = {
@@ -35,13 +40,6 @@ const moduleFixture = {
 const routeMock = vi.fn(() => '/');
 
 const globalOpts = { stubs, mocks: { route: routeMock } };
-
-beforeEach(() => {
-    vi.stubGlobal(
-        'confirm',
-        vi.fn(() => true)
-    );
-});
 
 describe('Instructor/Modules/Index', () => {
     it('renders without crashing', () => {
@@ -84,6 +82,16 @@ describe('Instructor/Modules/Index', () => {
             props: { section: sectionWithModules },
         });
         expect(wrapper.html()).toContain('aria-label="Edit module Week 1"');
+    });
+
+    it('delete confirmation dialog is not visible initially', () => {
+        const sectionWithModules = { ...section, modules: [moduleFixture] };
+        const wrapper = mount(IndexPage, {
+            global: globalOpts,
+            props: { section: sectionWithModules },
+        });
+        const vm = wrapper.vm as unknown as { confirmDialog: { visible: boolean } };
+        expect(vm.confirmDialog.visible).toBe(false);
     });
 
     it('passes WCAG axe check', async () => {
