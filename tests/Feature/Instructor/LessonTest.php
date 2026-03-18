@@ -127,3 +127,83 @@ it('student cannot create a lesson', function () {
 
     $response->assertStatus(403);
 });
+
+it('instructor can delete their lesson', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $course = Course::create([
+        'code' => 'LES104',
+        'title' => 'Lesson Delete Course',
+        'department' => 'CS',
+        'term' => '1st',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'A',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $module = Module::create([
+        'course_section_id' => $section->id,
+        'title' => 'Module 1',
+        'order_no' => 1,
+    ]);
+
+    $lesson = Lesson::create([
+        'module_id' => $module->id,
+        'title' => 'Lesson To Delete',
+        'type' => 'text',
+        'order_no' => 1,
+    ]);
+
+    $response = $this->actingAs($instructor)->delete(
+        route('instructor.courses.modules.lessons.destroy', ['section' => $section, 'module' => $module, 'lesson' => $lesson])
+    );
+
+    $response->assertRedirect(route('instructor.courses.modules.index', $section));
+    $this->assertDatabaseMissing('lessons', ['id' => $lesson->id]);
+});
+
+it('student cannot delete a lesson', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $course = Course::create([
+        'code' => 'LES105',
+        'title' => 'Lesson Delete Block Course',
+        'department' => 'CS',
+        'term' => '1st',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'A',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $module = Module::create([
+        'course_section_id' => $section->id,
+        'title' => 'Module 1',
+        'order_no' => 1,
+    ]);
+
+    $lesson = Lesson::create([
+        'module_id' => $module->id,
+        'title' => 'Protected Lesson',
+        'type' => 'text',
+        'order_no' => 1,
+    ]);
+
+    $response = $this->actingAs($student)->delete(
+        route('instructor.courses.modules.lessons.destroy', ['section' => $section, 'module' => $module, 'lesson' => $lesson])
+    );
+
+    $response->assertStatus(403);
+});
