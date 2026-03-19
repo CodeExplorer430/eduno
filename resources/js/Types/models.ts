@@ -52,6 +52,8 @@ export interface Module {
     description: string | null;
     order_no: number;
     published_at: string | null;
+    section?: CourseSection;
+    lessons?: Lesson[];
     created_at: string;
     updated_at: string;
 }
@@ -61,9 +63,11 @@ export interface Lesson {
     module_id: number;
     title: string;
     content: string | null;
-    type: string;
+    type: 'text' | 'pdf' | 'video' | 'link';
     order_no: number;
     published_at: string | null;
+    module?: Module;
+    resources?: Resource[];
     created_at: string;
     updated_at: string;
 }
@@ -75,7 +79,8 @@ export interface Resource {
     file_path: string;
     mime_type: string;
     size_bytes: number;
-    visibility: string;
+    visibility: 'enrolled' | 'instructor' | 'public';
+    lesson?: Lesson;
     created_at: string;
     updated_at: string;
 }

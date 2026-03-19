@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Course\Models;
 
+use App\Domain\Module\Models\Module;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,5 +42,10 @@ class CourseSection extends Model
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function modules(): HasMany
+    {
+        return $this->hasMany(Module::class);
     }
 }
