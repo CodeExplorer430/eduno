@@ -14,7 +14,9 @@ class NewSubmissionNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public readonly Submission $submission) {}
+    public function __construct(public readonly Submission $submission)
+    {
+    }
 
     /**
      * @return array<int, string>
@@ -29,7 +31,7 @@ class NewSubmissionNotification extends Notification implements ShouldQueue
         $assignment = $this->submission->assignment;
         $student = $this->submission->student;
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject("New Submission: {$assignment->title}")
             ->greeting('Hello!')
             ->line("Student: {$student->name}")

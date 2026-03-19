@@ -174,6 +174,23 @@ test('student cannot submit twice when allow_resubmission is false', function ()
         ->assertForbidden();
 });
 
+// ─── Regression: file-size limit (FR-025) ────────────────────────────────────
+
+test('submission rejects file exceeding 25 MB limit', function (): void {
+    Storage::fake('private');
+    [$instructor, $section, $assignment] = makeSubmissionSetup();
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    enrollStudentForSubmission($student, $section);
+    // UploadedFile::fake()->create() size is in KB; 26 000 KB = ~25.4 MB
+    $oversized = UploadedFile::fake()->create('large.pdf', 26_000, 'application/pdf');
+
+    $this->actingAs($student)
+        ->post(route('assignments.submissions.store', $assignment), [
+            'files' => [$oversized],
+        ])
+        ->assertSessionHasErrors(['files.0']);
+});
+
 // ─── Instructor view ─────────────────────────────────────────────────────────
 
 test('instructor can view all submissions for an assignment', function (): void {

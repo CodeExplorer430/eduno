@@ -33,7 +33,7 @@ class AssignmentController extends Controller
             $query->whereNotNull('published_at')->where('published_at', '<=', now());
         }
 
-        $assignments = $query->get();
+        $assignments = $query->paginate(15);
 
         return Inertia::render('Assignment/Index', [
             'section' => $section,

@@ -35,6 +35,19 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    :href="route('courses.index')"
+                                    :active="route().current('courses.*')"
+                                >
+                                    Courses
+                                </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.role === 'admin'"
+                                    :href="route('admin.reports.index')"
+                                    :active="route().current('admin.reports.*')"
+                                >
+                                    Reports
+                                </NavLink>
                             </div>
                         </div>
 
@@ -46,7 +59,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -70,6 +83,9 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink :href="route('profile.edit')">
                                             Profile
                                         </DropdownLink>
+                                        <DropdownLink :href="route('preferences.edit')">
+                                            Accessibility Settings
+                                        </DropdownLink>
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
@@ -85,6 +101,8 @@ const showingNavigationDropdown = ref(false);
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
+                                :aria-expanded="showingNavigationDropdown"
+                                aria-label="Toggle navigation menu"
                                 class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                             >
@@ -135,6 +153,19 @@ const showingNavigationDropdown = ref(false);
                         >
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('courses.index')"
+                            :active="route().current('courses.*')"
+                        >
+                            Courses
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.role === 'admin'"
+                            :href="route('admin.reports.index')"
+                            :active="route().current('admin.reports.*')"
+                        >
+                            Reports
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -151,6 +182,9 @@ const showingNavigationDropdown = ref(false);
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 Profile
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('preferences.edit')">
+                                Accessibility Settings
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out

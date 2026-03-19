@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import type { Course, CourseSection, Module } from '@/Types/models';
+import type { Course, CourseSection, Module, PaginatedResponse } from '@/Types/models';
 
 interface SectionWithCourse extends CourseSection {
     course: Course;
@@ -9,7 +10,7 @@ interface SectionWithCourse extends CourseSection {
 
 const props = defineProps<{
     section: SectionWithCourse;
-    modules: Module[];
+    modules: PaginatedResponse<Module>;
     canManage: boolean;
 }>();
 
@@ -65,7 +66,7 @@ function destroyModule(moduleId: number): void {
         <div class="py-12">
             <div class="mx-auto max-w-4xl sm:px-6 lg:px-8">
                 <div
-                    v-if="modules.length === 0"
+                    v-if="modules.data.length === 0"
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     role="status"
                 >
@@ -84,7 +85,7 @@ function destroyModule(moduleId: number): void {
 
                 <ol v-else class="space-y-3" aria-label="Module list">
                     <li
-                        v-for="module in modules"
+                        v-for="module in modules.data"
                         :key="module.id"
                         class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
@@ -148,6 +149,8 @@ function destroyModule(moduleId: number): void {
                         </div>
                     </li>
                 </ol>
+
+                <Pagination v-if="modules.links.length > 3" :links="modules.links" />
             </div>
         </div>
     </AuthenticatedLayout>

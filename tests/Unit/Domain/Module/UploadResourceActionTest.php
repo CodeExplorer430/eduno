@@ -49,7 +49,7 @@ test('it stores the file on the private disk', function (): void {
     Storage::fake('private');
     $lesson = makeLessonForUpload();
     $file = UploadedFile::fake()->create('lecture.pdf', 1024, 'application/pdf');
-    $action = new UploadResource;
+    $action = new UploadResource();
 
     $resource = $action->handle($lesson, $file, 'Lecture Notes', ResourceVisibility::Enrolled);
 
@@ -60,7 +60,7 @@ test('it generates a UUID-based filename not the original name', function (): vo
     Storage::fake('private');
     $lesson = makeLessonForUpload();
     $file = UploadedFile::fake()->create('my-secret-file.pdf', 512, 'application/pdf');
-    $action = new UploadResource;
+    $action = new UploadResource();
 
     $resource = $action->handle($lesson, $file, 'Notes', ResourceVisibility::Enrolled);
 
@@ -72,7 +72,7 @@ test('it records file metadata in the database', function (): void {
     Storage::fake('private');
     $lesson = makeLessonForUpload();
     $file = UploadedFile::fake()->create('slides.pdf', 2048, 'application/pdf');
-    $action = new UploadResource;
+    $action = new UploadResource();
 
     $resource = $action->handle($lesson, $file, 'Slides', ResourceVisibility::Enrolled);
 

@@ -193,3 +193,30 @@ test('student cannot grade a submission', function (): void {
         ])
         ->assertForbidden();
 });
+
+test('grade score cannot be negative', function (): void {
+    [$instructor, , $submission] = makeGradingSetup();
+
+    $this->actingAs($instructor)
+        ->post(route('submissions.grade.store', $submission), [
+            'score' => -1,
+            'feedback' => 'Negative score attempt',
+        ])
+        ->assertSessionHasErrors(['score']);
+});
+
+test('grade score of zero is valid', function (): void {
+    [$instructor, , $submission] = makeGradingSetup();
+
+    $this->actingAs($instructor)
+        ->post(route('submissions.grade.store', $submission), [
+            'score' => 0,
+            'feedback' => 'Zero score',
+        ])
+        ->assertRedirect();
+
+    $this->assertDatabaseHas('grades', [
+        'submission_id' => $submission->id,
+        'score' => 0,
+    ]);
+});

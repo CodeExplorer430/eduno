@@ -33,7 +33,7 @@ function makeSection(): CourseSection
 test('it enrolls a student in a section', function (): void {
     $student = User::factory()->create(['role' => UserRole::Student]);
     $section = makeSection();
-    $action = new EnrollStudent;
+    $action = new EnrollStudent();
 
     $enrollment = $action->handle($student, $section);
 
@@ -46,7 +46,7 @@ test('it enrolls a student in a section', function (): void {
 test('it persists the enrollment in the database', function (): void {
     $student = User::factory()->create(['role' => UserRole::Student]);
     $section = makeSection();
-    $action = new EnrollStudent;
+    $action = new EnrollStudent();
 
     $action->handle($student, $section);
 
@@ -60,7 +60,7 @@ test('it persists the enrollment in the database', function (): void {
 test('it throws a validation exception when student is already enrolled', function (): void {
     $student = User::factory()->create(['role' => UserRole::Student]);
     $section = makeSection();
-    $action = new EnrollStudent;
+    $action = new EnrollStudent();
 
     $action->handle($student, $section);
 
@@ -72,7 +72,7 @@ test('different students can enroll in the same section', function (): void {
     $studentA = User::factory()->create(['role' => UserRole::Student]);
     $studentB = User::factory()->create(['role' => UserRole::Student]);
     $section = makeSection();
-    $action = new EnrollStudent;
+    $action = new EnrollStudent();
 
     $enrollmentA = $action->handle($studentA, $section);
     $enrollmentB = $action->handle($studentB, $section);

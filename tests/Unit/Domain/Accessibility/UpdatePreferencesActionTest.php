@@ -10,7 +10,7 @@ use App\Models\User;
 test('creates user preference on first call', function (): void {
     $user = User::factory()->create(['role' => UserRole::Student]);
 
-    $action = new UpdatePreferences;
+    $action = new UpdatePreferences();
     $pref = $action->handle($user, [
         'font_size' => 'large',
         'high_contrast' => true,
@@ -27,7 +27,7 @@ test('creates user preference on first call', function (): void {
 test('updates existing preference on second call', function (): void {
     $user = User::factory()->create(['role' => UserRole::Student]);
 
-    $action = new UpdatePreferences;
+    $action = new UpdatePreferences();
     $action->handle($user, ['font_size' => 'small', 'high_contrast' => false, 'reduced_motion' => false, 'simplified_layout' => false]);
     $pref = $action->handle($user, ['font_size' => 'large', 'high_contrast' => true, 'reduced_motion' => true, 'simplified_layout' => false]);
 

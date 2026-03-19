@@ -15,6 +15,8 @@ class EnrollmentController extends Controller
 {
     public function store(CourseSection $section, EnrollStudent $action): RedirectResponse
     {
+        $this->authorize('enroll', $section);
+
         /** @var User $user */
         $user = auth()->user();
 
@@ -26,6 +28,8 @@ class EnrollmentController extends Controller
 
     public function destroy(CourseSection $section, UnenrollStudent $action): RedirectResponse
     {
+        $this->authorize('unenroll', $section);
+
         /** @var User $user */
         $user = auth()->user();
 

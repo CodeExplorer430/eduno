@@ -33,7 +33,7 @@ class ModuleController extends Controller
             $query->whereNotNull('published_at')->where('published_at', '<=', now());
         }
 
-        $modules = $query->get();
+        $modules = $query->paginate(15);
 
         return Inertia::render('Module/Index', [
             'section' => $section,

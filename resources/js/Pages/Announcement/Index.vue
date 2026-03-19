@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import type { Announcement, CourseSection } from '@/Types/models';
+import Pagination from '@/Components/Pagination.vue';
+import type { Announcement, CourseSection, PaginatedResponse } from '@/Types/models';
 
-defineProps<{
+const props = defineProps<{
     section: CourseSection;
-    announcements: Announcement[];
+    announcements: PaginatedResponse<Announcement>;
     canManage: boolean;
 }>();
 
@@ -54,7 +55,7 @@ function togglePublish(announcement: Announcement): void {
         </header>
 
         <div
-            v-if="announcements.length === 0"
+            v-if="announcements.data.length === 0"
             class="rounded border border-dashed border-gray-300 px-6 py-12 text-center text-gray-500"
             role="status"
         >
@@ -63,7 +64,7 @@ function togglePublish(announcement: Announcement): void {
 
         <ul v-else class="space-y-4" role="list">
             <li
-                v-for="announcement in announcements"
+                v-for="announcement in announcements.data"
                 :key="announcement.id"
                 class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm"
             >
@@ -125,5 +126,7 @@ function togglePublish(announcement: Announcement): void {
                 </div>
             </li>
         </ul>
+
+        <Pagination v-if="announcements.links.length > 3" :links="announcements.links" />
     </main>
 </template>

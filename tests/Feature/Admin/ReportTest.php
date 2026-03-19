@@ -11,7 +11,8 @@ test('admin can view admin reports index', function (): void {
     $response = $this->actingAs($admin)->get(route('admin.reports.index'));
 
     $response->assertOk();
-    $response->assertInertia(fn ($page) => $page
+    $response->assertInertia(
+        fn ($page) => $page
         ->component('Admin/Reports/Index')
         ->has('report.total_courses')
         ->has('report.total_sections')
