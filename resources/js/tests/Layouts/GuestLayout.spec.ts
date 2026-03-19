@@ -25,7 +25,7 @@ describe('GuestLayout', () => {
             slots: { default: '<p>Login form</p>' },
             global: globalOpts,
         });
-        expect(wrapper.find('a').attributes('href')).toBe('/');
+        expect(wrapper.find('a[aria-label]').attributes('href')).toBe('/');
     });
 
     it('renders the ApplicationLogo component', () => {
