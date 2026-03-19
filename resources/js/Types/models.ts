@@ -41,6 +41,8 @@ export interface CourseSection {
     schedule_text: string | null;
     course?: Course;
     instructor?: User;
+    enrollments_count?: number;
+    assignments_count?: number;
     created_at: string;
     updated_at: string;
 }
@@ -52,6 +54,8 @@ export interface Module {
     description: string | null;
     order_no: number;
     published_at: string | null;
+    section?: CourseSection;
+    lessons?: Lesson[];
     created_at: string;
     updated_at: string;
 }
@@ -61,9 +65,11 @@ export interface Lesson {
     module_id: number;
     title: string;
     content: string | null;
-    type: string;
+    type: 'text' | 'pdf' | 'video' | 'link';
     order_no: number;
     published_at: string | null;
+    module?: Module;
+    resources?: Resource[];
     created_at: string;
     updated_at: string;
 }
@@ -75,7 +81,8 @@ export interface Resource {
     file_path: string;
     mime_type: string;
     size_bytes: number;
-    visibility: string;
+    visibility: 'enrolled' | 'instructor' | 'public';
+    lesson?: Lesson;
     created_at: string;
     updated_at: string;
 }
@@ -89,6 +96,7 @@ export interface Assignment {
     max_score: number;
     allow_resubmission: boolean;
     published_at: string | null;
+    section?: CourseSection;
     created_at: string;
     updated_at: string;
 }
@@ -111,6 +119,7 @@ export interface Grade {
     score: number;
     feedback: string | null;
     released_at: string | null;
+    submission?: Submission;
     created_at: string;
     updated_at: string;
 }
@@ -123,6 +132,8 @@ export interface Submission {
     submitted_at: string;
     is_late: boolean;
     attempt_no: number;
+    assignment?: Assignment;
+    student?: User;
     files?: SubmissionFile[];
     grade?: Grade;
     created_at: string;
@@ -137,6 +148,35 @@ export interface Announcement {
     published_at: string | null;
     created_by: number;
     author?: User;
+    section?: CourseSection;
     created_at: string;
     updated_at: string;
+}
+
+export interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+export interface PaginatedResponse<T> {
+    data: T[];
+    links: PaginationLink[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+}
+
+export interface AuditLog {
+    id: number;
+    actor_id: number;
+    action: string;
+    entity_type: string;
+    entity_id: number;
+    metadata: Record<string, unknown> | null;
+    created_at: string;
+    actor?: User;
 }

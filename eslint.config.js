@@ -30,6 +30,11 @@ export default [
             'vue/require-default-prop': 'off',
         },
     },
+    // Pagination uses v-html for Laravel's trusted HTML labels (e.g. &laquo; &raquo;)
+    {
+        files: ['resources/js/Components/Pagination.vue'],
+        rules: { 'vue/no-v-html': 'off' },
+    },
     // Prettier overrides last
     prettierConfig,
     { ignores: ['vendor/', 'node_modules/', 'public/build/', 'bootstrap/ssr/'] },

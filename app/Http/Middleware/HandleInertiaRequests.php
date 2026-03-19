@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
@@ -36,9 +38,15 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'ziggy' => fn () => [
-                ...(new Ziggy)->toArray(),
+                ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
+            'userPrefs' => fn () => $request->user()?->preferences?->only([
+                'reduced_motion',
+                'high_contrast',
+                'dyslexia_font',
+                'font_size',
+            ]),
         ];
     }
 }
