@@ -15,6 +15,7 @@ class UserPreference extends Model
         'font_size',
         'high_contrast',
         'reduced_motion',
+        'dyslexia_font',
         'simplified_layout',
         'language',
     ];
@@ -24,6 +25,7 @@ class UserPreference extends Model
         return [
             'high_contrast' => 'boolean',
             'reduced_motion' => 'boolean',
+            'dyslexia_font' => 'boolean',
             'simplified_layout' => 'boolean',
         ];
     }
