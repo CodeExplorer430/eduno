@@ -27,8 +27,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with: { php-version: '8.4', extensions: 'pgsql, pdo_pgsql, redis', coverage: none }
+      - run: cp .env.example .env
       - run: composer install --no-interaction --prefer-dist
-      - run: cp .env.example .env && php artisan key:generate
+      - run: php artisan key:generate
       - name: Configure test DB
         run: |
           echo "DB_CONNECTION=pgsql" >> .env
