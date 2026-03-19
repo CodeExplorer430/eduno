@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\CourseController;
@@ -8,9 +9,11 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\PreferencesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\SubmissionExportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -80,6 +83,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('grades.update');
     Route::post('grades/{grade}/release', [GradeController::class, 'release'])
         ->name('grades.release');
+
+    // Submission export
+    Route::get('assignments/{assignment}/submissions/export', SubmissionExportController::class)
+        ->name('assignments.submissions.export');
+
+    // Accessibility preferences
+    Route::get('preferences', [PreferencesController::class, 'edit'])->name('preferences.edit');
+    Route::put('preferences', [PreferencesController::class, 'update'])->name('preferences.update');
+
+    // Admin reports
+    Route::get('admin/reports', [ReportController::class, 'index'])->name('admin.reports.index');
 });
 
 require __DIR__.'/auth.php';

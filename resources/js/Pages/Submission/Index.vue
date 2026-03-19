@@ -5,6 +5,7 @@ import type { Assignment, Submission } from '@/Types/models';
 defineProps<{
     assignment: Assignment;
     submissions: Submission[];
+    canManage: boolean;
 }>();
 </script>
 
@@ -24,10 +25,22 @@ defineProps<{
             </ol>
         </nav>
 
-        <h1 class="mb-6 text-2xl font-bold">
-            Submissions
-            <span class="ml-2 text-lg font-normal text-gray-500">({{ submissions.length }})</span>
-        </h1>
+        <div class="mb-6 flex items-center justify-between">
+            <h1 class="text-2xl font-bold">
+                Submissions
+                <span class="ml-2 text-lg font-normal text-gray-500"
+                    >({{ submissions.length }})</span
+                >
+            </h1>
+
+            <a
+                v-if="canManage"
+                :href="route('assignments.submissions.export', assignment.id)"
+                class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+                Export CSV
+            </a>
+        </div>
 
         <div
             v-if="submissions.length === 0"
