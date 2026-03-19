@@ -37,11 +37,11 @@ export function useA11yPrefs(): {
     }
 
     // Apply on initial load
-    applyPrefs(page.props.userPrefs);
+    applyPrefs(page.props?.userPrefs);
 
     // Re-apply whenever the shared prop changes (e.g. after a save)
     watch(
-        () => page.props.userPrefs,
+        () => page.props?.userPrefs,
         (prefs) => applyPrefs(prefs),
         { deep: true }
     );
@@ -52,7 +52,7 @@ export function useA11yPrefs(): {
     }
 
     return {
-        prefs: page.props.userPrefs,
+        prefs: page.props?.userPrefs,
         updatePref,
     };
 }
