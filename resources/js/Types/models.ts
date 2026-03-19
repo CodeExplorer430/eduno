@@ -94,6 +94,7 @@ export interface Assignment {
     max_score: number;
     allow_resubmission: boolean;
     published_at: string | null;
+    section?: CourseSection;
     created_at: string;
     updated_at: string;
 }
@@ -128,6 +129,8 @@ export interface Submission {
     submitted_at: string;
     is_late: boolean;
     attempt_no: number;
+    assignment?: Assignment;
+    student?: User;
     files?: SubmissionFile[];
     grade?: Grade;
     created_at: string;

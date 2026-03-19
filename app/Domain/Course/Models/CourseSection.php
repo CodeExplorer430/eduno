@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Course\Models;
 
+use App\Domain\Announcement\Models\Announcement;
+use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Module\Models\Module;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -47,5 +49,15 @@ class CourseSection extends Model
     public function modules(): HasMany
     {
         return $this->hasMany(Module::class);
+    }
+
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(Assignment::class);
     }
 }
