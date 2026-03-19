@@ -16,7 +16,7 @@ useA11yPrefs();
         </a>
 
         <div>
-            <Link href="/">
+            <Link href="/" aria-label="Go to homepage">
                 <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
             </Link>
         </div>

@@ -33,6 +33,7 @@
     "@inertiajs/vue3": "^2.0.0",
     "@playwright/test": "^1.58.2",
     "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^25.5.0",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
     "@vitejs/plugin-vue": "^6.0.0",
@@ -59,7 +60,8 @@
     "vitest-axe": "^0.1.0",
     "vue": "^3.4.0",
     "vue-eslint-parser": "^10.4.0",
-    "vue-tsc": "^2.0.24"
+    "vue-tsc": "^2.0.24",
+    "ziggy-js": "^2.6.2"
   },
   "dependencies": {
     "tailwindcss": "^4.2.1"
