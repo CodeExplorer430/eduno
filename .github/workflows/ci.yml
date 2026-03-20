@@ -27,19 +27,29 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with: { php-version: '8.4', extensions: 'pgsql, pdo_pgsql, redis', coverage: none }
-      - run: cp .env.example .env
       - name: Configure environment
         run: |
-          echo "DB_CONNECTION=pgsql" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
-          echo "DB_PORT=5432" >> .env
-          echo "DB_DATABASE=eduno_test" >> .env
-          echo "DB_USERNAME=postgres" >> .env
-          echo "DB_PASSWORD=postgres" >> .env
-          echo "REDIS_HOST=127.0.0.1" >> .env
-          echo "CACHE_STORE=array" >> .env
-          echo "SESSION_DRIVER=array" >> .env
-          echo "QUEUE_CONNECTION=sync" >> .env
+          printf '%s\n' \
+            'APP_NAME=Eduno' \
+            'APP_ENV=testing' \
+            'APP_KEY=' \
+            'APP_DEBUG=true' \
+            'APP_URL=http://localhost' \
+            'DB_CONNECTION=pgsql' \
+            'DB_HOST=127.0.0.1' \
+            'DB_PORT=5432' \
+            'DB_DATABASE=eduno_test' \
+            'DB_USERNAME=postgres' \
+            'DB_PASSWORD=postgres' \
+            'REDIS_HOST=127.0.0.1' \
+            'REDIS_PASSWORD=null' \
+            'REDIS_PORT=6379' \
+            'REDIS_CLIENT=phpredis' \
+            'CACHE_STORE=array' \
+            'SESSION_DRIVER=array' \
+            'QUEUE_CONNECTION=sync' \
+            'MAIL_MAILER=log' \
+            > .env
       - run: composer install --no-interaction --prefer-dist --no-scripts
         env:
           COMPOSER_MEMORY_LIMIT: -1
