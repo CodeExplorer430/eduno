@@ -11,9 +11,9 @@
 ## Executive Summary
 
 Eduno LMS v1.0.0 achieves **WCAG 2.2 Level AA compliance** across all page components.
-The audit covered 34 Vue page components and all reusable UI components using axe-core
-automated testing (168 Vitest specs with `toHaveNoViolations` assertions), supplemented
-by manual code review of semantic structure, keyboard operability, and ARIA usage.
+The audit covered 32 Vue page and component spec files using axe-core automated
+testing (168 Vitest specs with `toHaveNoViolations` assertions), supplemented by
+manual code review of semantic structure, keyboard operability, and ARIA usage.
 
 **Result: No axe-core violations on any page component.**
 
@@ -145,15 +145,14 @@ a visible label. Password fields include autocomplete hints.
 ## User Accessibility Preferences (FR-041–045)
 
 The `useA11yPrefs` composable reads `UserPreference` from the Inertia shared
-props and applies CSS custom properties to the document root:
+props and applies CSS classes and data attributes to the `<html>` element:
 
-| Preference | CSS Implementation |
+| Preference | DOM Implementation |
 |---|---|
-| `font_size` (sm / md / lg / xl) | `--eduno-font-scale: 0.875 / 1 / 1.125 / 1.25` |
-| `high_contrast` | `data-high-contrast` attribute on `<html>` |
-| `reduced_motion` | `data-reduced-motion` → `@media (prefers-reduced-motion)` override |
-| `dyslexia_font` | `data-dyslexia-font` → OpenDyslexic font stack |
-| `simplified_layout` | `data-simplified` → hides decorative elements |
+| `font_size` (small / medium / large / extra-large) | `data-fontSize` attribute on `<html>` |
+| `high_contrast` | `high-contrast` CSS class on `<html>` |
+| `reduced_motion` | `reduced-motion` CSS class on `<html>` |
+| `dyslexia_font` | `dyslexia-font` CSS class on `<html>` |
 
 Preferences persist to `user_preferences` table via `UpdateUserPreferences` action
 and are restored on every page load through Inertia shared props.
