@@ -43,8 +43,8 @@ jobs:
       - run: composer install --no-interaction --prefer-dist --no-scripts
         env:
           COMPOSER_MEMORY_LIMIT: -1
-      - run: composer run-script post-autoload-dump
       - run: php artisan key:generate
+      - run: composer run-script post-autoload-dump
       - run: php artisan migrate --force
       - run: ./vendor/bin/pint --test
       - run: ./vendor/bin/phpstan analyse --level=5
