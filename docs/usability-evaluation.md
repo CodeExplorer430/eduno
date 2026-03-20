@@ -48,13 +48,13 @@ The "What's Next?" dashboard widget color-codes deadlines: red (≤ 24 h), amber
 green (> 72 h). The urgency label is also included in the `aria-label`, so it is not
 color-only.
 
-**⚠ Minor — No upload progress indicator (Severity 2)**
+**✅ PASS — Upload progress indicator (Severity 2) — Resolved in v1.2.0**
 
 When a student submits a large file (up to 25 MB), there is no progress bar or spinner.
 The submit button is disabled (`processing` state via `useForm()`), but the user sees no
 indication of how long to wait. On slow connections this can feel like the page has frozen.
 
-**Recommendation:** Add a loading spinner or progress bar to the file submission form.
+**Resolution:** A percentage progress bar (`role="progressbar"`) and live text ("Uploading… N%") appear below the file input during upload, using Inertia's `router.post()` `onProgress` callback. The bar disappears on success or error.
 
 ---
 
@@ -109,16 +109,14 @@ Lesson). Users can navigate back to any level without using the browser back but
 Instructors can toggle modules, lessons, and announcements between Draft and Published.
 Publishing is not irreversible — an instructor can unpublish at any time.
 
-**⚠ Moderate — No submission recall for students (Severity 2)**
+**✅ PASS — Submission pre-warning for single-attempt assignments (Severity 2) — Resolved in v1.2.0**
 
 Once a student submits an assignment, they cannot delete or replace their submission
 unless `allow_resubmission` is enabled by the instructor. The default is `false`.
 Students who accidentally upload the wrong file are stuck unless the instructor
 manually enables resubmission.
 
-**Recommendation:** Show a clear message at submission time: "You have 1 attempt. Make
-sure your file is correct before submitting." This sets expectations before the action,
-reducing the need for an undo.
+**Resolution:** An amber warning banner ("You have 1 attempt. Make sure your file is correct before submitting.") is displayed above the file upload form whenever `allow_resubmission` is `false`, setting expectations before the action.
 
 **✅ Pass — Destructive action confirmation (Severity 0)**
 
@@ -189,14 +187,13 @@ Once a grade is released (`released_at` is set), students can see it. The `audit
 records every `grade.created`, `grade.updated`, and `grade.released` event — instructors
 cannot quietly change a released grade without a traceable record.
 
-**⚠ Moderate — No due date warning on assignment creation (Severity 2)**
+**✅ PASS — Past-due-date warning on assignment creation (Severity 2) — Resolved in v1.2.0**
 
 When an instructor creates an assignment with a due date in the past, the form accepts it
 without a warning. Students would immediately see the assignment as past-due with no
 opportunity to submit.
 
-**Recommendation:** Add a client-side warning (not a block) if `due_at` is in the past
-when the assignment is saved: "This due date is in the past. Are you sure?"
+**Resolution:** Both `Assignment/Create.vue` and `Assignment/Edit.vue` now include a `computed` `isPastDue` check that renders an amber `role="alert"` warning beneath the due-date field whenever the selected date is in the past.
 
 ---
 
@@ -252,13 +249,12 @@ order (no `tabindex` hacks).
 Submission, course, and lesson lists are paginated — expert users working through a
 large cohort can move through pages efficiently.
 
-**⚠ Moderate — No bulk grading (Severity 2)**
+**✅ PASS — Sequential "Next Submission →" navigation in grading (Severity 2) — Resolved in v1.2.0**
 
 Instructors grade one submission at a time. For a class of 30 students, grading requires
 30 individual form submissions. There is no "next submission" button or batch input.
 
-**Recommendation:** Add a "Next Submission →" navigation control on the grading form so
-instructors can move sequentially through the submission queue without returning to the list.
+**Resolution:** `SubmissionController::show()` now computes `prevSubmissionId` and `nextSubmissionId` from all submissions for the same assignment ordered by `submitted_at`. `Submission/Show.vue` renders accessible `← Previous` / `Next →` `<Link>` controls at the top, letting instructors move through the queue without returning to the list.
 
 **⚠ Minor — No keyboard shortcut for publish (Severity 1)**
 
@@ -358,14 +354,13 @@ is for and why it is empty.
 The original assignment instructions are shown above the file upload input. Students do
 not need to navigate away to read the task description.
 
-**⚠ Moderate — No onboarding for new users (Severity 2)**
+**✅ PASS — Dismissible first-login welcome banner (Severity 2) — Resolved in v1.2.0**
 
 First-time users land on the Dashboard with no introduction to Eduno's workflow. A new
 student who has just been enrolled sees the "What's Next?" widget but no guidance on
 how to navigate to a course or submit an assignment.
 
-**Recommendation:** Add a dismissible welcome banner on first login: "Welcome to Eduno!
-Start by visiting your Courses to access materials and assignments."
+**Resolution:** `Dashboard.vue` now renders a `role="status" aria-live="polite"` welcome banner for users who have not yet dismissed it. Dismissal is persisted via `localStorage` (key `eduno_welcome_dismissed`) and the banner is hidden immediately on click via a `showWelcome` ref.
 
 **⚠ Minor — No help text on file submission (Severity 1)**
 
@@ -396,21 +391,17 @@ ZIP — Maximum 25 MB per file."
 
 ## Priority Recommendations
 
-### High Priority (Severity 2–3)
+### High Priority (Severity 2–3) — ✅ All resolved in v1.2.0
 
-1. **File upload progress indicator** — Prevents perceived freezing on slow connections.
-   Affects all students submitting assignments (Heuristic 1).
+1. ✅ **File upload progress indicator** — Percentage progress bar added to submission form (Heuristic 1).
 
-2. **Submission pre-warning ("1 attempt, verify your file")** — Reduces wrong-file
-   submissions and frustrated students (Heuristic 3).
+2. ✅ **Submission pre-warning ("1 attempt, verify your file")** — Amber warning banner shown before file upload for single-attempt assignments (Heuristic 3).
 
-3. **Past-due-date warning on assignment creation** — Prevents instructors from creating
-   inaccessible assignments (Heuristic 5).
+3. ✅ **Past-due-date warning on assignment creation** — Client-side alert rendered on Create and Edit forms when due date is in the past (Heuristic 5).
 
-4. **"Next Submission →" navigation in grading view** — Significantly reduces grading
-   time for instructors with large cohorts (Heuristic 7).
+4. ✅ **"Next Submission →" navigation in grading view** — Previous/Next links on `Submission/Show` page allow sequential grading (Heuristic 7).
 
-5. **First-login welcome banner** — Reduces disorientation for new users (Heuristic 10).
+5. ✅ **First-login welcome banner** — Dismissible banner on Dashboard for first-time users, persisted via localStorage (Heuristic 10).
 
 ### Low Priority (Severity 1)
 
