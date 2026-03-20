@@ -15,6 +15,7 @@ const props = defineProps<{
 const publishForm = useForm({});
 const selectedFiles = ref<File[]>([]);
 const isSubmitting = ref(false);
+const uploadProgress = ref<number | null>(null);
 const fileErrors = ref<string | null>(null);
 
 function togglePublish(): void {
@@ -34,15 +35,21 @@ function handleFileChange(event: Event): void {
 function submitAssignment(): void {
     if (selectedFiles.value.length === 0) return;
     isSubmitting.value = true;
+    uploadProgress.value = 0;
     const fd = new FormData();
     selectedFiles.value.forEach((f) => fd.append('files[]', f));
     router.post(route('assignments.submissions.store', props.assignment.id), fd, {
+        onProgress: (progress) => {
+            uploadProgress.value = progress?.percentage ?? null;
+        },
         onError: (errors) => {
             fileErrors.value = errors['files'] ?? errors['files.0'] ?? null;
             isSubmitting.value = false;
+            uploadProgress.value = null;
         },
         onSuccess: () => {
             isSubmitting.value = false;
+            uploadProgress.value = null;
         },
     });
 }
@@ -226,6 +233,24 @@ function isPastDue(): boolean {
                             </p>
                         </div>
 
+                        <div v-if="uploadProgress !== null" class="mt-3">
+                            <div
+                                role="progressbar"
+                                :aria-valuenow="uploadProgress"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                class="h-2 w-full overflow-hidden rounded bg-gray-200"
+                            >
+                                <div
+                                    class="h-full bg-indigo-500 transition-all"
+                                    :style="{ width: `${uploadProgress}%` }"
+                                />
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500" aria-live="polite">
+                                Uploading… {{ uploadProgress }}%
+                            </p>
+                        </div>
+
                         <button
                             type="submit"
                             :disabled="isSubmitting || selectedFiles.length === 0 || !!fileErrors"
@@ -233,14 +258,6 @@ function isPastDue(): boolean {
                         >
                             {{ isSubmitting ? 'Submitting…' : 'Submit Assignment' }}
                         </button>
-                        <p
-                            v-if="isSubmitting"
-                            role="status"
-                            aria-live="polite"
-                            class="mt-2 text-sm text-gray-600"
-                        >
-                            Uploading your files, please wait…
-                        </p>
                     </form>
                 </div>
             </section>
