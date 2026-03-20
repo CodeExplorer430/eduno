@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $course_id
  * @property string $section_name
+ * @property string|null $block_code
  * @property int $instructor_id
  * @property string|null $schedule_text
  * @property Carbon $created_at
@@ -27,6 +28,7 @@ class CourseSection extends Model
     protected $fillable = [
         'course_id',
         'section_name',
+        'block_code',
         'instructor_id',
         'schedule_text',
     ];

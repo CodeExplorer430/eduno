@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { nextTick } from 'vue';
 import { mount } from '@vue/test-utils';
 import { axe } from 'vitest-axe';
 import AssignmentShow from '@/Pages/Assignment/Show.vue';
@@ -17,6 +18,12 @@ vi.mock('@/Components/Breadcrumb.vue', () => ({
 
 vi.mock('@/Components/StatusBadge.vue', () => ({
     default: { props: ['variant'], template: '<span />' },
+}));
+
+vi.mock('@/composables/useFileSize', () => ({
+    useFileSize: () => ({
+        formatBytes: (bytes: number) => `${bytes} B`,
+    }),
 }));
 
 beforeAll(() => {
@@ -75,6 +82,34 @@ describe('Assignment/Show', () => {
             global: { mocks: { route: (name: string) => `/${name}` } },
         });
         expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
+    });
+
+    it('shows file count and total size after files are selected', async () => {
+        const wrapper = mount(AssignmentShow, {
+            props: { assignment: baseAssignment, canManage: false, mySubmission: null },
+            global: { mocks: { route: (name: string) => `/${name}` } },
+        });
+
+        const input = wrapper.find('input[type="file"]');
+        const file1 = new File(['a'], 'report.pdf', { type: 'application/pdf' });
+        const file2 = new File(['bb'], 'data.zip', { type: 'application/zip' });
+        Object.defineProperty(input.element, 'files', {
+            value: [file1, file2],
+            configurable: true,
+        });
+        await input.trigger('change');
+        await nextTick();
+
+        expect(wrapper.html()).toContain('2 file(s) selected');
+        expect(wrapper.html()).toContain('3 B');
+    });
+
+    it('does not show file summary when no files are selected', () => {
+        const wrapper = mount(AssignmentShow, {
+            props: { assignment: baseAssignment, canManage: false, mySubmission: null },
+            global: { mocks: { route: (name: string) => `/${name}` } },
+        });
+        expect(wrapper.html()).not.toContain('file(s) selected');
     });
 
     it('has no axe violations (student view)', async () => {

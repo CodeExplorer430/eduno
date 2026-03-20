@@ -10,7 +10,7 @@ use App\Models\User;
 class UpdatePreferences
 {
     /**
-     * @param  array<string, mixed>  $data
+     * @param  array{reduced_motion?: bool, high_contrast?: bool, dyslexia_font?: bool, simplified_layout?: bool, font_size?: string}  $data
      */
     public function handle(User $user, array $data): UserPreference
     {

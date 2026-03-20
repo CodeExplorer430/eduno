@@ -37,6 +37,7 @@ export interface CourseSection {
     id: number;
     course_id: number;
     section_name: string;
+    block_code: string | null;
     instructor_id: number;
     schedule_text: string | null;
     course?: Course;
@@ -97,6 +98,7 @@ export interface Assignment {
     allow_resubmission: boolean;
     published_at: string | null;
     section?: CourseSection;
+    mySubmission?: Submission | null;
     created_at: string;
     updated_at: string;
 }

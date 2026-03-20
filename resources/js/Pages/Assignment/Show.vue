@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import StatusBadge from '@/Components/StatusBadge.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { useFileSize } from '@/composables/useFileSize';
 import type { Assignment, Submission } from '@/Types/models';
 
 const props = defineProps<{
@@ -11,6 +12,8 @@ const props = defineProps<{
     submissions?: Submission[];
     mySubmission?: Submission | null;
 }>();
+
+const { formatBytes } = useFileSize();
 
 const publishForm = useForm({});
 const selectedFiles = ref<File[]>([]);
@@ -53,6 +56,12 @@ function submitAssignment(): void {
         },
     });
 }
+
+const selectedFileSummary = computed(() => {
+    if (selectedFiles.value.length === 0) return null;
+    const total = selectedFiles.value.reduce((sum, f) => sum + f.size, 0);
+    return `${selectedFiles.value.length} file(s) selected · ${formatBytes(total)}`;
+});
 
 function isPastDue(): boolean {
     return !!props.assignment.due_at && new Date(props.assignment.due_at) < new Date();
@@ -222,6 +231,13 @@ function isPastDue(): boolean {
                             />
                             <p class="mt-1 text-xs text-gray-500">
                                 Accepted: PDF, DOC, DOCX, ZIP, PNG, JPG, JPEG. Max 25 MB per file.
+                            </p>
+                            <p
+                                v-if="selectedFileSummary"
+                                class="mt-1 text-xs text-gray-500"
+                                aria-live="polite"
+                            >
+                                {{ selectedFileSummary }}
                             </p>
                             <p
                                 v-if="fileErrors"
