@@ -25,6 +25,10 @@ function handleFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     selectedFiles.value = input.files ? Array.from(input.files) : [];
     fileErrors.value = null;
+    const oversized = selectedFiles.value.find((f) => f.size > 26_214_400);
+    if (oversized) {
+        fileErrors.value = `"${oversized.name}" exceeds the 25 MB limit. Please choose a smaller file.`;
+    }
 }
 
 function submitAssignment(): void {
@@ -173,6 +177,7 @@ function isPastDue(): boolean {
                     <p class="mt-1 text-sm text-gray-600 capitalize">
                         Status: {{ mySubmission.status }}
                     </p>
+                    <p class="mt-1 text-sm text-gray-600">Attempt #{{ mySubmission.attempt_no }}</p>
                     <Link
                         :href="route('submissions.show', mySubmission.id)"
                         class="mt-3 inline-block text-sm text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
@@ -183,6 +188,14 @@ function isPastDue(): boolean {
 
                 <div v-else class="mt-4">
                     <h2 class="mb-4 text-lg font-semibold">Submit Your Work</h2>
+
+                    <p
+                        v-if="!assignment.allow_resubmission"
+                        role="note"
+                        class="mb-4 rounded border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+                    >
+                        You have 1 attempt. Make sure your file is correct before submitting.
+                    </p>
 
                     <form novalidate @submit.prevent="submitAssignment">
                         <div>
@@ -215,11 +228,19 @@ function isPastDue(): boolean {
 
                         <button
                             type="submit"
-                            :disabled="isSubmitting || selectedFiles.length === 0"
+                            :disabled="isSubmitting || selectedFiles.length === 0 || !!fileErrors"
                             class="mt-4 rounded bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60"
                         >
-                            Submit Assignment
+                            {{ isSubmitting ? 'Submitting…' : 'Submit Assignment' }}
                         </button>
+                        <p
+                            v-if="isSubmitting"
+                            role="status"
+                            aria-live="polite"
+                            class="mt-2 text-sm text-gray-600"
+                        >
+                            Uploading your files, please wait…
+                        </p>
                     </form>
                 </div>
             </section>
