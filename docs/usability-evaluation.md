@@ -1,0 +1,431 @@
+# Usability Evaluation — Heuristic Evaluation
+
+**Project:** Eduno LMS
+**Version:** 1.0.0
+**Date:** 2026-03-20
+**Method:** Nielsen's 10 Usability Heuristics
+**Context:** CCS 123 — Introduction to Human–Computer Interaction
+
+---
+
+## Overview
+
+This heuristic evaluation examines Eduno LMS against Nielsen's 10 Usability Heuristics.
+Each heuristic is rated on a 0–4 severity scale:
+
+| Severity | Meaning |
+|---|---|
+| 0 | Not a problem |
+| 1 | Cosmetic issue — fix if time permits |
+| 2 | Minor usability problem — low priority |
+| 3 | Major usability problem — high priority |
+| 4 | Usability catastrophe — must fix before release |
+
+---
+
+## Heuristic 1 — Visibility of System Status
+
+> The system should always keep users informed about what is going on through appropriate
+> feedback within a reasonable time.
+
+### Findings
+
+**✅ Pass — Submission confirmation (Severity 0)**
+
+After a student submits an assignment, Inertia redirects to the submission detail page.
+The submission timestamp, attempt number, and status ("Submitted") are immediately visible.
+The confirmation uses `role="alert"` so screen readers announce it without requiring focus.
+
+**✅ Pass — Grade status (Severity 0)**
+
+Submissions display a status badge (`StatusBadge`) at all times: Submitted → Graded →
+Returned. Students can see whether a grade exists and whether it has been released,
+without needing to contact the instructor.
+
+**✅ Pass — Deadline urgency (Severity 0)**
+
+The "What's Next?" dashboard widget color-codes deadlines: red (≤ 24 h), amber (≤ 72 h),
+green (> 72 h). The urgency label is also included in the `aria-label`, so it is not
+color-only.
+
+**⚠ Minor — No upload progress indicator (Severity 2)**
+
+When a student submits a large file (up to 25 MB), there is no progress bar or spinner.
+The submit button is disabled (`processing` state via `useForm()`), but the user sees no
+indication of how long to wait. On slow connections this can feel like the page has frozen.
+
+**Recommendation:** Add a loading spinner or progress bar to the file submission form.
+
+---
+
+## Heuristic 2 — Match Between System and the Real World
+
+> The system should speak the users' language, use words, phrases, and concepts familiar
+> to the user, rather than system-oriented terms.
+
+### Findings
+
+**✅ Pass — Domain vocabulary (Severity 0)**
+
+Eduno uses academic vocabulary throughout: "Assignment," "Module," "Lesson," "Section,"
+"Grade," "Announcement," "Deadline." These directly match the vocabulary used by UCC
+faculty and students in daily academic contexts.
+
+**✅ Pass — Status labels (Severity 0)**
+
+Status badges use "Draft," "Published," and "Late" — terms understood by both instructors
+and students without needing documentation.
+
+**✅ Pass — Date formatting (Severity 0)**
+
+Dates use Philippine locale format (`en-PH`): "Mon, Mar 24, 02:30 PM". This matches how
+dates are communicated at UCC.
+
+**⚠ Minor — "Section" vs "Class" (Severity 1)**
+
+At UCC, students commonly refer to their "class" or "block" (e.g., BSCS-2A) rather than
+"section." The term "Section" is used correctly in the academic registrar sense but may
+initially confuse students who expect to see "class" or "block."
+
+**Recommendation:** Consider adding "class" as a visible alias in the UI subtitle or help
+text on the courses page.
+
+---
+
+## Heuristic 3 — User Control and Freedom
+
+> Users often choose system functions by mistake and will need a clearly marked "emergency
+> exit" to leave the unwanted state without having to go through an extended dialogue.
+
+### Findings
+
+**✅ Pass — Breadcrumb navigation (Severity 0)**
+
+Every page inside a section provides a breadcrumb trail (Course → Section → Module →
+Lesson). Users can navigate back to any level without using the browser back button.
+
+**✅ Pass — Draft/Publish workflow (Severity 0)**
+
+Instructors can toggle modules, lessons, and announcements between Draft and Published.
+Publishing is not irreversible — an instructor can unpublish at any time.
+
+**⚠ Moderate — No submission recall for students (Severity 2)**
+
+Once a student submits an assignment, they cannot delete or replace their submission
+unless `allow_resubmission` is enabled by the instructor. The default is `false`.
+Students who accidentally upload the wrong file are stuck unless the instructor
+manually enables resubmission.
+
+**Recommendation:** Show a clear message at submission time: "You have 1 attempt. Make
+sure your file is correct before submitting." This sets expectations before the action,
+reducing the need for an undo.
+
+**✅ Pass — Destructive action confirmation (Severity 0)**
+
+Delete operations (courses, modules, lessons, assignments) use `DangerButton.vue` with
+a distinct red appearance, clearly differentiating destructive actions from primary ones.
+
+---
+
+## Heuristic 4 — Consistency and Standards
+
+> Users should not have to wonder whether different words, situations, or actions mean
+> the same thing. Follow platform conventions.
+
+### Findings
+
+**✅ Pass — Component consistency (Severity 0)**
+
+All forms use the same component set: `InputLabel`, `TextInput`, `InputError`,
+`PrimaryButton` / `DangerButton`. This produces a visually and behaviorally consistent
+form pattern across all 20+ forms in the application.
+
+**✅ Pass — Navigation consistency (Severity 0)**
+
+The same navigation bar (Dashboard, Courses, Reports for Admin) appears on every
+authenticated page. The active link always shows the indigo-400 bottom-border indicator.
+
+**✅ Pass — Card pattern (Severity 0)**
+
+Every content section uses the same `bg-white shadow-sm sm:rounded-lg` card pattern.
+Users learn the card = content association once and apply it everywhere.
+
+**⚠ Minor — Two accessibility preference routes (Severity 1)**
+
+Accessibility preferences can be updated via both `profile.preferences` (PATCH) and
+`preferences.update` (PUT). Both point to the same action class, but the dual routes
+may cause inconsistency if future UI changes reference the wrong one.
+
+**Recommendation:** Consolidate to a single route in a future cleanup. Not visible to
+end users, but a maintenance consistency concern.
+
+---
+
+## Heuristic 5 — Error Prevention
+
+> Even better than good error messages is a careful design which prevents a problem
+> from occurring in the first place.
+
+### Findings
+
+**✅ Pass — File validation (Severity 0)**
+
+File type and size are validated server-side via Laravel Form Requests before any upload
+is accepted. Rejected uploads return a field-specific error message immediately.
+
+**✅ Pass — Late detection (Severity 0)**
+
+The `is_late` flag is set server-side, comparing `submitted_at` to `due_at`. There is
+no way for a student to manipulate their device clock to avoid the flag.
+
+**✅ Pass — Enrollment duplicate guard (Severity 0)**
+
+The `EnrollStudent` action throws a validation exception if a student is already enrolled
+in a section, preventing duplicate enrollment records.
+
+**✅ Pass — Grade immutability post-release (Severity 0)**
+
+Once a grade is released (`released_at` is set), students can see it. The `audit_log`
+records every `grade.created`, `grade.updated`, and `grade.released` event — instructors
+cannot quietly change a released grade without a traceable record.
+
+**⚠ Moderate — No due date warning on assignment creation (Severity 2)**
+
+When an instructor creates an assignment with a due date in the past, the form accepts it
+without a warning. Students would immediately see the assignment as past-due with no
+opportunity to submit.
+
+**Recommendation:** Add a client-side warning (not a block) if `due_at` is in the past
+when the assignment is saved: "This due date is in the past. Are you sure?"
+
+---
+
+## Heuristic 6 — Recognition Rather Than Recall
+
+> Minimize the user's memory load by making objects, actions, and options visible.
+> The user should not have to remember information from one part of the interface
+> to another.
+
+### Findings
+
+**✅ Pass — Breadcrumbs eliminate context switching (Severity 0)**
+
+The breadcrumb on the Lesson page shows: Course Title → Section Name → Module Title →
+Lesson Title. Users never need to remember where they are in the hierarchy.
+
+**✅ Pass — Assignment instructions always visible (Severity 0)**
+
+On the submission form, the original assignment instructions are displayed above the
+upload area. Students do not need to open a separate page to recall what they need
+to submit.
+
+**✅ Pass — "What's Next?" reduces recall burden (Severity 0)**
+
+The deadline widget on the Dashboard surfaces the most urgent upcoming assignments
+without requiring students to navigate to each course individually.
+
+**⚠ Minor — Submission history not on assignment view (Severity 2)**
+
+On the student-facing assignment page, students cannot see their previous submission
+status or attempt number. They must navigate to the submission detail page separately.
+
+**Recommendation:** Show a small "Your submission: Submitted (Attempt 1, Mar 20)" summary
+directly on the assignment page so students do not need to recall whether they submitted.
+
+---
+
+## Heuristic 7 — Flexibility and Efficiency of Use
+
+> Accelerators — unseen by the novice user — may often speed up the interaction for the
+> expert user so that the system can cater to both inexperienced and experienced users.
+
+### Findings
+
+**✅ Pass — Keyboard navigation (Severity 0)**
+
+All interactive elements are reachable via Tab/Shift+Tab. The skip-to-content link
+allows keyboard users to bypass the navigation bar entirely. Focus order follows DOM
+order (no `tabindex` hacks).
+
+**✅ Pass — Pagination for large lists (Severity 0)**
+
+Submission, course, and lesson lists are paginated — expert users working through a
+large cohort can move through pages efficiently.
+
+**⚠ Moderate — No bulk grading (Severity 2)**
+
+Instructors grade one submission at a time. For a class of 30 students, grading requires
+30 individual form submissions. There is no "next submission" button or batch input.
+
+**Recommendation:** Add a "Next Submission →" navigation control on the grading form so
+instructors can move sequentially through the submission queue without returning to the list.
+
+**⚠ Minor — No keyboard shortcut for publish (Severity 1)**
+
+Publishing a module or lesson requires clicking through to the edit page and pressing the
+"Publish" button. There is no shortcut to publish directly from the list view.
+
+**Recommendation (future):** Add a quick-action publish toggle to the module/lesson list
+row for instructor power users.
+
+---
+
+## Heuristic 8 — Aesthetic and Minimalist Design
+
+> Dialogues should not contain irrelevant or rarely needed information. Every extra unit
+> of information in a dialogue competes with the relevant units of information and
+> diminishes their relative visibility.
+
+### Findings
+
+**✅ Pass — Clean card layout (Severity 0)**
+
+Each page uses white cards on a gray-100 background, with generous padding (p-6) and
+clear typographic hierarchy. Secondary information (course code, section name) is rendered
+in `text-xs gray-500` so it does not compete with primary content.
+
+**✅ Pass — Empty states instead of hidden elements (Severity 0)**
+
+When a list has no items, a dashed-border `EmptyState` card appears rather than a blank
+region. This signals intentionality — the page has loaded correctly and the list is
+genuinely empty.
+
+**✅ Pass — Minimal navigation items (Severity 0)**
+
+The navigation bar shows only three items for most users (Dashboard, Courses, Reports for
+Admin). There is no navigation bloat.
+
+**⚠ Minor — Dashboard shows all three sections unconditionally (Severity 1)**
+
+The Dashboard renders "What's Next?", "My Courses", and "Recent Grades" sections even
+for instructors, where "Recent Grades" has no applicable meaning (instructors do not
+receive grades). The section is hidden when `recentGrades.length === 0`, but the heading
+logic is not role-differentiated.
+
+**Recommendation:** Tailor dashboard sections by role — instructors should see
+"Pending Submissions" and "Sections to Grade" instead of "Recent Grades."
+
+---
+
+## Heuristic 9 — Help Users Recognize, Diagnose, and Recover from Errors
+
+> Error messages should be expressed in plain language (no codes), precisely indicate
+> the problem, and constructively suggest a solution.
+
+### Findings
+
+**✅ Pass — Field-specific error messages (Severity 0)**
+
+Laravel Form Request validation returns field-keyed errors (e.g., "The file field is
+required." for `file`, "The score must be between 0 and 100." for `score`). Inertia
+maps these to the correct `InputError` component for each field.
+
+**✅ Pass — `role="alert"` on error fields (Severity 0)**
+
+`InputError.vue` uses `role="alert"`, causing screen readers to immediately announce
+the error text when it appears without requiring the user to focus the error element.
+
+**✅ Pass — Rate limit messaging (Severity 0)**
+
+After 5 failed login attempts, the system returns a throttling error with a clear
+message rather than a generic HTTP 429.
+
+**⚠ Minor — No inline file size feedback (Severity 1)**
+
+If a user selects a file that is too large (> 25 MB), they only discover this after
+the form is submitted and the server rejects it. There is no client-side file size
+check before upload begins.
+
+**Recommendation:** Add a `change` event listener on the file input that compares
+`file.size` to 26214400 (25 MB) and shows a warning immediately — before the upload
+wastes time and bandwidth.
+
+---
+
+## Heuristic 10 — Help and Documentation
+
+> Even though it is better if the system can be used without documentation, it may
+> be necessary to provide help and the system should make it easy for users to search
+> for relevant information.
+
+### Findings
+
+**✅ Pass — Empty state messages as inline help (Severity 0)**
+
+Empty states contain human-readable explanations, functioning as micro-documentation:
+"No upcoming deadlines in the next 7 days. Great work!" tells students what the section
+is for and why it is empty.
+
+**✅ Pass — Submission instructions always displayed (Severity 0)**
+
+The original assignment instructions are shown above the file upload input. Students do
+not need to navigate away to read the task description.
+
+**⚠ Moderate — No onboarding for new users (Severity 2)**
+
+First-time users land on the Dashboard with no introduction to Eduno's workflow. A new
+student who has just been enrolled sees the "What's Next?" widget but no guidance on
+how to navigate to a course or submit an assignment.
+
+**Recommendation:** Add a dismissible welcome banner on first login: "Welcome to Eduno!
+Start by visiting your Courses to access materials and assignments."
+
+**⚠ Minor — No help text on file submission (Severity 1)**
+
+The file upload area on the submission form does not indicate accepted file types or the
+25 MB size limit until the user makes an error.
+
+**Recommendation:** Add a small hint below the file input: "Accepted: PDF, DOCX, PPTX,
+ZIP — Maximum 25 MB per file."
+
+---
+
+## Summary of Findings
+
+| Heuristic | Rating | Severity Issues |
+|---|---|---|
+| 1. Visibility of System Status | Good | 1 minor (no upload progress) |
+| 2. Match System and Real World | Good | 1 cosmetic ("section" vs "class") |
+| 3. User Control and Freedom | Good | 1 moderate (no submission recall) |
+| 4. Consistency and Standards | Excellent | 1 cosmetic (dual preference routes) |
+| 5. Error Prevention | Excellent | 1 moderate (past due date warning) |
+| 6. Recognition Rather Than Recall | Good | 1 minor (submission status on assignment view) |
+| 7. Flexibility and Efficiency | Good | 1 moderate (no bulk grading), 1 minor (no publish shortcut) |
+| 8. Aesthetic and Minimalist Design | Good | 1 minor (role-differentiated dashboard) |
+| 9. Recognize, Diagnose, Recover | Good | 1 minor (client-side file size check) |
+| 10. Help and Documentation | Acceptable | 1 moderate (no onboarding), 1 minor (upload hints) |
+
+---
+
+## Priority Recommendations
+
+### High Priority (Severity 2–3)
+
+1. **File upload progress indicator** — Prevents perceived freezing on slow connections.
+   Affects all students submitting assignments (Heuristic 1).
+
+2. **Submission pre-warning ("1 attempt, verify your file")** — Reduces wrong-file
+   submissions and frustrated students (Heuristic 3).
+
+3. **Past-due-date warning on assignment creation** — Prevents instructors from creating
+   inaccessible assignments (Heuristic 5).
+
+4. **"Next Submission →" navigation in grading view** — Significantly reduces grading
+   time for instructors with large cohorts (Heuristic 7).
+
+5. **First-login welcome banner** — Reduces disorientation for new users (Heuristic 10).
+
+### Low Priority (Severity 1)
+
+6. Add "Accepted file types + max size" hint below file upload input.
+7. Add submission status summary on the student-facing assignment page.
+8. Add "class" as a visible alias for "section" in UCC-specific context.
+
+---
+
+## Evaluator Note
+
+This evaluation was conducted through code review and automated WCAG testing
+(`vitest-axe`, 168 specs). A follow-up evaluation with 5 representative UCC users
+(2 students, 2 instructors, 1 admin) performing structured tasks would yield
+additional severity ratings grounded in observed behavior.
