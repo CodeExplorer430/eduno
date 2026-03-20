@@ -27,6 +27,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with: { php-version: '8.4', extensions: 'pgsql, pdo_pgsql, redis', coverage: none }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: 'npm' }
       - name: Configure environment
         run: |
           printf '%s\n' \
@@ -53,6 +55,8 @@ jobs:
       - run: composer install --no-interaction --prefer-dist --no-scripts
         env:
           COMPOSER_MEMORY_LIMIT: -1
+      - run: npm ci --legacy-peer-deps
+      - run: npm run build
       - run: mkdir -p bootstrap/cache storage/logs storage/framework/{sessions,views,cache}
       - run: php artisan key:generate
       - run: composer run-script post-autoload-dump
