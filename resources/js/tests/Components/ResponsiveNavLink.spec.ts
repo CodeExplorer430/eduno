@@ -36,6 +36,24 @@ describe('ResponsiveNavLink', () => {
         expect(wrapper.text()).toContain('Courses');
     });
 
+    it('sets aria-current="page" when active=true', () => {
+        const wrapper = mount(ResponsiveNavLink, {
+            props: { href: '/dashboard', active: true },
+            global: { stubs: { Link: LinkStub } },
+            slots: { default: 'Dashboard' },
+        });
+        expect(wrapper.find('a').attributes('aria-current')).toBe('page');
+    });
+
+    it('does not set aria-current when active=false', () => {
+        const wrapper = mount(ResponsiveNavLink, {
+            props: { href: '/dashboard', active: false },
+            global: { stubs: { Link: LinkStub } },
+            slots: { default: 'Dashboard' },
+        });
+        expect(wrapper.find('a').attributes('aria-current')).toBeUndefined();
+    });
+
     it('has no axe violations', async () => {
         const wrapper = mount(ResponsiveNavLink, {
             props: { href: '/dashboard' },

@@ -62,6 +62,26 @@ describe('Dropdown', () => {
         expect(isHiddenByVShow(overlay)).toBe(true);
     });
 
+    it('content wrapper has role="menu"', async () => {
+        const wrapper = mount(Dropdown, { slots: defaultSlots, global: { stubs: globalStubs } });
+        await wrapper.find('button').trigger('click'); // open
+        expect(wrapper.find('[role="menu"]').exists()).toBe(true);
+    });
+
+    it('exposes open state as slot prop on trigger slot', async () => {
+        const wrapper = mount(Dropdown, {
+            slots: {
+                trigger: `<template #trigger="{ open }"><button type="button" :data-open="open">menu</button></template>`,
+                content: '<a href="#">Item</a>',
+            },
+            global: { stubs: globalStubs },
+        });
+        // Initially closed
+        expect(wrapper.find('button').attributes('data-open')).toBe('false');
+        await wrapper.find('button').trigger('click');
+        expect(wrapper.find('button').attributes('data-open')).toBe('true');
+    });
+
     it('has no axe violations when closed', async () => {
         const wrapper = mount(Dropdown, { slots: defaultSlots, global: { stubs: globalStubs } });
         expect(

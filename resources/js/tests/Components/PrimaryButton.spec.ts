@@ -14,10 +14,14 @@ describe('PrimaryButton', () => {
         expect(wrapper.find('button').text()).toBe('Save Changes');
     });
 
-    it('is of type "submit" by default (browser default for buttons)', () => {
+    it('has type="submit" by default', () => {
         const wrapper = mount(PrimaryButton);
-        // No explicit type means the button inherits native browser default
-        expect(wrapper.find('button').exists()).toBe(true);
+        expect(wrapper.find('button').attributes('type')).toBe('submit');
+    });
+
+    it('accepts an explicit type prop', () => {
+        const wrapper = mount(PrimaryButton, { props: { type: 'button' } });
+        expect(wrapper.find('button').attributes('type')).toBe('button');
     });
 
     it('has no axe violations', async () => {

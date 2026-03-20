@@ -26,6 +26,22 @@ describe('TextInput', () => {
         expect(focusSpy).toHaveBeenCalled();
     });
 
+    it('forwards aria-describedby to the input element', () => {
+        const wrapper = mount(TextInput, {
+            props: { modelValue: '' },
+            attrs: { 'aria-describedby': 'hint-text' },
+        });
+        expect(wrapper.find('input').attributes('aria-describedby')).toBe('hint-text');
+    });
+
+    it('forwards aria-invalid to the input element', () => {
+        const wrapper = mount(TextInput, {
+            props: { modelValue: '' },
+            attrs: { 'aria-invalid': 'true' },
+        });
+        expect(wrapper.find('input').attributes('aria-invalid')).toBe('true');
+    });
+
     it('has no axe violations', async () => {
         const wrapper = mount({
             template: `<div><label for="txt">Name</label><TextInput id="txt" v-model="val" /></div>`,

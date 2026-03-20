@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 
 const props = withDefaults(
     defineProps<{
@@ -14,9 +14,12 @@ const props = withDefaults(
     }
 );
 
+const triggerRef = ref<HTMLElement | null>(null);
+
 const closeOnEscape = (e: KeyboardEvent) => {
     if (open.value && e.key === 'Escape') {
         open.value = false;
+        nextTick(() => triggerRef.value?.querySelector<HTMLElement>('button, [tabindex]')?.focus());
     }
 };
 
@@ -44,8 +47,8 @@ const open = ref(false);
 
 <template>
     <div class="relative">
-        <div @click="open = !open">
-            <slot name="trigger" />
+        <div ref="triggerRef" @click="open = !open">
+            <slot name="trigger" :open="open" />
         </div>
 
         <!-- Full Screen Dropdown Overlay -->
@@ -66,7 +69,11 @@ const open = ref(false);
                 style="display: none"
                 @click="open = false"
             >
-                <div class="rounded-md ring-1 ring-black ring-opacity-5" :class="contentClasses">
+                <div
+                    role="menu"
+                    class="rounded-md ring-1 ring-black ring-opacity-5"
+                    :class="contentClasses"
+                >
                     <slot name="content" />
                 </div>
             </div>

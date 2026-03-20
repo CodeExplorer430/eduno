@@ -19,7 +19,11 @@ const displayLabel = props.label ?? props.variant.charAt(0).toUpperCase() + prop
 </script>
 
 <template>
-    <span class="rounded-full px-2 py-0.5 text-xs font-medium" :class="variantClasses[variant]">
-        {{ label ?? variant.charAt(0).toUpperCase() + variant.slice(1) }}
+    <span
+        role="status"
+        class="rounded-full px-2 py-0.5 text-xs font-medium"
+        :class="variantClasses[variant]"
+    >
+        {{ displayLabel }}
     </span>
 </template>
