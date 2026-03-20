@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { axe } from 'vitest-axe';
 import Dashboard from '@/Pages/Dashboard.vue';
@@ -29,6 +29,10 @@ vi.mock('@/Components/DeadlineItem.vue', () => ({
 
 beforeAll(() => {
     (globalThis as Record<string, unknown>).route = (name: string): string => `/${name}`;
+});
+
+beforeEach(() => {
+    localStorage.clear();
 });
 
 describe('Dashboard', () => {
@@ -79,6 +83,38 @@ describe('Dashboard', () => {
             },
         });
         expect(wrapper.html()).toContain('Lab Report 1');
+    });
+
+    it('shows welcome banner when not dismissed', () => {
+        localStorage.clear();
+        const wrapper = mount(Dashboard, {
+            props: {
+                upcoming: [],
+                recentGrades: [],
+                courseSummary: [],
+            },
+            global: {
+                mocks: { route: (name: string) => `/${name}` },
+            },
+        });
+        expect(wrapper.html()).toContain('Welcome to Eduno');
+    });
+
+    it('hides welcome banner after dismiss click', async () => {
+        localStorage.clear();
+        const wrapper = mount(Dashboard, {
+            props: {
+                upcoming: [],
+                recentGrades: [],
+                courseSummary: [],
+            },
+            global: {
+                mocks: { route: (name: string) => `/${name}` },
+            },
+        });
+        expect(wrapper.html()).toContain('Welcome to Eduno');
+        await wrapper.find('button[aria-label="Dismiss welcome banner"]').trigger('click');
+        expect(wrapper.html()).not.toContain('Welcome to Eduno');
     });
 
     it('has no axe violations', async () => {
