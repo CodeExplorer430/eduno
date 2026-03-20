@@ -66,9 +66,19 @@ class SubmissionController extends Controller
         $isInstructor = $user->isAdmin()
             || $user->id === $submission->assignment->section->instructor_id;
 
+        $siblingIds = Submission::where('assignment_id', $submission->assignment_id)
+            ->orderBy('submitted_at')
+            ->pluck('id')
+            ->values();
+        $currentIndex = $siblingIds->search($submission->id);
+        $prevId = $currentIndex > 0 ? $siblingIds[$currentIndex - 1] : null;
+        $nextId = $currentIndex < $siblingIds->count() - 1 ? $siblingIds[$currentIndex + 1] : null;
+
         return Inertia::render('Submission/Show', [
             'submission' => $submission,
             'isInstructor' => $isInstructor,
+            'prevSubmissionId' => $prevId,
+            'nextSubmissionId' => $nextId,
         ]);
     }
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Assignment\Models\Assignment;
+use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Domain\Report\Actions\GetAdminReport;
 use App\Domain\Submission\Models\Grade;
@@ -54,13 +54,6 @@ class DashboardController extends Controller
             ->with('section.course')
             ->get();
 
-        $recentAnnouncements = Announcement::whereIn('course_section_id', $sectionIds)
-            ->whereNotNull('published_at')
-            ->latest('published_at')
-            ->limit(5)
-            ->with('section.course')
-            ->get();
-
         $recentGrades = Grade::whereHas('submission', fn ($q) => $q->where('student_id', $user->id))
             ->whereNotNull('released_at')
             ->latest('released_at')
@@ -69,10 +62,43 @@ class DashboardController extends Controller
             ->get();
 
         return Inertia::render('Dashboard', [
-            'enrolledSections' => $enrolledSections,
-            'upcomingAssignments' => $upcomingAssignments,
-            'recentAnnouncements' => $recentAnnouncements,
-            'recentGrades' => $recentGrades,
+            'courseSummary' => $enrolledSections->map(function (CourseSection $s): array {
+                /** @var Course $course */
+                $course = $s->course;
+
+                return [
+                    'id' => $s->id,
+                    'code' => $course->code,
+                    'title' => $course->title,
+                    'section_name' => $s->section_name,
+                ];
+            }),
+            'upcoming' => $upcomingAssignments->map(function (Assignment $a): array {
+                /** @var CourseSection $section */
+                $section = $a->section;
+                /** @var Course $course */
+                $course = $section->course;
+
+                return [
+                    'id' => $a->id,
+                    'title' => $a->title,
+                    'course_name' => $course->title,
+                    'course_code' => $course->code,
+                    'due_at' => $a->due_at,
+                ];
+            }),
+            'recentGrades' => $recentGrades->map(function (Grade $g): array {
+                $assignment = $g->submission->assignment;
+                /** @var Course $course */
+                $course = $assignment->section->course;
+
+                return [
+                    'assignment_title' => $assignment->title,
+                    'score' => $g->score,
+                    'max_score' => $assignment->max_score,
+                    'course_name' => $course->title,
+                ];
+            }),
         ]);
     }
 

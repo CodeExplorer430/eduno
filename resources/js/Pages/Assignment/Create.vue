@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import type { CourseSection } from '@/Types/models';
 
@@ -13,6 +14,8 @@ const form = useForm({
     max_score: 100 as number | string,
     allow_resubmission: false,
 });
+
+const isPastDue = computed(() => !!form.due_at && new Date(form.due_at) < new Date());
 
 function submit(): void {
     form.post(route('sections.assignments.store', props.section.id));
@@ -109,6 +112,9 @@ function submit(): void {
                         role="alert"
                     >
                         {{ form.errors.due_at }}
+                    </p>
+                    <p v-if="isPastDue" class="mt-1 text-sm text-amber-600" role="alert">
+                        This due date is in the past. Students will not be able to submit.
                     </p>
                 </div>
 
