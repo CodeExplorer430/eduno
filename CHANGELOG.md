@@ -2,6 +2,29 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [1.2.0] — 2026-03-21
+
+### Usability Fixes (Severity-2 Findings — Nielsen Heuristics)
+
+- **H1-1 — Visibility of System Status** (`Assignment/Show.vue`): Added upload
+  progress bar so students see real-time feedback during file submission.
+- **H3-1 — User Control and Freedom** (`Dashboard.vue`): Welcome banner is now
+  dismissible; state persisted so it doesn't reappear on subsequent visits.
+- **H5-1 — Error Prevention** (`Assignment/Show.vue`): Students are shown a
+  prominent 1-attempt warning before submitting when only one attempt is allowed.
+- **H7-1 — Flexibility and Efficiency of Use**: Dismiss button for the welcome
+  banner is fully keyboard-accessible (Enter/Space activates, focus ring visible).
+- **H10-1 — Help and Documentation** (`Assignment/Show.vue`): Accepted file types
+  and maximum file size are displayed as a hint adjacent to the upload input.
+
+### Tests
+
+- Vitest specs: **168 → 175** (7 new specs covering H1-1, H3-1, H5-1, H7-1, H10-1
+  in `Assignment/Show.spec.ts` and `Dashboard.spec.ts`)
+- PHP: `SendDeadlineRemindersTest` unit test added (`tests/Unit/`)
+
+---
+
 ## [1.0.0] - 2026-03-20
 
 ### Features (48 Functional Requirements)
