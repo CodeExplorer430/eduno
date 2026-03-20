@@ -81,7 +81,7 @@ function dismissWelcome(): void {
                     </button>
                 </div>
 
-                <!-- ── Student view ── -->
+                <!-- Student-only view: upcoming assignments, enrolled courses, recent grades -->
                 <template v-if="upcoming !== undefined">
                     <!-- What's Next? -->
                     <section aria-labelledby="whats-next-heading">
@@ -192,7 +192,7 @@ function dismissWelcome(): void {
                     </section>
                 </template>
 
-                <!-- ── Instructor view ── -->
+                <!-- Instructor-only view: sections taught, pending submissions to grade -->
                 <template v-if="sections !== undefined">
                     <!-- My Sections -->
                     <section aria-labelledby="my-sections-heading">
