@@ -2,6 +2,32 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [1.3.0] — 2026-03-21
+
+### Usability Fixes (Severity-1 Findings — Nielsen Heuristics)
+
+- **H6-1 — Recognition over Recall** (`AssignmentController`, `Assignment/Index.vue`):
+  Students can now see their submission status (Submitted / Graded) and date directly
+  on the assignment list, eliminating the need to click into each assignment.
+- **H9-1 — Help Users Recognize, Diagnose, and Recover** (`Assignment/Show.vue`):
+  After selecting files, a live summary ("2 file(s) selected · 1.4 MB") appears below
+  the file input so students can confirm their selection before submitting.
+- **H2-1 — Match Between System and Real World** (`CourseSection`, `Course/Show.vue`,
+  `Assignment/Index.vue`): Sections now display UCC block codes (e.g., "Section A
+  (BSCS-2A)") in all views, matching the identifiers students and instructors use.
+- **H4-1 — Consistency and Standards** (`AccessibilityController`,
+  `PatchPreferencesRequest`): Consolidated two divergent A11y preference routes onto
+  a single `UpdatePreferences::handle()` action with a shared `PatchPreferencesRequest`;
+  deleted the redundant `UpdateUserPreferences` action class.
+
+### Tests
+
+- PHP: **297 → 297** (3 renamed/updated Pest specs for `UpdatePreferences`)
+- Vitest specs: **181** (7 new specs covering H6-1 × 4 and H9-1 × 2; 1 block_code
+  fixture update propagated across `Announcement/Index`, `Lesson/Show`, `Module/Show`)
+
+---
+
 ## [1.2.0] — 2026-03-21
 
 ### Usability Fixes (Severity-2 Findings — Nielsen Heuristics)
