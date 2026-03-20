@@ -19,6 +19,16 @@ describe('DangerButton', () => {
         expect(wrapper.find('button').classes()).toContain('bg-red-600');
     });
 
+    it('has type="button" by default', () => {
+        const wrapper = mount(DangerButton);
+        expect(wrapper.find('button').attributes('type')).toBe('button');
+    });
+
+    it('accepts an explicit type prop', () => {
+        const wrapper = mount(DangerButton, { props: { type: 'submit' } });
+        expect(wrapper.find('button').attributes('type')).toBe('submit');
+    });
+
     it('has no axe violations', async () => {
         const wrapper = mount(DangerButton, { slots: { default: 'Delete' } });
         expect(

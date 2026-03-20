@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = withDefaults(
     defineProps<{
@@ -17,8 +17,9 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(['close']);
-const dialog = ref();
+const dialog = ref<HTMLDialogElement | null>(null);
 const showSlot = ref(props.show);
+const previousFocus = ref<HTMLElement | null>(null);
 
 watch(
     () => props.show,
@@ -26,14 +27,23 @@ watch(
         if (props.show) {
             document.body.style.overflow = 'hidden';
             showSlot.value = true;
+            previousFocus.value = document.activeElement as HTMLElement;
 
             dialog.value?.showModal();
+            nextTick(() => {
+                dialog.value
+                    ?.querySelector<HTMLElement>(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    )
+                    ?.focus();
+            });
         } else {
             document.body.style.overflow = '';
 
             setTimeout(() => {
                 dialog.value?.close();
                 showSlot.value = false;
+                previousFocus.value?.focus();
             }, 200);
         }
     }

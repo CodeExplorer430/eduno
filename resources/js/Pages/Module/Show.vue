@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import Modal from '@/Components/Modal.vue';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import type { Course, CourseSection, Lesson, Module } from '@/Types/models';
+import { ref } from 'vue';
 
 interface ModuleWithRelations extends Module {
     section: CourseSection & { course: Course };
@@ -15,15 +17,20 @@ const props = defineProps<{
 }>();
 
 const publishForm = useForm({});
+const confirmDeleteLessonId = ref<number | null>(null);
 
 function togglePublish(): void {
     publishForm.post(route('modules.publish', props.module.id));
 }
 
 function destroyLesson(lessonId: number): void {
-    if (confirm('Delete this lesson? This cannot be undone.')) {
-        publishForm.delete(route('lessons.destroy', lessonId));
-    }
+    confirmDeleteLessonId.value = lessonId;
+}
+
+function performDelete(): void {
+    if (confirmDeleteLessonId.value === null) return;
+    router.delete(route('lessons.destroy', confirmDeleteLessonId.value));
+    confirmDeleteLessonId.value = null;
 }
 
 function togglePublishLesson(lessonId: number): void {
@@ -201,4 +208,36 @@ function togglePublishLesson(lessonId: number): void {
             </div>
         </div>
     </AuthenticatedLayout>
+
+    <Modal
+        :show="confirmDeleteLessonId !== null"
+        max-width="sm"
+        labelledby="delete-lesson-title"
+        @close="confirmDeleteLessonId = null"
+    >
+        <div class="p-6">
+            <h2 id="delete-lesson-title" class="text-lg font-semibold text-gray-900">
+                Delete Lesson
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                Are you sure you want to delete this lesson? This cannot be undone.
+            </p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button
+                    type="button"
+                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    @click="confirmDeleteLessonId = null"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700"
+                    @click="performDelete"
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+    </Modal>
 </template>
