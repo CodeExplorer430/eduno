@@ -295,15 +295,12 @@ genuinely empty.
 The navigation bar shows only three items for most users (Dashboard, Courses, Reports for
 Admin). There is no navigation bloat.
 
-**⚠ Minor — Dashboard shows all three sections unconditionally (Severity 1)**
+**✅ PASS — Resolved in v1.1.0**
 
-The Dashboard renders "What's Next?", "My Courses", and "Recent Grades" sections even
-for instructors, where "Recent Grades" has no applicable meaning (instructors do not
-receive grades). The section is hidden when `recentGrades.length === 0`, but the heading
-logic is not role-differentiated.
-
-**Recommendation:** Tailor dashboard sections by role — instructors should see
-"Pending Submissions" and "Sections to Grade" instead of "Recent Grades."
+The dashboard now uses role-differentiated template branches: the student view
+(`v-if="upcoming !== undefined"`) and instructor view (`v-if="sections !== undefined"`)
+are mutually exclusive, ensuring each role sees only relevant content.
+"Recent Grades" is never rendered for instructors.
 
 ---
 
@@ -391,7 +388,7 @@ ZIP — Maximum 25 MB per file."
 | 5. Error Prevention | Excellent | 1 moderate (past due date warning) |
 | 6. Recognition Rather Than Recall | Good | 1 minor (submission status on assignment view) |
 | 7. Flexibility and Efficiency | Good | 1 moderate (no bulk grading), 1 minor (no publish shortcut) |
-| 8. Aesthetic and Minimalist Design | Good | 1 minor (role-differentiated dashboard) |
+| 8. Aesthetic and Minimalist Design | Excellent | ✅ All issues resolved |
 | 9. Recognize, Diagnose, Recover | Good | 1 minor (client-side file size check) |
 | 10. Help and Documentation | Acceptable | 1 moderate (no onboarding), 1 minor (upload hints) |
 
