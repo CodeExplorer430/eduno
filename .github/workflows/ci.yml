@@ -28,9 +28,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with: { php-version: '8.4', extensions: 'pgsql, pdo_pgsql, redis', coverage: none }
       - run: cp .env.example .env
-      - run: composer install --no-interaction --prefer-dist
-      - run: php artisan key:generate
-      - name: Configure test DB
+      - name: Configure environment
         run: |
           echo "DB_CONNECTION=pgsql" >> .env
           echo "DB_HOST=127.0.0.1" >> .env
@@ -42,6 +40,11 @@ jobs:
           echo "CACHE_STORE=array" >> .env
           echo "SESSION_DRIVER=array" >> .env
           echo "QUEUE_CONNECTION=sync" >> .env
+      - run: composer install --no-interaction --prefer-dist --no-scripts
+        env:
+          COMPOSER_MEMORY_LIMIT: -1
+      - run: composer run-script post-autoload-dump
+      - run: php artisan key:generate
       - run: php artisan migrate --force
       - run: ./vendor/bin/pint --test
       - run: ./vendor/bin/phpstan analyse --level=5
