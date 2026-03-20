@@ -55,6 +55,23 @@ describe('Modal', () => {
         expect(wrapper.emitted('close')).toBeFalsy();
     });
 
+    it('focuses the first focusable child when opened', async () => {
+        const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
+
+        const wrapper = mount(Modal, {
+            props: { show: false },
+            slots: { default: '<button id="first-btn">OK</button>' },
+            attachTo: document.body,
+        });
+
+        await wrapper.setProps({ show: true });
+        await wrapper.vm.$nextTick();
+        await wrapper.vm.$nextTick();
+
+        expect(focusSpy).toHaveBeenCalled();
+        focusSpy.mockRestore();
+    });
+
     it('has no axe violations when closed', async () => {
         const wrapper = mount(Modal, {
             props: { show: false },

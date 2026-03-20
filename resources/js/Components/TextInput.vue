@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
+defineOptions({ inheritAttrs: false });
+
 const model = defineModel<string>({ required: true });
 
 const input = ref<HTMLInputElement | null>(null);
@@ -17,6 +19,7 @@ defineExpose({ focus: () => input.value?.focus() });
 <template>
     <input
         ref="input"
+        v-bind="$attrs"
         v-model="model"
         class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
     />

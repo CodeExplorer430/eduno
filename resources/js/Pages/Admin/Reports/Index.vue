@@ -33,35 +33,35 @@ const gradedPercent = computed(() => {
         <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <dt class="text-sm font-medium text-gray-500">Total Courses</dt>
-                <dd class="mt-1 text-3xl font-semibold text-gray-900" role="status">
+                <dd class="mt-1 text-3xl font-semibold text-gray-900">
                     {{ report.total_courses }}
                 </dd>
             </div>
 
             <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <dt class="text-sm font-medium text-gray-500">Total Sections</dt>
-                <dd class="mt-1 text-3xl font-semibold text-gray-900" role="status">
+                <dd class="mt-1 text-3xl font-semibold text-gray-900">
                     {{ report.total_sections }}
                 </dd>
             </div>
 
             <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <dt class="text-sm font-medium text-gray-500">Total Students</dt>
-                <dd class="mt-1 text-3xl font-semibold text-gray-900" role="status">
+                <dd class="mt-1 text-3xl font-semibold text-gray-900">
                     {{ report.total_students }}
                 </dd>
             </div>
 
             <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <dt class="text-sm font-medium text-gray-500">Total Submissions</dt>
-                <dd class="mt-1 text-3xl font-semibold text-gray-900" role="status">
+                <dd class="mt-1 text-3xl font-semibold text-gray-900">
                     {{ report.total_submissions }}
                 </dd>
             </div>
 
             <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <dt class="text-sm font-medium text-gray-500">Late Submissions</dt>
-                <dd class="mt-1 text-3xl font-semibold text-gray-900" role="status">
+                <dd class="mt-1 text-3xl font-semibold text-gray-900">
                     {{ report.late_submissions }}
                     <span class="ml-2 text-lg font-normal text-gray-500">({{ latePercent }}%)</span>
                 </dd>
@@ -69,7 +69,7 @@ const gradedPercent = computed(() => {
 
             <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
                 <dt class="text-sm font-medium text-gray-500">Graded Submissions</dt>
-                <dd class="mt-1 text-3xl font-semibold text-gray-900" role="status">
+                <dd class="mt-1 text-3xl font-semibold text-gray-900">
                     {{ report.graded_submissions }}
                     <span class="ml-2 text-lg font-normal text-gray-500"
                         >({{ gradedPercent }}%)</span

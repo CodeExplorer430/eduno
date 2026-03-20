@@ -43,7 +43,6 @@ const formattedDate = computed(() =>
 
 <template>
     <li
-        role="listitem"
         :aria-label="`${assignment.title} — ${assignment.course_name}, due ${formattedDate}. ${urgencyLabel}.`"
         class="flex items-start gap-3 rounded-lg border-l-4 p-4"
         :class="urgencyClasses"

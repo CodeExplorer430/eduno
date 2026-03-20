@@ -64,11 +64,13 @@ useA11yPrefs();
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
-                                    <template #trigger>
+                                    <template #trigger="{ open }">
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
                                                 class="inline-flex min-h-[44px] items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+                                                :aria-expanded="open"
+                                                aria-haspopup="menu"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -111,6 +113,9 @@ useA11yPrefs();
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
                                 class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+                                aria-label="Toggle navigation menu"
+                                :aria-expanded="showingNavigationDropdown"
+                                aria-controls="responsive-nav"
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                             >
                                 <svg
@@ -118,6 +123,7 @@ useA11yPrefs();
                                     stroke="currentColor"
                                     fill="none"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
                                     <path
                                         :class="{
@@ -147,6 +153,7 @@ useA11yPrefs();
 
                 <!-- Responsive Navigation Menu -->
                 <div
+                    id="responsive-nav"
                     :class="{
                         block: showingNavigationDropdown,
                         hidden: !showingNavigationDropdown,
