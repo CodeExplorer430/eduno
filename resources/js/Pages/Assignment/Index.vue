@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
 import type { Assignment, CourseSection, PaginatedResponse } from '@/Types/models';
@@ -27,10 +28,22 @@ function statusClass(assignment: Assignment): string {
         return 'bg-red-100 text-red-700';
     return 'bg-green-100 text-green-700';
 }
+
+function submissionBadgeClass(status: string): string {
+    if (status === 'graded') return 'bg-blue-100 text-blue-700';
+    if (status === 'returned') return 'bg-purple-100 text-purple-700';
+    return 'bg-green-100 text-green-700';
+}
+
+function formatSubmissionDate(dateStr: string): string {
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
 </script>
 
 <template>
-    <Head :title="`Assignments — ${section.section_name}`" />
+    <Head
+        :title="`Assignments — ${section.section_name}${section.block_code ? ` (${section.block_code})` : ''}`"
+    />
 
     <main class="mx-auto max-w-5xl px-4 py-8">
         <header class="mb-6 flex items-center justify-between">
@@ -42,7 +55,8 @@ function statusClass(assignment: Assignment): string {
                                 :href="route('sections.show', section.id)"
                                 class="hover:underline"
                             >
-                                {{ section.section_name }}
+                                {{ section.section_name
+                                }}{{ section.block_code ? ` (${section.block_code})` : '' }}
                             </Link>
                         </li>
                         <li aria-hidden="true">/</li>
@@ -76,6 +90,9 @@ function statusClass(assignment: Assignment): string {
                     <th scope="col" class="py-3 pr-4 font-medium">Due Date</th>
                     <th scope="col" class="py-3 pr-4 font-medium">Status</th>
                     <th scope="col" class="py-3 pr-4 font-medium">Max Score</th>
+                    <th v-if="!canManage" scope="col" class="py-3 pr-4 font-medium">
+                        My Submission
+                    </th>
                     <th v-if="canManage" scope="col" class="py-3 font-medium">Actions</th>
                 </tr>
             </thead>
@@ -105,6 +122,17 @@ function statusClass(assignment: Assignment): string {
                         </span>
                     </td>
                     <td class="py-3 pr-4 text-gray-600">{{ assignment.max_score }}</td>
+                    <td v-if="!canManage" class="py-3 pr-4">
+                        <span
+                            v-if="assignment.mySubmission"
+                            :class="submissionBadgeClass(assignment.mySubmission.status)"
+                            class="rounded-full px-2 py-0.5 text-xs font-medium capitalize"
+                        >
+                            {{ assignment.mySubmission.status }} &middot;
+                            {{ formatSubmissionDate(assignment.mySubmission.submitted_at) }}
+                        </span>
+                        <span v-else class="text-gray-400">—</span>
+                    </td>
                     <td v-if="canManage" class="py-3">
                         <div class="flex gap-3">
                             <button

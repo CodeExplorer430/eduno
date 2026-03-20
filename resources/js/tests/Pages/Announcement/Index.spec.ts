@@ -27,6 +27,7 @@ beforeAll(() => {
 const section: CourseSection = {
     id: 1,
     section_name: 'CS101-A',
+    block_code: null,
     course_id: 1,
     instructor_id: 1,
     schedule_text: null,
