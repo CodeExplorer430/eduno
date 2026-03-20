@@ -136,6 +136,7 @@ function isEnrolled(section: EnrichedSection): boolean {
                 <section aria-labelledby="sections-heading">
                     <h3 id="sections-heading" class="text-lg font-semibold text-gray-800">
                         Sections
+                        <span class="text-sm font-normal text-gray-500">(classes / blocks)</span>
                     </h3>
 
                     <div

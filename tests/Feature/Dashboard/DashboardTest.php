@@ -62,9 +62,8 @@ test('student dashboard has required props', function (): void {
     $response->assertInertia(
         fn ($page) => $page
             ->component('Dashboard')
-            ->has('enrolledSections')
-            ->has('upcomingAssignments')
-            ->has('recentAnnouncements')
+            ->has('courseSummary')
+            ->has('upcoming')
             ->has('recentGrades')
     );
 });
@@ -100,7 +99,7 @@ test('student upcoming assignments excludes assignments already submitted', func
     $response->assertInertia(
         fn ($page) => $page
             ->component('Dashboard')
-            ->where('upcomingAssignments', fn ($assignments) => collect($assignments)->where('id', $assignment->id)->isEmpty())
+            ->where('upcoming', fn ($assignments) => collect($assignments)->where('id', $assignment->id)->isEmpty())
     );
 });
 
@@ -126,7 +125,7 @@ test('student upcoming assignments excludes assignments due beyond 7 days', func
     $response->assertInertia(
         fn ($page) => $page
             ->component('Dashboard')
-            ->where('upcomingAssignments', fn ($assignments) => collect($assignments)->where('title', 'Far Future Assignment')->isEmpty())
+            ->where('upcoming', fn ($assignments) => collect($assignments)->where('title', 'Far Future Assignment')->isEmpty())
     );
 });
 

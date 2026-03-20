@@ -5,6 +5,8 @@ import type { Submission } from '@/Types/models';
 const props = defineProps<{
     submission: Submission;
     isInstructor: boolean;
+    prevSubmissionId?: number | null;
+    nextSubmissionId?: number | null;
 }>();
 
 const gradeForm = useForm({
@@ -46,6 +48,26 @@ function releaseGrade(): void {
                 <li aria-hidden="true">/</li>
                 <li aria-current="page">Submission</li>
             </ol>
+        </nav>
+
+        <nav aria-label="Submission navigation" class="mb-6 flex items-center gap-4">
+            <Link
+                v-if="prevSubmissionId"
+                :href="route('submissions.show', prevSubmissionId)"
+                class="text-sm text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+            >
+                ← Previous
+            </Link>
+            <span v-else class="text-sm text-gray-400">← Previous</span>
+
+            <Link
+                v-if="nextSubmissionId"
+                :href="route('submissions.show', nextSubmissionId)"
+                class="text-sm text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+            >
+                Next →
+            </Link>
+            <span v-else class="text-sm text-gray-400">Next →</span>
         </nav>
 
         <h1 class="mb-2 text-2xl font-bold">Submission by {{ submission.student?.name }}</h1>
