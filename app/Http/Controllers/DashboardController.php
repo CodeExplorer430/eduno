@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
@@ -30,8 +31,15 @@ class DashboardController extends Controller
             return $this->instructorDashboard($user);
         }
 
+        $report = $adminReport->handle();
+
         return Inertia::render('Dashboard', [
-            'report' => $adminReport->handle(),
+            'role' => 'admin',
+            'users_by_role' => User::selectRaw('role, count(*) as count')->groupBy('role')->pluck('count', 'role'),
+            'total_courses' => $report['total_courses'],
+            'total_submissions' => $report['total_submissions'],
+            'total_grades_released' => Grade::whereNotNull('released_at')->count(),
+            'report' => $report,
         ]);
     }
 
@@ -61,7 +69,17 @@ class DashboardController extends Controller
             ->with('submission.assignment.section.course')
             ->get();
 
+        $recentAnnouncements = Announcement::whereIn('course_section_id', $sectionIds)
+            ->whereNotNull('published_at')
+            ->latest('published_at')
+            ->limit(5)
+            ->get(['id', 'title', 'published_at', 'course_section_id']);
+
         return Inertia::render('Dashboard', [
+            'role' => 'student',
+            'enrolled_courses_count' => $enrolledSections->count(),
+            'upcoming_assignments' => $upcomingAssignments,
+            'recent_announcements' => $recentAnnouncements,
             'courseSummary' => $enrolledSections->map(function (CourseSection $s): array {
                 /** @var Course $course */
                 $course = $s->course;
@@ -121,7 +139,19 @@ class DashboardController extends Controller
             ->with(['assignment.section.course', 'student'])
             ->get();
 
+        $upcomingDeadlines = Assignment::whereIn('course_section_id', $sectionIds)
+            ->whereNotNull('published_at')
+            ->whereBetween('due_at', [now(), now()->addDays(7)])
+            ->orderBy('due_at')
+            ->limit(10)
+            ->get(['id', 'title', 'due_at', 'course_section_id']);
+
         return Inertia::render('Dashboard', [
+            'role' => 'instructor',
+            'courses_count' => $sections->count(),
+            'pending_submissions_count' => $pendingSubmissions->count(),
+            'recent_submissions' => $pendingSubmissions,
+            'upcoming_deadlines' => $upcomingDeadlines,
             'sections' => $sections,
             'pendingSubmissions' => $pendingSubmissions,
         ]);

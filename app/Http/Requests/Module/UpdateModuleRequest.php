@@ -22,6 +22,7 @@ class UpdateModuleRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'order_no' => ['nullable', 'integer', 'min:0'],
+            'published' => ['nullable', 'boolean'],
         ];
     }
 }

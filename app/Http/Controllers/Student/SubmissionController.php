@@ -43,9 +43,9 @@ class SubmissionController extends Controller
             403
         );
 
-        $submission = $this->submitAssignment->execute(
-            $request->user(),
+        $submission = $this->submitAssignment->handle(
             $assignment,
+            $request->user(),
             $request->file('files') ?? []
         );
 

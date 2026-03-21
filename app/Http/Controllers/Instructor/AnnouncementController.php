@@ -50,7 +50,7 @@ class AnnouncementController extends Controller
 
         $section = CourseSection::findOrFail($request->validated('course_section_id'));
 
-        $this->createAnnouncement->execute($request->user(), $section, $request->validated());
+        $this->createAnnouncement->handle($section, $request->validated(), $request->user());
 
         return redirect()->route('instructor.announcements.index')
             ->with('success', 'Announcement published.');

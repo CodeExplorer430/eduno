@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 it('has expected fillable attributes', function (): void {
-    $model = new Assignment;
+    $model = new Assignment();
     expect($model->getFillable())->toContain(
         'course_section_id',
         'title',
@@ -18,11 +18,11 @@ it('has expected fillable attributes', function (): void {
 });
 
 it('uses courseSection relationship', function (): void {
-    $assignment = new Assignment;
+    $assignment = new Assignment();
     expect($assignment->courseSection())->toBeInstanceOf(BelongsTo::class);
 });
 
 it('uses submissions relationship', function (): void {
-    $assignment = new Assignment;
+    $assignment = new Assignment();
     expect($assignment->submissions())->toBeInstanceOf(HasMany::class);
 });
