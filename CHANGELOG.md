@@ -2,6 +2,22 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [1.4.0] — 2026-03-21
+
+### Usability Fix (Cosmetic — Nielsen Heuristic 2)
+
+- **H2-1 cosmetic — Match Between System and Real World** (`Course/Show.vue`):
+  Added a subtitle paragraph beneath the "Sections (classes / blocks)" heading —
+  "Sections correspond to your enrolled class block (e.g., BSCS-2A)." — so students
+  immediately understand the UCC block-code convention without having to guess.
+
+### Tests
+
+- Vitest specs: **184** (3 new specs in `Course/Show.spec.ts` covering section name +
+  block_code rendering, helper text content, and axe WCAG compliance)
+
+---
+
 ## [1.3.0] — 2026-03-21
 
 ### Usability Fixes (Severity-1 Findings — Nielsen Heuristics)
