@@ -81,14 +81,13 @@ and students without needing documentation.
 Dates use Philippine locale format (`en-PH`): "Mon, Mar 24, 02:30 PM". This matches how
 dates are communicated at UCC.
 
-**⚠ Minor — "Section" vs "Class" (Severity 1)**
+**✅ PASS — UCC block codes displayed (Severity 1) — Resolved in v1.3.0**
 
 At UCC, students commonly refer to their "class" or "block" (e.g., BSCS-2A) rather than
 "section." The term "Section" is used correctly in the academic registrar sense but may
 initially confuse students who expect to see "class" or "block."
 
-**Recommendation:** Consider adding "class" as a visible alias in the UI subtitle or help
-text on the courses page.
+**Resolution:** Sections now display the UCC block code (e.g., 'BSCS-2A') in parentheses in all views (`Course/Show.vue`, `Assignment/Index.vue`), matching the identifiers students and instructors use daily.
 
 ---
 
@@ -148,14 +147,13 @@ authenticated page. The active link always shows the indigo-400 bottom-border in
 Every content section uses the same `bg-white shadow-sm sm:rounded-lg` card pattern.
 Users learn the card = content association once and apply it everywhere.
 
-**⚠ Minor — Two accessibility preference routes (Severity 1)**
+**✅ PASS — Preference routes consolidated (Severity 1) — Resolved in v1.3.0**
 
 Accessibility preferences can be updated via both `profile.preferences` (PATCH) and
 `preferences.update` (PUT). Both point to the same action class, but the dual routes
 may cause inconsistency if future UI changes reference the wrong one.
 
-**Recommendation:** Consolidate to a single route in a future cleanup. Not visible to
-end users, but a maintenance consistency concern.
+**Resolution:** Both `/profile/preferences` (PATCH) and `/preferences` (PUT) now route through a single `UpdatePreferences::handle()` action backed by `PatchPreferencesRequest`. The redundant `UpdateUserPreferences` action was deleted.
 
 ---
 
@@ -221,13 +219,12 @@ to submit.
 The deadline widget on the Dashboard surfaces the most urgent upcoming assignments
 without requiring students to navigate to each course individually.
 
-**⚠ Minor — Submission history not on assignment view (Severity 2)**
+**✅ PASS — Submission status on assignment list (Severity 2) — Resolved in v1.3.0**
 
 On the student-facing assignment page, students cannot see their previous submission
 status or attempt number. They must navigate to the submission detail page separately.
 
-**Recommendation:** Show a small "Your submission: Submitted (Attempt 1, Mar 20)" summary
-directly on the assignment page so students do not need to recall whether they submitted.
+**Resolution:** Students can see Submitted / Graded status and submission date directly on the assignment list (`Assignment/Index.vue`), eliminating the need to click into each assignment.
 
 ---
 
@@ -323,15 +320,13 @@ the error text when it appears without requiring the user to focus the error ele
 After 5 failed login attempts, the system returns a throttling error with a clear
 message rather than a generic HTTP 429.
 
-**⚠ Minor — No inline file size feedback (Severity 1)**
+**✅ PASS — Inline file-selection feedback and size guard (Severity 1) — Resolved in v1.3.0**
 
 If a user selects a file that is too large (> 25 MB), they only discover this after
 the form is submitted and the server rejects it. There is no client-side file size
 check before upload begins.
 
-**Recommendation:** Add a `change` event listener on the file input that compares
-`file.size` to 26214400 (25 MB) and shows a warning immediately — before the upload
-wastes time and bandwidth.
+**Resolution:** A live summary ('2 file(s) selected · 1.4 MB') appears below the file input on selection. Files exceeding 25 MB trigger an immediate `role='alert'` error and disable the submit button before any upload attempt.
 
 ---
 
@@ -377,14 +372,14 @@ ZIP — Maximum 25 MB per file."
 | Heuristic | Rating | Severity Issues |
 |---|---|---|
 | 1. Visibility of System Status | Good | 1 minor (no upload progress) |
-| 2. Match System and Real World | Good | 1 cosmetic ("section" vs "class") |
+| 2. Match System and Real World | Good | ✅ All issues resolved |
 | 3. User Control and Freedom | Good | 1 moderate (no submission recall) |
-| 4. Consistency and Standards | Excellent | 1 cosmetic (dual preference routes) |
+| 4. Consistency and Standards | Excellent | ✅ All issues resolved |
 | 5. Error Prevention | Excellent | 1 moderate (past due date warning) |
-| 6. Recognition Rather Than Recall | Good | 1 minor (submission status on assignment view) |
+| 6. Recognition Rather Than Recall | Good | ✅ All issues resolved |
 | 7. Flexibility and Efficiency | Good | 1 moderate (no bulk grading), 1 minor (no publish shortcut) |
 | 8. Aesthetic and Minimalist Design | Excellent | ✅ All issues resolved |
-| 9. Recognize, Diagnose, Recover | Good | 1 minor (client-side file size check) |
+| 9. Recognize, Diagnose, Recover | Good | ✅ All issues resolved |
 | 10. Help and Documentation | Acceptable | 1 moderate (no onboarding), 1 minor (upload hints) |
 
 ---
@@ -403,17 +398,17 @@ ZIP — Maximum 25 MB per file."
 
 5. ✅ **First-login welcome banner** — Dismissible banner on Dashboard for first-time users, persisted via localStorage (Heuristic 10).
 
-### Low Priority (Severity 1)
+### Low Priority (Severity 1) — ✅ All resolved in v1.2.0 / v1.3.0
 
-6. Add "Accepted file types + max size" hint below file upload input.
-7. Add submission status summary on the student-facing assignment page.
-8. Add "class" as a visible alias for "section" in UCC-specific context.
+6. ✅ **"Accepted file types + max size" hint** — Resolved in v1.2.0 (H10-1).
+7. ✅ **Submission status on assignment page** — Resolved in v1.3.0 (H6-1).
+8. ✅ **UCC block codes displayed** — Resolved in v1.3.0 (H2-1).
 
 ---
 
 ## Evaluator Note
 
 This evaluation was conducted through code review and automated WCAG testing
-(`vitest-axe`, 168 specs). A follow-up evaluation with 5 representative UCC users
+(`vitest-axe`, 181 specs). A follow-up evaluation with 5 representative UCC users
 (2 students, 2 instructors, 1 admin) performing structured tasks would yield
 additional severity ratings grounded in observed behavior.
