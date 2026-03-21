@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 interface Announcement {
     id: number;
@@ -22,9 +23,18 @@ const formatDate = (dateString: string): string =>
     }).format(new Date(dateString));
 
 const deleteForm = useForm({});
-const deleteAnnouncement = (id: number): void => {
-    if (!confirm('Delete this announcement?')) return;
-    deleteForm.delete(route('instructor.announcements.destroy', id));
+const confirmTarget = ref<number | null>(null);
+
+const requestDelete = (id: number): void => {
+    confirmTarget.value = id;
+};
+const confirmDelete = (): void => {
+    if (confirmTarget.value === null) return;
+    deleteForm.delete(route('instructor.announcements.destroy', confirmTarget.value));
+    confirmTarget.value = null;
+};
+const cancelDelete = (): void => {
+    confirmTarget.value = null;
 };
 </script>
 
@@ -36,7 +46,7 @@ const deleteAnnouncement = (id: number): void => {
             <div class="flex items-center justify-between">
                 <h1 class="text-xl font-bold text-gray-900">Announcements</h1>
                 <Link :href="route('instructor.announcements.create')">
-                    <PrimaryButton type="button">New Announcement</PrimaryButton>
+                    <Button type="button">New Announcement</Button>
                 </Link>
             </div>
         </template>
@@ -103,17 +113,16 @@ const deleteAnnouncement = (id: number): void => {
                                                     Edit
                                                 </Link>
                                                 <form
-                                                    @submit.prevent="
-                                                        deleteAnnouncement(announcement.id)
-                                                    "
+                                                    @submit.prevent="requestDelete(announcement.id)"
                                                 >
-                                                    <DangerButton
+                                                    <Button
                                                         type="submit"
-                                                        class="text-xs px-2 py-1"
+                                                        severity="danger"
+                                                        size="small"
                                                         :aria-label="`Delete ${announcement.title}`"
                                                     >
                                                         Delete
-                                                    </DangerButton>
+                                                    </Button>
                                                 </form>
                                             </div>
                                         </header>
@@ -128,5 +137,29 @@ const deleteAnnouncement = (id: number): void => {
                 </main>
             </div>
         </div>
+
+        <Dialog
+            :visible="confirmTarget !== null"
+            modal
+            header="Delete Announcement"
+            :closable="false"
+            @update:visible="cancelDelete"
+        >
+            <p id="confirm-delete-desc">
+                Are you sure you want to delete this announcement? This action cannot be undone.
+            </p>
+            <template #footer>
+                <Button severity="secondary" @click="cancelDelete">Cancel</Button>
+                <Button
+                    severity="danger"
+                    :disabled="deleteForm.processing"
+                    :aria-busy="deleteForm.processing"
+                    @click="confirmDelete"
+                >
+                    <span v-if="deleteForm.processing">Deleting&hellip;</span>
+                    <span v-else>Delete</span>
+                </Button>
+            </template>
+        </Dialog>
     </AuthenticatedLayout>
 </template>

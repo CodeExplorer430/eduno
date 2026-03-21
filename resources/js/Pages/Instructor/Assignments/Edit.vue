@@ -2,9 +2,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Props {
@@ -90,7 +89,7 @@ const submit = (): void => {
                                         <span class="text-red-500" aria-hidden="true">*</span>
                                         <span class="sr-only">(required)</span>
                                     </InputLabel>
-                                    <TextInput
+                                    <InputText
                                         id="assignment-title"
                                         v-model="form.title"
                                         type="text"
@@ -128,7 +127,7 @@ const submit = (): void => {
 
                                 <div>
                                     <InputLabel for="assignment-due-at">Due Date</InputLabel>
-                                    <TextInput
+                                    <InputText
                                         id="assignment-due-at"
                                         v-model="form.due_at"
                                         type="datetime-local"
@@ -149,7 +148,7 @@ const submit = (): void => {
                                         <span class="text-red-500" aria-hidden="true">*</span>
                                         <span class="sr-only">(required)</span>
                                     </InputLabel>
-                                    <TextInput
+                                    <InputText
                                         id="assignment-max-score"
                                         v-model="form.max_score"
                                         type="number"
@@ -195,21 +194,17 @@ const submit = (): void => {
                             <footer
                                 class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4"
                             >
-                                <Link
-                                    :href="route('instructor.courses.index')"
-                                    as="button"
-                                    type="button"
-                                >
-                                    <SecondaryButton type="button">Cancel</SecondaryButton>
+                                <Link :href="route('instructor.courses.index')">
+                                    <Button type="button" severity="secondary">Cancel</Button>
                                 </Link>
-                                <PrimaryButton
+                                <Button
                                     type="submit"
                                     :disabled="form.processing"
                                     :aria-busy="form.processing"
                                 >
                                     <span v-if="form.processing">Saving&hellip;</span>
                                     <span v-else>Save Changes</span>
-                                </PrimaryButton>
+                                </Button>
                             </footer>
                         </form>
                     </section>

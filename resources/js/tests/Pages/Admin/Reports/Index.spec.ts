@@ -1,60 +1,62 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { axe } from 'vitest-axe';
-import ReportsIndex from '@/Pages/Admin/Reports/Index.vue';
+import IndexPage from '@/Pages/Admin/Reports/Index.vue';
+import { mountWithPrimeVue } from '@/tests/helpers';
 
 vi.mock('@inertiajs/vue3', () => ({
-    Head: { template: '<head></head>' },
+    Head: { template: '<div />' },
 }));
 
-beforeAll(() => {
-    (globalThis as Record<string, unknown>).route = (name: string) => `/${name}`;
-});
+const stubs = {
+    AuthenticatedLayout: { template: '<div><slot /><slot name="header" /></div>' },
+    Head: true,
+};
 
-const report = {
-    total_courses: 12,
-    total_sections: 24,
-    total_students: 480,
-    total_submissions: 960,
-    late_submissions: 48,
-    graded_submissions: 720,
+const routeMock = vi.fn(() => '/');
+
+const globalOpts = { stubs, mocks: { route: routeMock } };
+
+const props = {
+    stats: { total_submissions: 42, late_submissions: 5, graded: 38, released_grades: 30 },
 };
 
 describe('Admin/Reports/Index', () => {
-    it('renders the "System Reports" heading', () => {
-        const wrapper = mount(ReportsIndex, {
-            props: { report },
-            global: { mocks: { route: (name: string) => `/${name}` } },
-        });
-        expect(wrapper.html()).toContain('System Reports');
+    it('renders without crashing', () => {
+        const wrapper = mount(IndexPage, { global: globalOpts, props });
+        expect(wrapper.exists()).toBe(true);
     });
 
-    it('renders total courses stat', () => {
-        const wrapper = mount(ReportsIndex, {
-            props: { report },
-            global: { mocks: { route: (name: string) => `/${name}` } },
-        });
-        expect(wrapper.html()).toContain('Total Courses');
-        expect(wrapper.html()).toContain('12');
+    it('renders total_submissions value (42) in the DOM', () => {
+        const wrapper = mount(IndexPage, { global: globalOpts, props });
+        expect(wrapper.text()).toContain('42');
     });
 
-    it('renders graded submissions stat', () => {
-        const wrapper = mount(ReportsIndex, {
-            props: { report },
-            global: { mocks: { route: (name: string) => `/${name}` } },
-        });
-        expect(wrapper.html()).toContain('Graded Submissions');
-        expect(wrapper.html()).toContain('720');
+    it('section has aria-labelledby="stats-heading"', () => {
+        const wrapper = mount(IndexPage, { global: globalOpts, props });
+        expect(wrapper.find('section[aria-labelledby="stats-heading"]').exists()).toBe(true);
     });
 
-    it('has no axe violations', async () => {
-        const wrapper = mount(ReportsIndex, {
-            props: { report },
-            global: { mocks: { route: (name: string) => `/${name}` } },
-            attachTo: document.body,
+    it('h2 has id="stats-heading"', () => {
+        const wrapper = mount(IndexPage, { global: globalOpts, props });
+        expect(wrapper.find('h2#stats-heading').exists()).toBe(true);
+    });
+
+    it('dd element has aria-label containing "Total Submissions: 42"', () => {
+        const wrapper = mount(IndexPage, { global: globalOpts, props });
+        const dd = wrapper.find('dd[aria-label="Total Submissions: 42"]');
+        expect(dd.exists()).toBe(true);
+    });
+
+    it('passes WCAG axe check', async () => {
+        const wrapper = mountWithPrimeVue(IndexPage, {
+            props,
+            global: {
+                mocks: { route: routeMock },
+                stubs,
+            },
         });
-        expect(
-            await axe(wrapper.element, { rules: { region: { enabled: false } } })
-        ).toHaveNoViolations();
+        const results = await axe(wrapper.element, { rules: { region: { enabled: false } } });
+        expect(results).toHaveNoViolations();
     });
 });

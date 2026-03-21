@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import GradeForm from '@/Components/GradeForm.vue';
-import StatusBadge from '@/Components/StatusBadge.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Tag from 'primevue/tag';
+import Button from 'primevue/button';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Grade {
@@ -28,10 +28,13 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const validStatuses = ['submitted', 'graded', 'returned', 'late', 'pending'] as const;
-type ValidStatus = (typeof validStatuses)[number];
-const safeStatus = (s: string): ValidStatus =>
-    validStatuses.includes(s as ValidStatus) ? (s as ValidStatus) : 'pending';
+const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger' | 'warn'> = {
+    submitted: 'info',
+    graded: 'success',
+    returned: 'secondary',
+    late: 'danger',
+    pending: 'warn',
+};
 
 const formatBytes = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
@@ -105,7 +108,11 @@ const releaseGrade = (): void => {
                                     Status
                                 </dt>
                                 <dd>
-                                    <StatusBadge :variant="safeStatus(submission.status)" />
+                                    <Tag
+                                        :severity="statusSeverity[submission.status] ?? 'warn'"
+                                        :value="submission.status"
+                                        class="capitalize"
+                                    />
                                     <span
                                         v-if="submission.is_late"
                                         class="ml-2 inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
@@ -189,14 +196,14 @@ const releaseGrade = (): void => {
                                     Grade is saved but not yet visible to the student.
                                 </p>
                                 <form @submit.prevent="releaseGrade">
-                                    <PrimaryButton
+                                    <Button
                                         type="submit"
                                         :disabled="releaseForm.processing"
                                         :aria-busy="releaseForm.processing"
                                     >
                                         <span v-if="releaseForm.processing">Releasing&hellip;</span>
                                         <span v-else>Release Grade to Student</span>
-                                    </PrimaryButton>
+                                    </Button>
                                 </form>
                             </div>
 

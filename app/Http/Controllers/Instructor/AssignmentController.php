@@ -40,7 +40,7 @@ class AssignmentController extends Controller
     public function create(Request $request, CourseSection $section): Response
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
-        $this->authorize('create', Assignment::class);
+        $this->authorize('create', [Assignment::class, $section]);
 
         return Inertia::render('Instructor/Assignments/Create', [
             'section' => $section,
@@ -50,9 +50,9 @@ class AssignmentController extends Controller
     public function store(CreateAssignmentRequest $request, CourseSection $section): RedirectResponse
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
-        $this->authorize('create', Assignment::class);
+        $this->authorize('create', [Assignment::class, $section]);
 
-        $this->createAssignment->execute($section, $request->validated());
+        $this->createAssignment->handle($section, $request->validated());
 
         return redirect()->route('instructor.courses.index')
             ->with('success', 'Assignment created.');
@@ -74,7 +74,7 @@ class AssignmentController extends Controller
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $assignment);
 
-        $this->updateAssignment->execute($assignment, $request->validated());
+        $this->updateAssignment->handle($assignment, $request->validated());
 
         return redirect()->route('instructor.courses.index')
             ->with('success', 'Assignment updated.');

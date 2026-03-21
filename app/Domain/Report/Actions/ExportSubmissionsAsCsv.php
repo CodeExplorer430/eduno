@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Report\Actions;
 
-use App\Domain\Grade\Models\Grade;
+use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

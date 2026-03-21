@@ -1,53 +1,54 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import DeadlineItem from '@/Components/DeadlineItem.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import type { Assignment, Announcement, Grade, Submission } from '@/Types/models';
 
-defineProps<{
-    // Student props
-    upcoming?: Array<{
-        id: number;
-        title: string;
-        course_name: string;
-        course_code?: string;
-        due_at: string;
-    }>;
-    recentGrades?: Array<{
-        assignment_title: string;
-        score: number;
-        max_score: number;
-        course_name: string;
-    }>;
-    courseSummary?: Array<{
-        id: number;
-        code: string;
-        title: string;
-        section_name: string;
-    }>;
-    // Instructor props
-    sections?: Array<{
-        id: number;
-        course: { code: string; title: string };
-        section_name: string;
-        enrollments_count: number;
-        assignments_count: number;
-    }>;
-    pendingSubmissions?: Array<{
-        id: number;
-        student: { name: string };
-        assignment: { title: string; section: { course: { code: string } } };
-        submitted_at: string;
-        is_late: boolean;
-    }>;
-}>();
-
-const showWelcome = ref(!localStorage.getItem('eduno_welcome_dismissed'));
-
-function dismissWelcome(): void {
-    localStorage.setItem('eduno_welcome_dismissed', '1');
-    showWelcome.value = false;
+interface StudentProps {
+    role: 'student';
+    enrolled_courses_count: number;
+    upcoming_assignments: Assignment[];
+    recent_announcements: (Announcement & {
+        course_section: {
+            id: number;
+            section_name: string;
+            course: { code: string; title: string };
+        };
+        author: { id: number; name: string };
+    })[];
+    latest_grade: (Grade & { submission: { assignment: Assignment } }) | null;
 }
+
+interface InstructorProps {
+    role: 'instructor';
+    courses_count: number;
+    pending_submissions_count: number;
+    recent_submissions: (Submission & {
+        assignment: Assignment;
+        student: { id: number; name: string };
+    })[];
+    upcoming_deadlines: Assignment[];
+}
+
+interface AdminProps {
+    role: 'admin';
+    users_by_role: { student: number; instructor: number; admin: number };
+    total_courses: number;
+    total_submissions: number;
+    total_grades_released: number;
+}
+
+type DashboardProps = StudentProps | InstructorProps | AdminProps;
+
+const props = defineProps<DashboardProps>();
+
+const formatDate = (iso: string | null): string => {
+    if (!iso) return 'No due date';
+    return new Date(iso).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    });
+};
 </script>
 
 <template>
@@ -59,251 +60,274 @@ function dismissWelcome(): void {
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl space-y-8 sm:px-6 lg:px-8">
-                <!-- Welcome banner -->
-                <div
-                    v-if="showWelcome"
-                    role="status"
-                    aria-live="polite"
-                    class="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 px-5 py-4 text-sm text-blue-800"
-                >
-                    <span>
-                        Welcome to Eduno! Start by visiting your Courses to access materials and
-                        assignments.
-                    </span>
-                    <button
-                        type="button"
-                        class="ml-4 shrink-0 rounded p-1 hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
-                        aria-label="Dismiss welcome banner"
-                        @click="dismissWelcome"
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <!-- Student Dashboard -->
+                <div v-if="props.role === 'student'" class="space-y-8">
+                    <!-- Stats -->
+                    <section aria-labelledby="student-stats-heading">
+                        <h2 id="student-stats-heading" class="sr-only">Your statistics</h2>
+                        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">Enrolled Courses</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                                    {{ (props as StudentProps).enrolled_courses_count }}
+                                </dd>
+                            </div>
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">
+                                    Upcoming Assignments
+                                </dt>
+                                <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                                    {{ (props as StudentProps).upcoming_assignments.length }}
+                                </dd>
+                            </div>
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">Latest Grade</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                                    <template v-if="(props as StudentProps).latest_grade">
+                                        {{ (props as StudentProps).latest_grade!.score }}
+                                    </template>
+                                    <span v-else class="text-lg text-gray-400">None yet</span>
+                                </dd>
+                            </div>
+                        </dl>
+                    </section>
+
+                    <!-- Upcoming Assignments -->
+                    <section
+                        aria-labelledby="upcoming-assignments-heading"
+                        class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        ✕
-                    </button>
+                        <div class="border-b border-gray-100 px-6 py-4">
+                            <h2
+                                id="upcoming-assignments-heading"
+                                class="font-semibold text-gray-800"
+                            >
+                                Upcoming Assignments (next 7 days)
+                            </h2>
+                        </div>
+                        <div
+                            v-if="(props as StudentProps).upcoming_assignments.length > 0"
+                            class="divide-y divide-gray-100"
+                        >
+                            <div
+                                v-for="assignment in (props as StudentProps).upcoming_assignments"
+                                :key="assignment.id"
+                                class="flex items-center justify-between px-6 py-3 text-sm"
+                            >
+                                <span class="font-medium text-gray-800">{{
+                                    assignment.title
+                                }}</span>
+                                <time :datetime="assignment.due_at ?? ''" class="text-gray-500">
+                                    {{ formatDate(assignment.due_at) }}
+                                </time>
+                            </div>
+                        </div>
+                        <p v-else class="px-6 py-4 text-sm text-gray-400">
+                            No assignments due in the next 7 days.
+                        </p>
+                    </section>
+
+                    <!-- Recent Announcements -->
+                    <section
+                        aria-labelledby="recent-announcements-heading"
+                        class="overflow-hidden rounded-lg bg-white shadow-sm"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-gray-100 px-6 py-4"
+                        >
+                            <h2
+                                id="recent-announcements-heading"
+                                class="font-semibold text-gray-800"
+                            >
+                                Recent Announcements
+                            </h2>
+                            <Link
+                                :href="route('student.announcements.index')"
+                                class="rounded text-sm text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                                View all
+                            </Link>
+                        </div>
+                        <div
+                            v-if="(props as StudentProps).recent_announcements.length > 0"
+                            class="divide-y divide-gray-100"
+                        >
+                            <div
+                                v-for="announcement in (props as StudentProps).recent_announcements"
+                                :key="announcement.id"
+                                class="px-6 py-3"
+                            >
+                                <p class="text-sm font-medium text-gray-800">
+                                    {{ announcement.title }}
+                                </p>
+                                <p class="mt-0.5 text-xs text-gray-500">
+                                    {{ announcement.course_section.course.code }} &bull;
+                                    {{ announcement.author.name }}
+                                </p>
+                            </div>
+                        </div>
+                        <p v-else class="px-6 py-4 text-sm text-gray-400">
+                            No recent announcements.
+                        </p>
+                    </section>
                 </div>
 
-                <!-- Student-only view: upcoming assignments, enrolled courses, recent grades -->
-                <template v-if="upcoming !== undefined">
-                    <!-- What's Next? -->
-                    <section aria-labelledby="whats-next-heading">
-                        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                            <div class="p-6">
-                                <h3
-                                    id="whats-next-heading"
-                                    class="mb-4 text-lg font-semibold text-gray-900"
-                                >
-                                    What's Next?
-                                </h3>
-
-                                <div
-                                    v-if="upcoming.length === 0"
-                                    role="status"
-                                    class="text-sm text-gray-500"
-                                >
-                                    No upcoming deadlines in the next 7 days. Great work!
-                                </div>
-
-                                <ol v-else class="space-y-3" aria-label="Upcoming deadlines">
-                                    <DeadlineItem
-                                        v-for="assignment in upcoming"
-                                        :key="assignment.id"
-                                        :assignment="assignment"
-                                    />
-                                </ol>
+                <!-- Instructor Dashboard -->
+                <div v-else-if="props.role === 'instructor'" class="space-y-8">
+                    <!-- Stats -->
+                    <section aria-labelledby="instructor-stats-heading">
+                        <h2 id="instructor-stats-heading" class="sr-only">Your statistics</h2>
+                        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">Course Sections</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                                    {{ (props as InstructorProps).courses_count }}
+                                </dd>
                             </div>
-                        </div>
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">
+                                    Pending Submissions
+                                </dt>
+                                <dd class="mt-1 text-3xl font-semibold text-indigo-600">
+                                    {{ (props as InstructorProps).pending_submissions_count }}
+                                </dd>
+                            </div>
+                        </dl>
                     </section>
 
-                    <!-- My Courses -->
+                    <!-- Upcoming Deadlines -->
                     <section
-                        v-if="courseSummary !== undefined && courseSummary.length > 0"
-                        aria-labelledby="courses-heading"
+                        aria-labelledby="instructor-deadlines-heading"
+                        class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                            <div class="p-6">
-                                <h3
-                                    id="courses-heading"
-                                    class="mb-4 text-lg font-semibold text-gray-900"
-                                >
-                                    My Courses
-                                </h3>
-
-                                <ul
-                                    class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
-                                    aria-label="Enrolled courses"
-                                >
-                                    <li
-                                        v-for="course in courseSummary"
-                                        :key="course.id"
-                                        class="rounded-lg border border-gray-200 p-4"
-                                    >
-                                        <p class="text-sm font-medium text-gray-900">
-                                            {{ course.code }}
-                                        </p>
-                                        <p class="mt-0.5 text-xs text-gray-500">
-                                            {{ course.title }}
-                                        </p>
-                                        <p class="mt-1 text-xs text-gray-400">
-                                            {{ course.section_name }}
-                                        </p>
-                                    </li>
-                                </ul>
+                        <div class="border-b border-gray-100 px-6 py-4">
+                            <h2
+                                id="instructor-deadlines-heading"
+                                class="font-semibold text-gray-800"
+                            >
+                                Upcoming Deadlines (next 7 days)
+                            </h2>
+                        </div>
+                        <div
+                            v-if="(props as InstructorProps).upcoming_deadlines.length > 0"
+                            class="divide-y divide-gray-100"
+                        >
+                            <div
+                                v-for="assignment in (props as InstructorProps).upcoming_deadlines"
+                                :key="assignment.id"
+                                class="flex items-center justify-between px-6 py-3 text-sm"
+                            >
+                                <span class="font-medium text-gray-800">{{
+                                    assignment.title
+                                }}</span>
+                                <time :datetime="assignment.due_at ?? ''" class="text-gray-500">
+                                    {{ formatDate(assignment.due_at) }}
+                                </time>
                             </div>
                         </div>
+                        <p v-else class="px-6 py-4 text-sm text-gray-400">
+                            No deadlines in the next 7 days.
+                        </p>
                     </section>
 
-                    <!-- Recent Grades -->
+                    <!-- Recent Submissions -->
                     <section
-                        v-if="recentGrades !== undefined && recentGrades.length > 0"
-                        aria-labelledby="grades-heading"
+                        aria-labelledby="recent-submissions-heading"
+                        class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                            <div class="p-6">
-                                <h3
-                                    id="grades-heading"
-                                    class="mb-4 text-lg font-semibold text-gray-900"
-                                >
-                                    Recent Grades
-                                </h3>
-
-                                <ul class="divide-y divide-gray-100" aria-label="Recent grades">
-                                    <li
-                                        v-for="(grade, i) in recentGrades"
-                                        :key="i"
-                                        class="flex items-center justify-between py-3 text-sm"
-                                    >
-                                        <div>
-                                            <p class="font-medium text-gray-900">
-                                                {{ grade.assignment_title }}
-                                            </p>
-                                            <p class="text-xs text-gray-500">
-                                                {{ grade.course_name }}
-                                            </p>
-                                        </div>
-                                        <span
-                                            class="font-semibold text-gray-800"
-                                            :aria-label="`${grade.score} out of ${grade.max_score}`"
-                                        >
-                                            {{ grade.score }}/{{ grade.max_score }}
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="border-b border-gray-100 px-6 py-4">
+                            <h2 id="recent-submissions-heading" class="font-semibold text-gray-800">
+                                Recent Submissions
+                            </h2>
                         </div>
-                    </section>
-                </template>
-
-                <!-- Instructor-only view: sections taught, pending submissions to grade -->
-                <template v-if="sections !== undefined">
-                    <!-- My Sections -->
-                    <section aria-labelledby="my-sections-heading">
-                        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                            <div class="p-6">
-                                <h3
-                                    id="my-sections-heading"
-                                    class="mb-4 text-lg font-semibold text-gray-900"
-                                >
-                                    My Sections
-                                </h3>
-
-                                <div
-                                    v-if="sections.length === 0"
-                                    class="text-sm text-gray-500"
-                                    role="status"
-                                >
-                                    You have no sections assigned yet.
+                        <div
+                            v-if="(props as InstructorProps).recent_submissions.length > 0"
+                            class="divide-y divide-gray-100"
+                        >
+                            <div
+                                v-for="submission in (props as InstructorProps).recent_submissions"
+                                :key="submission.id"
+                                class="flex items-center justify-between px-6 py-3 text-sm"
+                            >
+                                <div>
+                                    <p class="font-medium text-gray-800">
+                                        {{ submission.student.name }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        {{ submission.assignment.title }}
+                                    </p>
                                 </div>
-
-                                <ul
-                                    v-else
-                                    class="divide-y divide-gray-100"
-                                    aria-label="My sections"
+                                <span
+                                    class="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700"
                                 >
-                                    <li
-                                        v-for="section in sections"
-                                        :key="section.id"
-                                        class="flex items-center justify-between py-3 text-sm"
-                                    >
-                                        <div>
-                                            <p class="font-medium text-gray-900">
-                                                {{ section.course.code }} —
-                                                {{ section.section_name }}
-                                            </p>
-                                            <p class="text-xs text-gray-500">
-                                                {{ section.course.title }}
-                                            </p>
-                                        </div>
-                                        <span class="text-xs text-gray-500">
-                                            {{ section.enrollments_count }} enrolled ·
-                                            {{ section.assignments_count }} assignments
-                                        </span>
-                                    </li>
-                                </ul>
+                                    {{ submission.status }}
+                                </span>
                             </div>
                         </div>
+                        <p v-else class="px-6 py-4 text-sm text-gray-400">No recent submissions.</p>
+                    </section>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div v-else-if="props.role === 'admin'" class="space-y-8">
+                    <!-- Stats -->
+                    <section aria-labelledby="admin-stats-heading">
+                        <h2 id="admin-stats-heading" class="sr-only">System statistics</h2>
+                        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">Total Courses</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                                    {{ (props as AdminProps).total_courses }}
+                                </dd>
+                            </div>
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">Total Submissions</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-gray-900">
+                                    {{ (props as AdminProps).total_submissions }}
+                                </dd>
+                            </div>
+                            <div class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm">
+                                <dt class="text-sm font-medium text-gray-500">Grades Released</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-green-600">
+                                    {{ (props as AdminProps).total_grades_released }}
+                                </dd>
+                            </div>
+                        </dl>
                     </section>
 
-                    <!-- Pending Grading -->
+                    <!-- Users by Role -->
                     <section
-                        v-if="pendingSubmissions !== undefined"
-                        aria-labelledby="pending-grading-heading"
+                        aria-labelledby="users-by-role-heading"
+                        class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                            <div class="p-6">
-                                <h3
-                                    id="pending-grading-heading"
-                                    class="mb-4 text-lg font-semibold text-gray-900"
-                                >
-                                    Pending Grading
-                                </h3>
-
-                                <div
-                                    v-if="pendingSubmissions.length === 0"
-                                    class="text-sm text-gray-500"
-                                    role="status"
-                                >
-                                    No ungraded submissions. All caught up!
-                                </div>
-
-                                <ul
-                                    v-else
-                                    class="divide-y divide-gray-100"
-                                    aria-label="Pending submissions to grade"
-                                >
-                                    <li
-                                        v-for="sub in pendingSubmissions"
-                                        :key="sub.id"
-                                        class="flex items-center justify-between py-3 text-sm"
-                                    >
-                                        <div>
-                                            <p class="font-medium text-gray-900">
-                                                {{ sub.student.name }}
-                                            </p>
-                                            <p class="text-xs text-gray-500">
-                                                {{ sub.assignment.section.course.code }} —
-                                                {{ sub.assignment.title }}
-                                            </p>
-                                            <p class="text-xs text-gray-400">
-                                                {{ new Date(sub.submitted_at).toLocaleString() }}
-                                                <span
-                                                    v-if="sub.is_late"
-                                                    class="ml-1 rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700"
-                                                >
-                                                    Late
-                                                </span>
-                                            </p>
-                                        </div>
-                                        <Link
-                                            :href="route('submissions.show', sub.id)"
-                                            class="ml-4 shrink-0 text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
-                                        >
-                                            Grade
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="border-b border-gray-100 px-6 py-4">
+                            <h2 id="users-by-role-heading" class="font-semibold text-gray-800">
+                                Users by Role
+                            </h2>
                         </div>
+                        <dl class="grid grid-cols-3 divide-x divide-gray-100">
+                            <div class="px-6 py-5 text-center">
+                                <dt class="text-sm font-medium text-gray-500">Students</dt>
+                                <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                                    {{ (props as AdminProps).users_by_role.student }}
+                                </dd>
+                            </div>
+                            <div class="px-6 py-5 text-center">
+                                <dt class="text-sm font-medium text-gray-500">Instructors</dt>
+                                <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                                    {{ (props as AdminProps).users_by_role.instructor }}
+                                </dd>
+                            </div>
+                            <div class="px-6 py-5 text-center">
+                                <dt class="text-sm font-medium text-gray-500">Admins</dt>
+                                <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                                    {{ (props as AdminProps).users_by_role.admin }}
+                                </dd>
+                            </div>
+                        </dl>
                     </section>
-                </template>
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>

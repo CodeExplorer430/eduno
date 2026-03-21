@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubmissionRow from '@/Components/SubmissionRow.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import Button from 'primevue/button';
 
 interface Submission {
     id: number;
@@ -51,15 +52,25 @@ const props = defineProps<Props>();
             <div class="mx-auto max-w-6xl sm:px-6 lg:px-8">
                 <main>
                     <section aria-labelledby="gradebook-heading">
-                        <header class="mb-6">
-                            <h1 id="gradebook-heading" class="text-xl font-bold text-gray-900">
-                                {{ assignment.title }}
-                            </h1>
-                            <p class="mt-1 text-sm text-gray-500">
-                                {{ assignment.course_section?.course?.title }} &mdash;
-                                {{ assignment.course_section?.section_name }}
-                                &middot; Max score: {{ assignment.max_score }}
-                            </p>
+                        <header class="mb-6 flex items-start justify-between gap-4">
+                            <div>
+                                <h1 id="gradebook-heading" class="text-xl font-bold text-gray-900">
+                                    {{ assignment.title }}
+                                </h1>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    {{ assignment.course_section?.course?.title }} &mdash;
+                                    {{ assignment.course_section?.section_name }}
+                                    &middot; Max score: {{ assignment.max_score }}
+                                </p>
+                            </div>
+                            <Button
+                                tag="a"
+                                :href="route('instructor.submissions.export', assignment.id)"
+                                severity="secondary"
+                                size="small"
+                                label="Export CSV"
+                                aria-label="Export submissions as CSV"
+                            />
                         </header>
 
                         <div

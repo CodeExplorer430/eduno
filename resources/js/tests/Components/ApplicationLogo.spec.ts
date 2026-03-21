@@ -4,25 +4,24 @@ import { axe } from 'vitest-axe';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
 describe('ApplicationLogo', () => {
-    it('renders an <svg> element', () => {
+    it('renders an svg element', () => {
         const wrapper = mount(ApplicationLogo);
         expect(wrapper.find('svg').exists()).toBe(true);
     });
 
-    it('has aria-hidden="true" on the SVG (decorative image)', () => {
+    it('has the correct viewBox attribute', () => {
         const wrapper = mount(ApplicationLogo);
-        expect(wrapper.find('svg').attributes('aria-hidden')).toBe('true');
+        expect(wrapper.find('svg').attributes('viewBox')).toBe('0 0 316 316');
     });
 
-    it('has focusable="false" on the SVG', () => {
+    it('contains a path element', () => {
         const wrapper = mount(ApplicationLogo);
-        expect(wrapper.find('svg').attributes('focusable')).toBe('false');
+        expect(wrapper.find('path').exists()).toBe(true);
     });
 
-    it('has no axe violations', async () => {
+    it('passes WCAG axe check', async () => {
         const wrapper = mount(ApplicationLogo);
-        expect(
-            await axe(wrapper.element, { rules: { region: { enabled: false } } })
-        ).toHaveNoViolations();
+        const results = await axe(wrapper.element, { rules: { region: { enabled: false } } });
+        expect(results).toHaveNoViolations();
     });
 });

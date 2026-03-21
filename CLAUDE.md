@@ -146,6 +146,9 @@ Add to `package.json` scripts:
 - `main` must always be deployable.
 - Never force-push to `main`.
 
+**Co-author trailer:** Append to every commit message:
+`Co-Authored-By: Miguel Velasco <miguel.velasco.dev@gmail.com>`
+
 ---
 
 ## Testing Strategy

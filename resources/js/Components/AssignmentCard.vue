@@ -51,7 +51,7 @@ const isPastDue = computed<boolean>(() => {
                             isPastDue ? `Past due: ${formattedDueDate}` : `Due: ${formattedDueDate}`
                         "
                     >
-                        {{ formattedDueDate }}
+                        <time :datetime="assignment.due_at ?? ''">{{ formattedDueDate }}</time>
                     </dd>
                 </div>
                 <div class="flex items-center gap-1">

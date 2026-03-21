@@ -1,98 +1,115 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { axe } from 'vitest-axe';
-import Register from '@/Pages/Auth/Register.vue';
+import RegisterPage from '@/Pages/Auth/Register.vue';
+import { mountWithPrimeVue } from '@/tests/helpers';
 
-vi.mock('@inertiajs/vue3', () => ({
-    Head: { template: '<head></head>' },
-    Link: {
-        props: ['href'],
-        template: '<a :href="href"><slot /></a>',
-    },
-    useForm: (initial: Record<string, unknown>) => ({
+const mockUseForm = vi.fn(
+    (initial: Record<string, unknown>): Record<string, unknown> => ({
         ...initial,
+        errors: {} as Record<string, string>,
         processing: false,
-        errors: {},
+        hasErrors: false,
         post: vi.fn(),
         reset: vi.fn(),
-    }),
+    })
+);
+
+vi.mock('@inertiajs/vue3', () => ({
+    Head: { template: '<div />' },
+    Link: { template: '<a href="#"><slot /></a>' },
+    useForm: (data: Record<string, unknown>) => mockUseForm(data),
 }));
 
-vi.mock('@/Layouts/GuestLayout.vue', () => ({
-    default: {
-        template: '<main><slot /></main>',
+const stubs = {
+    Head: true,
+    GuestLayout: { template: '<div><slot /></div>' },
+    Link: { template: '<a href="#"><slot /></a>' },
+    InputLabel: {
+        template: '<label :for="$props.for">{{ value }}</label>',
+        props: ['for', 'value'],
     },
-}));
-
-vi.mock('@/Components/InputLabel.vue', () => ({
-    default: {
-        props: ['value'],
-        template: '<label>{{ value }}</label>',
+    InputError: {
+        template: '<span :id="$attrs.id" />',
+        inheritAttrs: false,
     },
-}));
-
-vi.mock('@/Components/TextInput.vue', () => ({
-    default: {
-        props: ['id', 'type', 'modelValue', 'required', 'autofocus', 'autocomplete'],
-        emits: ['update:modelValue'],
+    InputText: {
+        template: '<input v-bind="$attrs" />',
+        inheritAttrs: false,
+    },
+    Button: {
         template:
-            '<input :id="id" :type="type || \'text\'" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+            '<button type="submit" :disabled="disabled" :aria-busy="ariaBusy"><slot /></button>',
+        props: ['disabled', 'ariaBusy'],
     },
-}));
+};
 
-vi.mock('@/Components/InputError.vue', () => ({
-    default: {
-        props: ['message'],
-        template: '<p v-if="message" role="alert">{{ message }}</p>',
-    },
-}));
+const routeMock = vi.fn(() => '/');
 
-vi.mock('@/Components/PrimaryButton.vue', () => ({
-    default: {
-        template: '<button type="submit"><slot /></button>',
-    },
-}));
-
-beforeAll(() => {
-    (globalThis as Record<string, unknown>).route = (name: string) => `/${name}`;
-});
+const globalOpts = { stubs, mocks: { route: routeMock } };
 
 describe('Auth/Register', () => {
-    it('renders the Name field with label', () => {
-        const wrapper = mount(Register, {
-            global: { mocks: { route: (name: string) => `/${name}` } },
-        });
-        expect(wrapper.html()).toContain('Name');
+    it('renders without crashing', () => {
+        const wrapper = mount(RegisterPage, { global: globalOpts });
+        expect(wrapper.exists()).toBe(true);
     });
 
-    it('renders the Email field with label', () => {
-        const wrapper = mount(Register, {
-            global: { mocks: { route: (name: string) => `/${name}` } },
-        });
-        expect(wrapper.html()).toContain('Email');
+    it('name input has aria-describedby="name-error"', () => {
+        const wrapper = mount(RegisterPage, { global: globalOpts });
+        expect(wrapper.html()).toContain('aria-describedby="name-error"');
     });
 
-    it('renders the Password field with label', () => {
-        const wrapper = mount(Register, {
-            global: { mocks: { route: (name: string) => `/${name}` } },
-        });
-        expect(wrapper.html()).toContain('Password');
+    it('email input has aria-describedby="email-error"', () => {
+        const wrapper = mount(RegisterPage, { global: globalOpts });
+        expect(wrapper.html()).toContain('aria-describedby="email-error"');
     });
 
-    it('renders the Confirm Password field with label', () => {
-        const wrapper = mount(Register, {
-            global: { mocks: { route: (name: string) => `/${name}` } },
-        });
-        expect(wrapper.html()).toContain('Confirm Password');
+    it('password input has aria-describedby="password-error"', () => {
+        const wrapper = mount(RegisterPage, { global: globalOpts });
+        expect(wrapper.html()).toContain('aria-describedby="password-error"');
     });
 
-    it('has no axe violations', async () => {
-        const wrapper = mount(Register, {
-            global: { mocks: { route: (name: string) => `/${name}` } },
-            attachTo: document.body,
+    it('password confirmation input has aria-describedby="password_confirmation-error"', () => {
+        const wrapper = mount(RegisterPage, { global: globalOpts });
+        expect(wrapper.html()).toContain('aria-describedby="password_confirmation-error"');
+    });
+
+    it('submit button has aria-busy="false" when not processing', () => {
+        const wrapper = mount(RegisterPage, { global: globalOpts });
+        const button = wrapper.find('button[type="submit"]');
+        expect(button.attributes('aria-busy')).toBe('false');
+    });
+
+    it('submit button is disabled when form.processing is true', () => {
+        mockUseForm.mockReturnValueOnce({
+            name: '',
+            email: '',
+            password: '',
+            password_confirmation: '',
+            errors: {},
+            processing: true,
+            hasErrors: false,
+            post: vi.fn(),
+            reset: vi.fn(),
         });
-        expect(
-            await axe(wrapper.element, { rules: { region: { enabled: false } } })
-        ).toHaveNoViolations();
+        const wrapper = mount(RegisterPage, { global: globalOpts });
+        expect(wrapper.find('button[type="submit"]').attributes('disabled')).toBeDefined();
+    });
+
+    it('passes WCAG axe check', async () => {
+        const wrapper = mountWithPrimeVue(RegisterPage, {
+            global: {
+                mocks: { route: routeMock },
+                stubs: {
+                    ...stubs,
+                    InputText: { template: '<input v-bind="$attrs" />', inheritAttrs: false },
+                    Button: {
+                        template: '<button type="submit"><slot /></button>',
+                    },
+                },
+            },
+        });
+        const results = await axe(wrapper.element, { rules: { region: { enabled: false } } });
+        expect(results).toHaveNoViolations();
     });
 });

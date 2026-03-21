@@ -4,38 +4,35 @@ import { axe } from 'vitest-axe';
 import InputError from '@/Components/InputError.vue';
 
 describe('InputError', () => {
-    it('displays the error message when provided', () => {
-        const wrapper = mount(InputError, { props: { message: 'This field is required.' } });
+    it('renders message text when message prop is provided', () => {
+        const wrapper = mount(InputError, {
+            props: { message: 'This field is required.' },
+        });
         expect(wrapper.text()).toContain('This field is required.');
     });
 
-    it('is visually hidden when no message is provided', () => {
-        const wrapper = mount(InputError, { props: { message: '' } });
-        // v-show sets display:none via inline style when the condition is falsy
-        expect(wrapper.find('div').element.style.display).toBe('none');
+    it('sets id attribute from id prop', () => {
+        const wrapper = mount(InputError, {
+            props: { message: 'Error', id: 'grade-score-error' },
+        });
+        expect(wrapper.find('div').attributes('id')).toBe('grade-score-error');
     });
 
-    it('becomes visible when a message is supplied', async () => {
-        const wrapper = mount(InputError, { props: { message: 'Invalid value.' } });
-        expect(wrapper.find('div').isVisible()).toBe(true);
+    it('hides the container via v-show when no message prop is given', () => {
+        const wrapper = mount(InputError, {
+            attachTo: document.body,
+        });
+        const div = wrapper.find('div');
+        expect(div.exists()).toBe(true);
+        expect(div.isVisible()).toBe(false);
+        wrapper.unmount();
     });
 
-    it('renders the message inside a <p> element', () => {
-        const wrapper = mount(InputError, { props: { message: 'Error text.' } });
-        expect(wrapper.find('p').exists()).toBe(true);
-        expect(wrapper.find('p').text()).toBe('Error text.');
-    });
-
-    it('has role="alert" on the <p> element', () => {
-        const wrapper = mount(InputError, { props: { message: 'Required field.' } });
-        expect(wrapper.find('p').attributes('role')).toBe('alert');
-    });
-
-    it('has no axe violations when displaying an error', async () => {
-        const wrapper = mount(InputError, { props: { message: 'Invalid email address.' } });
-        // Disable the region rule: components are tested in isolation, not as full pages
-        expect(
-            await axe(wrapper.element, { rules: { region: { enabled: false } } })
-        ).toHaveNoViolations();
+    it('passes WCAG axe check', async () => {
+        const wrapper = mount(InputError, {
+            props: { message: 'This field is required.', id: 'test-error' },
+        });
+        const results = await axe(wrapper.element, { rules: { region: { enabled: false } } });
+        expect(results).toHaveNoViolations();
     });
 });

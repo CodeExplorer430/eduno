@@ -51,7 +51,7 @@ class CourseController extends Controller
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Course::class);
 
-        $this->createCourse->execute($request->user(), $request->validated());
+        $this->createCourse->handle($request->user(), $request->validated());
 
         return redirect()->route('instructor.courses.index')
             ->with('success', 'Course created successfully.');
@@ -72,7 +72,7 @@ class CourseController extends Controller
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $course);
 
-        $this->updateCourse->execute($request->user(), $course, $request->validated());
+        $this->updateCourse->handle($course, $request->validated(), $request->user());
 
         return redirect()->route('instructor.courses.index')
             ->with('success', 'Course updated successfully.');

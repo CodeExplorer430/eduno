@@ -1,175 +1,210 @@
 <script setup lang="ts">
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
-import type { PageProps } from '@/types';
+import ToggleSwitch from 'primevue/toggleswitch';
+import Select from 'primevue/select';
+import Button from 'primevue/button';
 import type { UserPreferences } from '@/Types/models';
 
 const props = defineProps<{
     preferences: UserPreferences | null;
 }>();
 
+const fontSizeOptions = [
+    { label: 'Small', value: 'small' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Large', value: 'large' },
+    { label: 'X-Large', value: 'xlarge' },
+];
+
+const languageOptions = [{ label: 'English', value: 'en' }];
+
 const form = useForm({
     font_size: props.preferences?.font_size ?? 'medium',
     high_contrast: props.preferences?.high_contrast ?? false,
     reduced_motion: props.preferences?.reduced_motion ?? false,
     simplified_layout: props.preferences?.simplified_layout ?? false,
+    language: props.preferences?.language ?? 'en',
 });
 
-const page = usePage<PageProps<{ status?: string }>>();
-const saved = computed(() => page.props.status === 'preferences-updated');
+const successMessage = computed(
+    () => (usePage().props.flash as Record<string, string> | undefined)?.success ?? null
+);
 
 function submit(): void {
-    form.put(route('preferences.update'));
+    form.patch(route('profile.accessibility.update'));
 }
 </script>
 
 <template>
-    <Head title="Accessibility Settings" />
+    <Head title="Accessibility Preferences" />
 
-    <main class="mx-auto max-w-2xl px-4 py-8">
-        <nav aria-label="Breadcrumb" class="mb-4">
-            <ol class="flex gap-2 text-sm text-gray-500">
-                <li>
-                    <Link
-                        :href="route('profile.edit')"
-                        class="hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+    <AuthenticatedLayout>
+        <template #header>
+            <h1 class="text-xl font-semibold leading-tight text-gray-800">
+                Accessibility Preferences
+            </h1>
+        </template>
+
+        <div class="py-12">
+            <div class="mx-auto max-w-2xl sm:px-6 lg:px-8">
+                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+                    <form
+                        aria-label="Accessibility preferences form"
+                        novalidate
+                        @submit.prevent="submit"
                     >
-                        Profile
-                    </Link>
-                </li>
-                <li aria-hidden="true">/</li>
-                <li aria-current="page">Accessibility Settings</li>
-            </ol>
-        </nav>
+                        <div class="space-y-6">
+                            <!-- Font Size -->
+                            <div>
+                                <InputLabel for="font_size" value="Font Size" />
+                                <p id="font_size_desc" class="mt-1 text-sm text-gray-500">
+                                    Choose the base text size across the application.
+                                </p>
+                                <Select
+                                    id="font_size"
+                                    v-model="form.font_size"
+                                    :options="fontSizeOptions"
+                                    option-label="label"
+                                    option-value="value"
+                                    class="mt-2 w-full"
+                                    aria-describedby="font_size_desc"
+                                />
+                                <InputError class="mt-1" :message="form.errors.font_size" />
+                            </div>
 
-        <h1 class="mb-6 text-2xl font-bold">Accessibility Settings</h1>
+                            <!-- Language -->
+                            <div>
+                                <InputLabel for="language" value="Language" />
+                                <p id="language_desc" class="mt-1 text-sm text-gray-500">
+                                    Select your preferred interface language.
+                                </p>
+                                <Select
+                                    id="language"
+                                    v-model="form.language"
+                                    :options="languageOptions"
+                                    option-label="label"
+                                    option-value="value"
+                                    class="mt-2 w-full"
+                                    aria-describedby="language_desc"
+                                />
+                                <InputError class="mt-1" :message="form.errors.language" />
+                            </div>
 
-        <div
-            v-if="saved"
-            class="mb-4 rounded border border-green-300 bg-green-50 px-4 py-3 text-green-800"
-            role="status"
-            aria-live="polite"
-        >
-            Preferences saved successfully.
+                            <!-- High Contrast -->
+                            <div class="flex items-start gap-4">
+                                <div class="pt-1">
+                                    <ToggleSwitch
+                                        v-model="form.high_contrast"
+                                        input-id="high_contrast"
+                                        aria-describedby="high_contrast_desc"
+                                    />
+                                </div>
+                                <div>
+                                    <InputLabel for="high_contrast" value="High Contrast" />
+                                    <p id="high_contrast_desc" class="mt-1 text-sm text-gray-500">
+                                        Increases contrast ratio to improve readability.
+                                    </p>
+                                    <InputError class="mt-1" :message="form.errors.high_contrast" />
+                                </div>
+                            </div>
+
+                            <!-- Reduced Motion -->
+                            <div class="flex items-start gap-4">
+                                <div class="pt-1">
+                                    <ToggleSwitch
+                                        v-model="form.reduced_motion"
+                                        input-id="reduced_motion"
+                                        aria-describedby="reduced_motion_desc"
+                                    />
+                                </div>
+                                <div>
+                                    <InputLabel for="reduced_motion" value="Reduce Motion" />
+                                    <p id="reduced_motion_desc" class="mt-1 text-sm text-gray-500">
+                                        Disables animations and transitions throughout the
+                                        application.
+                                    </p>
+                                    <InputError
+                                        class="mt-1"
+                                        :message="form.errors.reduced_motion"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Simplified Layout -->
+                            <div class="flex items-start gap-4">
+                                <div class="pt-1">
+                                    <ToggleSwitch
+                                        v-model="form.simplified_layout"
+                                        input-id="simplified_layout"
+                                        aria-describedby="simplified_layout_desc"
+                                    />
+                                </div>
+                                <div>
+                                    <InputLabel for="simplified_layout" value="Simplified Layout" />
+                                    <p
+                                        id="simplified_layout_desc"
+                                        class="mt-1 text-sm text-gray-500"
+                                    >
+                                        Hides decorative elements to reduce visual complexity.
+                                    </p>
+                                    <InputError
+                                        class="mt-1"
+                                        :message="form.errors.simplified_layout"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Live Preview -->
+                            <section
+                                aria-labelledby="preview-heading"
+                                class="rounded-lg border border-gray-200 p-4"
+                            >
+                                <h2
+                                    id="preview-heading"
+                                    class="mb-2 text-sm font-medium text-gray-700"
+                                >
+                                    Preview
+                                </h2>
+                                <p
+                                    :style="{
+                                        fontSize: {
+                                            small: '14px',
+                                            medium: '16px',
+                                            large: '18px',
+                                            xlarge: '20px',
+                                        }[form.font_size],
+                                    }"
+                                    class="text-gray-800"
+                                >
+                                    The quick brown fox jumps over the lazy dog.
+                                </p>
+                            </section>
+
+                            <!-- Success message -->
+                            <div
+                                v-if="successMessage"
+                                role="status"
+                                aria-live="polite"
+                                class="rounded-md bg-green-50 p-3 text-sm text-green-700"
+                            >
+                                {{ successMessage }}
+                            </div>
+
+                            <div class="flex items-center gap-4">
+                                <Button
+                                    type="submit"
+                                    label="Save Preferences"
+                                    :disabled="form.processing"
+                                />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <form novalidate @submit.prevent="submit">
-            <fieldset class="mb-6">
-                <legend class="mb-2 text-base font-medium text-gray-900">Font Size</legend>
-
-                <div class="space-y-2">
-                    <div
-                        v-for="size in ['small', 'medium', 'large'] as const"
-                        :key="size"
-                        class="flex items-center gap-2"
-                    >
-                        <input
-                            :id="`font-size-${size}`"
-                            v-model="form.font_size"
-                            type="radio"
-                            :value="size"
-                            name="font_size"
-                            class="h-4 w-4 accent-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            :aria-describedby="
-                                form.errors.font_size ? 'font-size-error' : undefined
-                            "
-                        />
-                        <label :for="`font-size-${size}`" class="capitalize text-gray-700">{{
-                            size
-                        }}</label>
-                    </div>
-                </div>
-
-                <p
-                    v-if="form.errors.font_size"
-                    id="font-size-error"
-                    class="mt-1 text-sm text-red-600"
-                    role="alert"
-                >
-                    {{ form.errors.font_size }}
-                </p>
-            </fieldset>
-
-            <fieldset class="mb-6">
-                <legend class="mb-2 text-base font-medium text-gray-900">Display Options</legend>
-
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3">
-                        <input
-                            id="high-contrast"
-                            v-model="form.high_contrast"
-                            type="checkbox"
-                            class="h-4 w-4 accent-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            :aria-describedby="
-                                form.errors.high_contrast ? 'high-contrast-error' : undefined
-                            "
-                        />
-                        <label for="high-contrast" class="text-gray-700">High contrast mode</label>
-                        <p
-                            v-if="form.errors.high_contrast"
-                            id="high-contrast-error"
-                            class="text-sm text-red-600"
-                            role="alert"
-                        >
-                            {{ form.errors.high_contrast }}
-                        </p>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <input
-                            id="reduced-motion"
-                            v-model="form.reduced_motion"
-                            type="checkbox"
-                            class="h-4 w-4 accent-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            :aria-describedby="
-                                form.errors.reduced_motion ? 'reduced-motion-error' : undefined
-                            "
-                        />
-                        <label for="reduced-motion" class="text-gray-700">Reduce motion</label>
-                        <p
-                            v-if="form.errors.reduced_motion"
-                            id="reduced-motion-error"
-                            class="text-sm text-red-600"
-                            role="alert"
-                        >
-                            {{ form.errors.reduced_motion }}
-                        </p>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <input
-                            id="simplified-layout"
-                            v-model="form.simplified_layout"
-                            type="checkbox"
-                            class="h-4 w-4 accent-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            :aria-describedby="
-                                form.errors.simplified_layout
-                                    ? 'simplified-layout-error'
-                                    : undefined
-                            "
-                        />
-                        <label for="simplified-layout" class="text-gray-700"
-                            >Simplified layout</label
-                        >
-                        <p
-                            v-if="form.errors.simplified_layout"
-                            id="simplified-layout-error"
-                            class="text-sm text-red-600"
-                            role="alert"
-                        >
-                            {{ form.errors.simplified_layout }}
-                        </p>
-                    </div>
-                </div>
-            </fieldset>
-
-            <button
-                type="submit"
-                :disabled="form.processing"
-                class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50"
-            >
-                Save Preferences
-            </button>
-        </form>
-    </main>
+    </AuthenticatedLayout>
 </template>

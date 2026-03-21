@@ -1,28 +1,38 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
-import { useA11yPrefs } from '@/composables/useA11yPrefs';
+import { Link, usePage } from '@inertiajs/vue3';
+import type { PageProps } from '@/types';
 
 const showingNavigationDropdown = ref(false);
 
-useA11yPrefs();
+const page = usePage<PageProps>();
+const prefs = computed(() => page.props.auth?.preferences);
+const userRole = computed(() => page.props.auth?.user?.role);
+const features = computed(() => page.props.features);
+
+watchEffect(() => {
+    const html = document.documentElement;
+    const p = prefs.value;
+    const f = features.value;
+
+    html.classList.remove('font-small', 'font-medium', 'font-large', 'font-xlarge');
+    html.classList.add(`font-${p?.font_size ?? 'medium'}`);
+
+    html.classList.toggle('high-contrast', f?.['high-contrast'] ?? p?.high_contrast ?? false);
+    html.classList.toggle('reduce-motion', p?.reduced_motion ?? false);
+    html.classList.toggle('simplified', f?.['simplified-layout'] ?? p?.simplified_layout ?? false);
+});
 </script>
 
 <template>
     <div>
-        <a
-            href="#main-content"
-            class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:px-4 focus:py-2 focus:bg-indigo-600 focus:text-white focus:rounded focus:m-2"
-        >
-            Skip to main content
-        </a>
         <div class="min-h-screen bg-gray-100">
-            <nav aria-label="Site navigation" class="border-b border-gray-100 bg-white">
+            <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
@@ -44,19 +54,6 @@ useA11yPrefs();
                                 >
                                     Dashboard
                                 </NavLink>
-                                <NavLink
-                                    :href="route('courses.index')"
-                                    :active="route().current('courses.*')"
-                                >
-                                    Courses
-                                </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.role === 'admin'"
-                                    :href="route('admin.reports.index')"
-                                    :active="route().current('admin.reports.*')"
-                                >
-                                    Reports
-                                </NavLink>
                             </div>
                         </div>
 
@@ -68,9 +65,9 @@ useA11yPrefs();
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex min-h-[44px] items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+                                                aria-haspopup="true"
                                                 :aria-expanded="open"
-                                                aria-haspopup="menu"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -94,9 +91,23 @@ useA11yPrefs();
                                         <DropdownLink :href="route('profile.edit')">
                                             Profile
                                         </DropdownLink>
-                                        <DropdownLink :href="route('preferences.edit')">
-                                            Accessibility Settings
+                                        <DropdownLink :href="route('profile.accessibility.edit')">
+                                            Accessibility
                                         </DropdownLink>
+                                        <template v-if="userRole === 'admin'">
+                                            <DropdownLink :href="route('admin.users.index')">
+                                                Users
+                                            </DropdownLink>
+                                            <DropdownLink :href="route('admin.courses.index')">
+                                                Courses
+                                            </DropdownLink>
+                                            <DropdownLink :href="route('admin.reports.index')">
+                                                Reports
+                                            </DropdownLink>
+                                            <DropdownLink :href="route('admin.audit-logs.index')">
+                                                Audit Logs
+                                            </DropdownLink>
+                                        </template>
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
@@ -112,10 +123,10 @@ useA11yPrefs();
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
-                                class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-                                aria-label="Toggle navigation menu"
+                                aria-label="Toggle navigation"
                                 :aria-expanded="showingNavigationDropdown"
                                 aria-controls="responsive-nav"
+                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                             >
                                 <svg
@@ -123,7 +134,6 @@ useA11yPrefs();
                                     stroke="currentColor"
                                     fill="none"
                                     viewBox="0 0 24 24"
-                                    aria-hidden="true"
                                 >
                                     <path
                                         :class="{
@@ -167,19 +177,6 @@ useA11yPrefs();
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('courses.index')"
-                            :active="route().current('courses.*')"
-                        >
-                            Courses
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="$page.props.auth.user.role === 'admin'"
-                            :href="route('admin.reports.index')"
-                            :active="route().current('admin.reports.*')"
-                        >
-                            Reports
-                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -197,6 +194,23 @@ useA11yPrefs();
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 Profile
                             </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.accessibility.edit')">
+                                Accessibility
+                            </ResponsiveNavLink>
+                            <template v-if="userRole === 'admin'">
+                                <ResponsiveNavLink :href="route('admin.users.index')">
+                                    Users
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink :href="route('admin.courses.index')">
+                                    Courses
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink :href="route('admin.reports.index')">
+                                    Reports
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink :href="route('admin.audit-logs.index')">
+                                    Audit Logs
+                                </ResponsiveNavLink>
+                            </template>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
@@ -213,7 +227,7 @@ useA11yPrefs();
             </header>
 
             <!-- Page Content -->
-            <main id="main-content">
+            <main>
                 <slot />
             </main>
         </div>

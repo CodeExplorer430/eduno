@@ -1,16 +1,17 @@
 import { defineConfig } from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
-import { resolve } from 'path';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
     plugins: [vue()],
     test: {
+        environment: 'jsdom',
         globals: true,
-        environment: 'happy-dom',
         setupFiles: ['./resources/js/tests/setup.ts'],
-        exclude: ['**/node_modules/**', 'e2e/**'],
     },
     resolve: {
-        alias: { '@': resolve(__dirname, 'resources/js') },
+        alias: {
+            '@': fileURLToPath(new URL('./resources/js', import.meta.url)),
+        },
     },
 });

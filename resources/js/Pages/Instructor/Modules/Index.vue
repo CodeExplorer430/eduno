@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 interface ResourceItem {
     id: number;
@@ -38,34 +41,53 @@ const props = defineProps<{
     section: Section;
 }>();
 
+const confirmDialog = ref<{
+    visible: boolean;
+    message: string;
+    onConfirm: () => void;
+}>({ visible: false, message: '', onConfirm: () => {} });
+
+const openConfirm = (message: string, action: () => void): void => {
+    confirmDialog.value = { visible: true, message, onConfirm: action };
+};
+const closeConfirm = (): void => {
+    confirmDialog.value = { visible: false, message: '', onConfirm: () => {} };
+};
+
 const deleteModule = (moduleId: number): void => {
-    if (!confirm('Delete this module and all its lessons?')) return;
-    router.delete(
-        route('instructor.courses.modules.destroy', { section: props.section.id, module: moduleId })
-    );
+    openConfirm('Delete this module and all its lessons?', () => {
+        router.delete(
+            route('instructor.courses.modules.destroy', {
+                section: props.section.id,
+                module: moduleId,
+            })
+        );
+    });
 };
 
 const deleteLesson = (moduleId: number, lessonId: number): void => {
-    if (!confirm('Delete this lesson?')) return;
-    router.delete(
-        route('instructor.courses.modules.lessons.destroy', {
-            section: props.section.id,
-            module: moduleId,
-            lesson: lessonId,
-        })
-    );
+    openConfirm('Delete this lesson?', () => {
+        router.delete(
+            route('instructor.courses.modules.lessons.destroy', {
+                section: props.section.id,
+                module: moduleId,
+                lesson: lessonId,
+            })
+        );
+    });
 };
 
 const deleteResource = (moduleId: number, lessonId: number, resourceId: number): void => {
-    if (!confirm('Delete this resource file?')) return;
-    router.delete(
-        route('instructor.courses.modules.lessons.resources.destroy', {
-            section: props.section.id,
-            module: moduleId,
-            lesson: lessonId,
-            resource: resourceId,
-        })
-    );
+    openConfirm('Delete this resource file?', () => {
+        router.delete(
+            route('instructor.courses.modules.lessons.resources.destroy', {
+                section: props.section.id,
+                module: moduleId,
+                lesson: lessonId,
+                resource: resourceId,
+            })
+        );
+    });
 };
 </script>
 
@@ -301,5 +323,29 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
                 </main>
             </div>
         </div>
+
+        <Dialog
+            :visible="confirmDialog.visible"
+            modal
+            header="Confirm Delete"
+            :closable="false"
+            @update:visible="closeConfirm"
+        >
+            <p>{{ confirmDialog.message }}</p>
+            <template #footer>
+                <Button severity="secondary" @click="closeConfirm">Cancel</Button>
+                <Button
+                    severity="danger"
+                    @click="
+                        () => {
+                            confirmDialog.onConfirm();
+                            closeConfirm();
+                        }
+                    "
+                >
+                    Delete
+                </Button>
+            </template>
+        </Dialog>
     </AuthenticatedLayout>
 </template>
