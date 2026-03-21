@@ -220,3 +220,66 @@ test('grade score of zero is valid', function (): void {
         'score' => 0,
     ]);
 });
+
+test('another instructor cannot create a grade on another section submission', function (): void {
+    [, , $submission] = makeGradingSetup();
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('submissions.grade.store', $submission), ['score' => 80])
+        ->assertForbidden();
+});
+
+test('student cannot update a grade', function (): void {
+    [$instructor, $student, $submission] = makeGradingSetup();
+    $grade = Grade::create([
+        'submission_id' => $submission->id,
+        'graded_by'     => $instructor->id,
+        'score'         => 70,
+    ]);
+
+    $this->actingAs($student)
+        ->patch(route('grades.update', $grade), ['score' => 90])
+        ->assertForbidden();
+});
+
+test('another instructor cannot update a grade', function (): void {
+    [$instructor, , $submission] = makeGradingSetup();
+    $grade = Grade::create([
+        'submission_id' => $submission->id,
+        'graded_by'     => $instructor->id,
+        'score'         => 70,
+    ]);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->patch(route('grades.update', $grade), ['score' => 90])
+        ->assertForbidden();
+});
+
+test('student cannot release a grade', function (): void {
+    [$instructor, $student, $submission] = makeGradingSetup();
+    $grade = Grade::create([
+        'submission_id' => $submission->id,
+        'graded_by'     => $instructor->id,
+        'score'         => 85,
+    ]);
+
+    $this->actingAs($student)
+        ->post(route('grades.release', $grade))
+        ->assertForbidden();
+});
+
+test('another instructor cannot release a grade', function (): void {
+    [$instructor, , $submission] = makeGradingSetup();
+    $grade = Grade::create([
+        'submission_id' => $submission->id,
+        'graded_by'     => $instructor->id,
+        'score'         => 85,
+    ]);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('grades.release', $grade))
+        ->assertForbidden();
+});
