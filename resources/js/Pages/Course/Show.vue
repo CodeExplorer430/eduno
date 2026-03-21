@@ -138,6 +138,9 @@ function isEnrolled(section: EnrichedSection): boolean {
                         Sections
                         <span class="text-sm font-normal text-gray-500">(classes / blocks)</span>
                     </h3>
+                    <p class="text-sm text-gray-500">
+                        Sections correspond to your enrolled class block (e.g., BSCS-2A).
+                    </p>
 
                     <div
                         v-if="course.sections.length === 0"
