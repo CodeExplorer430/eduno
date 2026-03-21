@@ -19,7 +19,7 @@ use Illuminate\Support\Carbon;
  * @property int $created_by
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property-read CourseSection $section
+ * @property-read CourseSection|null $section
  * @property-read User $author
  */
 class Announcement extends Model

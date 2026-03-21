@@ -8,6 +8,7 @@ use App\Domain\Course\Models\CourseSection;
 use App\Domain\Course\Models\Enrollment;
 use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 function makeEnrollment(): Enrollment
 {
@@ -56,4 +57,28 @@ test('it records the action in audit_logs', function (): void {
         'action' => 'enrollment.deleted',
         'entity_id' => $enrollment->id,
     ]);
+});
+
+test('it stores complete audit log metadata', function (): void {
+    $enrollment = makeEnrollment();
+
+    $action = new UnenrollStudent();
+    $action->handle($enrollment);
+
+    $this->assertDatabaseHas('audit_logs', [
+        'actor_id' => $enrollment->user_id,
+        'action' => 'enrollment.deleted',
+        'entity_type' => Enrollment::class,
+        'entity_id' => $enrollment->id,
+    ]);
+
+    $log = DB::table('audit_logs')
+        ->where('entity_id', $enrollment->id)
+        ->where('action', 'enrollment.deleted')
+        ->first();
+
+    $metadata = json_decode($log->metadata, true);
+
+    expect($metadata)->toHaveKey('student_id')
+        ->and($metadata)->toHaveKey('course_section_id');
 });

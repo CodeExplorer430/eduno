@@ -7,10 +7,12 @@ use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Domain\Course\Models\Enrollment;
 use App\Domain\Submission\Actions\SubmitAssignment;
+use App\Domain\Submission\Models\Submission;
 use App\Enums\SubmissionStatus;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 function makeSubmitSetup(): array
@@ -119,4 +121,31 @@ test('it sets status to submitted', function (): void {
     $submission = $action->handle($assignment, $student, [$file]);
 
     expect($submission->status)->toBe(SubmissionStatus::Submitted);
+});
+
+test('it does not crash and skips notification when section has no instructor', function (): void {
+    Notification::fake();
+    Storage::fake('private');
+    [$assignment, $student] = makeSubmitSetup();
+
+    // Add a global scope that makes all User queries return empty results, simulating
+    // a section whose instructor record has been removed. Applied after setup so that
+    // factory creates still work normally.
+    User::addGlobalScope('null_instructor_test', fn ($q) => $q->whereNull('id'));
+
+    $action = new SubmitAssignment();
+    $file = UploadedFile::fake()->create('essay.pdf', 512, 'application/pdf');
+
+    $submission = $action->handle($assignment, $student, [$file]);
+
+    expect($submission)->toBeInstanceOf(Submission::class);
+    Notification::assertNothingSent();
+
+    // Cleanup: remove the global scope so subsequent tests can query users normally.
+    $reflection = new ReflectionClass(User::class);
+    $property = $reflection->getProperty('globalScopes');
+    $property->setAccessible(true);
+    $scopes = $property->getValue(null);
+    unset($scopes[User::class]['null_instructor_test']);
+    $property->setValue(null, $scopes);
 });

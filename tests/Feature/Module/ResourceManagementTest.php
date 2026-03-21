@@ -10,6 +10,7 @@ use App\Domain\Module\Models\Module;
 use App\Domain\Module\Models\Resource;
 use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 function makeSectionWithLessonForResource(): array
@@ -117,4 +118,17 @@ test('instructor-only resource is inaccessible to students', function (): void {
     $this->actingAs($student)
         ->get(route('resources.download', $resource))
         ->assertForbidden();
+});
+
+test('resource upload fails with an invalid visibility value', function (): void {
+    Storage::fake('private');
+    [$instructor, , $lesson] = makeSectionWithLessonForResource();
+
+    $this->actingAs($instructor)
+        ->post(route('lessons.resources.store', $lesson), [
+            'title' => 'Bad Visibility',
+            'file' => UploadedFile::fake()->create('test.pdf', 100, 'application/pdf'),
+            'visibility' => 'student',
+        ])
+        ->assertSessionHasErrors('visibility');
 });

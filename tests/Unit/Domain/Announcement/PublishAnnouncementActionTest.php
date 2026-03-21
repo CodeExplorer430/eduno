@@ -8,6 +8,7 @@ use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Support\Facades\Notification;
 
 function makePublishTestSection(): array
 {
@@ -77,4 +78,37 @@ test('handle returns the announcement instance', function (): void {
 
     expect($result)->toBeInstanceOf(Announcement::class)
         ->and($result->id)->toBe($announcement->id);
+});
+
+test('publishing an announcement whose section was deleted sets published_at without crashing', function (): void {
+    Notification::fake();
+    [$instructor, $section] = makePublishTestSection();
+
+    $announcement = Announcement::create([
+        'course_section_id' => $section->id,
+        'title' => 'Orphaned Announcement',
+        'body' => 'Body.',
+        'created_by' => $instructor->id,
+        'published_at' => null,
+    ]);
+
+    // Override the section relation to always return null, simulating an orphaned
+    // announcement whose section was deleted — without touching real DB rows.
+    Announcement::resolveRelationUsing(
+        'section',
+        fn ($m) => $m->belongsTo(CourseSection::class, 'course_section_id')->whereNull('id')
+    );
+
+    (new PublishAnnouncement())->handle($announcement);
+
+    expect($announcement->fresh()->published_at)->not->toBeNull();
+    Notification::assertNothingSent();
+
+    // Cleanup: remove the static resolver so subsequent tests use the real section() method.
+    $reflection = new ReflectionClass(Announcement::class);
+    $property = $reflection->getProperty('relationResolvers');
+    $property->setAccessible(true);
+    $resolvers = $property->getValue(null);
+    unset($resolvers[Announcement::class]['section']);
+    $property->setValue(null, $resolvers);
 });

@@ -20,12 +20,16 @@ class PublishAnnouncement
 
         if ($wasUnpublished) {
             $announcement->refresh();
-            $students = $announcement->section->enrollments()
-                ->with('student')
-                ->get()
-                ->pluck('student');
+            $section = $announcement->section;
 
-            Notification::send($students, new AnnouncementPublishedNotification($announcement));
+            if ($section !== null) {
+                $students = $section->enrollments()
+                    ->with('student')
+                    ->get()
+                    ->pluck('student');
+
+                Notification::send($students, new AnnouncementPublishedNotification($announcement));
+            }
         }
 
         return $announcement;

@@ -111,6 +111,60 @@ test('instructor can update their section', function (): void {
     ]);
 });
 
+test('student cannot update a section', function (): void {
+    [$instructor, $course] = makeCourseForSection();
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'Section A',
+        'instructor_id' => $instructor->id,
+    ]);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->put(route('sections.update', $section), ['section_name' => 'X'])
+        ->assertForbidden();
+});
+
+test('another instructor cannot update a section they do not own', function (): void {
+    [$instructor, $course] = makeCourseForSection();
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'Section A',
+        'instructor_id' => $instructor->id,
+    ]);
+    $otherInstructor = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($otherInstructor)
+        ->put(route('sections.update', $section), ['section_name' => 'X'])
+        ->assertForbidden();
+});
+
+test('section update fails with missing section_name', function (): void {
+    [$instructor, $course] = makeCourseForSection();
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'Section A',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $this->actingAs($instructor)
+        ->put(route('sections.update', $section), [])
+        ->assertSessionHasErrors('section_name');
+});
+
+test('section store fails when instructor_id belongs to a student', function (): void {
+    [$instructor, $course] = makeCourseForSection();
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($instructor)
+        ->post(route('courses.sections.store', $course), [
+            'section_name' => 'Section X',
+            'course_id' => $course->id,
+            'instructor_id' => $student->id,
+        ])
+        ->assertSessionHasErrors('instructor_id');
+});
+
 // ─── Delete ───────────────────────────────────────────────────────────────────
 
 test('instructor can delete their section', function (): void {

@@ -8,9 +8,9 @@ use App\Domain\Course\Actions\CreateCourseSection;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Http\Requests\StoreCourseSectionRequest;
+use App\Http\Requests\UpdateCourseSectionRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class CourseSectionController extends Controller
 {
@@ -29,14 +29,11 @@ class CourseSectionController extends Controller
             ->with('success', 'Section created successfully.');
     }
 
-    public function update(Request $request, CourseSection $section): RedirectResponse
+    public function update(UpdateCourseSectionRequest $request, CourseSection $section): RedirectResponse
     {
         $this->authorize('update', $section);
 
-        $validated = $request->validate([
-            'section_name' => ['required', 'string', 'max:255'],
-            'schedule_text' => ['nullable', 'string', 'max:255'],
-        ]);
+        $validated = $request->validated();
 
         $section->update($validated);
 

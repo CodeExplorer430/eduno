@@ -36,7 +36,7 @@ code artefacts: Action class, Controller method, route name, and test file.
 | FR | Description | Action | Route | Test |
 |---|---|---|---|---|
 | FR-008 | Instructor creates and manages courses | `CreateCourse`, `UpdateCourse` (`app/Domain/Course/Actions/`) | `courses.store`, `courses.update` | `tests/Feature/Course/CourseManagementTest.php` |
-| FR-009 | Organize courses into sections | `CreateCourseSection` (`app/Domain/Course/Actions/`) | `courses.sections.store` | `tests/Feature/Course/CourseManagementTest.php` |
+| FR-009 | Organize courses into sections | `CreateCourseSection` (`app/Domain/Course/Actions/`) | `courses.sections.store`, `sections.update` | `tests/Feature/Course/CourseManagementTest.php` |
 | FR-010 | Admin manages course status | `UpdateCourse` (status field) | `courses.update` | `tests/Feature/Course/CourseManagementTest.php` |
 | FR-011 | Students view enrolled courses | `CourseController::index` | `courses.index` | `tests/Feature/Course/CourseShowTest.php` |
 
