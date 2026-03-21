@@ -223,3 +223,26 @@ test('deadline reminder is not sent for assignment due beyond 24 hours', functio
 
     Notification::assertNotSentTo($student, DeadlineReminderNotification::class);
 });
+
+test('deadline reminder is not sent to withdrawn student', function (): void {
+    Notification::fake();
+    [$instructor, $section, $student] = makeNotificationSetup();
+
+    // Withdraw the student from the section.
+    Enrollment::where('user_id', $student->id)
+        ->where('course_section_id', $section->id)
+        ->update(['status' => 'withdrawn']);
+
+    Assignment::create([
+        'course_section_id' => $section->id,
+        'title'             => 'Due Soon',
+        'max_score'         => 100,
+        'allow_resubmission' => false,
+        'due_at'            => now()->addHours(12),
+        'published_at'      => now()->subMinute(),
+    ]);
+
+    $this->artisan('schedule:deadline-reminders')->assertSuccessful();
+
+    Notification::assertNotSentTo($student, DeadlineReminderNotification::class);
+});

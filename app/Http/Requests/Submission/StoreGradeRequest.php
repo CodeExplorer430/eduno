@@ -18,8 +18,10 @@ class StoreGradeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $maxScore = $this->route('submission')->assignment->max_score;
+
         return [
-            'score' => ['required', 'numeric', 'min:0'],
+            'score' => ['required', 'numeric', 'min:0', 'max:'.$maxScore],
             'feedback' => ['nullable', 'string'],
         ];
     }

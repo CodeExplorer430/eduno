@@ -24,6 +24,7 @@ class SendDeadlineReminders extends Command
 
         foreach ($assignments as $assignment) {
             $students = $assignment->section->enrollments()
+                ->where('status', 'active')
                 ->with('student')
                 ->whereDoesntHave('student.submissions', function ($query) use ($assignment): void {
                     $query->where('assignment_id', $assignment->id);

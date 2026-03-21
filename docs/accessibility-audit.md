@@ -11,8 +11,8 @@
 ## Executive Summary
 
 Eduno LMS v1.3.0 achieves **WCAG 2.2 Level AA compliance** across all page components.
-The audit covered 33 Vue page and component spec files using axe-core automated
-testing (181 Vitest specs with `toHaveNoViolations` assertions), supplemented by
+The audit covered 34 Vue page and component spec files using axe-core automated
+testing (184 Vitest specs with `toHaveNoViolations` assertions), supplemented by
 manual code review of semantic structure, keyboard operability, and ARIA usage.
 
 **Result: No axe-core violations on any page component.**
@@ -29,6 +29,7 @@ manual code review of semantic structure, keyboard operability, and ARIA usage.
 | `Auth/Register` | `tests/Pages/Auth/Register.spec.ts` |
 | `Dashboard` | `tests/Pages/Dashboard.spec.ts` |
 | `Course/Index` | `tests/Pages/Course/Index.spec.ts` |
+| `Course/Show` | `tests/Pages/Course/Show.spec.ts` |
 | `Module/Show` | `tests/Pages/Module/Show.spec.ts` |
 | `Lesson/Show` | `tests/Pages/Lesson/Show.spec.ts` |
 | `Assignment/Index` | `tests/Pages/Assignment/Index.spec.ts` |
@@ -187,5 +188,5 @@ Run the full automated accessibility test suite:
 npm run test
 ```
 
-All 181 Vitest specs pass, including `toHaveNoViolations()` axe assertions on every
+All 184 Vitest specs pass, including `toHaveNoViolations()` axe assertions on every
 audited page and component.

@@ -36,7 +36,7 @@ code artefacts: Action class, Controller method, route name, and test file.
 | FR | Description | Action | Route | Test |
 |---|---|---|---|---|
 | FR-008 | Instructor creates and manages courses | `CreateCourse`, `UpdateCourse` (`app/Domain/Course/Actions/`) | `courses.store`, `courses.update` | `tests/Feature/Course/CourseManagementTest.php` |
-| FR-009 | Organize courses into sections | `CreateCourseSection` (`app/Domain/Course/Actions/`) | `courses.sections.store` | `tests/Feature/Course/CourseManagementTest.php` |
+| FR-009 | Organize courses into sections | `CreateCourseSection` (`app/Domain/Course/Actions/`) | `courses.sections.store`, `sections.update` | `tests/Feature/Course/CourseManagementTest.php` |
 | FR-010 | Admin manages course status | `UpdateCourse` (status field) | `courses.update` | `tests/Feature/Course/CourseManagementTest.php` |
 | FR-011 | Students view enrolled courses | `CourseController::index` | `courses.index` | `tests/Feature/Course/CourseShowTest.php` |
 
@@ -158,4 +158,4 @@ code artefacts: Action class, Controller method, route name, and test file.
 | Reports | FR-038–040 | 2 | 2 Actions | 1 test class |
 | Accessibility | FR-041–045 | 2 | 1 Action | 1 PHP + 34 Vue specs |
 | Audit Logs | FR-046–048 | — | Inline in Actions | Covered via grading tests |
-| **Total** | **48** | **69** | **27** | **297 PHP + 181 Vitest** |
+| **Total** | **48** | **69** | **27** | **347 PHP + 184 Vitest** |

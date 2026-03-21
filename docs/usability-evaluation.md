@@ -357,13 +357,14 @@ how to navigate to a course or submit an assignment.
 
 **Resolution:** `Dashboard.vue` now renders a `role="status" aria-live="polite"` welcome banner for users who have not yet dismissed it. Dismissal is persisted via `localStorage` (key `eduno_welcome_dismissed`) and the banner is hidden immediately on click via a `showWelcome` ref.
 
-**⚠ Minor — No help text on file submission (Severity 1)**
+**✅ PASS — "Accepted file types + size" hint (Severity 1) — Resolved in v1.2.0**
 
 The file upload area on the submission form does not indicate accepted file types or the
 25 MB size limit until the user makes an error.
 
-**Recommendation:** Add a small hint below the file input: "Accepted: PDF, DOCX, PPTX,
-ZIP — Maximum 25 MB per file."
+**Resolution:** A hint line ("Accepted: PDF, DOCX, PPTX, ZIP — Maximum 25 MB per file")
+is displayed directly below the file input in `Assignment/Show.vue`, giving students the
+constraint information before they attempt an upload.
 
 ---
 
@@ -371,16 +372,16 @@ ZIP — Maximum 25 MB per file."
 
 | Heuristic | Rating | Severity Issues |
 |---|---|---|
-| 1. Visibility of System Status | Good | 1 minor (no upload progress) |
+| 1. Visibility of System Status | Good | ✅ All issues resolved |
 | 2. Match System and Real World | Good | ✅ All issues resolved |
-| 3. User Control and Freedom | Good | 1 moderate (no submission recall) |
+| 3. User Control and Freedom | Good | ✅ All issues resolved |
 | 4. Consistency and Standards | Excellent | ✅ All issues resolved |
-| 5. Error Prevention | Excellent | 1 moderate (past due date warning) |
+| 5. Error Prevention | Excellent | ✅ All issues resolved |
 | 6. Recognition Rather Than Recall | Good | ✅ All issues resolved |
-| 7. Flexibility and Efficiency | Good | 1 moderate (no bulk grading), 1 minor (no publish shortcut) |
+| 7. Flexibility and Efficiency | Good | 1 minor open — no quick-publish shortcut on module/lesson lists |
 | 8. Aesthetic and Minimalist Design | Excellent | ✅ All issues resolved |
 | 9. Recognize, Diagnose, Recover | Good | ✅ All issues resolved |
-| 10. Help and Documentation | Acceptable | 1 moderate (no onboarding), 1 minor (upload hints) |
+| 10. Help and Documentation | Acceptable | ✅ All issues resolved |
 
 ---
 
@@ -409,6 +410,6 @@ ZIP — Maximum 25 MB per file."
 ## Evaluator Note
 
 This evaluation was conducted through code review and automated WCAG testing
-(`vitest-axe`, 181 specs). A follow-up evaluation with 5 representative UCC users
+(`vitest-axe`, 184 specs). A follow-up evaluation with 5 representative UCC users
 (2 students, 2 instructors, 1 admin) performing structured tasks would yield
 additional severity ratings grounded in observed behavior.

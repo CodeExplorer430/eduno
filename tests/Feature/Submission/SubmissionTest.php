@@ -257,3 +257,80 @@ test('student can view only their own submission', function (): void {
         ->get(route('submissions.show', $otherSubmission))
         ->assertForbidden();
 });
+
+// ─── Delete (SubmissionPolicy::delete) ───────────────────────────────────────
+
+test('student can delete their own submitted submission', function (): void {
+    [$instructor, $section, $assignment] = makeSubmissionSetup();
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    enrollStudentForSubmission($student, $section);
+    $submission = Submission::create([
+        'assignment_id' => $assignment->id,
+        'student_id'    => $student->id,
+        'status'        => SubmissionStatus::Submitted,
+        'submitted_at'  => now(),
+        'is_late'       => false,
+        'attempt_no'    => 1,
+    ]);
+
+    $this->actingAs($student)
+        ->delete(route('submissions.destroy', $submission))
+        ->assertRedirect();
+
+    $this->assertDatabaseMissing('submissions', ['id' => $submission->id]);
+});
+
+test('another student cannot delete a submission', function (): void {
+    [$instructor, $section, $assignment] = makeSubmissionSetup();
+    $owner  = User::factory()->create(['role' => UserRole::Student]);
+    $other  = User::factory()->create(['role' => UserRole::Student]);
+    enrollStudentForSubmission($owner, $section);
+    $submission = Submission::create([
+        'assignment_id' => $assignment->id,
+        'student_id'    => $owner->id,
+        'status'        => SubmissionStatus::Submitted,
+        'submitted_at'  => now(),
+        'is_late'       => false,
+        'attempt_no'    => 1,
+    ]);
+
+    $this->actingAs($other)
+        ->delete(route('submissions.destroy', $submission))
+        ->assertForbidden();
+});
+
+test('instructor cannot delete a submission', function (): void {
+    [$instructor, $section, $assignment] = makeSubmissionSetup();
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    enrollStudentForSubmission($student, $section);
+    $submission = Submission::create([
+        'assignment_id' => $assignment->id,
+        'student_id'    => $student->id,
+        'status'        => SubmissionStatus::Submitted,
+        'submitted_at'  => now(),
+        'is_late'       => false,
+        'attempt_no'    => 1,
+    ]);
+
+    $this->actingAs($instructor)
+        ->delete(route('submissions.destroy', $submission))
+        ->assertForbidden();
+});
+
+test('student cannot delete a returned submission', function (): void {
+    [$instructor, $section, $assignment] = makeSubmissionSetup();
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    enrollStudentForSubmission($student, $section);
+    $submission = Submission::create([
+        'assignment_id' => $assignment->id,
+        'student_id'    => $student->id,
+        'status'        => SubmissionStatus::Returned,
+        'submitted_at'  => now(),
+        'is_late'       => false,
+        'attempt_no'    => 1,
+    ]);
+
+    $this->actingAs($student)
+        ->delete(route('submissions.destroy', $submission))
+        ->assertForbidden();
+});

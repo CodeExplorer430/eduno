@@ -177,6 +177,78 @@ test('student cannot publish an assignment', function (): void {
         ->assertForbidden();
 });
 
+// ─── Ownership (non-owning instructor) ───────────────────────────────────────
+
+test('non-owning instructor cannot create assignment in another section', function (): void {
+    [, $section] = makeAssignmentSection();
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('sections.assignments.store', $section), [
+            'title' => 'Hijack',
+            'max_score' => 100,
+        ])
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot update another instructor\'s assignment', function (): void {
+    [, $section] = makeAssignmentSection();
+    $assignment = makeAssignment($section);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->put(route('assignments.update', $assignment), [
+            'title' => 'Hijack',
+            'max_score' => 50,
+        ])
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot delete another instructor\'s assignment', function (): void {
+    [, $section] = makeAssignmentSection();
+    $assignment = makeAssignment($section);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->delete(route('assignments.destroy', $assignment))
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot publish another instructor\'s assignment', function (): void {
+    [, $section] = makeAssignmentSection();
+    $assignment = makeAssignment($section, false);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('assignments.publish', $assignment))
+        ->assertForbidden();
+});
+
+// ─── Role gates ───────────────────────────────────────────────────────────────
+
+test('student cannot update an assignment', function (): void {
+    [, $section] = makeAssignmentSection();
+    $assignment = makeAssignment($section);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->put(route('assignments.update', $assignment), [
+            'title' => 'Hack',
+            'max_score' => 50,
+        ])
+        ->assertForbidden();
+});
+
+test('student cannot delete an assignment', function (): void {
+    [, $section] = makeAssignmentSection();
+    $assignment = makeAssignment($section);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->delete(route('assignments.destroy', $assignment))
+        ->assertForbidden();
+});
+
 // ─── Validation ───────────────────────────────────────────────────────────────
 
 test('assignment creation fails with missing title', function (): void {

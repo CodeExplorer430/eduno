@@ -66,13 +66,33 @@ class SubmissionController extends Controller
         $isInstructor = $user->isAdmin()
             || $user->id === $submission->assignment->section->instructor_id;
 
-        $siblingIds = Submission::where('assignment_id', $submission->assignment_id)
+        $prevId = Submission::where('assignment_id', $submission->assignment_id)
+            ->where(
+                fn ($q) => $q
+                ->where('submitted_at', '<', $submission->submitted_at)
+                ->orWhere(
+                    fn ($q2) => $q2
+                    ->where('submitted_at', $submission->submitted_at)
+                    ->where('id', '<', $submission->id)
+                )
+            )
+            ->orderByDesc('submitted_at')
+            ->orderByDesc('id')
+            ->value('id');
+
+        $nextId = Submission::where('assignment_id', $submission->assignment_id)
+            ->where(
+                fn ($q) => $q
+                ->where('submitted_at', '>', $submission->submitted_at)
+                ->orWhere(
+                    fn ($q2) => $q2
+                    ->where('submitted_at', $submission->submitted_at)
+                    ->where('id', '>', $submission->id)
+                )
+            )
             ->orderBy('submitted_at')
-            ->pluck('id')
-            ->values();
-        $currentIndex = $siblingIds->search($submission->id);
-        $prevId = $currentIndex > 0 ? $siblingIds[$currentIndex - 1] : null;
-        $nextId = $currentIndex < $siblingIds->count() - 1 ? $siblingIds[$currentIndex + 1] : null;
+            ->orderBy('id')
+            ->value('id');
 
         return Inertia::render('Submission/Show', [
             'submission' => $submission,
