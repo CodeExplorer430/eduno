@@ -183,3 +183,41 @@ test('course creation fails with duplicate code', function (): void {
         ])
         ->assertSessionHasErrors(['code']);
 });
+
+// ─── Ownership / role gates ───────────────────────────────────────────────────
+
+test('non-owning instructor cannot delete another instructor\'s course', function (): void {
+    $owner = User::factory()->create(['role' => UserRole::Instructor]);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+    $course = createCourse($owner, 'TST'.fake()->numberBetween(100, 999));
+
+    $this->actingAs($other)
+        ->delete(route('courses.destroy', $course))
+        ->assertForbidden();
+});
+
+test('student cannot update a course', function (): void {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    $course = createCourse($instructor, 'TST'.fake()->numberBetween(100, 999));
+
+    $this->actingAs($student)
+        ->put(route('courses.update', $course), [
+            'code' => 'HACK101',
+            'title' => 'Hacked',
+            'department' => 'CCS',
+            'term' => '1st Semester',
+            'academic_year' => '2025-2026',
+        ])
+        ->assertForbidden();
+});
+
+test('student cannot delete a course', function (): void {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    $course = createCourse($instructor, 'TST'.fake()->numberBetween(100, 999));
+
+    $this->actingAs($student)
+        ->delete(route('courses.destroy', $course))
+        ->assertForbidden();
+});
