@@ -197,6 +197,53 @@ test('student cannot publish an announcement', function (): void {
         ->assertForbidden();
 });
 
+// ─── Ownership (non-owning instructor) ───────────────────────────────────────
+
+test('non-owning instructor cannot create announcement in another section', function (): void {
+    [, $section] = makeAnnouncementSection();
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('sections.announcements.store', $section), [
+            'title' => 'Hijack',
+            'body'  => 'Attempt',
+        ])
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot update another instructor\'s announcement', function (): void {
+    [$instructor, $section] = makeAnnouncementSection();
+    $announcement = makeAnnouncement($section, $instructor);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->put(route('announcements.update', $announcement), [
+            'title' => 'Hijack',
+            'body'  => 'Attempt',
+        ])
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot delete another instructor\'s announcement', function (): void {
+    [$instructor, $section] = makeAnnouncementSection();
+    $announcement = makeAnnouncement($section, $instructor);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->delete(route('announcements.destroy', $announcement))
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot publish another instructor\'s announcement', function (): void {
+    [$instructor, $section] = makeAnnouncementSection();
+    $announcement = makeAnnouncement($section, $instructor, false);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('announcements.publish', $announcement))
+        ->assertForbidden();
+});
+
 // ─── Validation ───────────────────────────────────────────────────────────────
 
 test('announcement creation fails with missing title', function (): void {
@@ -213,4 +260,40 @@ test('announcement creation fails with missing body', function (): void {
     $this->actingAs($instructor)
         ->post(route('sections.announcements.store', $section), ['title' => 'Title only'])
         ->assertSessionHasErrors(['body']);
+});
+
+// ─── Role / Enrollment gates ──────────────────────────────────────────────────
+
+test('student cannot update an announcement', function (): void {
+    [$instructor, $section] = makeAnnouncementSection();
+    $announcement = makeAnnouncement($section, $instructor);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->put(route('announcements.update', $announcement), [
+            'title' => 'Hack',
+            'body'  => 'Attempt',
+        ])
+        ->assertForbidden();
+});
+
+test('student cannot delete an announcement', function (): void {
+    [$instructor, $section] = makeAnnouncementSection();
+    $announcement = makeAnnouncement($section, $instructor);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->delete(route('announcements.destroy', $announcement))
+        ->assertForbidden();
+});
+
+test('unenrolled student cannot view a published announcement', function (): void {
+    [$instructor, $section] = makeAnnouncementSection();
+    $announcement = makeAnnouncement($section, $instructor, true);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    // student is NOT enrolled
+
+    $this->actingAs($student)
+        ->get(route('announcements.show', $announcement))
+        ->assertForbidden();
 });
