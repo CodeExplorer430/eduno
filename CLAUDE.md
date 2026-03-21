@@ -146,8 +146,11 @@ Add to `package.json` scripts:
 - `main` must always be deployable.
 - Never force-push to `main`.
 
-**Co-author trailer:** Append to every commit message:
-`Co-Authored-By: Miguel Velasco <miguel.velasco.dev@gmail.com>`
+**Co-author trailers:** Append both to every commit message:
+```
+Co-Authored-By: Miguel Velasco <miguel.velasco.dev@gmail.com>
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+```
 
 ---
 
@@ -168,14 +171,29 @@ Every change — whether a new feature, bug fix, refactor, or migration — must
 | Gate | Command | Scope |
 |---|---|---|
 | PHP formatting | `./vendor/bin/pint` | `app/`, `database/`, `routes/` |
-| PHP static analysis | `./vendor/bin/phpstan analyse --level=5` | `app/` |
+| PHP static analysis | `./vendor/bin/phpstan analyse --level=5` | Must exit 0 — zero errors |
 | PHP tests | `php artisan test` | `tests/Feature/`, `tests/Unit/` |
 | TS type check | `npm run type-check` | `resources/js/` |
-| JS/Vue linting | `npm run lint` | `resources/js/` |
+| JS/Vue linting | `npm run lint` | Must exit 0 — zero warnings |
 | Formatting | `npm run format -- --check` | `resources/js/` |
 | JS build | `npm run build` | Ensures no compilation errors |
 
 Husky enforces lint-staged + type-check on pre-commit and commitlint on commit-msg automatically.
+
+---
+
+## Zero-Tolerance Policy
+
+Every commit to `develop` or `main` must produce:
+- PHPStan: exit code 0 (zero errors at level 5)
+- ESLint: zero warnings and zero errors
+- Pint: `{"result":"pass"}` (zero formatting violations)
+- PHP tests: 100% pass rate
+- TypeScript: zero errors (`vue-tsc --noEmit`)
+- Build: clean compilation (`npm run build`)
+
+No exceptions. Suppressions (`@phpstan-ignore-line`) are only permitted when the
+underlying code is genuinely correct and PHPStan's limitation is well-documented.
 
 ---
 

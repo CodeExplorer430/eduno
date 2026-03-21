@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Domain\Assignment\Models\Assignment;
+use App\Domain\Course\Models\CourseSection;
 use App\Jobs\SendDeadlineReminder;
 use Illuminate\Console\Command;
 
@@ -27,7 +28,9 @@ class SendDailyDeadlineReminders extends Command
         $count = 0;
 
         foreach ($assignments as $assignment) {
-            foreach ($assignment->courseSection->enrollments as $enrollment) {
+            /** @var CourseSection $courseSection */
+            $courseSection = $assignment->courseSection;
+            foreach ($courseSection->enrollments as $enrollment) {
                 $student = $enrollment->student;
 
                 // Skip students who already submitted

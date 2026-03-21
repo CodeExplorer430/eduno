@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Domain\Announcement\Models\Announcement;
+use App\Domain\Course\Models\CourseSection;
 use App\Mail\AnnouncementPublishedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -20,11 +21,9 @@ class SendAnnouncementNotification implements ShouldQueue
 
     public function handle(): void
     {
-        $students = $this->announcement->courseSection
-            ->enrollments()
-            ->with('user')
-            ->get()
-            ->pluck('user');
+        /** @var CourseSection $courseSection */
+        $courseSection = $this->announcement->courseSection;
+        $students = $courseSection->enrollments()->with('user')->get()->pluck('user');
 
         foreach ($students as $student) {
             Mail::to($student->email)->queue(new AnnouncementPublishedMail($this->announcement));

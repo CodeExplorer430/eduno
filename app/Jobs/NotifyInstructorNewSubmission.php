@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Domain\Course\Models\CourseSection;
 use App\Domain\Submission\Models\Submission;
 use App\Mail\NewSubmissionMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +21,9 @@ class NotifyInstructorNewSubmission implements ShouldQueue
 
     public function handle(): void
     {
-        $instructor = $this->submission->assignment->courseSection->instructor;
+        /** @var CourseSection $courseSection */
+        $courseSection = $this->submission->assignment->courseSection;
+        $instructor = $courseSection->instructor;
 
         Mail::to($instructor->email)->send(new NewSubmissionMail($this->submission));
     }

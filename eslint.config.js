@@ -38,4 +38,11 @@ export default [
     // Prettier overrides last
     prettierConfig,
     { ignores: ['vendor/', 'node_modules/', 'public/build/', 'bootstrap/ssr/'] },
+    // Spec files: Vitest callbacks (it/describe/beforeEach) don't need explicit return types
+    {
+        files: ['resources/js/tests/**/*.spec.ts'],
+        rules: {
+            '@typescript-eslint/explicit-function-return-type': 'off',
+        },
+    },
 ];
