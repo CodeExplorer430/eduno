@@ -60,7 +60,7 @@ function makeGradingSetup(): array
 // ─── Grading ─────────────────────────────────────────────────────────────────
 
 test('instructor can create a grade', function (): void {
-    [$instructor, $student, $submission] = makeGradingSetup();
+    [$instructor, , $submission] = makeGradingSetup();
 
     $this->actingAs($instructor)
         ->post(route('submissions.grade.store', $submission), [
@@ -76,7 +76,7 @@ test('instructor can create a grade', function (): void {
 });
 
 test('instructor can update a grade', function (): void {
-    [$instructor, $student, $submission] = makeGradingSetup();
+    [$instructor, , $submission] = makeGradingSetup();
     $grade = Grade::create([
         'submission_id' => $submission->id,
         'graded_by' => $instructor->id,
@@ -116,7 +116,7 @@ test('student cannot see grade before release', function (): void {
 });
 
 test('instructor can release grade', function (): void {
-    [$instructor, $student, $submission] = makeGradingSetup();
+    [$instructor, , $submission] = makeGradingSetup();
     $grade = Grade::create([
         'submission_id' => $submission->id,
         'graded_by' => $instructor->id,
@@ -133,7 +133,7 @@ test('instructor can release grade', function (): void {
 
 test('student can see grade after release', function (): void {
     [$instructor, $student, $submission] = makeGradingSetup();
-    $grade = Grade::create([
+    Grade::create([
         'submission_id' => $submission->id,
         'graded_by' => $instructor->id,
         'score' => 88,
@@ -151,7 +151,7 @@ test('student can see grade after release', function (): void {
 });
 
 test('grade creation creates audit_log entry', function (): void {
-    [$instructor, $student, $submission] = makeGradingSetup();
+    [$instructor, , $submission] = makeGradingSetup();
 
     $this->actingAs($instructor)
         ->post(route('submissions.grade.store', $submission), [
@@ -167,7 +167,7 @@ test('grade creation creates audit_log entry', function (): void {
 });
 
 test('grade release creates audit_log entry', function (): void {
-    [$instructor, $student, $submission] = makeGradingSetup();
+    [$instructor, , $submission] = makeGradingSetup();
     $grade = Grade::create([
         'submission_id' => $submission->id,
         'graded_by' => $instructor->id,
@@ -185,7 +185,7 @@ test('grade release creates audit_log entry', function (): void {
 });
 
 test('student cannot grade a submission', function (): void {
-    [$instructor, $student, $submission] = makeGradingSetup();
+    [, $student, $submission] = makeGradingSetup();
 
     $this->actingAs($student)
         ->post(route('submissions.grade.store', $submission), [

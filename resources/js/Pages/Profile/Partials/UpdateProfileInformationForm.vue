@@ -40,9 +40,10 @@ const form = useForm({
                     required
                     autofocus
                     autocomplete="name"
+                    aria-describedby="name-error"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError id="name-error" class="mt-2" :message="form.errors.name" />
             </div>
 
             <div>
@@ -55,9 +56,10 @@ const form = useForm({
                     class="mt-1 block w-full"
                     required
                     autocomplete="username"
+                    aria-describedby="email-error"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError id="email-error" class="mt-2" :message="form.errors.email" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">

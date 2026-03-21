@@ -2,7 +2,7 @@
 
 **Project:** Eduno LMS
 **Version:** 1.0.0
-**Date:** 2026-03-20
+**Date:** 2026-03-21
 **Standard:** ISO/IEC 25010 Functional Suitability
 
 Every Functional Requirement (FR) from `eduno_srs.md` is traced to the implementing
@@ -114,7 +114,7 @@ code artefacts: Action class, Controller method, route name, and test file.
 
 | FR | Description | Action | Route | Test |
 |---|---|---|---|---|
-| FR-038 | Export submission records as CSV | `ExportSubmissions` (`app/Domain/Report/Actions/`) | `assignments.submissions.export` | `tests/Feature/Admin/ReportTest.php` |
+| FR-038 | Export submission records as CSV | `ExportSubmissions` (`app/Domain/Report/Actions/`) | `assignments.submissions.export` | `tests/Feature/Report/ExportTest.php` |
 | FR-039 | Admin views summary reports | `GetAdminReport` (`app/Domain/Report/Actions/`) | `admin.reports.index` | `tests/Feature/Admin/ReportTest.php` |
 | FR-040 | Basic activity metrics | `GetAdminReport` (submission counts, late flag aggregates) | `admin.reports.index` | `tests/Feature/Admin/ReportTest.php` |
 
@@ -146,16 +146,16 @@ code artefacts: Action class, Controller method, route name, and test file.
 
 | Domain | FRs | Routes Implemented | Actions Implemented | Tests |
 |---|---|---|---|---|
-| Auth | FR-001–005 | 8 (Breeze) | Breeze built-in | 5 test classes |
+| Auth | FR-001–005 | 12 (Breeze) | Breeze built-in | 8 test classes |
 | Profile | FR-006–007 | 3 | 1 custom Action | 2 test classes |
-| Courses | FR-008–011 | 14 | 5 Actions | 2 test classes |
-| Modules/Lessons | FR-012–016 | 18 | 7 Actions | 2 test classes |
-| Announcements | FR-017–019 | 7 | 3 Actions | 1 test class |
-| Assignments | FR-020–023 | 7 | 4 Actions | 2 test classes |
-| Submissions | FR-024–029 | 5 | 1 Action | 1 test class |
+| Courses | FR-008–011 | 16 | 5 Actions | 4 test classes |
+| Modules/Lessons | FR-012–016 | 18 | 8 Actions | 4 test classes |
+| Announcements | FR-017–019 | 8 | 3 Actions | 2 test classes |
+| Assignments | FR-020–023 | 8 | 4 Actions | 2 test classes |
+| Submissions | FR-024–029 | 4 | 1 Action | 1 test class |
 | Grading | FR-030–033 | 3 | 2 Actions | 1 test class |
 | Notifications | FR-034–037 | — | Queued Notifications | Covered via action tests |
-| Reports | FR-038–040 | 2 | 2 Actions | 1 test class |
-| Accessibility | FR-041–045 | 2 | 1 Action | 1 PHP + 34 Vue specs |
+| Reports | FR-038–040 | 2 | 2 Actions | 2 test classes |
+| Accessibility | FR-041–045 | 3 | 1 Action | 1 PHP + 36 Vue specs |
 | Audit Logs | FR-046–048 | — | Inline in Actions | Covered via grading tests |
-| **Total** | **48** | **69** | **27** | **347 PHP + 184 Vitest** |
+| **Total** | **48** | **69** | **27** | **350 PHP + 184 Vitest** |
