@@ -22,6 +22,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $schedule_text
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read User|null $instructor
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Enrollment> $enrollments
  */
 class CourseSection extends Model
 {

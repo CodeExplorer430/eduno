@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $enrolled_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read User $student
  */
 class Enrollment extends Model
 {
