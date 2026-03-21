@@ -481,3 +481,83 @@ test('student cannot publish a module', function (): void {
         ->post(route('modules.publish', $module))
         ->assertForbidden();
 });
+
+// ─── Ownership (non-owning instructor) — Lesson ───────────────────────────────
+
+test('non-owning instructor cannot create a lesson in another instructor\'s module', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('modules.lessons.store', $module), ['title' => 'Hijack', 'type' => 'text'])
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot update another instructor\'s lesson', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $lesson = makeLesson($module);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->put(route('lessons.update', $lesson), ['title' => 'Hijack', 'type' => 'text'])
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot delete another instructor\'s lesson', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $lesson = makeLesson($module);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->delete(route('lessons.destroy', $lesson))
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot publish another instructor\'s lesson', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $lesson = makeLesson($module, false);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('lessons.publish', $lesson))
+        ->assertForbidden();
+});
+
+// ─── Role gates — Lesson ──────────────────────────────────────────────────────
+
+test('student cannot update a lesson', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $lesson = makeLesson($module);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->put(route('lessons.update', $lesson), ['title' => 'Hack', 'type' => 'text'])
+        ->assertForbidden();
+});
+
+test('student cannot delete a lesson', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $lesson = makeLesson($module);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->delete(route('lessons.destroy', $lesson))
+        ->assertForbidden();
+});
+
+test('student cannot publish a lesson', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $lesson = makeLesson($module, false);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->post(route('lessons.publish', $lesson))
+        ->assertForbidden();
+});
