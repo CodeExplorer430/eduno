@@ -158,4 +158,4 @@ code artefacts: Action class, Controller method, route name, and test file.
 | Reports | FR-038–040 | 2 | 2 Actions | 1 test class |
 | Accessibility | FR-041–045 | 2 | 1 Action | 1 PHP + 34 Vue specs |
 | Audit Logs | FR-046–048 | — | Inline in Actions | Covered via grading tests |
-| **Total** | **48** | **69** | **27** | **297 PHP + 184 Vitest** |
+| **Total** | **48** | **69** | **27** | **303 PHP + 184 Vitest** |
