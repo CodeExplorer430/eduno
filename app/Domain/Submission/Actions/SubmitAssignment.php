@@ -56,9 +56,10 @@ class SubmitAssignment
 
         $submission->load(['assignment.section.instructor', 'student']);
 
-        /** @var User $instructor */
         $instructor = $submission->assignment->section->instructor;
-        $instructor->notify(new NewSubmissionNotification($submission));
+        if ($instructor instanceof User) {
+            $instructor->notify(new NewSubmissionNotification($submission));
+        }
 
         return $submission;
     }
