@@ -30,8 +30,12 @@ class SubmissionPolicy
         return $user->id === $submission->student_id;
     }
 
-    public function create(User $user, Assignment $assignment): bool
+    public function create(User $user, ?Assignment $assignment = null): bool
     {
+        if ($assignment === null) {
+            return $user->isStudent();
+        }
+
         if (! $assignment->isPublished()) {
             return false;
         }

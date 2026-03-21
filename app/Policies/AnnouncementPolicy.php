@@ -32,8 +32,12 @@ class AnnouncementPolicy
         return false;
     }
 
-    public function create(User $user, CourseSection $section): bool
+    public function create(User $user, ?CourseSection $section = null): bool
     {
+        if ($section === null) {
+            return $user->isAdmin() || $user->isInstructor();
+        }
+
         return $user->isAdmin() || $user->id === $section->instructor_id;
     }
 

@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 
 it('creates preferences when none exist', function () {
     $user = User::factory()->create();
-    $action = new UpdateUserPreferences;
+    $action = new UpdateUserPreferences();
 
     $pref = $action->execute($user, [
         'dyslexia_font' => true,
@@ -33,7 +33,7 @@ it('updates preferences when they already exist', function () {
         'high_contrast' => false,
     ]);
 
-    $action = new UpdateUserPreferences;
+    $action = new UpdateUserPreferences();
     $action->execute($user, ['dyslexia_font' => true]);
 
     expect(UserPreference::where('user_id', $user->id)->value('dyslexia_font'))->toBeTrue();
@@ -41,7 +41,7 @@ it('updates preferences when they already exist', function () {
 
 it('only creates one preferences record per user', function () {
     $user = User::factory()->create();
-    $action = new UpdateUserPreferences;
+    $action = new UpdateUserPreferences();
 
     $action->execute($user, ['high_contrast' => true]);
     $action->execute($user, ['high_contrast' => false]);

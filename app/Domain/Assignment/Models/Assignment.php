@@ -53,6 +53,11 @@ class Assignment extends Model
         return $this->belongsTo(CourseSection::class, 'course_section_id');
     }
 
+    public function courseSection(): BelongsTo
+    {
+        return $this->section();
+    }
+
     public function submissions(): HasMany
     {
         return $this->hasMany(Submission::class);

@@ -5,5 +5,4 @@ parameters:
     paths:
         - app/
     level: 5
-    ignoreErrors:
-        - '#Parameter \#1 \$user of class Illuminate\\Auth\\Events\\Verified constructor expects#'
+    ignoreErrors: []
