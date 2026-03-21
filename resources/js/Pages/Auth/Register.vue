@@ -39,6 +39,7 @@ const submit = () => {
                     autofocus
                     autocomplete="name"
                     aria-describedby="name-error"
+                    :aria-invalid="!!form.errors.name"
                 />
 
                 <InputError id="name-error" class="mt-2" :message="form.errors.name" />
@@ -55,6 +56,7 @@ const submit = () => {
                     required
                     autocomplete="username"
                     aria-describedby="email-error"
+                    :aria-invalid="!!form.errors.email"
                 />
 
                 <InputError id="email-error" class="mt-2" :message="form.errors.email" />
@@ -71,6 +73,7 @@ const submit = () => {
                     required
                     autocomplete="new-password"
                     aria-describedby="password-error"
+                    :aria-invalid="!!form.errors.password"
                 />
 
                 <InputError id="password-error" class="mt-2" :message="form.errors.password" />
@@ -87,6 +90,7 @@ const submit = () => {
                     required
                     autocomplete="new-password"
                     aria-describedby="password_confirmation-error"
+                    :aria-invalid="!!form.errors.password_confirmation"
                 />
 
                 <InputError

@@ -31,6 +31,12 @@ watchEffect(() => {
 
 <template>
     <div>
+        <a
+            href="#main-content"
+            class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-white focus:text-indigo-700 focus:rounded focus:shadow-lg"
+        >
+            Skip to main content
+        </a>
         <div class="min-h-screen bg-gray-100">
             <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
@@ -227,7 +233,7 @@ watchEffect(() => {
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main id="main-content">
                 <slot />
             </main>
         </div>

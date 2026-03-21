@@ -28,6 +28,7 @@ const assignment: Assignment = {
     due_at: '2026-04-01T23:59:00Z',
     max_score: 100,
     allow_resubmission: false,
+    allowed_file_types: null,
     published_at: '2026-03-01T00:00:00Z',
     created_at: '2026-01-01T00:00:00Z',
     updated_at: '2026-01-01T00:00:00Z',

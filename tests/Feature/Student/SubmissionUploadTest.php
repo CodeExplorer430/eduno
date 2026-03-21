@@ -141,3 +141,145 @@ it('guest cannot submit a file', function () {
 
     $response->assertRedirect(route('login'));
 });
+
+it('rejects a file not in allowed_file_types', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $course = Course::create([
+        'code' => 'CS104',
+        'title' => 'Test Course 4',
+        'department' => 'CS',
+        'term' => '1st',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'D',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $assignment = Assignment::create([
+        'course_section_id' => $section->id,
+        'title' => 'Typed Assignment',
+        'max_score' => 100,
+        'allow_resubmission' => false,
+        'allowed_file_types' => ['application/pdf'],
+    ]);
+
+    Enrollment::create([
+        'user_id' => $student->id,
+        'course_section_id' => $section->id,
+        'status' => 'active',
+    ]);
+
+    $file = UploadedFile::fake()->create('doc.docx', 100, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+
+    $response = $this->actingAs($student)->post(
+        route('student.submissions.store', $assignment),
+        ['files' => [$file]]
+    );
+
+    $response->assertSessionHasErrors('files.0');
+});
+
+it('accepts a file that is in allowed_file_types', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $course = Course::create([
+        'code' => 'CS105',
+        'title' => 'Test Course 5',
+        'department' => 'CS',
+        'term' => '1st',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'E',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $assignment = Assignment::create([
+        'course_section_id' => $section->id,
+        'title' => 'PDF Only Assignment',
+        'max_score' => 100,
+        'allow_resubmission' => true,
+        'allowed_file_types' => ['application/pdf'],
+    ]);
+
+    Enrollment::create([
+        'user_id' => $student->id,
+        'course_section_id' => $section->id,
+        'status' => 'active',
+    ]);
+
+    $file = UploadedFile::fake()->create('report.pdf', 100, 'application/pdf');
+
+    $response = $this->actingAs($student)->post(
+        route('student.submissions.store', $assignment),
+        ['files' => [$file]]
+    );
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('submissions', [
+        'assignment_id' => $assignment->id,
+        'student_id' => $student->id,
+        'status' => 'submitted',
+    ]);
+});
+
+it('accepts any file when allowed_file_types is null', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $course = Course::create([
+        'code' => 'CS106',
+        'title' => 'Test Course 6',
+        'department' => 'CS',
+        'term' => '1st',
+        'academic_year' => '2025-2026',
+        'status' => 'published',
+        'created_by' => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id' => $course->id,
+        'section_name' => 'F',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $assignment = Assignment::create([
+        'course_section_id' => $section->id,
+        'title' => 'Open Assignment',
+        'max_score' => 100,
+        'allow_resubmission' => true,
+        'allowed_file_types' => null,
+    ]);
+
+    Enrollment::create([
+        'user_id' => $student->id,
+        'course_section_id' => $section->id,
+        'status' => 'active',
+    ]);
+
+    $file = UploadedFile::fake()->create('report.pdf', 100, 'application/pdf');
+
+    $response = $this->actingAs($student)->post(
+        route('student.submissions.store', $assignment),
+        ['files' => [$file]]
+    );
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('submissions', [
+        'assignment_id' => $assignment->id,
+        'student_id' => $student->id,
+        'status' => 'submitted',
+    ]);
+});

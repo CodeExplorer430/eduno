@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $due_at
  * @property float $max_score
  * @property bool $allow_resubmission
+ * @property array<int,string>|null $allowed_file_types
  * @property Carbon|null $published_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -35,6 +36,7 @@ class Assignment extends Model
         'due_at',
         'max_score',
         'allow_resubmission',
+        'allowed_file_types',
         'published_at',
     ];
 
@@ -44,6 +46,7 @@ class Assignment extends Model
             'due_at' => 'datetime',
             'published_at' => 'datetime',
             'allow_resubmission' => 'boolean',
+            'allowed_file_types' => 'array',
             'max_score' => 'decimal:2',
         ];
     }

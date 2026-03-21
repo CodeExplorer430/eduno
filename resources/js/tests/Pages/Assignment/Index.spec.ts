@@ -55,6 +55,7 @@ const sampleAssignments = {
             max_score: 100,
             instructions: null,
             allow_resubmission: false,
+            allowed_file_types: null,
             mySubmission: null,
             created_at: '2026-01-01T00:00:00Z',
             updated_at: '2026-01-01T00:00:00Z',

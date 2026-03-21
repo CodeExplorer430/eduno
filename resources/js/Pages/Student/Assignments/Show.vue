@@ -19,6 +19,21 @@ interface Submission {
     grade?: Grade | null;
 }
 
+const MIME_LABELS: Record<string, string> = {
+    'application/pdf': 'PDF',
+    'application/msword': 'Word (.doc)',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word (.docx)',
+    'application/vnd.ms-powerpoint': 'PowerPoint (.ppt)',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+        'PowerPoint (.pptx)',
+    'application/zip': 'ZIP',
+    'text/plain': 'Plain Text (.txt)',
+    'image/png': 'PNG',
+    'image/jpeg': 'JPG/JPEG',
+    'application/vnd.ms-excel': 'Excel (.xls)',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel (.xlsx)',
+};
+
 interface Assignment {
     id: number;
     title: string;
@@ -26,6 +41,7 @@ interface Assignment {
     due_at: string | null;
     max_score: number;
     allow_resubmission: boolean;
+    allowed_file_types: string[] | null;
     course_section_id: number;
     course_section?: {
         section_name: string;
@@ -142,6 +158,22 @@ const canSubmit = computed<boolean>(() => {
                                 <dt class="font-medium text-gray-700">Resubmission</dt>
                                 <dd class="text-gray-600">
                                     {{ assignment.allow_resubmission ? 'Allowed' : 'Not allowed' }}
+                                </dd>
+                            </div>
+                            <div
+                                v-if="
+                                    assignment.allowed_file_types &&
+                                    assignment.allowed_file_types.length > 0
+                                "
+                                class="col-span-2"
+                            >
+                                <dt class="font-medium text-gray-700">Accepted File Types</dt>
+                                <dd class="text-gray-600">
+                                    {{
+                                        assignment.allowed_file_types
+                                            .map((m) => MIME_LABELS[m] ?? m)
+                                            .join(', ')
+                                    }}
                                 </dd>
                             </div>
                         </dl>

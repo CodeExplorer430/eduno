@@ -14,9 +14,44 @@ const props = withDefaults(
     }
 );
 
+const open = ref(false);
+const panelRef = ref<HTMLElement | null>(null);
+
 const closeOnEscape = (e: KeyboardEvent) => {
     if (open.value && e.key === 'Escape') {
         open.value = false;
+    }
+};
+
+const getMenuItems = (): HTMLElement[] => {
+    if (!panelRef.value) return [];
+    return Array.from(panelRef.value.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+};
+
+const onKeydownTrigger = (e: KeyboardEvent) => {
+    if (!open.value) return;
+    const items = getMenuItems();
+    if (items.length === 0) return;
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items[0].focus();
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        items[items.length - 1].focus();
+    }
+};
+
+const onKeydownPanel = (e: KeyboardEvent) => {
+    const items = getMenuItems();
+    if (items.length === 0) return;
+    const current = document.activeElement as HTMLElement;
+    const idx = items.indexOf(current);
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items[(idx + 1) % items.length].focus();
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        items[(idx - 1 + items.length) % items.length].focus();
     }
 };
 
@@ -38,8 +73,6 @@ const alignmentClasses = computed(() => {
         return 'origin-top';
     }
 });
-
-const open = ref(false);
 </script>
 
 <template>
@@ -48,6 +81,7 @@ const open = ref(false);
             @click="open = !open"
             @keydown.enter.prevent="open = !open"
             @keydown.space.prevent="open = !open"
+            @keydown="onKeydownTrigger"
         >
             <slot name="trigger" :open="open" />
         </div>
@@ -65,12 +99,14 @@ const open = ref(false);
         >
             <div
                 v-show="open"
+                ref="panelRef"
                 role="menu"
                 aria-orientation="vertical"
                 class="absolute z-50 mt-2 rounded-md shadow-lg"
                 :class="[widthClass, alignmentClasses]"
                 style="display: none"
                 @click="open = false"
+                @keydown="onKeydownPanel"
             >
                 <div class="rounded-md ring-1 ring-black ring-opacity-5" :class="contentClasses">
                     <slot name="content" />
