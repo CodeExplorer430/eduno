@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreCourseSectionRequest extends FormRequest
+class UpdateCourseSectionRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -21,9 +19,7 @@ class StoreCourseSectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'course_id' => ['required', 'integer', 'exists:courses,id'],
             'section_name' => ['required', 'string', 'max:255'],
-            'instructor_id' => ['required', 'integer', Rule::exists('users', 'id')->where('role', UserRole::Instructor->value)],
             'schedule_text' => ['nullable', 'string', 'max:255'],
         ];
     }
