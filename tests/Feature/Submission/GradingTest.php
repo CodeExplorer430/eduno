@@ -283,3 +283,46 @@ test('another instructor cannot release a grade', function (): void {
         ->post(route('grades.release', $grade))
         ->assertForbidden();
 });
+
+test('score above max_score is rejected on store', function (): void {
+    [$instructor, , $submission] = makeGradingSetup();
+
+    $this->actingAs($instructor)
+        ->post(route('submissions.grade.store', $submission), [
+            'score' => 101,
+            'feedback' => 'Over limit',
+        ])
+        ->assertSessionHasErrors(['score']);
+});
+
+test('score above max_score is rejected on update', function (): void {
+    [$instructor, , $submission] = makeGradingSetup();
+    $grade = Grade::create([
+        'submission_id' => $submission->id,
+        'graded_by' => $instructor->id,
+        'score' => 80,
+    ]);
+
+    $this->actingAs($instructor)
+        ->patch(route('grades.update', $grade), [
+            'score' => 101,
+            'feedback' => 'Over limit',
+        ])
+        ->assertSessionHasErrors(['score']);
+});
+
+test('score equal to max_score is accepted on store', function (): void {
+    [$instructor, , $submission] = makeGradingSetup();
+
+    $this->actingAs($instructor)
+        ->post(route('submissions.grade.store', $submission), [
+            'score' => 100,
+            'feedback' => 'Perfect score',
+        ])
+        ->assertRedirect();
+
+    $this->assertDatabaseHas('grades', [
+        'submission_id' => $submission->id,
+        'score' => 100,
+    ]);
+});
