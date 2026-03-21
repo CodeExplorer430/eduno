@@ -105,6 +105,21 @@ describe('Auth/Login', () => {
         expect(wrapper.find('[role="alert"]').exists()).toBe(true);
     });
 
+    it('email input has aria-invalid="true" when email error is present', () => {
+        mockUseForm.mockReturnValueOnce({
+            email: '',
+            password: '',
+            remember: false,
+            errors: { email: 'These credentials do not match our records.' },
+            processing: false,
+            hasErrors: true,
+            post: vi.fn(),
+            reset: vi.fn(),
+        });
+        const wrapper = mount(LoginPage, { global: globalOpts });
+        expect(wrapper.html()).toContain('aria-invalid="true"');
+    });
+
     it('passes WCAG axe check', async () => {
         const wrapper = mountWithPrimeVue(LoginPage, {
             global: {

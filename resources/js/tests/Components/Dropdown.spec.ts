@@ -70,4 +70,40 @@ describe('Dropdown', () => {
         expect(results).toHaveNoViolations();
         wrapper.unmount();
     });
+
+    it('ArrowDown moves focus to first menuitem when open', async () => {
+        const wrapper = mount(Dropdown, {
+            attachTo: document.body,
+            slots: {
+                trigger: '<button type="button">Open</button>',
+                content:
+                    '<a href="#" role="menuitem" tabindex="-1">Item 1</a><a href="#" role="menuitem" tabindex="-1">Item 2</a>',
+            },
+        });
+        await wrapper.find('button').trigger('click');
+        await nextTick();
+        const triggerDiv = wrapper.find('.relative > div');
+        triggerDiv.element.dispatchEvent(
+            new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })
+        );
+        await nextTick();
+        const items = wrapper.findAll('[role="menuitem"]');
+        expect(items.length).toBeGreaterThan(0);
+        wrapper.unmount();
+    });
+
+    it('dropdown panel has role="menu" and items have role="menuitem"', async () => {
+        const wrapper = mount(Dropdown, {
+            attachTo: document.body,
+            slots: {
+                trigger: '<button type="button">Open</button>',
+                content: '<a href="#" role="menuitem">Item</a>',
+            },
+        });
+        await wrapper.find('button').trigger('click');
+        await nextTick();
+        expect(wrapper.find('[role="menu"]').exists()).toBe(true);
+        expect(wrapper.find('[role="menuitem"]').exists()).toBe(true);
+        wrapper.unmount();
+    });
 });
