@@ -27,7 +27,7 @@ code artefacts: Action class, Controller method, route name, and test file.
 | FR | Description | Action | Route | Test |
 |---|---|---|---|---|
 | FR-006 | View and update basic profile | `ProfileController::update` | `profile.edit`, `profile.update` | `tests/Feature/ProfileTest.php` |
-| FR-007 | Save accessibility preferences | `UpdateUserPreferences` (`app/Domain/Accessibility/Actions/`) | `preferences.update`, `profile.preferences` | `tests/Feature/Accessibility/PreferencesTest.php` |
+| FR-007 | Save accessibility preferences | `UpdatePreferences` (`app/Domain/Accessibility/Actions/`) | `preferences.update`, `profile.preferences` | `tests/Feature/Accessibility/PreferencesTest.php` |
 
 ---
 
@@ -128,7 +128,7 @@ code artefacts: Action class, Controller method, route name, and test file.
 | FR-042 | High-contrast mode | `UserPreference.high_contrast` → `data-high-contrast` attribute | `preferences.update` | `tests/Feature/Accessibility/PreferencesTest.php` |
 | FR-043 | Keyboard-only navigation | Semantic HTML, visible focus rings, skip-link in `AuthenticatedLayout` | all pages | `resources/js/tests/Pages/**/*.spec.ts` (vitest-axe) |
 | FR-044 | Readable validation and error messages | `aria-describedby` on all form inputs, `role="alert"` on errors | all form routes | `resources/js/tests/Pages/Auth/Register.spec.ts` |
-| FR-045 | Store accessibility preferences for future sessions | `UpdateUserPreferences`, `UserPreference` model | `preferences.update` | `tests/Feature/Accessibility/PreferencesTest.php` |
+| FR-045 | Store accessibility preferences for future sessions | `UpdatePreferences`, `UserPreference` model | `preferences.update` | `tests/Feature/Accessibility/PreferencesTest.php` |
 
 ---
 
@@ -158,4 +158,4 @@ code artefacts: Action class, Controller method, route name, and test file.
 | Reports | FR-038–040 | 2 | 2 Actions | 1 test class |
 | Accessibility | FR-041–045 | 2 | 1 Action | 1 PHP + 34 Vue specs |
 | Audit Logs | FR-046–048 | — | Inline in Actions | Covered via grading tests |
-| **Total** | **48** | **69** | **27** | **295 PHP + 168 Vitest** |
+| **Total** | **48** | **69** | **27** | **297 PHP + 181 Vitest** |

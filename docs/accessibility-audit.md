@@ -1,18 +1,18 @@
 # Accessibility Audit Report
 
-**Project:** Eduno LMS v1.0.0
+**Project:** Eduno LMS v1.3.0
 **Standard:** WCAG 2.2 Level AA
 **Audit Method:** Automated (axe-core via vitest-axe) + Manual code review
-**Date:** 2026-03-20
+**Date:** 2026-03-21
 **Auditor:** Claude Sonnet 4.6 (automated), development team (manual review)
 
 ---
 
 ## Executive Summary
 
-Eduno LMS v1.0.0 achieves **WCAG 2.2 Level AA compliance** across all page components.
-The audit covered 32 Vue page and component spec files using axe-core automated
-testing (168 Vitest specs with `toHaveNoViolations` assertions), supplemented by
+Eduno LMS v1.3.0 achieves **WCAG 2.2 Level AA compliance** across all page components.
+The audit covered 33 Vue page and component spec files using axe-core automated
+testing (181 Vitest specs with `toHaveNoViolations` assertions), supplemented by
 manual code review of semantic structure, keyboard operability, and ARIA usage.
 
 **Result: No axe-core violations on any page component.**
@@ -154,7 +154,7 @@ props and applies CSS classes and data attributes to the `<html>` element:
 | `reduced_motion` | `reduced-motion` CSS class on `<html>` |
 | `dyslexia_font` | `dyslexia-font` CSS class on `<html>` |
 
-Preferences persist to `user_preferences` table via `UpdateUserPreferences` action
+Preferences persist to `user_preferences` table via `UpdatePreferences` action
 and are restored on every page load through Inertia shared props.
 
 ---
@@ -187,5 +187,5 @@ Run the full automated accessibility test suite:
 npm run test
 ```
 
-All 168 Vitest specs pass, including `toHaveNoViolations()` axe assertions on every
+All 181 Vitest specs pass, including `toHaveNoViolations()` axe assertions on every
 audited page and component.
