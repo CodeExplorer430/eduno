@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { axe } from 'vitest-axe';
 import AssignmentIndex from '@/Pages/Assignment/Index.vue';
-import type { CourseSection, PaginatedResponse, Assignment } from '@/Types/models';
+import type { CourseSection, PaginatedResponse, Assignment, Submission } from '@/Types/models';
 
 vi.mock('@inertiajs/vue3', () => ({
     Head: { template: '<head></head>' },
@@ -30,6 +30,7 @@ beforeAll(() => {
 const section = {
     id: 1,
     section_name: 'CS101-A',
+    block_code: null,
     course_id: 1,
     instructor_id: 1,
     schedule_text: null,
@@ -54,8 +55,32 @@ const sampleAssignments = {
             max_score: 100,
             instructions: null,
             allow_resubmission: false,
+            mySubmission: null,
             created_at: '2026-01-01T00:00:00Z',
             updated_at: '2026-01-01T00:00:00Z',
+        },
+    ],
+    links: [],
+    meta: { current_page: 1, last_page: 1, per_page: 15, total: 1 },
+} as PaginatedResponse<Assignment>;
+
+const sampleSubmission: Submission = {
+    id: 10,
+    assignment_id: 1,
+    student_id: 2,
+    status: 'submitted',
+    submitted_at: '2026-03-20T14:00:00Z',
+    is_late: false,
+    attempt_no: 1,
+    created_at: '2026-03-20T14:00:00Z',
+    updated_at: '2026-03-20T14:00:00Z',
+};
+
+const assignmentsWithSubmission = {
+    data: [
+        {
+            ...sampleAssignments.data[0],
+            mySubmission: sampleSubmission,
         },
     ],
     links: [],
@@ -86,6 +111,39 @@ describe('Assignment/Index', () => {
         });
         expect(wrapper.html()).toContain('Due Date');
         expect(wrapper.html()).toContain('Lab Report 1');
+    });
+
+    it('shows "My Submission" column header for student view', () => {
+        const wrapper = mount(AssignmentIndex, {
+            props: { section, assignments: sampleAssignments, canManage: false },
+            global: { mocks: { route: (name: string) => `/${name}` } },
+        });
+        expect(wrapper.html()).toContain('My Submission');
+    });
+
+    it('does not show "My Submission" column header for instructor view', () => {
+        const wrapper = mount(AssignmentIndex, {
+            props: { section, assignments: sampleAssignments, canManage: true },
+            global: { mocks: { route: (name: string) => `/${name}` } },
+        });
+        expect(wrapper.html()).not.toContain('My Submission');
+    });
+
+    it('shows submission status and date when mySubmission is present', () => {
+        const wrapper = mount(AssignmentIndex, {
+            props: { section, assignments: assignmentsWithSubmission, canManage: false },
+            global: { mocks: { route: (name: string) => `/${name}` } },
+        });
+        expect(wrapper.html()).toContain('submitted');
+        expect(wrapper.html()).toContain('Mar 20');
+    });
+
+    it('shows "—" when mySubmission is null', () => {
+        const wrapper = mount(AssignmentIndex, {
+            props: { section, assignments: sampleAssignments, canManage: false },
+            global: { mocks: { route: (name: string) => `/${name}` } },
+        });
+        expect(wrapper.html()).toContain('—');
     });
 
     it('has no axe violations', async () => {

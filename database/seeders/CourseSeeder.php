@@ -49,6 +49,7 @@ class CourseSeeder extends Seeder
                 $section = CourseSection::create([
                     'course_id' => $course->id,
                     'section_name' => 'Section '.chr(64 + $s),
+                    'block_code' => 'BSCS-2'.chr(64 + $s),
                     'instructor_id' => $instructor->id,
                     'schedule_text' => $s === 1 ? 'MWF 9:00-10:00' : 'TTh 10:30-12:00',
                 ]);

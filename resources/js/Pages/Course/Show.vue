@@ -155,7 +155,8 @@ function isEnrolled(section: EnrichedSection): boolean {
                             <div class="flex items-center justify-between p-4">
                                 <div>
                                     <p class="font-medium text-gray-900">
-                                        {{ section.section_name }}
+                                        {{ section.section_name
+                                        }}{{ section.block_code ? ` (${section.block_code})` : '' }}
                                     </p>
                                     <p class="text-sm text-gray-500">
                                         Instructor: {{ section.instructor?.name }}

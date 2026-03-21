@@ -12,6 +12,7 @@ use App\Domain\Course\Models\CourseSection;
 use App\Http\Requests\Assignment\StoreAssignmentRequest;
 use App\Http\Requests\Assignment\UpdateAssignmentRequest;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -34,6 +35,21 @@ class AssignmentController extends Controller
         }
 
         $assignments = $query->paginate(15);
+
+        if ($user->isStudent()) {
+            $ids = $assignments->pluck('id');
+            $submissionMap = $user->submissions()
+                ->whereIn('assignment_id', $ids)
+                ->get(['id', 'assignment_id', 'status', 'submitted_at', 'is_late', 'attempt_no'])
+                ->keyBy('assignment_id');
+
+            $assignments->through(function (Model $a, int $key) use ($submissionMap): Model {
+                unset($key);
+                $a->setAttribute('mySubmission', $submissionMap[$a->getKey()] ?? null);
+
+                return $a;
+            });
+        }
 
         return Inertia::render('Assignment/Index', [
             'section' => $section,
