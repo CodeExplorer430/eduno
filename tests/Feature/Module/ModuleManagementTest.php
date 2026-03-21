@@ -417,3 +417,67 @@ test('enrolled student cannot access instructor-only resource', function (): voi
         ->get(route('resources.download', $resource))
         ->assertForbidden();
 });
+
+// ─── Ownership (non-owning instructor) ───────────────────────────────────────
+
+test('non-owning instructor cannot update another instructor\'s module', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->put(route('modules.update', $module), ['title' => 'Hijack'])
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot delete another instructor\'s module', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->delete(route('modules.destroy', $module))
+        ->assertForbidden();
+});
+
+test('non-owning instructor cannot publish another instructor\'s module', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section, false);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+
+    $this->actingAs($other)
+        ->post(route('modules.publish', $module))
+        ->assertForbidden();
+});
+
+// ─── Role gates ───────────────────────────────────────────────────────────────
+
+test('student cannot update a module', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->put(route('modules.update', $module), ['title' => 'Hack'])
+        ->assertForbidden();
+});
+
+test('student cannot delete a module', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->delete(route('modules.destroy', $module))
+        ->assertForbidden();
+});
+
+test('student cannot publish a module', function (): void {
+    [, $section] = makeInstructorSection();
+    $module = makeModule($section, false);
+    $student = User::factory()->create(['role' => UserRole::Student]);
+
+    $this->actingAs($student)
+        ->post(route('modules.publish', $module))
+        ->assertForbidden();
+});
