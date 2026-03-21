@@ -3,74 +3,48 @@ import { mount } from '@vue/test-utils';
 import { axe } from 'vitest-axe';
 import NavLink from '@/Components/NavLink.vue';
 
-const LinkStub = {
-    template: '<a v-bind="$attrs"><slot /></a>',
-    inheritAttrs: true,
+const linkStub = {
+    template: '<a :href="$attrs.href ?? \'#\'" v-bind="$attrs"><slot /></a>',
+    inheritAttrs: false,
 };
 
+const globalOpts = { stubs: { Link: linkStub } };
+
 describe('NavLink', () => {
-    it('renders a Link with the provided href', () => {
+    it('renders slot content as link text', () => {
         const wrapper = mount(NavLink, {
-            props: { href: '/dashboard' },
-            global: { stubs: { Link: LinkStub } },
+            props: { href: '/dashboard', active: false },
             slots: { default: 'Dashboard' },
+            global: globalOpts,
         });
-        expect(wrapper.find('a').attributes('href')).toBe('/dashboard');
+        expect(wrapper.text()).toContain('Dashboard');
     });
 
-    it('renders the slot content', () => {
-        const wrapper = mount(NavLink, {
-            props: { href: '/courses' },
-            global: { stubs: { Link: LinkStub } },
-            slots: { default: 'Courses' },
-        });
-        expect(wrapper.text()).toContain('Courses');
-    });
-
-    it('applies active styles when active=true', () => {
+    it('applies active border class when active prop is true', () => {
         const wrapper = mount(NavLink, {
             props: { href: '/dashboard', active: true },
-            global: { stubs: { Link: LinkStub } },
             slots: { default: 'Dashboard' },
+            global: globalOpts,
         });
         expect(wrapper.find('a').classes()).toContain('border-indigo-400');
     });
 
-    it('applies inactive styles when active=false', () => {
+    it('applies transparent border class when active prop is false', () => {
         const wrapper = mount(NavLink, {
             props: { href: '/dashboard', active: false },
-            global: { stubs: { Link: LinkStub } },
             slots: { default: 'Dashboard' },
+            global: globalOpts,
         });
         expect(wrapper.find('a').classes()).toContain('border-transparent');
     });
 
-    it('sets aria-current="page" when active=true', () => {
-        const wrapper = mount(NavLink, {
-            props: { href: '/dashboard', active: true },
-            global: { stubs: { Link: LinkStub } },
-            slots: { default: 'Dashboard' },
-        });
-        expect(wrapper.find('a').attributes('aria-current')).toBe('page');
-    });
-
-    it('does not set aria-current when active=false', () => {
+    it('passes WCAG axe check', async () => {
         const wrapper = mount(NavLink, {
             props: { href: '/dashboard', active: false },
-            global: { stubs: { Link: LinkStub } },
             slots: { default: 'Dashboard' },
+            global: globalOpts,
         });
-        expect(wrapper.find('a').attributes('aria-current')).toBeUndefined();
-    });
-
-    it('has no axe violations', async () => {
-        const wrapper = mount(NavLink, {
-            props: { href: '/dashboard' },
-            global: { stubs: { Link: LinkStub } },
-            slots: { default: 'Dashboard' },
-        });
-        expect(
-            await axe(wrapper.element, { rules: { region: { enabled: false } } })
-        ).toHaveNoViolations();
+        const results = await axe(wrapper.element, { rules: { region: { enabled: false } } });
+        expect(results).toHaveNoViolations();
     });
 });

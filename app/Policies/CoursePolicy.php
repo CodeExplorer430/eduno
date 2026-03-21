@@ -43,4 +43,9 @@ class CoursePolicy
     {
         return $user->isAdmin() || $user->id === $course->created_by;
     }
+
+    public function changeStatus(User $user, Course $course): bool
+    {
+        return $user->isAdmin();
+    }
 }

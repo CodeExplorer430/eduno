@@ -2,8 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import Button from 'primevue/button';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Props {
@@ -93,17 +92,17 @@ const submit = (): void => {
                             <footer
                                 class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4"
                             >
-                                <Link :href="route('admin.users.index')" as="button" type="button">
-                                    <SecondaryButton type="button">Cancel</SecondaryButton>
+                                <Link :href="route('admin.users.index')">
+                                    <Button type="button" severity="secondary">Cancel</Button>
                                 </Link>
-                                <PrimaryButton
+                                <Button
                                     type="submit"
                                     :disabled="form.processing"
                                     :aria-busy="form.processing"
                                 >
                                     <span v-if="form.processing">Saving&hellip;</span>
                                     <span v-else>Save Role</span>
-                                </PrimaryButton>
+                                </Button>
                             </footer>
                         </form>
                     </section>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputText from 'primevue/inputtext';
 import InputError from '@/Components/InputError.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import FileUploadInput from '@/Components/FileUploadInput.vue';
+import Button from 'primevue/button';
+import FileUpload from 'primevue/fileupload';
+import type { FileUploadSelectEvent } from 'primevue/fileupload';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Section {
@@ -29,18 +29,17 @@ const props = defineProps<{
     lesson: LessonData;
 }>();
 
-const files = ref<File[]>([]);
-
 const form = useForm({
     title: '',
     file: null as File | null,
     visibility: 'enrolled' as 'enrolled' | 'public',
 });
 
+const onFileSelect = (e: FileUploadSelectEvent): void => {
+    form.file = e.files[0] ?? null;
+};
+
 const submit = (): void => {
-    if (files.value.length > 0) {
-        form.file = files.value[0];
-    }
     form.post(
         route('instructor.courses.modules.lessons.resources.store', {
             section: props.section.id,
@@ -94,7 +93,7 @@ const submit = (): void => {
                     <form class="space-y-5 px-6 py-6" @submit.prevent="submit">
                         <div>
                             <InputLabel for="title" value="Resource Title" />
-                            <TextInput
+                            <InputText
                                 id="title"
                                 v-model="form.title"
                                 type="text"
@@ -111,11 +110,14 @@ const submit = (): void => {
                         </div>
 
                         <div>
-                            <InputLabel for="file-upload-input" value="File" />
-                            <FileUploadInput
-                                v-model="files"
+                            <InputLabel value="File" />
+                            <FileUpload
+                                mode="advanced"
                                 accept=".pdf,.docx,.pptx,.xlsx,.mp4,.zip"
+                                :multiple="false"
+                                :auto="false"
                                 class="mt-1"
+                                @select="onFileSelect"
                             />
                             <InputError :message="form.errors.file" class="mt-1" />
                         </div>
@@ -148,9 +150,9 @@ const submit = (): void => {
                             >
                                 Cancel
                             </Link>
-                            <PrimaryButton :disabled="form.processing"
-                                >Upload Resource</PrimaryButton
-                            >
+                            <Button type="submit" :disabled="form.processing">
+                                Upload Resource
+                            </Button>
                         </div>
                     </form>
                 </div>

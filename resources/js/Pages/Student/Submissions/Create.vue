@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import FileUploadInput from '@/Components/FileUploadInput.vue';
+import FileUpload from 'primevue/fileupload';
+import type { FileUploadSelectEvent } from 'primevue/fileupload';
 import InputError from '@/Components/InputError.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
@@ -31,6 +32,10 @@ const formatDate = (dateString: string): string =>
         hour: '2-digit',
         minute: '2-digit',
     }).format(new Date(dateString));
+
+const onFileSelect = (e: FileUploadSelectEvent): void => {
+    form.files = e.files;
+};
 
 const submit = (): void => {
     form.post(route('student.submissions.store', props.assignment.id), {
@@ -117,10 +122,12 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
                                         <span class="sr-only">(required)</span>
                                     </p>
 
-                                    <FileUploadInput
-                                        v-model="form.files"
+                                    <FileUpload
+                                        mode="advanced"
                                         :multiple="true"
+                                        :auto="false"
                                         aria-describedby="files-error"
+                                        @select="onFileSelect"
                                     />
 
                                     <InputError

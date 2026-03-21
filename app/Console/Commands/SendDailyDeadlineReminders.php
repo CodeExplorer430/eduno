@@ -21,14 +21,14 @@ class SendDailyDeadlineReminders extends Command
         $assignments = Assignment::whereNotNull('due_at')
             ->whereBetween('due_at', [now(), $tomorrow->endOfDay()])
             ->whereNotNull('published_at')
-            ->with('courseSection.enrollments.user')
+            ->with('courseSection.enrollments.student')
             ->get();
 
         $count = 0;
 
         foreach ($assignments as $assignment) {
             foreach ($assignment->courseSection->enrollments as $enrollment) {
-                $student = $enrollment->user;
+                $student = $enrollment->student;
 
                 // Skip students who already submitted
                 $alreadySubmitted = $assignment->submissions()
