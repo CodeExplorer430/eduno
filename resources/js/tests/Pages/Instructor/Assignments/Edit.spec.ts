@@ -52,6 +52,7 @@ const assignment = {
     due_at: '2026-04-01T23:59:00Z',
     max_score: 100,
     allow_resubmission: false,
+    allowed_file_types: null,
 };
 
 const routeMock = vi.fn(() => '/');
@@ -65,6 +66,12 @@ describe('Instructor/Assignments/Edit', () => {
             props: { section, assignment },
         });
         expect(wrapper.exists()).toBe(true);
+    });
+
+    it('renders the allowed file types fieldset', () => {
+        const wrapper = mount(EditPage, { global: globalOpts, props: { section, assignment } });
+        expect(wrapper.find('fieldset').exists()).toBe(true);
+        expect(wrapper.find('legend').text()).toContain('Accepted File Types');
     });
 
     it('title input has aria-describedby="assignment-title-error"', () => {

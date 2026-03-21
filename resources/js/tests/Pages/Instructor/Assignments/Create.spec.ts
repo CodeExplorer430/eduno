@@ -66,6 +66,12 @@ describe('Instructor/Assignments/Create', () => {
         expect(wrapper.html()).toContain('aria-describedby="assignment-max-score-error"');
     });
 
+    it('renders the allowed file types fieldset', () => {
+        const wrapper = mount(CreatePage, { global: globalOpts, props: { section } });
+        expect(wrapper.find('fieldset').exists()).toBe(true);
+        expect(wrapper.find('legend').text()).toContain('Accepted File Types');
+    });
+
     it('shows role="alert" error banner when form.hasErrors is true and errors exist', () => {
         mockUseForm.mockReturnValueOnce({
             title: '',
@@ -73,6 +79,7 @@ describe('Instructor/Assignments/Create', () => {
             due_at: '',
             max_score: '100',
             allow_resubmission: false,
+            allowed_file_types: [],
             errors: { title: 'The title field is required.' },
             processing: false,
             hasErrors: true,

@@ -91,6 +91,7 @@ export interface Assignment {
     due_at: string | null;
     max_score: number;
     allow_resubmission: boolean;
+    allowed_file_types: string[] | null;
     published_at: string | null;
     mySubmission?: Submission | null;
     created_at: string;

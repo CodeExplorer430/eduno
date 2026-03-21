@@ -23,6 +23,7 @@ const baseAssignment = {
     due_at: '2099-12-31T23:59:00Z',
     max_score: 100,
     allow_resubmission: false,
+    allowed_file_types: null,
     course_section_id: 1,
 };
 
@@ -98,6 +99,30 @@ describe('Student/Assignments/Show', () => {
             props: { assignment: baseAssignment, submission: withSubmission },
         });
         expect(wrapper.find('[role="status"]').exists()).toBe(false);
+    });
+
+    it('shows accepted file types when allowed_file_types is set', () => {
+        const wrapper = mount(ShowPage, {
+            global: globalOpts,
+            props: {
+                assignment: {
+                    ...baseAssignment,
+                    allowed_file_types: ['application/pdf', 'application/zip'],
+                },
+                submission: null,
+            },
+        });
+        expect(wrapper.text()).toContain('Accepted File Types');
+        expect(wrapper.text()).toContain('PDF');
+        expect(wrapper.text()).toContain('ZIP');
+    });
+
+    it('does not show accepted file types row when allowed_file_types is null', () => {
+        const wrapper = mount(ShowPage, {
+            global: globalOpts,
+            props: { assignment: baseAssignment, submission: null },
+        });
+        expect(wrapper.text()).not.toContain('Accepted File Types');
     });
 
     it('late indicator rendered when submission.is_late is true', () => {

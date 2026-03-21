@@ -6,6 +6,30 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
+interface FileTypeOption {
+    label: string;
+    mime: string;
+}
+
+const FILE_TYPE_OPTIONS: FileTypeOption[] = [
+    { label: 'PDF', mime: 'application/pdf' },
+    {
+        label: 'Word (.docx)',
+        mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    },
+    {
+        label: 'PowerPoint (.pptx)',
+        mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    },
+    { label: 'ZIP', mime: 'application/zip' },
+    { label: 'Plain Text (.txt)', mime: 'text/plain' },
+    { label: 'Image (PNG/JPG)', mime: 'image/png' },
+    {
+        label: 'Excel (.xlsx)',
+        mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    },
+];
+
 interface Props {
     section: { id: number; section_name: string };
     assignment: {
@@ -15,6 +39,7 @@ interface Props {
         due_at: string | null;
         max_score: number;
         allow_resubmission: boolean;
+        allowed_file_types: string[] | null;
     };
 }
 
@@ -26,6 +51,7 @@ const form = useForm<{
     due_at: string;
     max_score: string;
     allow_resubmission: boolean;
+    allowed_file_types: string[];
 }>({
     title: props.assignment.title,
     instructions: props.assignment.instructions ?? '',
@@ -34,6 +60,7 @@ const form = useForm<{
         : '',
     max_score: String(props.assignment.max_score),
     allow_resubmission: props.assignment.allow_resubmission,
+    allowed_file_types: props.assignment.allowed_file_types ?? [],
 });
 
 const submit = (): void => {
@@ -180,6 +207,47 @@ const submit = (): void => {
                                         Allow resubmission
                                     </label>
                                 </div>
+
+                                <fieldset>
+                                    <legend
+                                        id="allowed-file-types-legend"
+                                        class="mb-2 block text-sm font-medium text-gray-700"
+                                    >
+                                        Accepted File Types
+                                        <span class="ml-1 font-normal text-gray-500"
+                                            >(leave all unchecked to accept any type)</span
+                                        >
+                                    </legend>
+                                    <div
+                                        class="grid grid-cols-2 gap-2"
+                                        aria-describedby="allowed-file-types-error"
+                                    >
+                                        <div
+                                            v-for="option in FILE_TYPE_OPTIONS"
+                                            :key="option.mime"
+                                            class="flex items-center gap-2"
+                                        >
+                                            <input
+                                                :id="`file-type-${option.mime}`"
+                                                v-model="form.allowed_file_types"
+                                                type="checkbox"
+                                                :value="option.mime"
+                                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                            <label
+                                                :for="`file-type-${option.mime}`"
+                                                class="text-sm text-gray-700"
+                                            >
+                                                {{ option.label }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <InputError
+                                        id="allowed-file-types-error"
+                                        class="mt-1"
+                                        :message="form.errors.allowed_file_types"
+                                    />
+                                </fieldset>
                             </div>
 
                             <div

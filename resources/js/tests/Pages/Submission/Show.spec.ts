@@ -40,6 +40,7 @@ const baseSubmission: Submission = {
         instructions: null,
         due_at: null,
         allow_resubmission: false,
+        allowed_file_types: null,
         published_at: null,
         created_at: '2026-01-01T00:00:00Z',
         updated_at: '2026-01-01T00:00:00Z',

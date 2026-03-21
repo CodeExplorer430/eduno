@@ -18,6 +18,7 @@ class CreateAssignment
             'due_at' => $data['due_at'] ?? null,
             'max_score' => $data['max_score'] ?? 100,
             'allow_resubmission' => $data['allow_resubmission'] ?? false,
+            'allowed_file_types' => $data['allowed_file_types'] ?? null,
         ]);
     }
 }

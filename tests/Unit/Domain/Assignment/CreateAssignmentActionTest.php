@@ -89,3 +89,25 @@ test('it persists the assignment in the database', function (): void {
         'title' => 'Stored Assignment',
     ]);
 });
+
+test('it stores allowed_file_types when provided', function (): void {
+    $section = makeAssignmentTestSection();
+    $action = new CreateAssignment();
+    $types = ['application/pdf', 'application/zip'];
+
+    $assignment = $action->handle($section, [
+        'title' => 'Typed Assignment',
+        'allowed_file_types' => $types,
+    ]);
+
+    expect($assignment->allowed_file_types)->toBe($types);
+});
+
+test('it stores null for allowed_file_types when omitted', function (): void {
+    $section = makeAssignmentTestSection();
+    $action = new CreateAssignment();
+
+    $assignment = $action->handle($section, ['title' => 'Open Types Assignment']);
+
+    expect($assignment->allowed_file_types)->toBeNull();
+});

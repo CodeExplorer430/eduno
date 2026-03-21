@@ -41,6 +41,7 @@ const baseAssignment = {
     title: 'Homework 1',
     due_at: '2026-04-01T23:59:00Z',
     max_score: 100,
+    allowed_file_types: null,
     course_section_id: 1,
 };
 

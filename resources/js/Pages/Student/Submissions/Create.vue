@@ -6,11 +6,27 @@ import type { FileUploadSelectEvent } from 'primevue/fileupload';
 import InputError from '@/Components/InputError.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
+const MIME_LABELS: Record<string, string> = {
+    'application/pdf': 'PDF',
+    'application/msword': 'Word (.doc)',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word (.docx)',
+    'application/vnd.ms-powerpoint': 'PowerPoint (.ppt)',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+        'PowerPoint (.pptx)',
+    'application/zip': 'ZIP',
+    'text/plain': 'Plain Text (.txt)',
+    'image/png': 'PNG',
+    'image/jpeg': 'JPG/JPEG',
+    'application/vnd.ms-excel': 'Excel (.xls)',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel (.xlsx)',
+};
+
 interface Assignment {
     id: number;
     title: string;
     due_at: string | null;
     max_score: number;
+    allowed_file_types: string[] | null;
     course_section_id: number;
 }
 
@@ -92,7 +108,7 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
 
                         <!-- Assignment summary -->
                         <div class="border-b border-gray-100 bg-gray-50 px-6 py-4">
-                            <dl class="flex gap-8 text-sm">
+                            <dl class="flex flex-wrap gap-8 text-sm">
                                 <div>
                                     <dt class="font-medium text-gray-700">Due Date</dt>
                                     <dd class="text-gray-600">
@@ -106,6 +122,21 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
                                 <div>
                                     <dt class="font-medium text-gray-700">Max Score</dt>
                                     <dd class="text-gray-600">{{ assignment.max_score }} pts</dd>
+                                </div>
+                                <div
+                                    v-if="
+                                        assignment.allowed_file_types &&
+                                        assignment.allowed_file_types.length > 0
+                                    "
+                                >
+                                    <dt class="font-medium text-gray-700">Accepted File Types</dt>
+                                    <dd class="text-gray-600">
+                                        {{
+                                            assignment.allowed_file_types
+                                                .map((m) => MIME_LABELS[m] ?? m)
+                                                .join(', ')
+                                        }}
+                                    </dd>
                                 </div>
                             </dl>
                         </div>
