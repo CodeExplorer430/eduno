@@ -13,7 +13,7 @@ import type { PageProps } from '@/types';
 const showingNavigationDropdown = ref(false);
 
 const page = usePage<PageProps>();
-const prefs = computed(() => page.props.auth?.preferences);
+const prefs = computed(() => page.props.userPrefs);
 const userRole = computed(() => page.props.auth?.user?.role);
 const features = computed(() => page.props.features);
 
@@ -28,6 +28,7 @@ watchEffect(() => {
     html.classList.toggle('high-contrast', f?.['high-contrast'] ?? p?.high_contrast ?? false);
     html.classList.toggle('reduce-motion', p?.reduced_motion ?? false);
     html.classList.toggle('simplified', f?.['simplified-layout'] ?? p?.simplified_layout ?? false);
+    html.classList.toggle('dyslexia-font', p?.dyslexia_font ?? false);
 });
 </script>
 

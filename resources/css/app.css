@@ -21,6 +21,14 @@
 
 .simplified .decorative { display: none; }
 
+.dyslexia-font,
+.dyslexia-font * {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', 'Trebuchet MS', Arial, sans-serif !important;
+    letter-spacing: 0.05em;
+    word-spacing: 0.1em;
+    line-height: 1.8;
+}
+
 :root {
   --color-primary:   #2563EB;
   --color-secondary: #06B6D4;
