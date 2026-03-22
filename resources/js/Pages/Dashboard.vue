@@ -74,6 +74,7 @@ const { formatDate } = useFormatDate();
                                 label="Enrolled Courses"
                                 :icon="BookOpenIcon"
                                 :animation-delay="0"
+                                accent="blue"
                             >
                                 {{ (props as StudentProps).enrolled_courses_count }}
                             </StatCard>
@@ -81,6 +82,7 @@ const { formatDate } = useFormatDate();
                                 label="Upcoming Assignments"
                                 :icon="ClipboardDocumentListIcon"
                                 :animation-delay="80"
+                                accent="amber"
                             >
                                 {{ (props as StudentProps).upcoming_assignments.length }}
                             </StatCard>
@@ -88,6 +90,7 @@ const { formatDate } = useFormatDate();
                                 label="Latest Grade"
                                 :icon="ChartBarIcon"
                                 :animation-delay="160"
+                                accent="green"
                             >
                                 <template v-if="(props as StudentProps).latest_grade">
                                     {{ (props as StudentProps).latest_grade!.score }}
@@ -102,7 +105,9 @@ const { formatDate } = useFormatDate();
                         aria-labelledby="upcoming-assignments-heading"
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="border-b border-gray-100 px-6 py-4">
+                        <div
+                            class="border-b border-gray-100 border-l-4 border-l-blue-500 px-6 py-4"
+                        >
                             <h2
                                 id="upcoming-assignments-heading"
                                 class="font-semibold text-gray-800"
@@ -142,7 +147,7 @@ const { formatDate } = useFormatDate();
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
                         <div
-                            class="flex items-center justify-between border-b border-gray-100 px-6 py-4"
+                            class="flex items-center justify-between border-b border-l-4 border-gray-100 border-l-blue-500 px-6 py-4"
                         >
                             <h2
                                 id="recent-announcements-heading"
@@ -197,6 +202,7 @@ const { formatDate } = useFormatDate();
                                 label="Course Sections"
                                 :icon="BookOpenIcon"
                                 :animation-delay="0"
+                                accent="blue"
                             >
                                 {{ (props as InstructorProps).courses_count }}
                             </StatCard>
@@ -205,6 +211,7 @@ const { formatDate } = useFormatDate();
                                 :icon="ClipboardDocumentListIcon"
                                 value-class="text-blue-600"
                                 :animation-delay="80"
+                                accent="cyan"
                             >
                                 {{ (props as InstructorProps).pending_submissions_count }}
                             </StatCard>
@@ -216,7 +223,9 @@ const { formatDate } = useFormatDate();
                         aria-labelledby="instructor-deadlines-heading"
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="border-b border-gray-100 px-6 py-4">
+                        <div
+                            class="border-b border-gray-100 border-l-4 border-l-blue-500 px-6 py-4"
+                        >
                             <h2
                                 id="instructor-deadlines-heading"
                                 class="font-semibold text-gray-800"
@@ -255,7 +264,9 @@ const { formatDate } = useFormatDate();
                         aria-labelledby="recent-submissions-heading"
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="border-b border-gray-100 px-6 py-4">
+                        <div
+                            class="border-b border-gray-100 border-l-4 border-l-blue-500 px-6 py-4"
+                        >
                             <h2 id="recent-submissions-heading" class="font-semibold text-gray-800">
                                 Recent Submissions
                             </h2>
@@ -298,6 +309,7 @@ const { formatDate } = useFormatDate();
                                 label="Total Courses"
                                 :icon="BookOpenIcon"
                                 :animation-delay="0"
+                                accent="blue"
                             >
                                 {{ (props as AdminProps).total_courses }}
                             </StatCard>
@@ -305,6 +317,7 @@ const { formatDate } = useFormatDate();
                                 label="Total Submissions"
                                 :icon="ClipboardDocumentListIcon"
                                 :animation-delay="80"
+                                accent="cyan"
                             >
                                 {{ (props as AdminProps).total_submissions }}
                             </StatCard>
@@ -313,6 +326,7 @@ const { formatDate } = useFormatDate();
                                 :icon="ChartBarIcon"
                                 value-class="text-green-600"
                                 :animation-delay="160"
+                                accent="green"
                             >
                                 {{ (props as AdminProps).total_grades_released }}
                             </StatCard>
@@ -324,7 +338,9 @@ const { formatDate } = useFormatDate();
                         aria-labelledby="users-by-role-heading"
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="border-b border-gray-100 px-6 py-4">
+                        <div
+                            class="border-b border-gray-100 border-l-4 border-l-blue-500 px-6 py-4"
+                        >
                             <h2 id="users-by-role-heading" class="font-semibold text-gray-800">
                                 Users by Role
                             </h2>

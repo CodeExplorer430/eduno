@@ -41,6 +41,12 @@
   outline-offset: 2px;
 }
 
+/* Decorative dot-grid pattern (used in hero) */
+.bg-dot-pattern {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
 /* AnimateOnScroll utility classes */
 @keyframes eduno-fadein {
     from { opacity: 0; transform: translateY(14px); }

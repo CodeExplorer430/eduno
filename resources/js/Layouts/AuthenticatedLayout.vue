@@ -39,8 +39,9 @@ watchEffect(() => {
         >
             Skip to main content
         </a>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="border-b border-gray-100 bg-white">
+        <div class="min-h-screen bg-slate-50">
+            <nav class="border-b border-gray-200 bg-white shadow-sm">
+                <div class="h-1 bg-gradient-to-r from-blue-600 to-cyan-500" aria-hidden="true" />
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
@@ -202,7 +203,7 @@ watchEffect(() => {
             </nav>
 
             <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow">
+            <header v-if="$slots.header" class="border-b border-gray-100 bg-white shadow-sm">
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

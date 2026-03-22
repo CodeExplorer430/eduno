@@ -62,10 +62,22 @@ defineProps<{
         <main id="main-content">
             <!-- Hero -->
             <section
-                class="bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 py-24 text-white"
+                class="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 py-24 text-white"
                 aria-labelledby="hero-heading"
             >
-                <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+                <div
+                    class="bg-dot-pattern pointer-events-none absolute inset-0"
+                    aria-hidden="true"
+                />
+                <div
+                    class="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-400 opacity-20 blur-3xl"
+                    aria-hidden="true"
+                />
+                <div
+                    class="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-blue-300 opacity-20 blur-3xl"
+                    aria-hidden="true"
+                />
+                <div class="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
                     <h1
                         id="hero-heading"
                         class="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
@@ -107,7 +119,7 @@ defineProps<{
                         <article
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 0ms`"
-                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100"
+                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
                         >
                             <div
                                 class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50"
@@ -124,13 +136,13 @@ defineProps<{
                         <article
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 100ms`"
-                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100"
+                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
                         >
                             <div
-                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50"
+                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-cyan-50"
                             >
                                 <ClipboardDocumentListIcon
-                                    class="h-6 w-6 text-blue-600"
+                                    class="h-6 w-6 text-cyan-500"
                                     aria-hidden="true"
                                 />
                             </div>
@@ -146,12 +158,12 @@ defineProps<{
                         <article
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 200ms`"
-                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100"
+                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
                         >
                             <div
-                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50"
+                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50"
                             >
-                                <ChartBarIcon class="h-6 w-6 text-blue-600" aria-hidden="true" />
+                                <ChartBarIcon class="h-6 w-6 text-amber-500" aria-hidden="true" />
                             </div>
                             <h3 class="text-lg font-semibold text-gray-900">Track Progress</h3>
                             <p class="mt-2 text-sm leading-relaxed text-gray-600">
@@ -173,7 +185,7 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 0ms`"
-                            class="rounded-xl border-l-4 border-blue-600 bg-white p-6 shadow-sm"
+                            class="rounded-xl border-l-4 border-blue-600 bg-blue-50/40 p-6 shadow-sm"
                         >
                             <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
                                 <AcademicCapIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
@@ -190,7 +202,7 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 100ms`"
-                            class="rounded-xl border-l-4 border-cyan-500 bg-white p-6 shadow-sm"
+                            class="rounded-xl border-l-4 border-cyan-500 bg-cyan-50/40 p-6 shadow-sm"
                         >
                             <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
                                 <UsersIcon class="h-5 w-5 text-cyan-500" aria-hidden="true" />
@@ -207,7 +219,7 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 200ms`"
-                            class="rounded-xl border-l-4 border-amber-500 bg-white p-6 shadow-sm"
+                            class="rounded-xl border-l-4 border-amber-500 bg-amber-50/40 p-6 shadow-sm"
                         >
                             <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
                                 <Cog6ToothIcon class="h-5 w-5 text-amber-500" aria-hidden="true" />
@@ -227,7 +239,7 @@ defineProps<{
             <!-- CTA Banner -->
             <section
                 v-animateonscroll="{ enterClass: 'animate-fadein' }"
-                class="bg-blue-600 py-16 text-white"
+                class="bg-gradient-to-r from-blue-600 to-cyan-600 py-16 text-white"
                 aria-labelledby="cta-heading"
             >
                 <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
@@ -249,6 +261,7 @@ defineProps<{
         <!-- Footer -->
         <footer class="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500">
             <p>© 2026 University of Caloocan City · Eduno LMS</p>
+            <p class="mt-1 text-xs text-gray-400">Empowering Learners, Inspiring Excellence</p>
         </footer>
     </div>
 </template>
