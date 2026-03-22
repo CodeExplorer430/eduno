@@ -11,6 +11,7 @@ use App\Enums\SubmissionStatus;
 use App\Models\User;
 use App\Notifications\NewSubmissionNotification;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -60,6 +61,8 @@ class SubmitAssignment
         if ($instructor instanceof User) {
             $instructor->notify(new NewSubmissionNotification($submission));
         }
+
+        Cache::forget('report.admin');
 
         return $submission;
     }

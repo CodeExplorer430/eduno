@@ -7,6 +7,7 @@ namespace App\Domain\Course\Actions;
 use App\Domain\Course\Models\Course;
 use App\Enums\CourseStatus;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -42,6 +43,8 @@ class CreateCourse
             'metadata' => json_encode(['code' => $course->code, 'title' => $course->title]),
             'created_at' => now(),
         ]);
+
+        Cache::forget('report.admin');
 
         return $course;
     }

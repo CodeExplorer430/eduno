@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Domain\Report\Actions\GetAdminReport;
-use App\Domain\Submission\Models\Grade;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,7 +23,7 @@ class ReportController extends Controller
                 'total_submissions' => $report['total_submissions'],
                 'late_submissions'  => $report['late_submissions'],
                 'graded'            => $report['graded_submissions'],
-                'released_grades'   => Grade::whereNotNull('released_at')->count(),
+                'released_grades'   => $report['released_grades_count'],
             ],
         ]);
     }

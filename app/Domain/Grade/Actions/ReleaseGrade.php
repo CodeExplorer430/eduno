@@ -8,6 +8,7 @@ use App\Domain\Audit\Actions\LogAction;
 use App\Domain\Grade\Models\Grade;
 use App\Jobs\NotifyStudentGradeReleased;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class ReleaseGrade
 {
@@ -18,6 +19,8 @@ class ReleaseGrade
     public function execute(User $actor, Grade $grade): Grade
     {
         $grade->update(['released_at' => now()]);
+
+        Cache::forget('report.admin');
 
         NotifyStudentGradeReleased::dispatch($grade);
 

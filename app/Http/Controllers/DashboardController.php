@@ -8,11 +8,12 @@ use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
-use App\Domain\Report\Actions\GetAdminReport;
 use App\Domain\Submission\Models\Grade;
+use App\Domain\Report\Actions\GetAdminReport;
 use App\Domain\Submission\Models\Submission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,12 +35,16 @@ class DashboardController extends Controller
         $report = $adminReport->handle();
 
         return Inertia::render('Dashboard', [
-            'role' => 'admin',
-            'users_by_role' => User::selectRaw('role, count(*) as count')->groupBy('role')->pluck('count', 'role'),
-            'total_courses' => $report['total_courses'],
-            'total_submissions' => $report['total_submissions'],
-            'total_grades_released' => Grade::whereNotNull('released_at')->count(),
-            'report' => $report,
+            'role'                  => 'admin',
+            'users_by_role'         => Cache::remember(
+                'report.admin.users_by_role',
+                now()->addMinutes(10),
+                fn () => User::selectRaw('role, count(*) as count')->groupBy('role')->pluck('count', 'role'),
+            ),
+            'total_courses'         => $report['total_courses'],
+            'total_submissions'     => $report['total_submissions'],
+            'total_grades_released' => $report['released_grades_count'],
+            'report'                => $report,
         ]);
     }
 
