@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { PlusIcon, PencilSquareIcon } from '@heroicons/vue/24/outline';
 
 interface AssignmentItem {
     id: number;
@@ -45,20 +47,18 @@ const props = defineProps<{
                                 course: props.section.id,
                             })
                         "
-                        class="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="inline-flex items-center gap-1 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
+                        <PlusIcon class="h-4 w-4" aria-hidden="true" />
                         New Assignment
                     </Link>
                 </div>
 
-                <div
+                <EmptyState
                     v-if="props.assignments.length === 0"
-                    class="rounded border border-dashed border-gray-300 py-12 text-center text-gray-500"
-                    role="status"
-                    aria-live="polite"
-                >
-                    No assignments yet. Create one to get started.
-                </div>
+                    title="No assignments yet."
+                    description="Create one to get started."
+                />
 
                 <ul
                     v-else
@@ -84,9 +84,10 @@ const props = defineProps<{
                                         assignment: assignment.id,
                                     })
                                 "
-                                class="text-sm text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                class="inline-flex items-center gap-1 text-sm text-blue-600 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 :aria-label="`Edit ${assignment.title}`"
                             >
+                                <PencilSquareIcon class="me-1 inline h-4 w-4" aria-hidden="true" />
                                 Edit
                             </Link>
                         </div>

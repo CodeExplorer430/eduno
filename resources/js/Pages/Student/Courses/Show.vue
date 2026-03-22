@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 import AssignmentCard from '@/Components/AssignmentCard.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 
 interface Lesson {
     id: number;
@@ -59,22 +60,12 @@ const lessonTypeLabel = (type: string): string => {
 
     <AuthenticatedLayout>
         <template #header>
-            <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
-                    <li>
-                        <Link
-                            :href="route('student.courses.index')"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
-                        >
-                            My Courses
-                        </Link>
-                    </li>
-                    <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">
-                        {{ section.course.code }}
-                    </li>
-                </ol>
-            </nav>
+            <Breadcrumb
+                :crumbs="[
+                    { label: 'My Courses', href: route('student.courses.index') },
+                    { label: section.course.code },
+                ]"
+            />
         </template>
 
         <div class="py-12">
@@ -84,9 +75,9 @@ const lessonTypeLabel = (type: string): string => {
                     aria-labelledby="course-info-heading"
                     class="overflow-hidden rounded-lg bg-white shadow-sm"
                 >
-                    <div class="border-b border-gray-100 bg-indigo-50 px-6 py-4">
+                    <div class="border-b border-gray-100 bg-blue-50 px-6 py-4">
                         <span
-                            class="block text-xs font-semibold uppercase tracking-wide text-indigo-600"
+                            class="block text-xs font-semibold uppercase tracking-wide text-blue-600"
                         >
                             {{ section.course.code }}
                         </span>
@@ -145,7 +136,7 @@ const lessonTypeLabel = (type: string): string => {
                                     >
                                         <Link
                                             :href="route('student.lessons.show', lesson.id)"
-                                            class="font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                                            class="font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                                         >
                                             {{ lesson.title }}
                                         </Link>
@@ -182,11 +173,14 @@ const lessonTypeLabel = (type: string): string => {
                         v-if="section.assignments.length > 0"
                         class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
                     >
-                        <AssignmentCard
-                            v-for="assignment in section.assignments"
+                        <div
+                            v-for="(assignment, index) in section.assignments"
                             :key="assignment.id"
-                            :assignment="assignment"
-                        />
+                            v-animateonscroll="{ enterClass: 'animate-fadein' }"
+                            :style="`animation-delay: ${index * 80}ms`"
+                        >
+                            <AssignmentCard :assignment="assignment" />
+                        </div>
                     </div>
 
                     <p

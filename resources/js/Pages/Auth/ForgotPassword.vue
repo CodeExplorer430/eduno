@@ -2,9 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import IconInput from '@/Components/IconInput.vue';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
 import { Head, useForm } from '@inertiajs/vue3';
+import { EnvelopeIcon } from '@heroicons/vue/24/outline';
 
 defineProps<{
     status?: string;
@@ -36,11 +37,11 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <InputText
+                <IconInput
                     id="email"
                     v-model="form.email"
+                    :icon="EnvelopeIcon"
                     type="email"
-                    class="mt-1 block w-full"
                     required
                     autofocus
                     autocomplete="username"

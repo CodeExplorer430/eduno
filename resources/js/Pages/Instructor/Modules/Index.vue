@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { PlusIcon, PencilSquareIcon, TrashIcon, BookOpenIcon } from '@heroicons/vue/24/outline';
 
 interface ResourceItem {
     id: number;
@@ -98,27 +101,18 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
         <template #header>
             <div class="flex items-center justify-between">
                 <div>
-                    <nav aria-label="Breadcrumb">
-                        <ol class="flex items-center gap-2 text-sm text-gray-500">
-                            <li>
-                                <Link
-                                    :href="route('instructor.courses.index')"
-                                    class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                >
-                                    My Courses
-                                </Link>
-                            </li>
-                            <li aria-hidden="true">/</li>
-                            <li class="font-medium text-gray-800" aria-current="page">
-                                {{ section.course.code }} — Modules
-                            </li>
-                        </ol>
-                    </nav>
+                    <Breadcrumb
+                        :crumbs="[
+                            { label: 'My Courses', href: route('instructor.courses.index') },
+                            { label: `${section.course.code} — Modules` },
+                        ]"
+                    />
                 </div>
                 <Link
                     :href="route('instructor.courses.modules.create', section.id)"
-                    class="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="inline-flex items-center gap-2 rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
+                    <PlusIcon class="h-4 w-4" aria-hidden="true" />
                     Add Module
                 </Link>
             </div>
@@ -168,10 +162,11 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
                                                 module: module.id,
                                             })
                                         "
-                                        class="rounded text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="inline-flex items-center gap-1 rounded text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         :aria-label="`Add lesson to ${module.title}`"
                                     >
-                                        + Lesson
+                                        <PlusIcon class="h-4 w-4" aria-hidden="true" />
+                                        Lesson
                                     </Link>
                                     <Link
                                         :href="
@@ -180,17 +175,22 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
                                                 module: module.id,
                                             })
                                         "
-                                        class="rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="inline-flex items-center gap-1 rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         :aria-label="`Edit module ${module.title}`"
                                     >
+                                        <PencilSquareIcon
+                                            class="me-1 inline h-4 w-4"
+                                            aria-hidden="true"
+                                        />
                                         Edit
                                     </Link>
                                     <button
                                         type="button"
-                                        class="rounded text-red-500 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                        class="inline-flex items-center gap-1 rounded text-red-500 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                                         :aria-label="`Delete module ${module.title}`"
                                         @click="deleteModule(module.id)"
                                     >
+                                        <TrashIcon class="me-1 inline h-4 w-4" aria-hidden="true" />
                                         Delete
                                     </button>
                                 </div>
@@ -237,7 +237,7 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
                                                         }
                                                     )
                                                 "
-                                                class="rounded text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                class="rounded text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 :aria-label="`Upload resource for ${lesson.title}`"
                                             >
                                                 + Resource
@@ -253,17 +253,25 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
                                                         }
                                                     )
                                                 "
-                                                class="rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                class="inline-flex items-center gap-1 rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 :aria-label="`Edit lesson ${lesson.title}`"
                                             >
+                                                <PencilSquareIcon
+                                                    class="me-1 inline h-4 w-4"
+                                                    aria-hidden="true"
+                                                />
                                                 Edit
                                             </Link>
                                             <button
                                                 type="button"
-                                                class="rounded text-red-500 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                                class="inline-flex items-center gap-1 rounded text-red-500 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                                                 :aria-label="`Delete lesson ${lesson.title}`"
                                                 @click="deleteLesson(module.id, lesson.id)"
                                             >
+                                                <TrashIcon
+                                                    class="me-1 inline h-4 w-4"
+                                                    aria-hidden="true"
+                                                />
                                                 Delete
                                             </button>
                                         </div>
@@ -305,21 +313,20 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
                         </article>
                     </div>
 
-                    <div
+                    <EmptyState
                         v-else
-                        class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-16 text-center"
+                        :icon="BookOpenIcon"
+                        title="No modules yet."
+                        description="Create your first module to get started."
                     >
-                        <p class="text-base font-medium text-gray-500">No modules yet.</p>
-                        <p class="mt-1 text-sm text-gray-400">
-                            Create your first module to get started.
-                        </p>
                         <Link
                             :href="route('instructor.courses.modules.create', section.id)"
-                            class="mt-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            class="mt-4 inline-flex items-center gap-2 rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
+                            <PlusIcon class="h-4 w-4" aria-hidden="true" />
                             Add Module
                         </Link>
-                    </div>
+                    </EmptyState>
                 </main>
             </div>
         </div>

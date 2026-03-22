@@ -2,9 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import IconInput from '@/Components/IconInput.vue';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
 import { Head, useForm } from '@inertiajs/vue3';
+import { LockClosedIcon } from '@heroicons/vue/24/outline';
 
 const form = useForm({
     password: '',
@@ -31,15 +32,17 @@ const submit = () => {
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="password" value="Password" />
-                <InputText
+
+                <IconInput
                     id="password"
                     v-model="form.password"
+                    :icon="LockClosedIcon"
                     type="password"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="current-password"
                     autofocus
                 />
+
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 

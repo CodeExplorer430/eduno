@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { UserGroupIcon, PencilSquareIcon } from '@heroicons/vue/24/outline';
 
 interface User {
     id: number;
@@ -25,12 +27,6 @@ interface Props {
 
 defineProps<Props>();
 
-const decodeLabel = (label: string): string =>
-    label
-        .replace(/&laquo;/g, '«')
-        .replace(/&raquo;/g, '»')
-        .replace(/&amp;/g, '&');
-
 const formatDate = (dateString: string): string =>
     new Intl.DateTimeFormat('en-PH', {
         year: 'numeric',
@@ -50,7 +46,10 @@ const roleClasses: Record<string, string> = {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-bold text-gray-900">User Management</h1>
+            <h1 class="flex items-center gap-2 text-xl font-bold text-gray-900">
+                <UserGroupIcon class="h-6 w-6 text-gray-700" aria-hidden="true" />
+                User Management
+            </h1>
         </template>
 
         <div class="py-12">
@@ -130,9 +129,13 @@ const roleClasses: Record<string, string> = {
                                             <td class="px-6 py-4 text-sm">
                                                 <Link
                                                     :href="route('admin.users.edit', user.id)"
-                                                    class="font-medium text-indigo-600 hover:text-indigo-800 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    class="inline-flex items-center gap-1 font-medium text-blue-600 hover:text-blue-800 focus:rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     :aria-label="`Edit ${user.name}`"
                                                 >
+                                                    <PencilSquareIcon
+                                                        class="me-1 inline h-4 w-4"
+                                                        aria-hidden="true"
+                                                    />
                                                     Edit
                                                 </Link>
                                             </td>
@@ -142,35 +145,7 @@ const roleClasses: Record<string, string> = {
                             </div>
                         </div>
 
-                        <!-- Pagination -->
-                        <nav
-                            v-if="users.links.length > 3"
-                            class="mt-6 flex justify-center gap-1"
-                            aria-label="Pagination"
-                        >
-                            <template v-for="link in users.links" :key="link.label">
-                                <Link
-                                    v-if="link.url"
-                                    :href="link.url"
-                                    class="rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    :class="
-                                        link.active
-                                            ? 'bg-indigo-600 font-semibold text-white'
-                                            : 'text-gray-600 hover:bg-gray-100'
-                                    "
-                                    :aria-current="link.active ? 'page' : undefined"
-                                >
-                                    {{ decodeLabel(link.label) }}
-                                </Link>
-                                <span
-                                    v-else
-                                    class="rounded px-3 py-1.5 text-sm text-gray-300"
-                                    aria-disabled="true"
-                                >
-                                    {{ decodeLabel(link.label) }}
-                                </span>
-                            </template>
-                        </nav>
+                        <Pagination v-if="users.links.length > 3" :links="users.links" />
                     </section>
                 </main>
             </div>

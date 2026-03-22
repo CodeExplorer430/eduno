@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import EmptyState from '@/Components/EmptyState.vue';
+import Pagination from '@/Components/Pagination.vue';
+import { Head } from '@inertiajs/vue3';
+import { MegaphoneIcon } from '@heroicons/vue/24/outline';
 
 interface Course {
     id: number;
@@ -58,9 +61,6 @@ const formatDate = (iso: string): string => {
         day: 'numeric',
     });
 };
-
-const decodePaginationLabel = (label: string): string =>
-    label.replace(/&laquo;/g, '«').replace(/&raquo;/g, '»');
 </script>
 
 <template>
@@ -102,7 +102,7 @@ const decodePaginationLabel = (label: string): string =>
                                     </time>
                                 </div>
                                 <p class="mt-1 text-sm text-gray-500">
-                                    <span class="font-medium text-indigo-600">
+                                    <span class="font-medium text-blue-600">
                                         {{ announcement.course_section.course.code }}
                                     </span>
                                     &mdash;
@@ -120,43 +120,17 @@ const decodePaginationLabel = (label: string): string =>
                         </article>
                     </div>
 
-                    <div
+                    <EmptyState
                         v-else
-                        class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-20 text-center"
-                    >
-                        <p class="text-base font-medium text-gray-500">No announcements yet.</p>
-                        <p class="mt-1 text-sm text-gray-400">
-                            Announcements from your enrolled courses will appear here.
-                        </p>
-                    </div>
+                        :icon="MegaphoneIcon"
+                        title="No announcements yet."
+                        description="Announcements from your enrolled courses will appear here."
+                    />
 
-                    <!-- Pagination -->
-                    <nav
+                    <Pagination
                         v-if="announcements.links && announcements.links.length > 3"
-                        class="mt-6 flex items-center justify-center gap-1"
-                        aria-label="Pagination"
-                    >
-                        <template v-for="link in announcements.links" :key="link.label">
-                            <Link
-                                v-if="link.url"
-                                :href="link.url"
-                                class="rounded px-3 py-1 text-sm transition"
-                                :class="
-                                    link.active
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'text-gray-600 hover:bg-gray-100'
-                                "
-                                :aria-current="link.active ? 'page' : undefined"
-                                >{{ decodePaginationLabel(link.label) }}</Link
-                            >
-                            <span
-                                v-else
-                                class="rounded px-3 py-1 text-sm text-gray-300"
-                                aria-disabled="true"
-                                >{{ decodePaginationLabel(link.label) }}</span
-                            >
-                        </template>
-                    </nav>
+                        :links="announcements.links"
+                    />
                 </main>
             </div>
         </div>

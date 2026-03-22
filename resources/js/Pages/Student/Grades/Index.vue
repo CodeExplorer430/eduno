@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import { Head } from '@inertiajs/vue3';
+import { ChartBarIcon } from '@heroicons/vue/24/outline';
 
 interface GradeEntry {
     id: number;
@@ -157,32 +159,12 @@ const formatDate = (dateString: string): string =>
                             </div>
                         </div>
 
-                        <div
+                        <EmptyState
                             v-else
-                            class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-20 text-center"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="mb-4 h-12 w-12 text-gray-300"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.5"
-                                    d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2Z"
-                                />
-                            </svg>
-                            <p class="text-base font-medium text-gray-500">
-                                No grades available yet.
-                            </p>
-                            <p class="mt-1 text-sm text-gray-400">
-                                Grades will appear here once your instructor releases them.
-                            </p>
-                        </div>
+                            :icon="ChartBarIcon"
+                            title="No grades available yet."
+                            description="Grades will appear here once your instructor releases them."
+                        />
                     </section>
                 </main>
             </div>

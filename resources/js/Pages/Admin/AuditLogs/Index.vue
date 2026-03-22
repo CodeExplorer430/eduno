@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import Pagination from '@/Components/Pagination.vue';
+import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import Button from 'primevue/button';
 import type { AuditLog } from '@/Types/models';
@@ -47,9 +48,6 @@ function applyFilters(): void {
 function formatDate(dateStr: string): string {
     return new Date(dateStr).toLocaleString();
 }
-
-const decodePaginationLabel = (label: string): string =>
-    label.replace(/&laquo;/g, '«').replace(/&raquo;/g, '»');
 </script>
 
 <template>
@@ -79,7 +77,7 @@ const decodePaginationLabel = (label: string): string =>
                                 v-model="filterAction"
                                 type="text"
                                 placeholder="e.g. user.role_changed"
-                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
@@ -93,7 +91,7 @@ const decodePaginationLabel = (label: string): string =>
                                 v-model="filterActorEmail"
                                 type="email"
                                 placeholder="user@example.com"
-                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
@@ -106,7 +104,7 @@ const decodePaginationLabel = (label: string): string =>
                                 id="filter_from"
                                 v-model="filterFrom"
                                 type="date"
-                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
@@ -119,7 +117,7 @@ const decodePaginationLabel = (label: string): string =>
                                 id="filter_to"
                                 v-model="filterTo"
                                 type="date"
-                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                class="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <Button
@@ -218,7 +216,7 @@ const decodePaginationLabel = (label: string): string =>
                                         <td class="px-4 py-3 text-sm text-gray-500">
                                             <details v-if="log.metadata">
                                                 <summary
-                                                    class="cursor-pointer text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    class="cursor-pointer text-blue-600 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 >
                                                     View
                                                 </summary>
@@ -237,30 +235,7 @@ const decodePaginationLabel = (label: string): string =>
                         </div>
                     </div>
 
-                    <!-- Pagination -->
-                    <nav
-                        v-if="logs.links && logs.links.length > 3"
-                        aria-label="Pagination"
-                        class="mt-6 flex justify-center gap-1"
-                    >
-                        <template v-for="link in logs.links" :key="link.label">
-                            <Link
-                                v-if="link.url"
-                                :href="link.url"
-                                :aria-current="link.active ? 'page' : undefined"
-                                class="rounded-md px-3 py-2 text-sm"
-                                :class="
-                                    link.active
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-700 hover:bg-gray-50'
-                                "
-                                >{{ decodePaginationLabel(link.label) }}</Link
-                            >
-                            <span v-else class="rounded-md px-3 py-2 text-sm text-gray-400">{{
-                                decodePaginationLabel(link.label)
-                            }}</span>
-                        </template>
-                    </nav>
+                    <Pagination v-if="logs.links && logs.links.length > 3" :links="logs.links" />
                 </main>
             </div>
         </div>
