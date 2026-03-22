@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Profile\AccessibilityController as ProfileAccessibilityController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Instructor;
 use App\Http\Controllers\Student;
 use App\Http\Controllers\AssignmentController;
@@ -102,6 +103,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Submission export
     Route::get('assignments/{assignment}/submissions/export', SubmissionExportController::class)
         ->name('assignments.submissions.export');
+
+    // Notifications
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('notifications/{notification}', [NotificationController::class, 'show'])->name('notifications.show');
+    Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 
     // Accessibility preferences
     Route::get('preferences', [PreferencesController::class, 'edit'])->name('preferences.edit');

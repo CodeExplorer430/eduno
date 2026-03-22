@@ -23,7 +23,22 @@ class DeadlineReminderNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'mail'];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function toDatabase(object $notifiable): array
+    {
+        $dueFormatted = $this->assignment->due_at?->toFormattedDateString() ?? 'soon';
+        $title = $this->assignment->title;
+
+        return [
+            'message' => "Reminder: \"{$title}\" is due {$dueFormatted}",
+            'url'     => route('student.assignments.show', $this->assignment),
+            'type'    => 'deadline_reminder',
+        ];
     }
 
     public function toMail(object $notifiable): MailMessage

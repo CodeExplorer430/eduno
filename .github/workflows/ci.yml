@@ -28,6 +28,8 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with: { php-version: '8.4', extensions: 'pgsql, pdo_pgsql, redis', coverage: none }
       - run: cp .env.example .env
+      - run: mkdir -p bootstrap/cache
+      - run: mkdir -p storage/framework/{cache,sessions,testing,views}
       - run: composer install --no-interaction --prefer-dist
       - run: php artisan key:generate
       - name: Configure test DB

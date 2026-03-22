@@ -2,6 +2,71 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [2.1.1] — 2026-03-22
+
+### Bug Fixes
+
+- **fix(submission): reject grade score exceeding assignment `max_score`**
+  (`StoreGradeRequest`, `UpdateGradeRequest`): Added a dynamic `max` validation
+  rule that loads the submission's assignment `max_score` and rejects any score
+  above it. Prevents instructors from accidentally awarding more points than the
+  assignment allows. (`tests/Feature/Submission/GradingTest.php`)
+
+- **fix: null guards, missing DB transaction, and validation hardening** (multiple
+  files): Added null-safety guards across controllers/actions where models could be
+  null; wrapped a missing multi-table write in a `DB::transaction()`; tightened
+  Form Request validation rules that previously allowed unexpected inputs.
+  (`tests/Feature/Submission/GradingTest.php` + related feature tests)
+
+### Tests
+
+- PHP: **491** (unchanged — fixes covered by existing test suite)
+- Vitest specs: **517** (unchanged)
+
+---
+
+## [2.1.0] — 2026-03-22
+
+### Demo Infrastructure
+
+- **DemoSeeder** (`database/seeders/DemoSeeder.php`): Added a fully-populated,
+  idempotent seeder for academic evaluation. Creates 9 demo accounts (1 admin,
+  2 instructors, 6 students), 3 published courses with 6 sections, 24 lessons,
+  9 assignments, varied submissions/grades, 18 audit log entries, and 11
+  announcements. All accounts use password `password`.
+
+### In-App Notification Center (FR-034–037)
+
+- **Database notification channel** added to all four notification classes
+  (`AnnouncementPublishedNotification`, `GradeReleasedNotification`,
+  `NewSubmissionNotification`, `DeadlineReminderNotification`). All notifications
+  now persist in the `notifications` table in addition to email delivery.
+- **`notifications` migration** (`2026_03_22_100000_create_notifications_table.php`):
+  Standard Laravel UUID notifications table.
+- **`NotificationController`** with four routes:
+  `GET /notifications`, `GET /notifications/{id}` (mark-read + redirect),
+  `POST /notifications/{id}/read`, `POST /notifications/read-all`.
+- **Three Action classes**: `GetUserNotifications`, `MarkNotificationRead`,
+  `MarkAllNotificationsRead` (`app/Domain/Notification/Actions/`).
+- **`NotificationBell.vue`** component: bell icon with unread-count badge in the
+  global nav; WCAG-compliant `aria-label`, visible focus ring, badge hidden at 0.
+- **`Notifications/Index.vue`** page: paginated list with read/unread dot indicator,
+  per-item "Mark as read", "Mark all as read" header button, and empty state with
+  `role="status"`.
+- **Shared prop** `auth.unread_notifications_count` added to `HandleInertiaRequests`
+  so the badge count is available on every page without an extra request.
+- **DemoSeeder extended**: 7 pre-seeded notifications (3 unread for
+  `juan@eduno.test`) so the bell badge is populated immediately on demo login.
+
+### Tests
+
+- PHP: **491** (6 new Pest feature tests in `tests/Feature/Notification/NotificationTest.php`
+  covering index auth, unauthenticated redirect, show-redirect-mark-read, cross-user
+  isolation, mark-all-read, and pagination)
+- Vitest specs: **517** (12 new: NotificationBell × 7, Notifications/Index × 5)
+
+---
+
 ## [1.4.0] — 2026-03-21
 
 ### Usability Fix (Cosmetic — Nielsen Heuristic 2)
