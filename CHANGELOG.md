@@ -40,8 +40,7 @@ All notable changes to Eduno LMS are documented here.
 - PHP: **491** (6 new Pest feature tests in `tests/Feature/Notification/NotificationTest.php`
   covering index auth, unauthenticated redirect, show-redirect-mark-read, cross-user
   isolation, mark-all-read, and pagination)
-- Vitest specs: **TBD** (NotificationBell + Notifications/Index component specs added
-  in this release)
+- Vitest specs: **517** (12 new: NotificationBell × 7, Notifications/Index × 5)
 
 ---
 
