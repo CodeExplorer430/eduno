@@ -24,7 +24,8 @@ class GradeSeeder extends Seeder
 
         // Grade and release all submissions from the first assignment in each section
         // (simulates one graded assignment cycle per section)
-        $submissions = Submission::with(['assignment.section'])
+        $submissions = Submission::doesntHave('grade')
+            ->with(['assignment.section'])
             ->get()
             ->groupBy('assignment_id');
 
