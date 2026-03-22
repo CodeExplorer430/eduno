@@ -107,7 +107,7 @@ const cancelDelete = (): void => {
                                                             announcement.id
                                                         )
                                                     "
-                                                    class="rounded text-sm font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                    class="rounded text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     :aria-label="`Edit ${announcement.title}`"
                                                 >
                                                     Edit

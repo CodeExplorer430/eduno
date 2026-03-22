@@ -20,3 +20,46 @@
 }
 
 .simplified .decorative { display: none; }
+
+.dyslexia-font,
+.dyslexia-font * {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', 'Trebuchet MS', Arial, sans-serif !important;
+    letter-spacing: 0.05em;
+    word-spacing: 0.1em;
+    line-height: 1.8;
+}
+
+:root {
+  --color-primary:   #2563EB;
+  --color-secondary: #06B6D4;
+  --color-accent:    #F59E0B;
+  --color-success:   #16A34A;
+  --color-danger:    #DC2626;
+  --neutral-900:     #111827;
+  --neutral-700:     #374151;
+  --neutral-500:     #6B7280;
+  --neutral-100:     #F3F4F6;
+  --focus:           #93C5FD;
+  --font-base:       16px;
+  --line-height:     1.5;
+  --radius-md:       10px;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Decorative dot-grid pattern (used in hero) */
+.bg-dot-pattern {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+/* AnimateOnScroll utility classes */
+@keyframes eduno-fadein {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadein {
+    animation: eduno-fadein 0.4s ease-out forwards;
+}

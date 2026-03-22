@@ -2,9 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import IconInput from '@/Components/IconInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { LockClosedIcon } from '@heroicons/vue/24/outline';
 
 const form = useForm({
     password: '',
@@ -20,7 +21,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout title="Confirm your password" subtitle="Re-enter your password to continue">
         <Head title="Confirm Password" />
 
         <div class="mb-4 text-sm text-gray-600">
@@ -31,20 +32,22 @@ const submit = () => {
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="password" value="Password" />
-                <InputText
+
+                <IconInput
                     id="password"
                     v-model="form.password"
+                    :icon="LockClosedIcon"
                     type="password"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="current-password"
                     autofocus
                 />
+
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4 flex justify-end">
-                <Button
+                <PrimaryButton
                     type="submit"
                     class="ms-4"
                     :disabled="form.processing"
@@ -52,7 +55,7 @@ const submit = () => {
                 >
                     <span v-if="form.processing">Confirming&hellip;</span>
                     <span v-else>Confirm</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

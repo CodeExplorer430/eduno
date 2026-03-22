@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import Tag from 'primevue/tag';
@@ -65,9 +66,6 @@ function changeStatus(course: Course): void {
         { preserveScroll: true }
     );
 }
-
-const decodePaginationLabel = (label: string): string =>
-    label.replace(/&laquo;/g, '«').replace(/&raquo;/g, '»');
 </script>
 
 <template>
@@ -231,30 +229,10 @@ const decodePaginationLabel = (label: string): string =>
                         </div>
                     </div>
 
-                    <!-- Pagination -->
-                    <nav
+                    <Pagination
                         v-if="courses.links && courses.links.length > 3"
-                        aria-label="Pagination"
-                        class="mt-6 flex justify-center gap-1"
-                    >
-                        <template v-for="link in courses.links" :key="link.label">
-                            <Link
-                                v-if="link.url"
-                                :href="link.url"
-                                :aria-current="link.active ? 'page' : undefined"
-                                class="rounded-md px-3 py-2 text-sm"
-                                :class="
-                                    link.active
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-700 hover:bg-gray-50'
-                                "
-                                >{{ decodePaginationLabel(link.label) }}</Link
-                            >
-                            <span v-else class="rounded-md px-3 py-2 text-sm text-gray-400">{{
-                                decodePaginationLabel(link.label)
-                            }}</span>
-                        </template>
-                    </nav>
+                        :links="courses.links"
+                    />
                 </main>
             </div>
         </div>

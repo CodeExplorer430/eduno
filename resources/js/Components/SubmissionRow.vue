@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Tag from 'primevue/tag';
 import { Link } from '@inertiajs/vue3';
+import { useFormatDate } from '@/composables/useFormatDate';
 
 interface Props {
     submission: {
@@ -17,14 +18,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const formatDate = (dateString: string): string =>
-    new Intl.DateTimeFormat('en-PH', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    }).format(new Date(dateString));
+const { formatDate } = useFormatDate();
 
 const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger' | 'warn'> = {
     submitted: 'info',
@@ -83,7 +77,7 @@ const scoreLabel = (): string => {
         <td class="px-6 py-4 text-sm">
             <Link
                 :href="route('instructor.submissions.show', submission.id)"
-                class="font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
+                class="font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                 :aria-label="`View submission by ${submission.student.name}`"
             >
                 View

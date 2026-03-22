@@ -61,7 +61,7 @@ const submit = (): void => {
                     <li>
                         <Link
                             :href="route('instructor.courses.modules.index', section.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             {{ section.course.code }} — Modules
                         </Link>
@@ -78,7 +78,7 @@ const submit = (): void => {
                     <div class="border-b border-gray-100 px-6 py-4">
                         <h1 class="font-semibold text-gray-800">
                             Upload Resource for
-                            <span class="text-indigo-600">{{ lesson.title }}</span>
+                            <span class="text-blue-600">{{ lesson.title }}</span>
                         </h1>
                     </div>
 
@@ -127,7 +127,7 @@ const submit = (): void => {
                             <select
                                 id="visibility"
                                 v-model="form.visibility"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 :aria-describedby="
                                     form.errors.visibility ? 'visibility-error' : undefined
                                 "
@@ -146,7 +146,7 @@ const submit = (): void => {
                         <div class="flex items-center justify-end gap-4 pt-2">
                             <Link
                                 :href="route('instructor.courses.modules.index', section.id)"
-                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                             >
                                 Cancel
                             </Link>

@@ -69,7 +69,7 @@ const submit = (): void => {
                     <li>
                         <Link
                             :href="route('instructor.courses.index')"
-                            class="hover:text-gray-700 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="hover:text-gray-700 focus:rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             Courses
                         </Link>
@@ -135,7 +135,7 @@ const submit = (): void => {
                                         rows="5"
                                         aria-describedby="assignment-instructions-error"
                                         :aria-invalid="!!form.errors.instructions"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         placeholder="Describe what students need to do…"
                                     ></textarea>
                                     <InputError
@@ -191,7 +191,7 @@ const submit = (): void => {
                                         id="assignment-allow-resubmission"
                                         v-model="form.allow_resubmission"
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                        class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                     />
                                     <label
                                         for="assignment-allow-resubmission"
@@ -225,7 +225,7 @@ const submit = (): void => {
                                                 v-model="form.allowed_file_types"
                                                 type="checkbox"
                                                 :value="option.mime"
-                                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                             />
                                             <label
                                                 :for="`file-type-${option.mime}`"

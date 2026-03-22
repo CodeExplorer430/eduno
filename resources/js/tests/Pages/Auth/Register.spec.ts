@@ -37,7 +37,7 @@ const stubs = {
         template: '<input v-bind="$attrs" />',
         inheritAttrs: false,
     },
-    Button: {
+    PrimaryButton: {
         template:
             '<button type="submit" :disabled="disabled" :aria-busy="ariaBusy"><slot /></button>',
         props: ['disabled', 'ariaBusy'],

@@ -2,9 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import IconInput from '@/Components/IconInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { UserIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
 const form = useForm({
     name: '',
@@ -23,18 +24,21 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout
+        title="Create your account"
+        subtitle="Join Eduno at the University of Caloocan City"
+    >
         <Head title="Register" />
 
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="name" value="Name" />
 
-                <InputText
+                <IconInput
                     id="name"
                     v-model="form.name"
+                    :icon="UserIcon"
                     type="text"
-                    class="mt-1 block w-full"
                     required
                     autofocus
                     autocomplete="name"
@@ -48,11 +52,11 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
-                <InputText
+                <IconInput
                     id="email"
                     v-model="form.email"
+                    :icon="EnvelopeIcon"
                     type="email"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="username"
                     aria-describedby="email-error"
@@ -65,11 +69,11 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
 
-                <InputText
+                <IconInput
                     id="password"
                     v-model="form.password"
+                    :icon="LockClosedIcon"
                     type="password"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="new-password"
                     aria-describedby="password-error"
@@ -82,11 +86,11 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password_confirmation" value="Confirm Password" />
 
-                <InputText
+                <IconInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
+                    :icon="LockClosedIcon"
                     type="password"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="new-password"
                     aria-describedby="password_confirmation-error"
@@ -103,12 +107,12 @@ const submit = () => {
             <div class="mt-4 flex items-center justify-end">
                 <Link
                     :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                     Already registered?
                 </Link>
 
-                <Button
+                <PrimaryButton
                     type="submit"
                     class="ms-4"
                     :disabled="form.processing"
@@ -116,7 +120,7 @@ const submit = () => {
                 >
                     <span v-if="form.processing">Registering&hellip;</span>
                     <span v-else>Register</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

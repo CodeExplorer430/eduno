@@ -99,7 +99,7 @@ const { formatBytes } = useFileSize();
                 <div v-if="canManage" class="flex gap-2">
                     <button
                         type="button"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         :aria-label="lesson.published_at ? 'Unpublish lesson' : 'Publish lesson'"
                         @click="togglePublish"
                     >
@@ -107,7 +107,7 @@ const { formatBytes } = useFileSize();
                     </button>
                     <Link
                         :href="route('lessons.edit', lesson.id)"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         aria-label="Edit lesson"
                     >
                         Edit
@@ -133,7 +133,7 @@ const { formatBytes } = useFileSize();
                                 :href="lesson.content"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 focus:underline focus:outline-none"
+                                class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 focus:underline focus:outline-none"
                                 :aria-label="`Open link: ${lesson.content}`"
                             >
                                 {{ lesson.content }}
@@ -185,7 +185,7 @@ const { formatBytes } = useFileSize();
                                     :href="route('resources.download', resource.id)"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="rounded border border-indigo-300 bg-white px-2 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    class="rounded border border-blue-300 bg-white px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     :aria-label="`Download ${resource.title}`"
                                 >
                                     Download
@@ -242,7 +242,7 @@ const { formatBytes } = useFileSize();
                                         v-model="uploadForm.title"
                                         type="text"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             uploadForm.errors.title
                                                 ? 'resource-title-error'
@@ -273,7 +273,7 @@ const { formatBytes } = useFileSize();
                                         type="file"
                                         required
                                         accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.mp4,.mp3,.png,.jpg,.jpeg,.gif"
-                                        class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-indigo-700 hover:file:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         :aria-describedby="
                                             uploadForm.errors.file
                                                 ? 'resource-file-error'
@@ -303,7 +303,7 @@ const { formatBytes } = useFileSize();
                                         id="resource-visibility"
                                         v-model="uploadForm.visibility"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             uploadForm.errors.visibility
                                                 ? 'visibility-error'
@@ -330,7 +330,7 @@ const { formatBytes } = useFileSize();
                                 <button
                                     type="submit"
                                     :disabled="uploadForm.processing"
-                                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                                     :aria-busy="uploadForm.processing"
                                 >
                                     {{ uploadForm.processing ? 'Uploading…' : 'Upload Resource' }}

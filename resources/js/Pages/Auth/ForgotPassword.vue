@@ -2,9 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import IconInput from '@/Components/IconInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { EnvelopeIcon } from '@heroicons/vue/24/outline';
 
 defineProps<{
     status?: string;
@@ -20,7 +21,10 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout
+        title="Forgot your password?"
+        subtitle="Enter your email and we'll send a reset link"
+    >
         <Head title="Forgot Password" />
 
         <div class="mb-4 text-sm text-gray-600">
@@ -36,11 +40,11 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <InputText
+                <IconInput
                     id="email"
                     v-model="form.email"
+                    :icon="EnvelopeIcon"
                     type="email"
-                    class="mt-1 block w-full"
                     required
                     autofocus
                     autocomplete="username"
@@ -51,10 +55,14 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex items-center justify-end">
-                <Button type="submit" :disabled="form.processing" :aria-busy="form.processing">
+                <PrimaryButton
+                    type="submit"
+                    :disabled="form.processing"
+                    :aria-busy="form.processing"
+                >
                     <span v-if="form.processing">Sending&hellip;</span>
                     <span v-else>Email Password Reset Link</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

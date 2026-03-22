@@ -96,7 +96,7 @@ const canSubmit = computed<boolean>(() => {
                     <li>
                         <Link
                             :href="route('student.assignments.index')"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             Assignments
                         </Link>
@@ -192,7 +192,7 @@ const canSubmit = computed<boolean>(() => {
                         <Link
                             v-if="canSubmit"
                             :href="route('student.submissions.create', assignment.id)"
-                            class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
                             {{ submission ? 'Resubmit Assignment' : 'Submit Assignment' }}
                         </Link>
@@ -235,7 +235,7 @@ const canSubmit = computed<boolean>(() => {
 
                         <Link
                             :href="route('student.submissions.show', submission.id)"
-                            class="mt-4 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                            class="mt-4 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             View submission details &rarr;
                         </Link>

@@ -27,8 +27,8 @@ describe('ResponsiveNavLink', () => {
             global: globalOpts,
         });
         const anchor = wrapper.find('a');
-        expect(anchor.classes()).toContain('border-indigo-400');
-        expect(anchor.classes()).toContain('bg-indigo-50');
+        expect(anchor.classes()).toContain('border-blue-500');
+        expect(anchor.classes()).toContain('bg-blue-50');
     });
 
     it('applies inactive classes when active prop is false', () => {

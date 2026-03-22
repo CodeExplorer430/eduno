@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Breadcrumb from '@/Components/Breadcrumb.vue';
 import SubmissionRow from '@/Components/SubmissionRow.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import Button from 'primevue/button';
 
 interface Submission {
@@ -32,20 +33,12 @@ const props = defineProps<Props>();
 
     <AuthenticatedLayout>
         <template #header>
-            <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
-                    <li>
-                        <Link
-                            :href="route('instructor.courses.index')"
-                            class="hover:text-gray-700 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                            Courses
-                        </Link>
-                    </li>
-                    <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">Submissions</li>
-                </ol>
-            </nav>
+            <Breadcrumb
+                :crumbs="[
+                    { label: 'Courses', href: route('instructor.courses.index') },
+                    { label: 'Submissions' },
+                ]"
+            />
         </template>
 
         <div class="py-12">

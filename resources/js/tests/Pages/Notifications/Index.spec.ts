@@ -94,9 +94,9 @@ describe('Notifications/Index', () => {
             },
         });
         expect(wrapper.html()).toContain('New announcement posted');
-        // unread row should have the indigo tint classes
+        // unread row should have the blue tint classes
         const li = wrapper.find('li');
-        expect(li.classes()).toContain('bg-indigo-50');
+        expect(li.classes()).toContain('bg-blue-50');
     });
 
     it('renders read notification without tint', () => {
@@ -111,7 +111,7 @@ describe('Notifications/Index', () => {
         expect(wrapper.html()).toContain('Your grade has been released');
         const li = wrapper.find('li');
         expect(li.classes()).toContain('bg-white');
-        expect(li.classes()).not.toContain('bg-indigo-50');
+        expect(li.classes()).not.toContain('bg-blue-50');
     });
 
     it('shows "Mark all as read" button only when unread_count > 0', () => {

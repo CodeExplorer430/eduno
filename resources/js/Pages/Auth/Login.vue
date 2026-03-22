@@ -2,10 +2,11 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import IconInput from '@/Components/IconInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrimeCheckbox from 'primevue/checkbox';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
 defineProps<{
     canResetPassword?: boolean;
@@ -28,7 +29,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout title="Welcome back" subtitle="Sign in to your Eduno account">
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
@@ -47,11 +48,11 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <InputText
+                <IconInput
                     id="email"
                     v-model="form.email"
+                    :icon="EnvelopeIcon"
                     type="email"
-                    class="mt-1 block w-full"
                     required
                     autofocus
                     autocomplete="username"
@@ -65,11 +66,11 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
 
-                <InputText
+                <IconInput
                     id="password"
                     v-model="form.password"
+                    :icon="LockClosedIcon"
                     type="password"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="current-password"
                     aria-describedby="password-error"
@@ -95,12 +96,12 @@ const submit = () => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                     Forgot your password?
                 </Link>
 
-                <Button
+                <PrimaryButton
                     type="submit"
                     class="ms-4"
                     :disabled="form.processing"
@@ -108,7 +109,7 @@ const submit = () => {
                 >
                     <span v-if="form.processing">Logging in&hellip;</span>
                     <span v-else>Log in</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

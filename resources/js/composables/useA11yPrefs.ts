@@ -28,7 +28,7 @@ export function useA11yPrefs(): {
         const html = document.documentElement;
 
         html.classList.toggle('dyslexia-font', prefs?.dyslexia_font === true);
-        html.classList.toggle('reduced-motion', prefs?.reduced_motion === true);
+        html.classList.toggle('reduce-motion', prefs?.reduced_motion === true);
         html.classList.toggle('high-contrast', prefs?.high_contrast === true);
 
         if (prefs?.font_size) {

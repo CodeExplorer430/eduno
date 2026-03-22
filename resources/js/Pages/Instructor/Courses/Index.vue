@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import Tag from 'primevue/tag';
 import { Head, Link } from '@inertiajs/vue3';
+import {
+    PlusIcon,
+    RectangleStackIcon,
+    PencilSquareIcon,
+    BookOpenIcon,
+} from '@heroicons/vue/24/outline';
 
 interface Section {
     id: number;
@@ -39,8 +46,9 @@ const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger'
                 <h1 class="text-xl font-semibold leading-tight text-gray-800">My Courses</h1>
                 <Link
                     :href="route('instructor.courses.create')"
-                    class="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="inline-flex items-center gap-2 rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
+                    <PlusIcon class="h-4 w-4" aria-hidden="true" />
                     Create Course
                 </Link>
             </div>
@@ -139,9 +147,13 @@ const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger'
                                                                     section.id
                                                                 )
                                                             "
-                                                            class="font-medium text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
+                                                            class="inline-flex items-center font-medium text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                                                             :aria-label="`Manage modules for ${course.title} — ${section.section_name}`"
                                                         >
+                                                            <RectangleStackIcon
+                                                                class="me-1 inline h-4 w-4"
+                                                                aria-hidden="true"
+                                                            />
                                                             Modules
                                                         </Link>
                                                     </template>
@@ -152,9 +164,13 @@ const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger'
                                                                 course.id
                                                             )
                                                         "
-                                                        class="font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
+                                                        class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                                                         :aria-label="`Edit course ${course.title}`"
                                                     >
+                                                        <PencilSquareIcon
+                                                            class="me-1 inline h-4 w-4"
+                                                            aria-hidden="true"
+                                                        />
                                                         Edit
                                                     </Link>
                                                 </div>
@@ -165,36 +181,20 @@ const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger'
                             </div>
                         </div>
 
-                        <div
+                        <EmptyState
                             v-else
-                            class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-20 text-center"
+                            :icon="BookOpenIcon"
+                            title="No courses yet."
+                            description="Create your first course to get started."
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="mb-4 h-12 w-12 text-gray-300"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.5"
-                                    d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-                                />
-                            </svg>
-                            <p class="text-base font-medium text-gray-500">No courses yet.</p>
-                            <p class="mt-1 text-sm text-gray-400">
-                                Create your first course to get started.
-                            </p>
                             <Link
                                 :href="route('instructor.courses.create')"
-                                class="mt-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                class="mt-4 inline-flex items-center gap-2 rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             >
+                                <PlusIcon class="h-4 w-4" aria-hidden="true" />
                                 Create Course
                             </Link>
-                        </div>
+                        </EmptyState>
                     </section>
                 </main>
             </div>

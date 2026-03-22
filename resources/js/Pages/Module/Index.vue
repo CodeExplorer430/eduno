@@ -55,7 +55,7 @@ function destroyModule(moduleId: number): void {
                 <Link
                     v-if="canManage"
                     :href="route('sections.modules.create', section.id)"
-                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     aria-label="Add new module"
                 >
                     Add Module
@@ -75,7 +75,7 @@ function destroyModule(moduleId: number): void {
                         <span v-if="canManage">
                             <Link
                                 :href="route('sections.modules.create', section.id)"
-                                class="text-indigo-600 hover:underline focus:outline-none focus:underline"
+                                class="text-blue-600 hover:underline focus:outline-none focus:underline"
                             >
                                 Create the first module.
                             </Link>
@@ -97,7 +97,7 @@ function destroyModule(moduleId: number): void {
                                     </span>
                                     <Link
                                         :href="route('modules.show', module.id)"
-                                        class="font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:underline"
+                                        class="font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:underline"
                                     >
                                         {{ module.title }}
                                     </Link>
@@ -120,7 +120,7 @@ function destroyModule(moduleId: number): void {
                             <div v-if="canManage" class="ml-4 flex shrink-0 gap-2">
                                 <button
                                     type="button"
-                                    class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     :aria-label="
                                         module.published_at
                                             ? `Unpublish ${module.title}`
@@ -132,7 +132,7 @@ function destroyModule(moduleId: number): void {
                                 </button>
                                 <Link
                                     :href="route('modules.edit', module.id)"
-                                    class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     :aria-label="`Edit ${module.title}`"
                                 >
                                     Edit
