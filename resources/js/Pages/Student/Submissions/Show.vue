@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Tag from 'primevue/tag';
+import StatusBadge from '@/Components/StatusBadge.vue';
+import { DocumentIcon } from '@heroicons/vue/24/outline';
 import { Head, Link } from '@inertiajs/vue3';
 
 interface SubmissionFile {
@@ -52,14 +53,6 @@ const formatSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-};
-
-const statusSeverity: Record<string, 'info' | 'success' | 'secondary' | 'danger' | 'warn'> = {
-    submitted: 'info',
-    graded: 'success',
-    returned: 'secondary',
-    late: 'danger',
-    pending: 'warn',
 };
 
 const submissionStatus = computed<'submitted' | 'graded' | 'returned' | 'late' | 'pending'>(() => {
@@ -122,11 +115,7 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                                     {{ submission.assignment.course_section.section_name }}
                                 </p>
                             </div>
-                            <Tag
-                                :severity="statusSeverity[submissionStatus] ?? 'warn'"
-                                :value="submissionStatus"
-                                class="capitalize"
-                            />
+                            <StatusBadge :variant="submissionStatus" />
                         </div>
                     </header>
 
@@ -179,21 +168,10 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                                 class="flex items-center justify-between py-3 text-sm"
                             >
                                 <span class="flex items-center gap-2 text-gray-800">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
+                                    <DocumentIcon
                                         class="h-4 w-4 shrink-0 text-gray-400"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
                                         aria-hidden="true"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                                        />
-                                    </svg>
+                                    />
                                     {{ file.original_name }}
                                 </span>
                                 <span class="ms-4 shrink-0 text-xs text-gray-400">

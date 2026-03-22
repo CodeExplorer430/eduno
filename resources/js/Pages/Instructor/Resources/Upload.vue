@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import InputText from 'primevue/inputtext';
 import InputError from '@/Components/InputError.vue';
-import Button from 'primevue/button';
-import FileUpload from 'primevue/fileupload';
-import type { FileUploadSelectEvent } from 'primevue/fileupload';
+import FileUploadInput from '@/Components/FileUploadInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Section {
@@ -35,9 +34,10 @@ const form = useForm({
     visibility: 'enrolled' as 'enrolled' | 'public',
 });
 
-const onFileSelect = (e: FileUploadSelectEvent): void => {
-    form.file = e.files[0] ?? null;
-};
+const selectedFiles = ref<File[]>([]);
+watch(selectedFiles, (files) => {
+    form.file = files[0] ?? null;
+});
 
 const submit = (): void => {
     form.post(
@@ -93,11 +93,11 @@ const submit = (): void => {
                     <form class="space-y-5 px-6 py-6" @submit.prevent="submit">
                         <div>
                             <InputLabel for="title" value="Resource Title" />
-                            <InputText
+                            <input
                                 id="title"
                                 v-model="form.title"
                                 type="text"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
                                 :aria-describedby="form.errors.title ? 'title-error' : undefined"
                                 required
                                 autofocus
@@ -111,13 +111,11 @@ const submit = (): void => {
 
                         <div>
                             <InputLabel value="File" />
-                            <FileUpload
-                                mode="advanced"
+                            <FileUploadInput
+                                v-model="selectedFiles"
                                 accept=".pdf,.docx,.pptx,.xlsx,.mp4,.zip"
                                 :multiple="false"
-                                :auto="false"
                                 class="mt-1"
-                                @select="onFileSelect"
                             />
                             <InputError :message="form.errors.file" class="mt-1" />
                         </div>
@@ -150,9 +148,9 @@ const submit = (): void => {
                             >
                                 Cancel
                             </Link>
-                            <Button type="submit" :disabled="form.processing">
+                            <PrimaryButton type="submit" :disabled="form.processing">
                                 Upload Resource
-                            </Button>
+                            </PrimaryButton>
                         </div>
                     </form>
                 </div>

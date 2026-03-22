@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import InputText from 'primevue/inputtext';
 import InputError from '@/Components/InputError.vue';
-import Button from 'primevue/button';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Section {
@@ -89,11 +88,11 @@ const submit = (): void => {
                     <form class="space-y-5 px-6 py-6" @submit.prevent="submit">
                         <div>
                             <InputLabel for="title" value="Title" />
-                            <InputText
+                            <input
                                 id="title"
                                 v-model="form.title"
                                 type="text"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
                                 :aria-describedby="form.errors.title ? 'title-error' : undefined"
                                 required
                                 autofocus
@@ -175,7 +174,9 @@ const submit = (): void => {
                             >
                                 Cancel
                             </Link>
-                            <Button type="submit" :disabled="form.processing">Save Changes</Button>
+                            <PrimaryButton type="submit" :disabled="form.processing"
+                                >Save Changes</PrimaryButton
+                            >
                         </div>
                     </form>
                 </div>
