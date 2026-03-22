@@ -68,7 +68,7 @@ const releaseGrade = (): void => {
                     <li>
                         <Link
                             :href="route('instructor.submissions.index', submission.assignment.id)"
-                            class="hover:text-gray-700 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="hover:text-gray-700 focus:rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             Submissions
                         </Link>

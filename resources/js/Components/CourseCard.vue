@@ -21,7 +21,7 @@ defineProps<{
         <div class="p-5">
             <header class="mb-3">
                 <span
-                    class="mb-1 block text-xs font-semibold uppercase tracking-wide text-indigo-600"
+                    class="mb-1 block text-xs font-semibold uppercase tracking-wide text-blue-600"
                 >
                     {{ section.course.code }}
                 </span>
@@ -49,7 +49,7 @@ defineProps<{
         <footer class="border-t border-gray-100 bg-gray-50 px-5 py-3">
             <Link
                 :href="route('student.courses.show', section.id)"
-                class="text-sm font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
+                class="text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                 :aria-label="`View ${section.course.code} — ${section.course.title}`"
             >
                 View Course &rarr;

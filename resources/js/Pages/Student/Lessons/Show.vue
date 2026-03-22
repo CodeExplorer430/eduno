@@ -47,7 +47,7 @@ const formatBytes = (bytes: number): string => {
                     <li>
                         <Link
                             :href="route('student.courses.show', lesson.module.course_section.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             {{ lesson.module.course_section.course.code }}
                         </Link>
@@ -70,10 +70,10 @@ const formatBytes = (bytes: number): string => {
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                         aria-labelledby="lesson-title"
                     >
-                        <header class="border-b border-gray-100 bg-indigo-50 px-6 py-4">
+                        <header class="border-b border-gray-100 bg-blue-50 px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <span
-                                    class="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700"
+                                    class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700"
                                 >
                                     {{ lesson.type }}
                                 </span>
@@ -125,7 +125,7 @@ const formatBytes = (bytes: number): string => {
                                 </div>
                                 <a
                                     :href="route('student.resources.download', resource.id)"
-                                    class="rounded text-sm font-medium text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    class="rounded text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     :aria-label="`Download ${resource.title}`"
                                 >
                                     Download

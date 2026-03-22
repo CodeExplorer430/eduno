@@ -32,8 +32,8 @@ const { prefs, updatePref } = useA11yPrefs();
                     role="switch"
                     :aria-checked="prefs?.dyslexia_font === true"
                     aria-describedby="dyslexia-font-desc"
-                    class="relative inline-flex h-6 w-11 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-                    :class="prefs?.dyslexia_font ? 'bg-indigo-600' : 'bg-gray-200'"
+                    class="relative inline-flex h-6 w-11 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    :class="prefs?.dyslexia_font ? 'bg-blue-600' : 'bg-gray-200'"
                     @click="updatePref('dyslexia_font', !prefs?.dyslexia_font)"
                 >
                     <span class="sr-only">Toggle dyslexia-friendly font</span>
@@ -60,8 +60,8 @@ const { prefs, updatePref } = useA11yPrefs();
                     role="switch"
                     :aria-checked="prefs?.reduced_motion === true"
                     aria-describedby="reduced-motion-desc"
-                    class="relative inline-flex h-6 w-11 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-                    :class="prefs?.reduced_motion ? 'bg-indigo-600' : 'bg-gray-200'"
+                    class="relative inline-flex h-6 w-11 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    :class="prefs?.reduced_motion ? 'bg-blue-600' : 'bg-gray-200'"
                     @click="updatePref('reduced_motion', !prefs?.reduced_motion)"
                 >
                     <span class="sr-only">Toggle reduced motion</span>
@@ -88,8 +88,8 @@ const { prefs, updatePref } = useA11yPrefs();
                     role="switch"
                     :aria-checked="prefs?.high_contrast === true"
                     aria-describedby="high-contrast-desc"
-                    class="relative inline-flex h-6 w-11 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-                    :class="prefs?.high_contrast ? 'bg-indigo-600' : 'bg-gray-200'"
+                    class="relative inline-flex h-6 w-11 items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    :class="prefs?.high_contrast ? 'bg-blue-600' : 'bg-gray-200'"
                     @click="updatePref('high_contrast', !prefs?.high_contrast)"
                 >
                     <span class="sr-only">Toggle high contrast</span>

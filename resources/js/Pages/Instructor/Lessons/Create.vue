@@ -49,7 +49,7 @@ const submit = (): void => {
                     <li>
                         <Link
                             :href="route('instructor.courses.modules.index', section.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             {{ section.course.code }} — Modules
                         </Link>
@@ -65,7 +65,7 @@ const submit = (): void => {
                 <div class="overflow-hidden rounded-lg bg-white shadow-sm">
                     <div class="border-b border-gray-100 px-6 py-4">
                         <h1 class="font-semibold text-gray-800">
-                            Add Lesson to <span class="text-indigo-600">{{ module.title }}</span>
+                            Add Lesson to <span class="text-blue-600">{{ module.title }}</span>
                         </h1>
                     </div>
 
@@ -101,7 +101,7 @@ const submit = (): void => {
                             <select
                                 id="type"
                                 v-model="form.type"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 :aria-describedby="form.errors.type ? 'type-error' : undefined"
                                 required
                             >
@@ -118,7 +118,7 @@ const submit = (): void => {
                             <textarea
                                 id="content"
                                 v-model="form.content"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 rows="6"
                                 :aria-describedby="
                                     form.errors.content ? 'content-error' : undefined
@@ -138,7 +138,7 @@ const submit = (): void => {
                                 v-model.number="form.order_no"
                                 type="number"
                                 min="0"
-                                class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 :aria-describedby="form.errors.order_no ? 'order-error' : undefined"
                                 required
                             />
@@ -154,7 +154,7 @@ const submit = (): void => {
                                 id="published"
                                 v-model="form.published"
                                 type="checkbox"
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
                             <InputLabel for="published" value="Publish immediately" class="mb-0" />
                         </div>
@@ -162,7 +162,7 @@ const submit = (): void => {
                         <div class="flex items-center justify-end gap-4 pt-2">
                             <Link
                                 :href="route('instructor.courses.modules.index', section.id)"
-                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                             >
                                 Cancel
                             </Link>

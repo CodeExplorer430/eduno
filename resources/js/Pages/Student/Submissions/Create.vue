@@ -72,7 +72,7 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
                     <li>
                         <Link
                             :href="route('student.assignments.index')"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             Assignments
                         </Link>
@@ -81,7 +81,7 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
                     <li>
                         <Link
                             :href="route('student.assignments.show', assignment.id)"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             {{ assignment.title }}
                         </Link>
@@ -194,7 +194,7 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
                             >
                                 <Link
                                     :href="route('student.assignments.show', assignment.id)"
-                                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     Cancel
                                 </Link>
@@ -203,7 +203,7 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
                                     type="submit"
                                     :disabled="form.processing || !hasFiles"
                                     :aria-busy="form.processing"
-                                    class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
                                     <span v-if="form.processing">Uploading&hellip;</span>
                                     <span v-else>Submit Assignment</span>

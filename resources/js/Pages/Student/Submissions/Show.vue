@@ -81,7 +81,7 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                     <li>
                         <Link
                             :href="route('student.assignments.index')"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             Assignments
                         </Link>
@@ -90,7 +90,7 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                     <li>
                         <Link
                             :href="route('student.assignments.show', submission.assignment.id)"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             {{ submission.assignment.title }}
                         </Link>

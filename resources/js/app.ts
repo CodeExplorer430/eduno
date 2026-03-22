@@ -9,6 +9,8 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
+import AnimateOnScroll from 'primevue/animateonscroll';
+import Ripple from 'primevue/ripple';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -23,12 +25,17 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .use(PrimeVue, { theme: { preset: Aura, options: { darkModeSelector: '.dark' } } })
+            .use(PrimeVue, {
+                theme: { preset: Aura, options: { darkModeSelector: '.dark' } },
+                ripple: true,
+            })
             .use(ToastService)
             .use(ConfirmationService)
+            .directive('animateonscroll', AnimateOnScroll)
+            .directive('ripple', Ripple)
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#2563EB',
     },
 });
