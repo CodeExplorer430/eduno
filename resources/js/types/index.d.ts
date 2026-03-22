@@ -13,6 +13,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
         preferences?: UserPreferences | null;
+        unread_notifications_count: number;
     };
     ziggy: Config & { location: string };
     flash?: Record<string, string>;

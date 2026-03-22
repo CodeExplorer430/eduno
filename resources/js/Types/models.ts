@@ -169,6 +169,19 @@ export interface AuditLog {
     created_at: string;
 }
 
+export interface AppNotification {
+    id: string;
+    type: string;
+    data: {
+        message: string;
+        url: string;
+        type: string;
+    };
+    read_at: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
 export type Role = 'student' | 'instructor' | 'admin';
 
 export interface PaginationLink {

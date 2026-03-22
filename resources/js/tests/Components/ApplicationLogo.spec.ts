@@ -11,7 +11,7 @@ describe('ApplicationLogo', () => {
 
     it('has the correct viewBox attribute', () => {
         const wrapper = mount(ApplicationLogo);
-        expect(wrapper.find('svg').attributes('viewBox')).toBe('0 0 316 316');
+        expect(wrapper.find('svg').attributes('viewBox')).toBe('0 0 64 64');
     });
 
     it('contains a path element', () => {

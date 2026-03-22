@@ -246,3 +246,128 @@ test('deadline reminder is not sent to withdrawn student', function (): void {
 
     Notification::assertNotSentTo($student, DeadlineReminderNotification::class);
 });
+
+// ---------------------------------------------------------------------------
+// Notification Center (in-app database channel) feature tests
+// ---------------------------------------------------------------------------
+
+test('authenticated user can view their notification list', function (): void {
+    $user = User::factory()->create();
+
+    \Illuminate\Support\Facades\DB::table('notifications')->insert([
+        'id'              => (string) \Illuminate\Support\Str::uuid(),
+        'type'            => 'App\\Notifications\\GradeReleasedNotification',
+        'notifiable_type' => 'App\\Models\\User',
+        'notifiable_id'   => $user->id,
+        'data'            => json_encode(['message' => 'Test', 'url' => '/', 'type' => 'grade_released']),
+        'read_at'         => null,
+        'created_at'      => now(),
+        'updated_at'      => now(),
+    ]);
+
+    $response = $this->actingAs($user)->get(route('notifications.index'));
+
+    $response->assertOk();
+    $response->assertInertia(fn ($page) => $page->component('Notifications/Index'));
+});
+
+test('unauthenticated user is redirected from notifications index', function (): void {
+    $this->get(route('notifications.index'))->assertRedirect(route('login'));
+});
+
+test('show redirects to notification url and marks it read', function (): void {
+    $user = User::factory()->create();
+    $notifId = (string) \Illuminate\Support\Str::uuid();
+
+    \Illuminate\Support\Facades\DB::table('notifications')->insert([
+        'id'              => $notifId,
+        'type'            => 'App\\Notifications\\GradeReleasedNotification',
+        'notifiable_type' => 'App\\Models\\User',
+        'notifiable_id'   => $user->id,
+        'data'            => json_encode(['message' => 'Grade released', 'url' => 'https://example.com', 'type' => 'grade_released']),
+        'read_at'         => null,
+        'created_at'      => now(),
+        'updated_at'      => now(),
+    ]);
+
+    $this->actingAs($user)->get(route('notifications.show', $notifId));
+
+    expect(
+        \Illuminate\Support\Facades\DB::table('notifications')
+            ->where('id', $notifId)
+            ->whereNotNull('read_at')
+            ->exists()
+    )->toBeTrue();
+});
+
+test('user cannot view another user notification', function (): void {
+    $owner = User::factory()->create();
+    $other = User::factory()->create();
+    $notifId = (string) \Illuminate\Support\Str::uuid();
+
+    \Illuminate\Support\Facades\DB::table('notifications')->insert([
+        'id'              => $notifId,
+        'type'            => 'App\\Notifications\\GradeReleasedNotification',
+        'notifiable_type' => 'App\\Models\\User',
+        'notifiable_id'   => $owner->id,
+        'data'            => json_encode(['message' => 'Secret', 'url' => '/', 'type' => 'grade_released']),
+        'read_at'         => null,
+        'created_at'      => now(),
+        'updated_at'      => now(),
+    ]);
+
+    $this->actingAs($other)
+        ->get(route('notifications.show', $notifId))
+        ->assertNotFound();
+});
+
+test('markAllAsRead clears unread count', function (): void {
+    $user = User::factory()->create();
+
+    foreach (range(1, 3) as $i) {
+        \Illuminate\Support\Facades\DB::table('notifications')->insert([
+            'id'              => (string) \Illuminate\Support\Str::uuid(),
+            'type'            => 'App\\Notifications\\GradeReleasedNotification',
+            'notifiable_type' => 'App\\Models\\User',
+            'notifiable_id'   => $user->id,
+            'data'            => json_encode(['message' => "Notification {$i}", 'url' => '/', 'type' => 'grade_released']),
+            'read_at'         => null,
+            'created_at'      => now(),
+            'updated_at'      => now(),
+        ]);
+    }
+
+    expect($user->fresh()->unreadNotifications()->count())->toBe(3);
+
+    $this->actingAs($user)
+        ->post(route('notifications.read-all'))
+        ->assertRedirect();
+
+    expect($user->fresh()->unreadNotifications()->count())->toBe(0);
+});
+
+test('notification list is paginated', function (): void {
+    $user = User::factory()->create();
+
+    foreach (range(1, 20) as $i) {
+        \Illuminate\Support\Facades\DB::table('notifications')->insert([
+            'id'              => (string) \Illuminate\Support\Str::uuid(),
+            'type'            => 'App\\Notifications\\GradeReleasedNotification',
+            'notifiable_type' => 'App\\Models\\User',
+            'notifiable_id'   => $user->id,
+            'data'            => json_encode(['message' => "Notification {$i}", 'url' => '/', 'type' => 'grade_released']),
+            'read_at'         => null,
+            'created_at'      => now(),
+            'updated_at'      => now(),
+        ]);
+    }
+
+    $this->actingAs($user)
+        ->get(route('notifications.index'))
+        ->assertOk()
+        ->assertInertia(
+            fn ($page) => $page
+            ->component('Notifications/Index')
+            ->has('notifications.data', 15)
+        );
+});

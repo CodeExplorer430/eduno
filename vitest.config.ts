@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 export default defineConfig({
     plugins: [vue()],
     test: {
+        include: ['resources/js/**/*.spec.ts', 'resources/js/**/*.test.ts'],
         environment: 'jsdom',
         globals: true,
         setupFiles: ['./resources/js/tests/setup.ts'],

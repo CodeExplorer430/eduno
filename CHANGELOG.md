@@ -25,6 +25,48 @@ All notable changes to Eduno LMS are documented here.
 
 ---
 
+## [2.1.0] — 2026-03-22
+
+### Demo Infrastructure
+
+- **DemoSeeder** (`database/seeders/DemoSeeder.php`): Added a fully-populated,
+  idempotent seeder for academic evaluation. Creates 9 demo accounts (1 admin,
+  2 instructors, 6 students), 3 published courses with 6 sections, 24 lessons,
+  9 assignments, varied submissions/grades, 18 audit log entries, and 11
+  announcements. All accounts use password `password`.
+
+### In-App Notification Center (FR-034–037)
+
+- **Database notification channel** added to all four notification classes
+  (`AnnouncementPublishedNotification`, `GradeReleasedNotification`,
+  `NewSubmissionNotification`, `DeadlineReminderNotification`). All notifications
+  now persist in the `notifications` table in addition to email delivery.
+- **`notifications` migration** (`2026_03_22_100000_create_notifications_table.php`):
+  Standard Laravel UUID notifications table.
+- **`NotificationController`** with four routes:
+  `GET /notifications`, `GET /notifications/{id}` (mark-read + redirect),
+  `POST /notifications/{id}/read`, `POST /notifications/read-all`.
+- **Three Action classes**: `GetUserNotifications`, `MarkNotificationRead`,
+  `MarkAllNotificationsRead` (`app/Domain/Notification/Actions/`).
+- **`NotificationBell.vue`** component: bell icon with unread-count badge in the
+  global nav; WCAG-compliant `aria-label`, visible focus ring, badge hidden at 0.
+- **`Notifications/Index.vue`** page: paginated list with read/unread dot indicator,
+  per-item "Mark as read", "Mark all as read" header button, and empty state with
+  `role="status"`.
+- **Shared prop** `auth.unread_notifications_count` added to `HandleInertiaRequests`
+  so the badge count is available on every page without an extra request.
+- **DemoSeeder extended**: 7 pre-seeded notifications (3 unread for
+  `juan@eduno.test`) so the bell badge is populated immediately on demo login.
+
+### Tests
+
+- PHP: **491** (6 new Pest feature tests in `tests/Feature/Notification/NotificationTest.php`
+  covering index auth, unauthenticated redirect, show-redirect-mark-read, cross-user
+  isolation, mark-all-read, and pagination)
+- Vitest specs: **517** (12 new: NotificationBell × 7, Notifications/Index × 5)
+
+---
+
 ## [1.4.0] — 2026-03-21
 
 ### Usability Fix (Cosmetic — Nielsen Heuristic 2)
