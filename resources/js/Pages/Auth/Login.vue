@@ -4,7 +4,6 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import IconInput from '@/Components/IconInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import PrimeCheckbox from 'primevue/checkbox';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
@@ -82,11 +81,12 @@ const submit = () => {
 
             <div class="mt-4 block">
                 <label class="flex items-center gap-2">
-                    <PrimeCheckbox
+                    <input
+                        id="remember-me"
                         v-model="form.remember"
-                        :binary="true"
-                        input-id="remember-me"
+                        type="checkbox"
                         name="remember"
+                        class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     />
                     <span class="text-sm text-gray-600">Remember me</span>
                 </label>

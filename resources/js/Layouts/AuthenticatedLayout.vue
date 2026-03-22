@@ -174,7 +174,7 @@ watchEffect(() => {
             id="sidebar"
             aria-label="Main navigation"
             :class="[
-                'fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-800 transition-all duration-300 ease-in-out',
+                'fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-800 transition-all duration-300 ease-in-out overflow-visible',
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
                 sidebarCollapsed ? 'lg:w-16' : 'lg:w-64',
                 'w-64',
@@ -228,24 +228,18 @@ watchEffect(() => {
                         </Link>
                     </li>
                 </ul>
-
-                <!-- Collapse toggle (desktop only) -->
-                <div class="hidden px-3 py-2 lg:block">
-                    <button
-                        type="button"
-                        class="flex w-full items-center justify-center rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                        :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-                        @click="toggleCollapse"
-                    >
-                        <ChevronLeftIcon
-                            v-if="!sidebarCollapsed"
-                            class="h-4 w-4"
-                            aria-hidden="true"
-                        />
-                        <ChevronRightIcon v-else class="h-4 w-4" aria-hidden="true" />
-                    </button>
-                </div>
             </nav>
+
+            <!-- Collapse toggle — floating tab at sidebar right edge (desktop only) -->
+            <button
+                type="button"
+                class="absolute -right-3 top-[4.5rem] hidden h-6 w-6 items-center justify-center rounded-full border border-slate-600 bg-slate-700 text-slate-300 shadow-md transition-colors hover:bg-slate-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white lg:flex"
+                :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                @click="toggleCollapse"
+            >
+                <ChevronLeftIcon v-if="!sidebarCollapsed" class="h-3.5 w-3.5" aria-hidden="true" />
+                <ChevronRightIcon v-else class="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
 
             <!-- User section -->
             <div class="shrink-0 border-t border-slate-700 px-3 py-4">
