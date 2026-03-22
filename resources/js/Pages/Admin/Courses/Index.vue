@@ -2,9 +2,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import Tag from 'primevue/tag';
-import Select from 'primevue/select';
 import Button from 'primevue/button';
 
 interface Course {
@@ -50,7 +49,18 @@ function applyFilter(): void {
     );
 }
 
-const pendingStatus = ref<Record<number, string>>({});
+const pendingStatus = ref<Record<number, string>>(
+    Object.fromEntries(props.courses.data.map((c) => [c.id, c.status]))
+);
+
+watch(
+    () => props.courses.data,
+    (courses) => {
+        courses.forEach((c) => {
+            pendingStatus.value[c.id] = c.status;
+        });
+    }
+);
 
 const successMessage = computed(
     () => (usePage().props.flash as Record<string, string> | undefined)?.success ?? null
@@ -88,17 +98,16 @@ function changeStatus(course: Course): void {
                             >
                                 Status
                             </label>
-                            <Select
+                            <select
                                 id="status_filter"
                                 v-model="statusFilter"
-                                :options="[
-                                    { label: 'All', value: '' },
-                                    ...statuses.map((s) => ({ label: s.name, value: s.value })),
-                                ]"
-                                option-label="label"
-                                option-value="value"
-                                class="w-48"
-                            />
+                                class="mt-1 block w-48 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            >
+                                <option value="">All</option>
+                                <option v-for="s in statuses" :key="s.value" :value="s.value">
+                                    {{ s.name }}
+                                </option>
+                            </select>
                         </div>
                         <Button
                             label="Apply"
@@ -200,20 +209,19 @@ function changeStatus(course: Course): void {
                                         </td>
                                         <td class="whitespace-nowrap px-6 py-4">
                                             <div class="flex items-center gap-2">
-                                                <Select
+                                                <select
                                                     v-model="pendingStatus[course.id]"
-                                                    :options="
-                                                        statuses.map((s) => ({
-                                                            label: s.name,
-                                                            value: s.value,
-                                                        }))
-                                                    "
-                                                    option-label="label"
-                                                    option-value="value"
-                                                    :placeholder="course.status"
-                                                    class="w-36"
+                                                    class="block w-36 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                                     :aria-label="`Change status for ${course.title}`"
-                                                />
+                                                >
+                                                    <option
+                                                        v-for="s in statuses"
+                                                        :key="s.value"
+                                                        :value="s.value"
+                                                    >
+                                                        {{ s.name }}
+                                                    </option>
+                                                </select>
                                                 <Button
                                                     label="Update"
                                                     severity="secondary"

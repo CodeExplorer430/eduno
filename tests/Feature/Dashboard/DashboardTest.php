@@ -62,7 +62,7 @@ test('student dashboard has required props', function (): void {
     $response->assertInertia(
         fn ($page) => $page
             ->component('Dashboard')
-            ->has('courseSummary')
+            ->has('course_summary')
             ->has('upcoming')
             ->has('recentGrades')
     );

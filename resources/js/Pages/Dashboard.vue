@@ -12,46 +12,58 @@ import {
     MegaphoneIcon,
     ClockIcon,
 } from '@heroicons/vue/24/outline';
-import type { Assignment, Announcement, Grade, Submission } from '@/Types/models';
+import type { Assignment, Announcement, Submission } from '@/Types/models';
 import { useFormatDate } from '@/composables/useFormatDate';
 
-interface StudentProps {
-    role: 'student';
-    enrolled_courses_count: number;
-    upcoming_assignments: Assignment[];
-    recent_announcements: (Announcement & {
-        course_section: {
-            id: number;
-            section_name: string;
-            course: { code: string; title: string };
-        };
-        author: { id: number; name: string };
-    })[];
-    latest_grade: (Grade & { submission: { assignment: Assignment } }) | null;
+interface LatestGrade {
+    score: number;
+    max_score: number;
+    assignment: string;
+    course: string;
 }
 
-interface InstructorProps {
-    role: 'instructor';
-    courses_count: number;
-    pending_submissions_count: number;
-    recent_submissions: (Submission & {
-        assignment: Assignment;
-        student: { id: number; name: string };
-    })[];
-    upcoming_deadlines: Assignment[];
+interface CourseSummary {
+    id: number;
+    code: string;
+    title: string;
+    section_name: string;
 }
 
-interface AdminProps {
-    role: 'admin';
-    users_by_role: { student: number; instructor: number; admin: number };
-    total_courses: number;
-    total_submissions: number;
-    total_grades_released: number;
+interface RecentAnnouncement extends Omit<Announcement, 'author' | 'course_section'> {
+    course_section: {
+        id: number;
+        section_name: string;
+        course: { code: string; title: string };
+    };
+    author: { id: number; name: string };
 }
 
-type DashboardProps = StudentProps | InstructorProps | AdminProps;
+interface RecentSubmission extends Submission {
+    assignment: Assignment;
+    student: { id: number; name: string };
+}
 
-const props = defineProps<DashboardProps>();
+interface Props {
+    role: 'student' | 'instructor' | 'admin';
+    // student
+    enrolled_courses_count?: number;
+    upcoming_assignments?: Assignment[];
+    recent_announcements?: RecentAnnouncement[];
+    latest_grade?: LatestGrade | null;
+    course_summary?: CourseSummary[];
+    // instructor
+    courses_count?: number;
+    pending_submissions_count?: number;
+    recent_submissions?: RecentSubmission[];
+    upcoming_deadlines?: Assignment[];
+    // admin
+    users_by_role?: { student: number; instructor: number; admin: number };
+    total_courses?: number;
+    total_submissions?: number;
+    total_grades_released?: number;
+}
+
+const props = defineProps<Props>();
 
 const { formatDate } = useFormatDate();
 
@@ -97,7 +109,7 @@ const greeting = computed(() => {
                                 :animation-delay="0"
                                 accent="blue"
                             >
-                                {{ (props as StudentProps).enrolled_courses_count }}
+                                {{ props.enrolled_courses_count ?? 0 }}
                             </StatCard>
                             <StatCard
                                 label="Upcoming Assignments"
@@ -105,7 +117,7 @@ const greeting = computed(() => {
                                 :animation-delay="80"
                                 accent="amber"
                             >
-                                {{ (props as StudentProps).upcoming_assignments.length }}
+                                {{ props.upcoming_assignments?.length ?? 0 }}
                             </StatCard>
                             <StatCard
                                 label="Latest Grade"
@@ -113,8 +125,9 @@ const greeting = computed(() => {
                                 :animation-delay="160"
                                 accent="green"
                             >
-                                <template v-if="(props as StudentProps).latest_grade">
-                                    {{ (props as StudentProps).latest_grade!.score }}
+                                <template v-if="props.latest_grade">
+                                    {{ props.latest_grade.score }} /
+                                    {{ props.latest_grade.max_score }}
                                 </template>
                                 <span v-else class="text-lg text-gray-400">None yet</span>
                             </StatCard>
@@ -137,11 +150,11 @@ const greeting = computed(() => {
                             </h2>
                         </div>
                         <div
-                            v-if="(props as StudentProps).upcoming_assignments.length > 0"
+                            v-if="(props.upcoming_assignments?.length ?? 0) > 0"
                             class="divide-y divide-gray-100"
                         >
                             <div
-                                v-for="assignment in (props as StudentProps).upcoming_assignments"
+                                v-for="assignment in props.upcoming_assignments"
                                 :key="assignment.id"
                                 class="flex items-center justify-between px-6 py-3 text-sm"
                             >
@@ -184,11 +197,11 @@ const greeting = computed(() => {
                             </Link>
                         </div>
                         <div
-                            v-if="(props as StudentProps).recent_announcements.length > 0"
+                            v-if="(props.recent_announcements?.length ?? 0) > 0"
                             class="divide-y divide-gray-100"
                         >
                             <div
-                                v-for="announcement in (props as StudentProps).recent_announcements"
+                                v-for="announcement in props.recent_announcements"
                                 :key="announcement.id"
                                 class="flex items-start gap-3 px-6 py-3"
                             >
@@ -211,6 +224,44 @@ const greeting = computed(() => {
                             No recent announcements.
                         </p>
                     </section>
+
+                    <!-- My Courses -->
+                    <section
+                        v-if="(props.course_summary?.length ?? 0) > 0"
+                        aria-labelledby="my-courses-heading"
+                        class="overflow-hidden rounded-lg bg-white shadow-sm"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-l-4 border-gray-100 border-l-blue-500 px-6 py-4"
+                        >
+                            <h2 id="my-courses-heading" class="font-semibold text-gray-800">
+                                My Courses
+                            </h2>
+                            <Link
+                                :href="route('student.courses.index')"
+                                class="rounded text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                View all
+                            </Link>
+                        </div>
+                        <ul class="divide-y divide-gray-100" role="list">
+                            <li
+                                v-for="section in props.course_summary"
+                                :key="section.id"
+                                class="flex items-center gap-3 px-6 py-3"
+                            >
+                                <BookOpenIcon
+                                    class="h-4 w-4 shrink-0 text-gray-400"
+                                    aria-hidden="true"
+                                />
+                                <span class="text-sm text-gray-800">
+                                    <span class="font-mono font-medium">{{ section.code }}</span>
+                                    — {{ section.title }}
+                                    <span class="text-gray-500">({{ section.section_name }})</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </section>
                 </div>
 
                 <!-- Instructor Dashboard -->
@@ -225,7 +276,7 @@ const greeting = computed(() => {
                                 :animation-delay="0"
                                 accent="blue"
                             >
-                                {{ (props as InstructorProps).courses_count }}
+                                {{ props.courses_count ?? 0 }}
                             </StatCard>
                             <StatCard
                                 label="Pending Submissions"
@@ -234,7 +285,7 @@ const greeting = computed(() => {
                                 :animation-delay="80"
                                 accent="cyan"
                             >
-                                {{ (props as InstructorProps).pending_submissions_count }}
+                                {{ props.pending_submissions_count ?? 0 }}
                             </StatCard>
                         </div>
                     </section>
@@ -255,11 +306,11 @@ const greeting = computed(() => {
                             </h2>
                         </div>
                         <div
-                            v-if="(props as InstructorProps).upcoming_deadlines.length > 0"
+                            v-if="(props.upcoming_deadlines?.length ?? 0) > 0"
                             class="divide-y divide-gray-100"
                         >
                             <div
-                                v-for="assignment in (props as InstructorProps).upcoming_deadlines"
+                                v-for="assignment in props.upcoming_deadlines"
                                 :key="assignment.id"
                                 class="flex items-center justify-between px-6 py-3 text-sm"
                             >
@@ -293,11 +344,11 @@ const greeting = computed(() => {
                             </h2>
                         </div>
                         <div
-                            v-if="(props as InstructorProps).recent_submissions.length > 0"
+                            v-if="(props.recent_submissions?.length ?? 0) > 0"
                             class="divide-y divide-gray-100"
                         >
                             <div
-                                v-for="submission in (props as InstructorProps).recent_submissions"
+                                v-for="submission in props.recent_submissions"
                                 :key="submission.id"
                                 class="flex items-center justify-between px-6 py-3 text-sm"
                             >
@@ -332,7 +383,7 @@ const greeting = computed(() => {
                                 :animation-delay="0"
                                 accent="blue"
                             >
-                                {{ (props as AdminProps).total_courses }}
+                                {{ props.total_courses ?? 0 }}
                             </StatCard>
                             <StatCard
                                 label="Total Submissions"
@@ -340,7 +391,7 @@ const greeting = computed(() => {
                                 :animation-delay="80"
                                 accent="cyan"
                             >
-                                {{ (props as AdminProps).total_submissions }}
+                                {{ props.total_submissions ?? 0 }}
                             </StatCard>
                             <StatCard
                                 label="Grades Released"
@@ -349,7 +400,7 @@ const greeting = computed(() => {
                                 :animation-delay="160"
                                 accent="green"
                             >
-                                {{ (props as AdminProps).total_grades_released }}
+                                {{ props.total_grades_released ?? 0 }}
                             </StatCard>
                         </div>
                     </section>
@@ -378,7 +429,7 @@ const greeting = computed(() => {
                                 />
                                 <dt class="text-sm font-medium text-gray-500">Students</dt>
                                 <dd class="mt-1 text-2xl font-semibold text-gray-900">
-                                    {{ (props as AdminProps).users_by_role.student }}
+                                    {{ props.users_by_role?.student ?? 0 }}
                                 </dd>
                             </div>
                             <div
@@ -392,7 +443,7 @@ const greeting = computed(() => {
                                 />
                                 <dt class="text-sm font-medium text-gray-500">Instructors</dt>
                                 <dd class="mt-1 text-2xl font-semibold text-gray-900">
-                                    {{ (props as AdminProps).users_by_role.instructor }}
+                                    {{ props.users_by_role?.instructor ?? 0 }}
                                 </dd>
                             </div>
                             <div
@@ -406,10 +457,50 @@ const greeting = computed(() => {
                                 />
                                 <dt class="text-sm font-medium text-gray-500">Admins</dt>
                                 <dd class="mt-1 text-2xl font-semibold text-gray-900">
-                                    {{ (props as AdminProps).users_by_role.admin }}
+                                    {{ props.users_by_role?.admin ?? 0 }}
                                 </dd>
                             </div>
                         </dl>
+                    </section>
+
+                    <!-- Quick Actions -->
+                    <section aria-labelledby="quick-actions-heading">
+                        <h2 id="quick-actions-heading" class="mb-4 font-semibold text-gray-800">
+                            Quick Actions
+                        </h2>
+                        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                            <Link
+                                :href="route('admin.users.index')"
+                                class="flex flex-col items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <UsersIcon class="h-7 w-7 text-blue-500" aria-hidden="true" />
+                                Manage Users
+                            </Link>
+                            <Link
+                                :href="route('admin.courses.index')"
+                                class="flex flex-col items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <BookOpenIcon class="h-7 w-7 text-blue-500" aria-hidden="true" />
+                                Manage Courses
+                            </Link>
+                            <Link
+                                :href="route('admin.reports.index')"
+                                class="flex flex-col items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <ChartBarIcon class="h-7 w-7 text-blue-500" aria-hidden="true" />
+                                View Reports
+                            </Link>
+                            <Link
+                                :href="route('admin.audit-logs.index')"
+                                class="flex flex-col items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <ClipboardDocumentListIcon
+                                    class="h-7 w-7 text-blue-500"
+                                    aria-hidden="true"
+                                />
+                                Audit Logs
+                            </Link>
+                        </div>
                     </section>
                 </div>
             </div>
