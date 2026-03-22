@@ -21,6 +21,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DemoSeeder extends Seeder
 {
@@ -1094,6 +1095,120 @@ class DemoSeeder extends Seeder
                     'published_at' => now()->subDays(1),
                 ],
             );
+
+            // ----------------------------------------------------------------
+            // In-app Notifications (database channel demo data)
+            // ----------------------------------------------------------------
+            // Delete existing seeded notifications so re-seeding is idempotent
+            DB::table('notifications')
+                ->whereIn('notifiable_id', [$juan->id, $ana->id, $maria->id])
+                ->delete();
+
+            $now = now();
+
+            DB::table('notifications')->insert([
+                // Juan — unread (3 total, badge = 3)
+                [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\GradeReleasedNotification',
+                    'notifiable_type' => 'App\\Models\\User',
+                    'notifiable_id'   => $juan->id,
+                    'data'            => json_encode([
+                        'message' => "Your grade for \"Needs Assessment Report\" has been released: 88/100",
+                        'url'     => url('/student/submissions'),
+                        'type'    => 'grade_released',
+                    ]),
+                    'read_at'    => null,
+                    'created_at' => $now->copy()->subHours(2),
+                    'updated_at' => $now->copy()->subHours(2),
+                ],
+                [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\AnnouncementPublishedNotification',
+                    'notifiable_type' => 'App\\Models\\User',
+                    'notifiable_id'   => $juan->id,
+                    'data'            => json_encode([
+                        'message' => "New announcement in CCS 123: \"Assignment 1 Graded — Check Your Feedback\"",
+                        'url'     => url('/student/announcements'),
+                        'type'    => 'announcement_published',
+                    ]),
+                    'read_at'    => null,
+                    'created_at' => $now->copy()->subHours(5),
+                    'updated_at' => $now->copy()->subHours(5),
+                ],
+                [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\DeadlineReminderNotification',
+                    'notifiable_type' => 'App\\Models\\User',
+                    'notifiable_id'   => $juan->id,
+                    'data'            => json_encode([
+                        'message' => "Reminder: \"Final Usability Report\" is due in 7 days",
+                        'url'     => url('/student/assignments'),
+                        'type'    => 'deadline_reminder',
+                    ]),
+                    'read_at'    => null,
+                    'created_at' => $now->copy()->subDay(),
+                    'updated_at' => $now->copy()->subDay(),
+                ],
+                // Ana — all read
+                [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\GradeReleasedNotification',
+                    'notifiable_type' => 'App\\Models\\User',
+                    'notifiable_id'   => $ana->id,
+                    'data'            => json_encode([
+                        'message' => "Your grade for \"Needs Assessment Report\" has been released: 72/100",
+                        'url'     => url('/student/submissions'),
+                        'type'    => 'grade_released',
+                    ]),
+                    'read_at'    => $now->copy()->subHours(1),
+                    'created_at' => $now->copy()->subHours(3),
+                    'updated_at' => $now->copy()->subHours(1),
+                ],
+                [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\AnnouncementPublishedNotification',
+                    'notifiable_type' => 'App\\Models\\User',
+                    'notifiable_id'   => $ana->id,
+                    'data'            => json_encode([
+                        'message' => "New announcement in CCS 123: \"Welcome to CCS 123!\"",
+                        'url'     => url('/student/announcements'),
+                        'type'    => 'announcement_published',
+                    ]),
+                    'read_at'    => $now->copy()->subHours(2),
+                    'created_at' => $now->copy()->subWeek(),
+                    'updated_at' => $now->copy()->subHours(2),
+                ],
+                // Maria (instructor)
+                [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\NewSubmissionNotification',
+                    'notifiable_type' => 'App\\Models\\User',
+                    'notifiable_id'   => $maria->id,
+                    'data'            => json_encode([
+                        'message' => "Juan dela Cruz submitted \"Needs Assessment Report\"",
+                        'url'     => url('/instructor/assignments'),
+                        'type'    => 'new_submission',
+                    ]),
+                    'read_at'    => $now->copy()->subHours(1),
+                    'created_at' => $now->copy()->subHours(4),
+                    'updated_at' => $now->copy()->subHours(1),
+                ],
+                [
+                    'id'              => (string) Str::uuid(),
+                    'type'            => 'App\\Notifications\\NewSubmissionNotification',
+                    'notifiable_type' => 'App\\Models\\User',
+                    'notifiable_id'   => $maria->id,
+                    'data'            => json_encode([
+                        'message' => "Carlo Santos submitted \"Prototype Wireframes\"",
+                        'url'     => url('/instructor/assignments'),
+                        'type'    => 'new_submission',
+                    ]),
+                    'read_at'    => null,
+                    'created_at' => $now->copy()->subHours(1),
+                    'updated_at' => $now->copy()->subHours(1),
+                ],
+            ]);
         });
     }
 }
