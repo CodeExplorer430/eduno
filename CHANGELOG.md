@@ -2,6 +2,19 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [2.1.2] — 2026-03-22
+
+### Maintenance
+
+- **docs(config): backfill CHANGELOG entries for v1.1.0 and v1.5.0–v2.0.0**: Seven
+  previously undocumented release versions are now recorded in `CHANGELOG.md`.
+  No code changes.
+- **chore: delete stale remote and local branches**: Removed 7 stale remote branches
+  (2 definitively merged, 5 squash-merge artifacts) and 33 stale local branches with
+  no upstream, all of whose content was already present in `main`.
+
+---
+
 ## [2.1.1] — 2026-03-22
 
 ### Bug Fixes
