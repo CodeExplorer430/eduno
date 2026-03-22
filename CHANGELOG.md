@@ -2,6 +2,19 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [2.1.2] — 2026-03-22
+
+### Maintenance
+
+- **docs(config): backfill CHANGELOG entries for v1.1.0 and v1.5.0–v2.0.0**: Seven
+  previously undocumented release versions are now recorded in `CHANGELOG.md`.
+  No code changes.
+- **chore: delete stale remote and local branches**: Removed 7 stale remote branches
+  (2 definitively merged, 5 squash-merge artifacts) and 33 stale local branches with
+  no upstream, all of whose content was already present in `main`.
+
+---
+
 ## [2.1.1] — 2026-03-22
 
 ### Bug Fixes
@@ -67,6 +80,97 @@ All notable changes to Eduno LMS are documented here.
 
 ---
 
+## [2.0.0] — 2026-03-22
+
+### Features (100% FR Coverage)
+
+- **feat(assignment): per-assignment `allowed_file_types`** (FR-021): Instructors can
+  now restrict accepted file extensions per assignment. Validated server-side in
+  `StoreSubmissionRequest`.
+- **a11y: skip-link, dropdown arrow navigation, `aria-invalid`, `aria-live`**
+  (FR-043/044): Added visible skip-to-content link, keyboard arrow-key navigation for
+  dropdowns, `aria-invalid` on errored inputs, and `aria-live` regions for dynamic
+  status messages. Achieves 100% Functional Requirement coverage (48/48 FRs).
+
+### Tests
+
+- PHP: **491** (all policy auth coverage + feature tests green at PHPStan level 5)
+- Vitest specs: **505** (all WCAG axe assertions passing)
+
+---
+
+## [1.9.0] — 2026-03-22
+
+### Quality Gates
+
+- **fix(config): zero-tolerance quality gates**: PHPStan brought to level 5 with
+  0 errors; ESLint zero warnings across all `.vue` and `.ts` files. Pint formatting
+  100% clean. Pre-commit hooks enforced via Husky + lint-staged.
+
+### Tests
+
+- PHP: **491** (zero PHPStan suppressions)
+- Vitest specs: **505** (zero ESLint warnings)
+
+---
+
+## [1.8.0] — 2026-03-22
+
+### Features
+
+- **feat(config): PrimeVue UI, WCAG a11y, audit logs, course management**: Integrated
+  PrimeVue component library for rich UI elements; added comprehensive WCAG 2.2
+  accessibility updates; implemented full audit log viewer; enhanced course management
+  flows for instructors and admins.
+
+---
+
+## [1.7.0] — 2026-03-22
+
+### Features
+
+- **feat(config): reports, notifications, CSV export, role dashboards**: Merged
+  reports-audit domain — system-wide reports with CSV export, role-specific dashboards
+  for instructors and admins, full notification delivery infrastructure.
+- **fix(config): wire routes, policies, and actions for role-namespaced controllers**:
+  Resolved routing gaps across all role-namespaced controller groups; ensured every
+  route has a matching policy authorization call.
+
+---
+
+## [1.6.0] — 2026-03-21
+
+### Features & Fixes
+
+- **feat: PWA manifest, landing page, favicon, and mobile touch-target fixes**: Added
+  `manifest.json`, service-worker offline caching, a public landing/marketing page,
+  favicon, and corrected touch-target sizes on mobile viewports.
+- **fix(config): `declare(strict_types=1)`, ARIA wiring, duplicate enum removal**:
+  Added `strict_types` to all PHP files missing it; fixed broken ARIA attribute wiring
+  in Vue components; removed a duplicate enum value causing a static analysis error.
+- **docs(config): re-sync traceability matrix post-v1.5.0**: Updated
+  `docs/traceability.md` to reflect all FRs implemented through v1.5.0.
+
+---
+
+## [1.5.0] — 2026-03-21
+
+### Bug Fixes
+
+- **fix(submission): reject grade score that exceeds assignment `max_score`**: Added
+  a `max` validation rule in `StoreGradeRequest` / `UpdateGradeRequest` capped at the
+  assignment's `max_score`. Prevents over-grading.
+- **fix(notification): skip withdrawn enrollments in deadline reminder**: The
+  `SendDeadlineReminders` job now filters out students who have unenrolled before
+  dispatching reminder notifications, eliminating spurious emails.
+
+### Tests
+
+- PHP: **343** (8 new Pest policy-auth coverage test files: course, module, lesson,
+  announcement, submission delete, grade, assignment, guard/validation)
+
+---
+
 ## [1.4.0] — 2026-03-21
 
 ### Usability Fix (Cosmetic — Nielsen Heuristic 2)
@@ -129,6 +233,25 @@ All notable changes to Eduno LMS are documented here.
 - Vitest specs: **168 → 175** (7 new specs covering H1-1, H3-1, H5-1, H7-1, H10-1
   in `Assignment/Show.spec.ts` and `Dashboard.spec.ts`)
 - PHP: `SendDeadlineRemindersTest` unit test added (`tests/Unit/`)
+
+---
+
+## [1.1.0] — 2026-03-20
+
+### Features
+
+- **feat: Nielsen heuristic usability recommendations** (#19): Implemented gap-fill
+  recommendations across all 10 Nielsen heuristics — visibility of system status,
+  match between system and real world, user control and freedom, consistency and
+  standards, error prevention, recognition over recall, flexibility, aesthetics,
+  error recovery, and help & documentation.
+- **chore: release supplements** (#18): Added `GradeSeeder` for demo data; re-synced
+  traceability matrix; added initial accessibility audit report.
+
+### Tests
+
+- PHP: **297** (2 new unit tests)
+- Vitest specs: **168** (pre-usability baseline; no new specs in this release)
 
 ---
 
