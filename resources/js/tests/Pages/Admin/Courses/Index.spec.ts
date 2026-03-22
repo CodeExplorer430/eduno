@@ -50,6 +50,7 @@ const props = {
         { name: 'Published', value: 'published' },
         { name: 'Archived', value: 'archived' },
     ],
+    summary: { total: 1, draft: 0, published: 1, archived: 0 },
 };
 
 describe('Admin/Courses/Index', () => {

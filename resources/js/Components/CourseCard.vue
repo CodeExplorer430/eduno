@@ -16,43 +16,60 @@ defineProps<{
 
 <template>
     <article
-        class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
+        class="group overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 transition hover:shadow-md"
     >
+        <!-- Accent bar -->
+        <div class="h-2 bg-gradient-to-r from-blue-500 to-cyan-400"></div>
+
         <div class="p-5">
             <header class="mb-3">
                 <span
-                    class="mb-1 block text-xs font-semibold uppercase tracking-wide text-blue-600"
+                    class="mb-1 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-blue-600"
                 >
                     {{ section.course.code }}
                 </span>
-                <h2 class="text-base font-semibold text-gray-900">
+                <h2 class="text-base font-semibold text-gray-900 leading-snug">
                     {{ section.course.title }}
                 </h2>
             </header>
 
-            <dl class="space-y-1 text-sm text-gray-600">
-                <div class="flex items-center gap-1">
-                    <dt class="font-medium text-gray-700">Section:</dt>
-                    <dd>{{ section.section_name }}</dd>
+            <dl class="space-y-1.5 text-sm text-gray-600">
+                <div class="flex items-center gap-1.5">
+                    <dt class="font-medium text-gray-500">Section</dt>
+                    <dd class="text-gray-700">{{ section.section_name }}</dd>
                 </div>
-                <div class="flex items-center gap-1">
-                    <dt class="font-medium text-gray-700">Instructor:</dt>
-                    <dd>{{ section.instructor.name }}</dd>
+                <div class="flex items-center gap-1.5">
+                    <dt class="font-medium text-gray-500">Instructor</dt>
+                    <dd class="text-gray-700">{{ section.instructor.name }}</dd>
                 </div>
-                <div v-if="section.schedule_text" class="flex items-center gap-1">
-                    <dt class="font-medium text-gray-700">Schedule:</dt>
-                    <dd>{{ section.schedule_text }}</dd>
+                <div v-if="section.schedule_text" class="flex items-center gap-1.5">
+                    <dt class="font-medium text-gray-500">Schedule</dt>
+                    <dd class="text-gray-700">{{ section.schedule_text }}</dd>
                 </div>
             </dl>
         </div>
 
-        <footer class="border-t border-gray-100 bg-gray-50 px-5 py-3">
+        <footer class="border-t border-gray-100 px-5 py-3">
             <Link
                 :href="route('student.courses.show', section.id)"
-                class="text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+                class="inline-flex items-center gap-1 rounded text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
                 :aria-label="`View ${section.course.code} — ${section.course.title}`"
             >
-                View Course &rarr;
+                View Course
+                <svg
+                    class="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                    />
+                </svg>
             </Link>
         </footer>
     </article>

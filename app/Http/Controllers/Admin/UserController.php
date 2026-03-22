@@ -25,10 +25,37 @@ class UserController extends Controller
         abort_unless($request->user()->isAdmin(), 403);
         $this->authorize('viewAny', User::class);
 
-        $users = User::orderBy('name')->paginate(25);
+        $search = $request->query('search');
+        $role   = $request->query('role');
+
+        $query = User::orderBy('name');
+
+        if ($search !== null && $search !== '') {
+            $query->where(function ($q) use ($search): void {
+                $q->where('name', 'ilike', "%{$search}%")
+                    ->orWhere('email', 'ilike', "%{$search}%");
+            });
+        }
+
+        if ($role !== null && $role !== '') {
+            $query->where('role', $role);
+        }
+
+        $users = $query->paginate(25)->withQueryString();
 
         return Inertia::render('Admin/Users/Index', [
-            'users' => $users,
+            'users'   => $users,
+            'filters' => ['search' => $search, 'role' => $role],
+            'summary' => [
+                'total'      => User::count(),
+                'student'    => User::where('role', 'student')->count(),
+                'instructor' => User::where('role', 'instructor')->count(),
+                'admin'      => User::where('role', 'admin')->count(),
+            ],
+            'roles' => array_map(
+                fn ($r) => ['name' => ucfirst($r->value), 'value' => $r->value],
+                UserRole::cases()
+            ),
         ]);
     }
 
@@ -38,8 +65,11 @@ class UserController extends Controller
         $this->authorize('update', $user);
 
         return Inertia::render('Admin/Users/Edit', [
-            'user' => $user,
-            'roles' => UserRole::cases(),
+            'user'  => $user,
+            'roles' => array_map(
+                fn ($r) => ['name' => ucfirst($r->value), 'value' => $r->value],
+                UserRole::cases()
+            ),
         ]);
     }
 

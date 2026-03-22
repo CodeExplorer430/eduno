@@ -23,24 +23,51 @@ const accentClasses = computed(() => {
     };
     return map[props.accent] ?? map['blue'];
 });
+
+const accentBarClass = computed(() => {
+    const bars: Record<string, string> = {
+        blue: 'bg-blue-500',
+        cyan: 'bg-cyan-500',
+        amber: 'bg-amber-500',
+        green: 'bg-green-500',
+        red: 'bg-red-500',
+    };
+    return bars[props.accent] ?? 'bg-blue-500';
+});
 </script>
 
 <template>
     <div
         v-animateonscroll="{ enterClass: 'animate-fadein' }"
         :style="`animation-delay: ${animationDelay}ms`"
-        class="overflow-hidden rounded-lg bg-white px-6 py-5 shadow-sm"
+        class="relative overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
     >
-        <div
-            v-if="icon"
-            class="mb-3 flex h-10 w-10 items-center justify-center rounded-full"
-            :class="accentClasses.bg"
-        >
-            <component :is="icon" class="h-5 w-5" :class="accentClasses.icon" aria-hidden="true" />
+        <!-- Left accent bar -->
+        <div class="absolute left-0 top-0 h-full w-1 rounded-l-xl" :class="accentBarClass" />
+
+        <div class="px-5 py-5 pl-6">
+            <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        {{ label }}
+                    </p>
+                    <p class="mt-2 text-3xl font-bold tracking-tight" :class="valueClass">
+                        <slot />
+                    </p>
+                </div>
+                <div
+                    v-if="icon"
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
+                    :class="accentClasses.bg"
+                >
+                    <component
+                        :is="icon"
+                        class="h-5 w-5"
+                        :class="accentClasses.icon"
+                        aria-hidden="true"
+                    />
+                </div>
+            </div>
         </div>
-        <p class="text-sm font-medium text-gray-500">{{ label }}</p>
-        <p class="mt-1 text-3xl font-semibold" :class="valueClass">
-            <slot />
-        </p>
     </div>
 </template>

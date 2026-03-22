@@ -69,6 +69,25 @@ withDefaults(
                         WCAG 2.2 AA accessible for every learner
                     </li>
                 </ul>
+
+                <!-- Mini stat card -->
+                <div
+                    class="decorative mt-10 rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm"
+                >
+                    <p class="text-xs font-semibold uppercase tracking-wider text-blue-200">
+                        Today at UCC
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-2">
+                        <div class="rounded-lg bg-white/10 p-2 text-center">
+                            <p class="text-lg font-bold text-white">847</p>
+                            <p class="text-[10px] text-blue-200">Students</p>
+                        </div>
+                        <div class="rounded-lg bg-white/10 p-2 text-center">
+                            <p class="text-lg font-bold text-white">124</p>
+                            <p class="text-[10px] text-blue-200">Courses</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Bottom: UCC credit -->
@@ -78,25 +97,30 @@ withDefaults(
         </aside>
 
         <!-- RIGHT PANEL — white form area -->
-        <div
-            class="flex flex-1 flex-col items-center justify-center bg-white px-6 py-12 sm:px-10 lg:px-16 min-h-screen"
-        >
-            <!-- Mobile-only logo -->
-            <div class="mb-8 lg:hidden">
-                <Link href="/" aria-label="Go to Eduno homepage">
-                    <ApplicationLogo class="h-14 w-14 fill-current text-blue-600" />
-                </Link>
-            </div>
+        <div class="flex flex-1 flex-col bg-white min-h-screen">
+            <!-- Top gradient accent bar -->
+            <div class="h-1 bg-gradient-to-r from-blue-600 to-cyan-500" aria-hidden="true" />
 
-            <!-- Optional form heading -->
-            <div v-if="title || subtitle" class="mb-8 w-full max-w-md">
-                <h1 v-if="title" class="text-2xl font-bold text-gray-900">{{ title }}</h1>
-                <p v-if="subtitle" class="mt-1 text-sm text-gray-500">{{ subtitle }}</p>
-            </div>
+            <div
+                class="flex flex-1 flex-col items-center justify-center px-6 py-12 sm:px-10 lg:px-16"
+            >
+                <!-- Mobile-only logo -->
+                <div class="mb-8 lg:hidden">
+                    <Link href="/" aria-label="Go to Eduno homepage">
+                        <ApplicationLogo class="h-14 w-14 fill-current text-blue-600" />
+                    </Link>
+                </div>
 
-            <!-- Form slot -->
-            <div class="w-full max-w-md">
-                <slot />
+                <!-- Optional form heading -->
+                <div v-if="title || subtitle" class="mb-8 w-full max-w-md">
+                    <h1 v-if="title" class="text-2xl font-bold text-gray-900">{{ title }}</h1>
+                    <p v-if="subtitle" class="mt-1 text-sm text-gray-500">{{ subtitle }}</p>
+                </div>
+
+                <!-- Form slot -->
+                <div class="w-full max-w-md">
+                    <slot />
+                </div>
             </div>
         </div>
     </div>

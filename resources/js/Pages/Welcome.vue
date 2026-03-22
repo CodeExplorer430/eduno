@@ -70,11 +70,11 @@ defineProps<{
                     aria-hidden="true"
                 />
                 <div
-                    class="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-400 opacity-20 blur-3xl"
+                    class="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-cyan-400 opacity-20 blur-3xl decorative"
                     aria-hidden="true"
                 />
                 <div
-                    class="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-blue-300 opacity-20 blur-3xl"
+                    class="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-blue-300 opacity-20 blur-3xl decorative"
                     aria-hidden="true"
                 />
                 <div class="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
@@ -82,7 +82,8 @@ defineProps<{
                         id="hero-heading"
                         class="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
                     >
-                        Empower Learning at UCC
+                        Empower Learning<br />
+                        <span class="text-gradient">at UCC</span>
                     </h1>
                     <p class="mt-6 text-lg leading-relaxed text-blue-100">
                         Your complete Learning Management System for the University of Caloocan
@@ -110,7 +111,7 @@ defineProps<{
                     <!-- Decorative dashboard preview -->
                     <div
                         aria-hidden="true"
-                        class="decorative mx-auto mt-12 max-w-sm rounded-2xl border border-white/20 bg-white/10 p-5 text-left shadow-xl backdrop-blur-sm ring-1 ring-white/10"
+                        class="animate-float decorative mx-auto mt-12 max-w-sm rounded-2xl border border-white/20 bg-white/10 p-5 text-left shadow-2xl backdrop-blur-sm ring-1 ring-white/10"
                     >
                         <div class="mb-4 grid grid-cols-3 gap-3">
                             <div class="rounded-lg bg-white/15 p-3">
@@ -147,6 +148,26 @@ defineProps<{
                                 <div class="h-1.5 w-[78%] rounded-full bg-cyan-300" />
                             </div>
                         </div>
+                        <div class="mt-4 space-y-2">
+                            <div
+                                class="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2 text-xs text-blue-100"
+                            >
+                                <span>CCS 123 — Final Project</span>
+                                <span
+                                    class="rounded-full bg-amber-400/30 px-2 py-0.5 text-amber-200"
+                                    >Due tomorrow</span
+                                >
+                            </div>
+                            <div
+                                class="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2 text-xs text-blue-100"
+                            >
+                                <span>CCS 221 — Lab Activity 4</span>
+                                <span
+                                    class="rounded-full bg-green-400/30 px-2 py-0.5 text-green-200"
+                                    >Submitted</span
+                                >
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -154,18 +175,18 @@ defineProps<{
             <!-- Stats strip -->
             <div class="border-b border-gray-100 bg-white" aria-label="Platform at a glance">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <dl class="grid grid-cols-3 divide-x divide-gray-100 py-6 text-center">
+                    <dl class="grid grid-cols-3 divide-x divide-gray-100 py-8 text-center">
                         <div class="px-4">
                             <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
                                 Functional Reqs
                             </dt>
-                            <dd class="mt-1 text-3xl font-bold text-gray-900">48</dd>
+                            <dd class="mt-1 text-4xl font-bold text-gray-900">48</dd>
                         </div>
                         <div class="px-4">
                             <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
                                 User Roles
                             </dt>
-                            <dd class="mt-1 text-3xl font-bold text-gray-900">3</dd>
+                            <dd class="mt-1 text-4xl font-bold text-gray-900">3</dd>
                         </div>
                         <div class="px-4">
                             <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
@@ -190,9 +211,9 @@ defineProps<{
                             class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
                         >
                             <div
-                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50"
+                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-sm shadow-blue-200"
                             >
-                                <BookOpenIcon class="h-6 w-6 text-blue-600" aria-hidden="true" />
+                                <BookOpenIcon class="h-6 w-6 text-white" aria-hidden="true" />
                             </div>
                             <h3 class="text-lg font-semibold text-gray-900">Manage Courses</h3>
                             <p class="mt-2 text-sm leading-relaxed text-gray-600">
@@ -207,10 +228,10 @@ defineProps<{
                             class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
                         >
                             <div
-                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-cyan-50"
+                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-sm shadow-cyan-200"
                             >
                                 <ClipboardDocumentListIcon
-                                    class="h-6 w-6 text-cyan-500"
+                                    class="h-6 w-6 text-white"
                                     aria-hidden="true"
                                 />
                             </div>
@@ -229,9 +250,9 @@ defineProps<{
                             class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
                         >
                             <div
-                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50"
+                                class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm shadow-amber-200"
                             >
-                                <ChartBarIcon class="h-6 w-6 text-amber-500" aria-hidden="true" />
+                                <ChartBarIcon class="h-6 w-6 text-white" aria-hidden="true" />
                             </div>
                             <h3 class="text-lg font-semibold text-gray-900">Track Progress</h3>
                             <p class="mt-2 text-sm leading-relaxed text-gray-600">
@@ -239,6 +260,82 @@ defineProps<{
                                 submission status, and course completion at a glance.
                             </p>
                         </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How it works -->
+            <section class="bg-white py-20" aria-labelledby="how-it-works-heading">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <h2
+                        id="how-it-works-heading"
+                        class="text-center text-3xl font-bold text-gray-900"
+                    >
+                        Up and running in minutes
+                    </h2>
+                    <div class="relative mt-12 grid gap-8 sm:grid-cols-3">
+                        <!-- Connector line on desktop -->
+                        <div
+                            class="pointer-events-none absolute top-6 left-1/4 right-1/4 hidden h-px bg-gray-200 sm:block decorative"
+                            aria-hidden="true"
+                        />
+                        <!-- Step 1 -->
+                        <div
+                            v-animateonscroll="{ enterClass: 'animate-fadein' }"
+                            :style="`animation-delay: 0ms`"
+                            class="flex flex-col items-center text-center"
+                        >
+                            <div
+                                class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white shadow-sm"
+                            >
+                                1
+                            </div>
+                            <h3 class="mt-4 text-base font-semibold text-gray-900">
+                                Create your account
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Register with your UCC email and choose your role as a student,
+                                instructor, or admin.
+                            </p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div
+                            v-animateonscroll="{ enterClass: 'animate-fadein' }"
+                            :style="`animation-delay: 100ms`"
+                            class="flex flex-col items-center text-center"
+                        >
+                            <div
+                                class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white shadow-sm"
+                            >
+                                2
+                            </div>
+                            <h3 class="mt-4 text-base font-semibold text-gray-900">
+                                Enroll in courses
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Browse the course catalog and enroll in your sections for the
+                                semester.
+                            </p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div
+                            v-animateonscroll="{ enterClass: 'animate-fadein' }"
+                            :style="`animation-delay: 200ms`"
+                            class="flex flex-col items-center text-center"
+                        >
+                            <div
+                                class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white shadow-sm"
+                            >
+                                3
+                            </div>
+                            <h3 class="mt-4 text-base font-semibold text-gray-900">
+                                Track your progress
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Submit assignments, receive grades, and monitor your performance
+                                from your personalized dashboard.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -253,7 +350,7 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 0ms`"
-                            class="rounded-xl border-l-4 border-blue-600 bg-blue-50/40 p-6 shadow-sm"
+                            class="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                         >
                             <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
                                 <AcademicCapIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
@@ -270,7 +367,7 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 100ms`"
-                            class="rounded-xl border-l-4 border-cyan-500 bg-cyan-50/40 p-6 shadow-sm"
+                            class="rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                         >
                             <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
                                 <UsersIcon class="h-5 w-5 text-cyan-500" aria-hidden="true" />
@@ -287,7 +384,7 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 200ms`"
-                            class="rounded-xl border-l-4 border-amber-500 bg-amber-50/40 p-6 shadow-sm"
+                            class="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                         >
                             <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
                                 <Cog6ToothIcon class="h-5 w-5 text-amber-500" aria-hidden="true" />
@@ -307,7 +404,7 @@ defineProps<{
             <!-- CTA Banner -->
             <section
                 v-animateonscroll="{ enterClass: 'animate-fadein' }"
-                class="bg-gradient-to-r from-blue-600 to-cyan-600 py-16 text-white"
+                class="bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 py-16 text-white"
                 aria-labelledby="cta-heading"
             >
                 <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">

@@ -35,7 +35,16 @@ class CourseController extends Controller
         return Inertia::render('Admin/Courses/Index', [
             'courses' => $courses,
             'filters' => ['status' => $status],
-            'statuses' => CourseStatus::cases(),
+            'statuses' => array_map(
+                fn ($c) => ['name' => ucfirst($c->value), 'value' => $c->value],
+                CourseStatus::cases()
+            ),
+            'summary' => [
+                'total'     => Course::count(),
+                'draft'     => Course::where('status', 'draft')->count(),
+                'published' => Course::where('status', 'published')->count(),
+                'archived'  => Course::where('status', 'archived')->count(),
+            ],
         ]);
     }
 

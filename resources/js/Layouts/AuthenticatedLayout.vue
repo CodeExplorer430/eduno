@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, onMounted } from 'vue';
 import type { Component } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NotificationBell from '@/Components/NotificationBell.vue';
@@ -18,6 +18,8 @@ import {
     Cog6ToothIcon,
     ArrowRightOnRectangleIcon,
     UserCircleIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
 } from '@heroicons/vue/24/outline';
 import type { PageProps } from '@/types';
 
@@ -27,6 +29,16 @@ const userRole = computed(() => page.props.auth?.user?.role);
 const features = computed(() => page.props.features);
 
 const sidebarOpen = ref(false);
+const sidebarCollapsed = ref(false); // SSR-safe default
+
+onMounted(() => {
+    sidebarCollapsed.value = localStorage.getItem('eduno:sidebar-collapsed') === 'true';
+});
+
+function toggleCollapse(): void {
+    sidebarCollapsed.value = !sidebarCollapsed.value;
+    localStorage.setItem('eduno:sidebar-collapsed', String(sidebarCollapsed.value));
+}
 
 interface NavItem {
     label: string;
@@ -162,15 +174,22 @@ watchEffect(() => {
             id="sidebar"
             aria-label="Main navigation"
             :class="[
-                'fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-slate-800 transition-transform duration-300 ease-in-out',
+                'fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-800 transition-all duration-300 ease-in-out',
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+                sidebarCollapsed ? 'lg:w-16' : 'lg:w-64',
+                'w-64',
             ]"
         >
             <!-- Logo row -->
             <div class="flex h-16 shrink-0 items-center justify-between px-4">
-                <Link :href="route('dashboard')" class="flex items-center gap-2">
-                    <ApplicationLogo class="h-8 w-auto fill-current text-white" />
-                    <span class="text-lg font-bold text-white">Eduno</span>
+                <Link :href="route('dashboard')" class="flex items-center gap-2 overflow-hidden">
+                    <ApplicationLogo class="h-8 w-8 shrink-0 fill-current text-white" />
+                    <span
+                        class="overflow-hidden text-lg font-bold text-white transition-all duration-300"
+                        :class="sidebarCollapsed ? 'lg:hidden' : 'lg:block'"
+                    >
+                        Eduno
+                    </span>
                 </Link>
                 <button
                     type="button"
@@ -183,14 +202,16 @@ watchEffect(() => {
             </div>
 
             <!-- Navigation links -->
-            <nav class="flex-1 overflow-y-auto px-3 py-4">
-                <ul role="list" class="space-y-1">
+            <nav class="flex flex-1 flex-col overflow-y-auto px-3 py-4">
+                <ul role="list" class="flex-1 space-y-1">
                     <li v-for="item in navItems" :key="item.label">
                         <Link
                             :href="item.href"
+                            :title="sidebarCollapsed ? item.label : undefined"
                             :aria-current="route().current(item.routeName) ? 'page' : undefined"
                             :class="[
-                                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                                'flex items-center rounded-md py-2 text-sm font-medium transition-colors',
+                                sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
                                 route().current(item.routeName)
                                     ? 'bg-blue-600 text-white'
                                     : 'text-slate-300 hover:bg-slate-700 hover:text-white',
@@ -201,15 +222,34 @@ watchEffect(() => {
                                 class="h-5 w-5 shrink-0"
                                 aria-hidden="true"
                             />
-                            {{ item.label }}
+                            <span :class="sidebarCollapsed ? 'lg:hidden' : ''">{{
+                                item.label
+                            }}</span>
                         </Link>
                     </li>
                 </ul>
+
+                <!-- Collapse toggle (desktop only) -->
+                <div class="hidden px-3 py-2 lg:block">
+                    <button
+                        type="button"
+                        class="flex w-full items-center justify-center rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                        :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                        @click="toggleCollapse"
+                    >
+                        <ChevronLeftIcon
+                            v-if="!sidebarCollapsed"
+                            class="h-4 w-4"
+                            aria-hidden="true"
+                        />
+                        <ChevronRightIcon v-else class="h-4 w-4" aria-hidden="true" />
+                    </button>
+                </div>
             </nav>
 
             <!-- User section -->
             <div class="shrink-0 border-t border-slate-700 px-3 py-4">
-                <div class="mb-3 px-3">
+                <div class="mb-3 px-3" :class="sidebarCollapsed ? 'lg:hidden' : ''">
                     <p class="text-sm font-medium text-white">
                         {{ $page.props.auth.user.name }}
                     </p>
@@ -221,19 +261,27 @@ watchEffect(() => {
                     <li>
                         <Link
                             :href="route('profile.edit')"
-                            class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white"
+                            :title="sidebarCollapsed ? 'Profile' : undefined"
+                            :class="[
+                                'flex items-center rounded-md py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white',
+                                sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
+                            ]"
                         >
                             <UserCircleIcon class="h-5 w-5 shrink-0" aria-hidden="true" />
-                            Profile
+                            <span :class="sidebarCollapsed ? 'lg:hidden' : ''">Profile</span>
                         </Link>
                     </li>
                     <li>
                         <Link
                             :href="route('profile.accessibility.edit')"
-                            class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white"
+                            :title="sidebarCollapsed ? 'Accessibility' : undefined"
+                            :class="[
+                                'flex items-center rounded-md py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white',
+                                sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
+                            ]"
                         >
                             <Cog6ToothIcon class="h-5 w-5 shrink-0" aria-hidden="true" />
-                            Accessibility
+                            <span :class="sidebarCollapsed ? 'lg:hidden' : ''">Accessibility</span>
                         </Link>
                     </li>
                     <li>
@@ -241,13 +289,17 @@ watchEffect(() => {
                             :href="route('logout')"
                             method="post"
                             as="button"
-                            class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white"
+                            :title="sidebarCollapsed ? 'Log Out' : undefined"
+                            :class="[
+                                'flex w-full items-center rounded-md py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white',
+                                sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
+                            ]"
                         >
                             <ArrowRightOnRectangleIcon
                                 class="h-5 w-5 shrink-0"
                                 aria-hidden="true"
                             />
-                            Log Out
+                            <span :class="sidebarCollapsed ? 'lg:hidden' : ''">Log Out</span>
                         </Link>
                     </li>
                 </ul>
@@ -263,7 +315,12 @@ watchEffect(() => {
         />
 
         <!-- Content area (offset by sidebar on lg+) -->
-        <div class="flex flex-col lg:pl-64">
+        <div
+            :class="[
+                'flex flex-col transition-all duration-300',
+                sidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64',
+            ]"
+        >
             <!-- Top header -->
             <header
                 class="sticky top-0 z-30 flex h-16 items-center gap-4 bg-white px-4 shadow-sm sm:px-6"

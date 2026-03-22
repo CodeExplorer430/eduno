@@ -24,6 +24,7 @@ export default {
                 'dashboard',
                 'seeder',
                 'factory',
+                'ui',
             ],
         ],
         'type-enum': [

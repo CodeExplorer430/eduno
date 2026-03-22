@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import InputText from 'primevue/inputtext';
 import InputError from '@/Components/InputError.vue';
-import Button from 'primevue/button';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Section {
@@ -49,97 +47,95 @@ const submit = (): void => {
             </nav>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden rounded-lg bg-white shadow-sm">
-                    <div class="border-b border-gray-100 px-6 py-4">
-                        <h1 class="font-semibold text-gray-800">Add Module</h1>
-                    </div>
-
-                    <div
-                        v-if="form.hasErrors"
-                        role="alert"
-                        class="border-b border-red-100 bg-red-50 px-6 py-3 text-sm text-red-700"
-                    >
-                        Please fix the errors below.
-                    </div>
-
-                    <form class="space-y-5 px-6 py-6" @submit.prevent="submit">
-                        <div>
-                            <InputLabel for="title" value="Title" />
-                            <InputText
-                                id="title"
-                                v-model="form.title"
-                                type="text"
-                                class="mt-1 block w-full"
-                                :aria-describedby="form.errors.title ? 'title-error' : undefined"
-                                required
-                                autofocus
-                            />
-                            <InputError
-                                id="title-error"
-                                :message="form.errors.title"
-                                class="mt-1"
-                            />
-                        </div>
-
-                        <div>
-                            <InputLabel for="description" value="Description (optional)" />
-                            <textarea
-                                id="description"
-                                v-model="form.description"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                rows="3"
-                                :aria-describedby="
-                                    form.errors.description ? 'description-error' : undefined
-                                "
-                            />
-                            <InputError
-                                id="description-error"
-                                :message="form.errors.description"
-                                class="mt-1"
-                            />
-                        </div>
-
-                        <div>
-                            <InputLabel for="order_no" value="Order" />
-                            <input
-                                id="order_no"
-                                v-model.number="form.order_no"
-                                type="number"
-                                min="0"
-                                class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                :aria-describedby="form.errors.order_no ? 'order-error' : undefined"
-                                required
-                            />
-                            <InputError
-                                id="order-error"
-                                :message="form.errors.order_no"
-                                class="mt-1"
-                            />
-                        </div>
-
-                        <div class="flex items-center gap-3">
-                            <input
-                                id="published"
-                                v-model="form.published"
-                                type="checkbox"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            />
-                            <InputLabel for="published" value="Publish immediately" class="mb-0" />
-                        </div>
-
-                        <div class="flex items-center justify-end gap-4 pt-2">
-                            <Link
-                                :href="route('instructor.courses.modules.index', section.id)"
-                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                            >
-                                Cancel
-                            </Link>
-                            <Button type="submit" :disabled="form.processing">Save Module</Button>
-                        </div>
-                    </form>
+        <div class="mx-auto max-w-xl px-4 py-8 sm:px-6 lg:px-8">
+            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
+                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                    <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
+                    <h1 class="font-semibold text-gray-900">Add Module</h1>
                 </div>
+
+                <div
+                    v-if="form.hasErrors"
+                    role="alert"
+                    class="border-b border-red-100 bg-red-50 px-6 py-3 text-sm text-red-700"
+                >
+                    Please fix the errors below.
+                </div>
+
+                <form class="space-y-5 px-6 py-6" @submit.prevent="submit">
+                    <div>
+                        <InputLabel for="title" value="Title" />
+                        <input
+                            id="title"
+                            v-model="form.title"
+                            type="text"
+                            class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            :aria-describedby="form.errors.title ? 'title-error' : undefined"
+                            required
+                            autofocus
+                        />
+                        <InputError id="title-error" :message="form.errors.title" class="mt-1" />
+                    </div>
+
+                    <div>
+                        <InputLabel for="description" value="Description (optional)" />
+                        <textarea
+                            id="description"
+                            v-model="form.description"
+                            class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows="3"
+                            :aria-describedby="
+                                form.errors.description ? 'description-error' : undefined
+                            "
+                        />
+                        <InputError
+                            id="description-error"
+                            :message="form.errors.description"
+                            class="mt-1"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel for="order_no" value="Order" />
+                        <input
+                            id="order_no"
+                            v-model.number="form.order_no"
+                            type="number"
+                            min="0"
+                            class="mt-1 block w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            :aria-describedby="form.errors.order_no ? 'order-error' : undefined"
+                            required
+                        />
+                        <InputError id="order-error" :message="form.errors.order_no" class="mt-1" />
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <input
+                            id="published"
+                            v-model="form.published"
+                            type="checkbox"
+                            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <InputLabel for="published" value="Publish immediately" class="mb-0" />
+                    </div>
+
+                    <div class="flex items-center justify-end gap-4 border-t border-gray-100 pt-4">
+                        <Link
+                            :href="route('instructor.courses.modules.index', section.id)"
+                            class="rounded text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Cancel
+                        </Link>
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
+                        >
+                            <span v-if="form.processing">Saving&hellip;</span>
+                            <span v-else>Save Module</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </AuthenticatedLayout>
