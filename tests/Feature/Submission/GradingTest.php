@@ -284,6 +284,7 @@ test('another instructor cannot release a grade', function (): void {
         ->assertForbidden();
 });
 
+
 test('score above max_score is rejected on store', function (): void {
     [$instructor, , $submission] = makeGradingSetup();
 
