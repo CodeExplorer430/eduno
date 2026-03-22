@@ -23,7 +23,24 @@ class GradeReleasedNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'mail'];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function toDatabase(object $notifiable): array
+    {
+        $assignment = $this->grade->submission->assignment;
+        $title = $assignment->title;
+        $score = (string) $this->grade->score;
+        $max = (string) $assignment->max_score;
+
+        return [
+            'message' => "Your grade for \"{$title}\" has been released: {$score}/{$max}",
+            'url'     => route('student.submissions.show', $this->grade->submission_id),
+            'type'    => 'grade_released',
+        ];
     }
 
     public function toMail(object $notifiable): MailMessage
