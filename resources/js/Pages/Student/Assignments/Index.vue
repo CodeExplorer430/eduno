@@ -46,12 +46,13 @@ defineProps<{
                         </div>
                     </div>
 
-                    <EmptyState
-                        v-else
-                        :icon="ClipboardDocumentListIcon"
-                        title="No assignments found."
-                        description="Your instructors have not published any assignments yet."
-                    />
+                    <section v-else aria-label="Empty state">
+                        <EmptyState
+                            :icon="ClipboardDocumentListIcon"
+                            title="No assignments found."
+                            description="Your instructors have not published any assignments yet."
+                        />
+                    </section>
                 </main>
             </div>
         </div>

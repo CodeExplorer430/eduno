@@ -90,7 +90,7 @@ const greeting = computed(() => {
                     <!-- Stats -->
                     <section aria-labelledby="student-stats-heading">
                         <h2 id="student-stats-heading" class="sr-only">Your statistics</h2>
-                        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                             <StatCard
                                 label="Enrolled Courses"
                                 :icon="BookOpenIcon"
@@ -118,7 +118,7 @@ const greeting = computed(() => {
                                 </template>
                                 <span v-else class="text-lg text-gray-400">None yet</span>
                             </StatCard>
-                        </dl>
+                        </div>
                     </section>
 
                     <!-- Upcoming Assignments -->
@@ -218,7 +218,7 @@ const greeting = computed(() => {
                     <!-- Stats -->
                     <section aria-labelledby="instructor-stats-heading">
                         <h2 id="instructor-stats-heading" class="sr-only">Your statistics</h2>
-                        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <StatCard
                                 label="Course Sections"
                                 :icon="BookOpenIcon"
@@ -236,7 +236,7 @@ const greeting = computed(() => {
                             >
                                 {{ (props as InstructorProps).pending_submissions_count }}
                             </StatCard>
-                        </dl>
+                        </div>
                     </section>
 
                     <!-- Upcoming Deadlines -->
@@ -325,7 +325,7 @@ const greeting = computed(() => {
                     <!-- Stats -->
                     <section aria-labelledby="admin-stats-heading">
                         <h2 id="admin-stats-heading" class="sr-only">System statistics</h2>
-                        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                             <StatCard
                                 label="Total Courses"
                                 :icon="BookOpenIcon"
@@ -351,7 +351,7 @@ const greeting = computed(() => {
                             >
                                 {{ (props as AdminProps).total_grades_released }}
                             </StatCard>
-                        </dl>
+                        </div>
                     </section>
 
                     <!-- Users by Role -->

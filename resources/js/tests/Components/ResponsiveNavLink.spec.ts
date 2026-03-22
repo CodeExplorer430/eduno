@@ -27,7 +27,7 @@ describe('ResponsiveNavLink', () => {
             global: globalOpts,
         });
         const anchor = wrapper.find('a');
-        expect(anchor.classes()).toContain('border-blue-400');
+        expect(anchor.classes()).toContain('border-blue-500');
         expect(anchor.classes()).toContain('bg-blue-50');
     });
 

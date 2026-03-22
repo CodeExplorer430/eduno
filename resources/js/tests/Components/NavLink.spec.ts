@@ -26,7 +26,7 @@ describe('NavLink', () => {
             slots: { default: 'Dashboard' },
             global: globalOpts,
         });
-        expect(wrapper.find('a').classes()).toContain('border-blue-400');
+        expect(wrapper.find('a').classes()).toContain('border-blue-500');
     });
 
     it('applies transparent border class when active prop is false', () => {

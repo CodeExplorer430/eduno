@@ -38,9 +38,9 @@ const accentClasses = computed(() => {
         >
             <component :is="icon" class="h-5 w-5" :class="accentClasses.icon" aria-hidden="true" />
         </div>
-        <dt class="text-sm font-medium text-gray-500">{{ label }}</dt>
-        <dd class="mt-1 text-3xl font-semibold" :class="valueClass">
+        <p class="text-sm font-medium text-gray-500">{{ label }}</p>
+        <p class="mt-1 text-3xl font-semibold" :class="valueClass">
             <slot />
-        </dd>
+        </p>
     </div>
 </template>
