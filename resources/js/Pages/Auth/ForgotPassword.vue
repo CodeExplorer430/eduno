@@ -3,7 +3,7 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import IconInput from '@/Components/IconInput.vue';
-import Button from 'primevue/button';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { EnvelopeIcon } from '@heroicons/vue/24/outline';
 
@@ -21,7 +21,10 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout
+        title="Forgot your password?"
+        subtitle="Enter your email and we'll send a reset link"
+    >
         <Head title="Forgot Password" />
 
         <div class="mb-4 text-sm text-gray-600">
@@ -52,10 +55,14 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex items-center justify-end">
-                <Button type="submit" :disabled="form.processing" :aria-busy="form.processing">
+                <PrimaryButton
+                    type="submit"
+                    :disabled="form.processing"
+                    :aria-busy="form.processing"
+                >
                     <span v-if="form.processing">Sending&hellip;</span>
                     <span v-else>Email Password Reset Link</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

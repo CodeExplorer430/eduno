@@ -44,7 +44,7 @@ const stubs = {
     },
     Checkbox: { template: '<input type="checkbox" />' },
     PrimeCheckbox: { template: '<input type="checkbox" />' },
-    Button: {
+    PrimaryButton: {
         template:
             '<button type="submit" :disabled="disabled" :aria-busy="ariaBusy"><slot /></button>',
         props: ['disabled', 'ariaBusy'],

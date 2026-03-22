@@ -3,7 +3,7 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import IconInput from '@/Components/IconInput.vue';
-import Button from 'primevue/button';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LockClosedIcon } from '@heroicons/vue/24/outline';
 
@@ -21,7 +21,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout title="Confirm your password" subtitle="Re-enter your password to continue">
         <Head title="Confirm Password" />
 
         <div class="mb-4 text-sm text-gray-600">
@@ -47,7 +47,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex justify-end">
-                <Button
+                <PrimaryButton
                     type="submit"
                     class="ms-4"
                     :disabled="form.processing"
@@ -55,7 +55,7 @@ const submit = () => {
                 >
                     <span v-if="form.processing">Confirming&hellip;</span>
                     <span v-else>Confirm</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

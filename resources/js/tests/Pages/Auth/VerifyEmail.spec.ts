@@ -30,7 +30,7 @@ const stubs = {
     Head: true,
     GuestLayout: { template: '<div><slot /></div>' },
     Link: { template: '<a href="#"><slot /></a>' },
-    Button: {
+    PrimaryButton: {
         template:
             '<button type="submit" :disabled="disabled" :aria-busy="ariaBusy"><slot /></button>',
         props: ['disabled', 'ariaBusy'],

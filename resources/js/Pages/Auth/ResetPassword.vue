@@ -3,7 +3,7 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import IconInput from '@/Components/IconInput.vue';
-import Button from 'primevue/button';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
@@ -29,7 +29,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout title="Set a new password" subtitle="Choose a strong password for your account">
         <Head title="Reset Password" />
 
         <form @submit.prevent="submit">
@@ -87,10 +87,14 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex items-center justify-end">
-                <Button type="submit" :disabled="form.processing" :aria-busy="form.processing">
+                <PrimaryButton
+                    type="submit"
+                    :disabled="form.processing"
+                    :aria-busy="form.processing"
+                >
                     <span v-if="form.processing">Resetting&hellip;</span>
                     <span v-else>Reset Password</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

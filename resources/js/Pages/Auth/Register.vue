@@ -3,7 +3,7 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import IconInput from '@/Components/IconInput.vue';
-import Button from 'primevue/button';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { UserIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
@@ -24,7 +24,10 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout
+        title="Create your account"
+        subtitle="Join Eduno at the University of Caloocan City"
+    >
         <Head title="Register" />
 
         <form @submit.prevent="submit">
@@ -109,7 +112,7 @@ const submit = () => {
                     Already registered?
                 </Link>
 
-                <Button
+                <PrimaryButton
                     type="submit"
                     class="ms-4"
                     :disabled="form.processing"
@@ -117,7 +120,7 @@ const submit = () => {
                 >
                     <span v-if="form.processing">Registering&hellip;</span>
                     <span v-else>Register</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

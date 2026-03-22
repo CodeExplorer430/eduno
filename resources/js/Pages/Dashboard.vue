@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import StatCard from '@/Components/StatCard.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import type { PageProps } from '@/types';
 import {
     BookOpenIcon,
     ClipboardDocumentListIcon,
@@ -52,6 +54,15 @@ type DashboardProps = StudentProps | InstructorProps | AdminProps;
 const props = defineProps<DashboardProps>();
 
 const { formatDate } = useFormatDate();
+
+const page = usePage<PageProps>();
+const userName = computed(() => page.props.auth?.user?.name ?? '');
+const greeting = computed(() => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good morning';
+    if (h < 17) return 'Good afternoon';
+    return 'Good evening';
+});
 </script>
 
 <template>
@@ -63,6 +74,16 @@ const { formatDate } = useFormatDate();
         </template>
 
         <div class="py-12">
+            <!-- Greeting banner -->
+            <div class="mx-auto mb-8 max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div
+                    class="rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-6 text-white shadow-sm"
+                >
+                    <p class="text-xl font-semibold">{{ greeting }}, {{ userName }}!</p>
+                    <p class="mt-1 text-sm text-white/80">Here's your Eduno overview.</p>
+                </div>
+            </div>
+
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <!-- Student Dashboard -->
                 <div v-if="props.role === 'student'" class="space-y-8">

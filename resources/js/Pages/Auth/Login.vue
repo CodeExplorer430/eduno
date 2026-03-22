@@ -3,7 +3,7 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import IconInput from '@/Components/IconInput.vue';
-import Button from 'primevue/button';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import PrimeCheckbox from 'primevue/checkbox';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
@@ -29,7 +29,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout title="Welcome back" subtitle="Sign in to your Eduno account">
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
@@ -101,7 +101,7 @@ const submit = () => {
                     Forgot your password?
                 </Link>
 
-                <Button
+                <PrimaryButton
                     type="submit"
                     class="ms-4"
                     :disabled="form.processing"
@@ -109,7 +109,7 @@ const submit = () => {
                 >
                     <span v-if="form.processing">Logging in&hellip;</span>
                     <span v-else>Log in</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

@@ -106,11 +106,79 @@ defineProps<{
                             <ArrowRightIcon class="h-4 w-4" aria-hidden="true" />
                         </Link>
                     </div>
+
+                    <!-- Decorative dashboard preview -->
+                    <div
+                        aria-hidden="true"
+                        class="decorative mx-auto mt-12 max-w-sm rounded-2xl border border-white/20 bg-white/10 p-5 text-left shadow-xl backdrop-blur-sm ring-1 ring-white/10"
+                    >
+                        <div class="mb-4 grid grid-cols-3 gap-3">
+                            <div class="rounded-lg bg-white/15 p-3">
+                                <p
+                                    class="text-[10px] font-medium uppercase tracking-wider text-blue-200"
+                                >
+                                    Courses
+                                </p>
+                                <p class="mt-1 text-xl font-bold text-white">12</p>
+                            </div>
+                            <div class="rounded-lg bg-white/15 p-3">
+                                <p
+                                    class="text-[10px] font-medium uppercase tracking-wider text-blue-200"
+                                >
+                                    Due Soon
+                                </p>
+                                <p class="mt-1 text-xl font-bold text-white">5</p>
+                            </div>
+                            <div class="rounded-lg bg-white/15 p-3">
+                                <p
+                                    class="text-[10px] font-medium uppercase tracking-wider text-blue-200"
+                                >
+                                    Grade
+                                </p>
+                                <p class="mt-1 text-xl font-bold text-white">94%</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-1 flex justify-between text-[10px] text-blue-200">
+                                <span>Course Progress</span>
+                                <span>78%</span>
+                            </div>
+                            <div class="h-1.5 w-full rounded-full bg-white/20">
+                                <div class="h-1.5 w-[78%] rounded-full bg-cyan-300" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- Stats strip -->
+            <div class="border-b border-gray-100 bg-white" aria-label="Platform at a glance">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <dl class="grid grid-cols-3 divide-x divide-gray-100 py-6 text-center">
+                        <div class="px-4">
+                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
+                                Functional Reqs
+                            </dt>
+                            <dd class="mt-1 text-3xl font-bold text-gray-900">48</dd>
+                        </div>
+                        <div class="px-4">
+                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
+                                User Roles
+                            </dt>
+                            <dd class="mt-1 text-3xl font-bold text-gray-900">3</dd>
+                        </div>
+                        <div class="px-4">
+                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
+                                Accessibility
+                            </dt>
+                            <dd class="mt-1 text-3xl font-bold text-blue-600">WCAG 2.2 AA</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
             <!-- Features -->
-            <section class="bg-white py-20" aria-labelledby="features-heading">
+            <section class="bg-slate-50 py-20" aria-labelledby="features-heading">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <h2 id="features-heading" class="text-center text-3xl font-bold text-gray-900">
                         Everything you need in one platform
