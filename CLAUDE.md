@@ -6,7 +6,7 @@ Governing AI instructions for Claude Code on the Eduno project.
 
 ## Project Identity
 
-**Eduno** is a web-based Learning Management System for the University of Caloocan City (UCC), built as an academic case study for CCS 123: Introduction to Human-Computer Interaction.
+**Eduno** is a standalone, SaaS-style web-based Learning Management System for schools, teams, and organizations — built as an academic case study for CCS 123: Introduction to Human-Computer Interaction.
 
 | Layer | Technology |
 |---|---|

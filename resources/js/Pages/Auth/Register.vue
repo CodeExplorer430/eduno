@@ -24,10 +24,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout
-        title="Create your account"
-        subtitle="Join Eduno at the University of Caloocan City"
-    >
+    <GuestLayout title="Create your account" subtitle="Start learning with Eduno today">
         <Head title="Register" />
 
         <form @submit.prevent="submit">

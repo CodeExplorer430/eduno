@@ -42,9 +42,9 @@ withDefaults(
 
             <!-- Middle: tagline + feature bullets -->
             <div class="relative z-10">
-                <h2 class="text-3xl font-bold leading-snug">Empower Learning<br />at UCC</h2>
+                <h2 class="text-3xl font-bold leading-snug">Empower Learning<br />Everywhere</h2>
                 <p class="mt-3 text-sm text-blue-100 leading-relaxed">
-                    Your complete LMS for the University of Caloocan City.
+                    The modern LMS for schools, teams, and organizations.
                 </p>
                 <ul class="mt-8 space-y-3 text-sm text-blue-50" role="list">
                     <li class="flex items-start gap-3">
@@ -75,7 +75,7 @@ withDefaults(
                     class="decorative mt-10 rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm"
                 >
                     <p class="text-xs font-semibold uppercase tracking-wider text-blue-200">
-                        Today at UCC
+                        Today on Eduno
                     </p>
                     <div class="mt-3 grid grid-cols-2 gap-2">
                         <div class="rounded-lg bg-white/10 p-2 text-center">
@@ -90,9 +90,8 @@ withDefaults(
                 </div>
             </div>
 
-            <!-- Bottom: UCC credit -->
             <p class="relative z-10 text-xs text-blue-200">
-                A CCS 123 project · University of Caloocan City
+                Eduno · Modern Learning Management System
             </p>
         </aside>
 

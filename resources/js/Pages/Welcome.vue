@@ -83,12 +83,12 @@ defineProps<{
                         class="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
                     >
                         Empower Learning<br />
-                        <span class="text-gradient">at UCC</span>
+                        <span class="text-gradient">Everywhere</span>
                     </h1>
                     <p class="mt-6 text-lg leading-relaxed text-blue-100">
-                        Your complete Learning Management System for the University of Caloocan
-                        City. Manage courses, submit assignments, and track your progress — all in
-                        one place.
+                        The modern Learning Management System for schools, teams, and organizations.
+                        Manage courses, submit assignments, and track your progress — all in one
+                        place.
                     </p>
                     <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                         <Link
@@ -294,7 +294,7 @@ defineProps<{
                                 Create your account
                             </h3>
                             <p class="mt-2 text-sm text-gray-600">
-                                Register with your UCC email and choose your role as a student,
+                                Register with your email and choose your role as a student,
                                 instructor, or admin.
                             </p>
                         </div>
@@ -410,7 +410,7 @@ defineProps<{
                 <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
                     <h2 id="cta-heading" class="text-3xl font-bold">Ready to get started?</h2>
                     <p class="mt-4 text-lg text-blue-100">
-                        Join students and instructors at the University of Caloocan City on Eduno.
+                        Join thousands of students and instructors already learning on Eduno.
                     </p>
                     <Link
                         v-if="canRegister"
@@ -425,7 +425,7 @@ defineProps<{
 
         <!-- Footer -->
         <footer class="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500">
-            <p>© 2026 University of Caloocan City · Eduno LMS</p>
+            <p>© 2026 Eduno LMS</p>
             <p class="mt-1 text-xs text-gray-400">Empowering Learners, Inspiring Excellence</p>
         </footer>
     </div>
