@@ -22,7 +22,7 @@ const label = computed(() =>
         <span
             v-if="count > 0"
             aria-hidden="true"
-            class="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
+            class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
             >{{ count > 9 ? '9+' : count }}</span
         >
     </Link>

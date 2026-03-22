@@ -16,9 +16,9 @@ class CourseController extends Controller
     {
         $sections = $request->user()
             ->enrollments()
-            ->with(['courseSection.course', 'courseSection.instructor'])
+            ->with(['section.course', 'section.instructor'])
             ->get()
-            ->pluck('courseSection');
+            ->pluck('section');
 
         return Inertia::render('Student/Courses/Index', [
             'sections' => $sections,

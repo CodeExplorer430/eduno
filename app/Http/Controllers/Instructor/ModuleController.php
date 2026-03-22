@@ -26,6 +26,7 @@ class ModuleController extends Controller
             'course',
             'modules' => fn ($q) => $q->orderBy('order_no'),
             'modules.lessons' => fn ($q) => $q->orderBy('order_no'),
+            'modules.lessons.resources',
         ]);
 
         return Inertia::render('Instructor/Modules/Index', [

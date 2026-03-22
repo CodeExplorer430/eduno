@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect, onMounted } from 'vue';
+import { ref, computed, watchEffect, onMounted, watch } from 'vue';
 import type { Component } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NotificationBell from '@/Components/NotificationBell.vue';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import { Link, usePage } from '@inertiajs/vue3';
 import {
     HomeIcon,
@@ -27,6 +29,7 @@ const page = usePage<PageProps>();
 const prefs = computed(() => page.props.userPrefs);
 const userRole = computed(() => page.props.auth?.user?.role);
 const features = computed(() => page.props.features);
+const toast = useToast();
 
 const sidebarOpen = ref(false);
 const sidebarCollapsed = ref(false); // SSR-safe default
@@ -102,7 +105,7 @@ const navItems = computed<NavItem[]>(() => {
             },
             {
                 label: 'Submissions',
-                href: safeRoute('instructor.submissions.index'),
+                href: safeRoute('instructor.submissions.all'),
                 icon: DocumentTextIcon,
                 routeName: 'instructor.submissions.*',
             },
@@ -144,6 +147,26 @@ const navItems = computed<NavItem[]>(() => {
     ];
 });
 
+watch(
+    () => page.props.flash as Record<string, string> | undefined,
+    (flash) => {
+        if (!flash) return;
+        if (flash.success)
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: flash.success,
+                life: 3500,
+            });
+        if (flash.error)
+            toast.add({ severity: 'error', summary: 'Error', detail: flash.error, life: 5000 });
+        if (flash.info)
+            toast.add({ severity: 'info', summary: 'Info', detail: flash.info, life: 3500 });
+        if (flash.warning)
+            toast.add({ severity: 'warn', summary: 'Warning', detail: flash.warning, life: 4000 });
+    }
+);
+
 watchEffect(() => {
     const html = document.documentElement;
     const p = prefs.value;
@@ -161,6 +184,8 @@ watchEffect(() => {
 
 <template>
     <div>
+        <Toast position="top-right" />
+
         <!-- Skip link — first focusable element -->
         <a
             href="#main-content"
@@ -341,9 +366,33 @@ watchEffect(() => {
             </header>
 
             <!-- Page content -->
-            <main id="main-content" class="flex-1 bg-slate-50">
+            <main
+                id="main-content"
+                class="flex-1 min-w-0 overflow-x-hidden bg-slate-50 pb-16 lg:pb-0"
+            >
                 <slot />
             </main>
         </div>
+
+        <!-- Mobile bottom navigation -->
+        <nav
+            aria-label="Mobile bottom navigation"
+            class="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-stretch bg-slate-800 lg:hidden"
+            style="padding-bottom: env(safe-area-inset-bottom)"
+        >
+            <Link
+                v-for="item in navItems.slice(0, 4)"
+                :key="item.label"
+                :href="item.href"
+                :aria-current="route().current(item.routeName) ? 'page' : undefined"
+                :class="[
+                    'flex flex-1 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors',
+                    route().current(item.routeName) ? 'text-blue-400' : 'text-slate-400',
+                ]"
+            >
+                <component :is="item.icon" class="h-5 w-5 shrink-0" aria-hidden="true" />
+                <span>{{ item.label }}</span>
+            </Link>
+        </nav>
     </div>
 </template>

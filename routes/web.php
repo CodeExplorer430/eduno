@@ -142,6 +142,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('courses.assignments', Instructor\AssignmentController::class)
             ->shallow()
             ->parameters(['courses' => 'section']);
+        Route::get('/submissions', [Instructor\SubmissionController::class, 'all'])
+            ->name('submissions.all');
         Route::get('/assignments/{assignment}/submissions', [Instructor\SubmissionController::class, 'index'])
             ->name('submissions.index');
         Route::get('/assignments/{assignment}/submissions/export', [Instructor\SubmissionController::class, 'export'])

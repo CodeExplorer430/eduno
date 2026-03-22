@@ -55,6 +55,13 @@ function scoreBarClass(pct: number): string {
     return 'bg-red-500';
 }
 
+function gradeBadgeClass(pct: number): string {
+    if (pct >= 90) return 'bg-green-100 text-green-700';
+    if (pct >= 75) return 'bg-blue-100 text-blue-700';
+    if (pct >= 60) return 'bg-amber-100 text-amber-700';
+    return 'bg-red-100 text-red-700';
+}
+
 function gradeLetter(pct: number): string {
     if (pct >= 93) return 'A';
     if (pct >= 90) return 'A−';
@@ -108,9 +115,64 @@ function gradeLetter(pct: number): string {
                     description="Grades will appear here once your instructor releases them."
                 />
 
+                <!-- Mobile card list -->
+                <ul v-else class="block sm:hidden space-y-3" aria-label="My grades">
+                    <li
+                        v-for="grade in grades"
+                        :key="grade.id"
+                        class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                    >
+                        <p class="text-sm font-semibold text-gray-900">
+                            {{ grade.submission?.assignment?.course_section?.course?.title ?? '—' }}
+                            <span class="font-normal text-gray-400 text-xs ml-1">
+                                {{
+                                    grade.submission?.assignment?.course_section?.section_name ?? ''
+                                }}
+                            </span>
+                        </p>
+                        <p class="mt-0.5 text-sm text-gray-600">
+                            {{ grade.submission?.assignment?.title ?? '—' }}
+                        </p>
+                        <div class="mt-2 flex items-center gap-3">
+                            <span
+                                class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                                :class="
+                                    gradeBadgeClass(
+                                        scorePercent(
+                                            grade.score,
+                                            grade.submission?.assignment?.max_score
+                                        )
+                                    )
+                                "
+                            >
+                                {{
+                                    gradeLetter(
+                                        scorePercent(
+                                            grade.score,
+                                            grade.submission?.assignment?.max_score
+                                        )
+                                    )
+                                }}
+                            </span>
+                            <span class="text-sm font-medium text-gray-800">
+                                {{ grade.score }}
+                                <span class="font-normal text-gray-400"
+                                    >/ {{ grade.submission?.assignment?.max_score ?? '?' }}</span
+                                >
+                            </span>
+                        </div>
+                        <p v-if="grade.feedback" class="mt-2 line-clamp-2 text-xs text-gray-500">
+                            {{ grade.feedback }}
+                        </p>
+                        <p class="mt-2 text-xs text-gray-400">
+                            {{ formatDate(grade.released_at) }}
+                        </p>
+                    </li>
+                </ul>
+
                 <div
-                    v-else
-                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    v-if="grades.length > 0"
+                    class="hidden sm:block overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
                 >
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-100" aria-label="My grades">

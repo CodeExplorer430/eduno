@@ -280,7 +280,7 @@ const deleteResource = (moduleId: number, lessonId: number, resourceId: number):
                             </div>
 
                             <ul
-                                v-if="lesson.resources.length > 0"
+                                v-if="(lesson.resources ?? []).length > 0"
                                 class="mt-2 space-y-1 ps-4"
                                 aria-label="Lesson resources"
                             >

@@ -15,6 +15,22 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubmissionController extends Controller
 {
+    public function all(Request $request): Response
+    {
+        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
+
+        $submissions = Submission::whereHas('assignment.courseSection', function ($q) use ($request): void {
+            $q->where('instructor_id', $request->user()->id);
+        })
+            ->with(['student', 'assignment.courseSection.course', 'grade'])
+            ->orderByDesc('submitted_at')
+            ->paginate(25);
+
+        return Inertia::render('Instructor/Submissions/All', [
+            'submissions' => $submissions,
+        ]);
+    }
+
     public function index(Request $request, Assignment $assignment): Response
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);

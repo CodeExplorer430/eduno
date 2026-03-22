@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import { watch } from 'vue';
 import {
     MagnifyingGlassIcon,
     BoltSlashIcon,
@@ -10,6 +10,7 @@ import {
     LanguageIcon,
 } from '@heroicons/vue/24/outline';
 import type { UserPreferences } from '@/Types/models';
+import { useAppToast } from '@/composables/useAppToast';
 
 const props = defineProps<{
     preferences: UserPreferences | null;
@@ -32,8 +33,13 @@ const form = useForm({
     language: props.preferences?.language ?? 'en',
 });
 
-const successMessage = computed(
-    () => (usePage().props.flash as Record<string, string> | undefined)?.success ?? null
+const appToast = useAppToast();
+
+watch(
+    () => form.wasSuccessful,
+    (val) => {
+        if (val) appToast.success('Preferences saved.');
+    }
 );
 
 function submit(): void {
@@ -53,16 +59,6 @@ function submit(): void {
 
         <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
             <form aria-label="Accessibility preferences form" novalidate @submit.prevent="submit">
-                <!-- Success message -->
-                <div
-                    v-if="successMessage"
-                    role="status"
-                    aria-live="polite"
-                    class="mb-6 rounded-xl bg-green-50 px-5 py-3 text-sm text-green-700 ring-1 ring-green-100"
-                >
-                    {{ successMessage }}
-                </div>
-
                 <div class="space-y-4">
                     <!-- Font Size -->
                     <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
@@ -180,8 +176,8 @@ function submit(): void {
                                 type="button"
                                 :aria-pressed="form.high_contrast"
                                 :aria-describedby="'high_contrast_desc'"
-                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                :class="form.high_contrast ? 'bg-blue-600' : 'bg-gray-200'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                :class="form.high_contrast ? 'bg-blue-600' : 'bg-gray-300'"
                                 @click="form.high_contrast = !form.high_contrast"
                             >
                                 <span class="sr-only">Toggle high contrast</span>
@@ -219,8 +215,8 @@ function submit(): void {
                                 type="button"
                                 :aria-pressed="form.reduced_motion"
                                 :aria-describedby="'reduced_motion_desc'"
-                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                :class="form.reduced_motion ? 'bg-blue-600' : 'bg-gray-200'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                :class="form.reduced_motion ? 'bg-blue-600' : 'bg-gray-300'"
                                 @click="form.reduced_motion = !form.reduced_motion"
                             >
                                 <span class="sr-only">Toggle reduce motion</span>
@@ -261,8 +257,8 @@ function submit(): void {
                                 type="button"
                                 :aria-pressed="form.simplified_layout"
                                 :aria-describedby="'simplified_layout_desc'"
-                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                :class="form.simplified_layout ? 'bg-blue-600' : 'bg-gray-200'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                :class="form.simplified_layout ? 'bg-blue-600' : 'bg-gray-300'"
                                 @click="form.simplified_layout = !form.simplified_layout"
                             >
                                 <span class="sr-only">Toggle simplified layout</span>

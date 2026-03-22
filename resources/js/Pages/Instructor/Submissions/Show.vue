@@ -2,6 +2,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import GradeForm from '@/Components/GradeForm.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { watch } from 'vue';
+import { useAppToast } from '@/composables/useAppToast';
 
 interface Grade {
     id: number;
@@ -49,7 +51,16 @@ const formatDate = (dateString: string): string =>
         minute: '2-digit',
     }).format(new Date(dateString));
 
+const appToast = useAppToast();
 const releaseForm = useForm({});
+
+watch(
+    () => releaseForm.wasSuccessful,
+    (val) => {
+        if (val) appToast.success('Grade saved.');
+    }
+);
+
 const releaseGrade = (): void => {
     if (!props.submission.grade) return;
     releaseForm.patch(route('instructor.grades.release', props.submission.grade.id));
