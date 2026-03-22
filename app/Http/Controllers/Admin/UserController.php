@@ -31,9 +31,10 @@ class UserController extends Controller
         $query = User::orderBy('name');
 
         if ($search !== null && $search !== '') {
-            $query->where(function ($q) use ($search): void {
-                $q->where('name', 'ilike', "%{$search}%")
-                    ->orWhere('email', 'ilike', "%{$search}%");
+            $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $search);
+            $query->where(function ($q) use ($escaped): void {
+                $q->where('name', 'ilike', "%{$escaped}%")
+                    ->orWhere('email', 'ilike', "%{$escaped}%");
             });
         }
 

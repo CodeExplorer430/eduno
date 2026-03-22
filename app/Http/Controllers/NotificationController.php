@@ -38,7 +38,13 @@ class NotificationController extends Controller
         /** @var string $url */
         $url = $notif->data['url'] ?? route('notifications.index');
 
-        return redirect()->away($url);
+        // Reject any URL that does not belong to this application to prevent open redirects.
+        $appUrl = rtrim(config('app.url'), '/');
+        if (! str_starts_with($url, $appUrl.'/') && $url !== $appUrl) {
+            $url = route('notifications.index');
+        }
+
+        return redirect($url);
     }
 
     public function markAsRead(string $notification, MarkNotificationRead $action): RedirectResponse

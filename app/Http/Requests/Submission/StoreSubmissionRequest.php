@@ -29,7 +29,7 @@ class StoreSubmissionRequest extends FormRequest
         }
 
         return [
-            'files' => ['required', 'array', 'min:1'],
+            'files'   => ['required', 'array', 'min:1', 'max:5'],
             'files.*' => ['required', 'file', 'max:25600', $mimeRule],
         ];
     }

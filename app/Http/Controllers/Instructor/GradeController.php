@@ -39,7 +39,7 @@ class GradeController extends Controller
     public function release(Request $request, Grade $grade): RedirectResponse
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
-        $this->authorize('update', $grade);
+        $this->authorize('release', $grade);
 
         $this->releaseGrade->execute($request->user(), $grade);
 
