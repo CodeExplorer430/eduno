@@ -47,7 +47,7 @@ class Assignment extends Model
             'published_at' => 'datetime',
             'allow_resubmission' => 'boolean',
             'allowed_file_types' => 'array',
-            'max_score' => 'decimal:2',
+            'max_score' => 'float',
         ];
     }
 

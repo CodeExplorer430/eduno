@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Modal from '@/Components/Modal.vue';
 import type { Announcement } from '@/Types/models';
 
 const props = defineProps<{
@@ -8,9 +10,15 @@ const props = defineProps<{
 }>();
 
 const publishForm = useForm({});
+const deleteForm = useForm({});
+const showDeleteModal = ref(false);
 
 function togglePublish(): void {
     publishForm.post(route('announcements.publish', props.announcement.id));
+}
+
+function executeDelete(): void {
+    deleteForm.delete(route('announcements.destroy', props.announcement.id));
 }
 </script>
 
@@ -59,14 +67,13 @@ function togglePublish(): void {
                         >
                             Edit
                         </Link>
-                        <Link
-                            :href="route('announcements.destroy', announcement.id)"
-                            method="delete"
-                            as="button"
+                        <button
+                            type="button"
                             class="rounded border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-600"
+                            @click="showDeleteModal = true"
                         >
                             Delete
-                        </Link>
+                        </button>
                     </div>
                 </div>
 
@@ -91,4 +98,35 @@ function togglePublish(): void {
             </div>
         </article>
     </main>
+
+    <Modal
+        :show="showDeleteModal"
+        max-width="sm"
+        labelledby="delete-announcement-title"
+        @close="showDeleteModal = false"
+    >
+        <div class="p-6">
+            <h2 id="delete-announcement-title" class="text-lg font-semibold text-gray-900">
+                Delete Announcement?
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">This will permanently delete the announcement.</p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button
+                    type="button"
+                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    @click="showDeleteModal = false"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    :disabled="deleteForm.processing"
+                    class="inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 disabled:opacity-50"
+                    @click="executeDelete"
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+    </Modal>
 </template>

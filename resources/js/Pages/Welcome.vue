@@ -172,32 +172,6 @@ defineProps<{
                 </div>
             </section>
 
-            <!-- Stats strip -->
-            <div class="border-b border-gray-100 bg-white" aria-label="Platform at a glance">
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <dl class="grid grid-cols-3 divide-x divide-gray-100 py-8 text-center">
-                        <div class="px-4">
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
-                                Functional Reqs
-                            </dt>
-                            <dd class="mt-1 text-4xl font-bold text-gray-900">48</dd>
-                        </div>
-                        <div class="px-4">
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
-                                User Roles
-                            </dt>
-                            <dd class="mt-1 text-4xl font-bold text-gray-900">3</dd>
-                        </div>
-                        <div class="px-4">
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">
-                                Accessibility
-                            </dt>
-                            <dd class="mt-1 text-3xl font-bold text-blue-600">WCAG 2.2 AA</dd>
-                        </div>
-                    </dl>
-                </div>
-            </div>
-
             <!-- Features -->
             <section class="bg-slate-50 py-20" aria-labelledby="features-heading">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -276,7 +250,7 @@ defineProps<{
                     <div class="relative mt-12 grid gap-8 sm:grid-cols-3">
                         <!-- Connector line on desktop -->
                         <div
-                            class="pointer-events-none absolute top-6 left-1/4 right-1/4 hidden h-px bg-gray-200 sm:block decorative"
+                            class="pointer-events-none absolute top-6 left-[calc(100%/6+1.5rem)] right-[calc(100%/6+1.5rem)] hidden h-px bg-gray-200 sm:block decorative"
                             aria-hidden="true"
                         />
                         <!-- Step 1 -->

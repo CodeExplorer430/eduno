@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Modal from '@/Components/Modal.vue';
 import Pagination from '@/Components/Pagination.vue';
 import type { Announcement, CourseSection, PaginatedResponse } from '@/Types/models';
 
@@ -10,9 +12,24 @@ const props = defineProps<{
 }>();
 
 const publishForm = useForm({});
+const deleteForm = useForm({});
+const confirmDeleteId = ref<number | null>(null);
 
 function togglePublish(announcement: Announcement): void {
     publishForm.post(route('announcements.publish', announcement.id));
+}
+
+function confirmDelete(id: number): void {
+    confirmDeleteId.value = id;
+}
+
+function executeDelete(): void {
+    if (confirmDeleteId.value === null) return;
+    deleteForm.delete(route('announcements.destroy', confirmDeleteId.value), {
+        onSuccess: () => {
+            confirmDeleteId.value = null;
+        },
+    });
 }
 </script>
 
@@ -113,15 +130,14 @@ function togglePublish(announcement: Announcement): void {
                             Edit
                         </Link>
 
-                        <Link
-                            :href="route('announcements.destroy', announcement.id)"
-                            method="delete"
-                            as="button"
+                        <button
+                            type="button"
                             class="text-sm text-red-600 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-600"
                             :aria-label="`Delete ${announcement.title}`"
+                            @click="confirmDelete(announcement.id)"
                         >
                             Delete
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </li>
@@ -129,4 +145,35 @@ function togglePublish(announcement: Announcement): void {
 
         <Pagination v-if="announcements.links.length > 3" :links="announcements.links" />
     </main>
+
+    <Modal
+        :show="confirmDeleteId !== null"
+        max-width="sm"
+        labelledby="delete-announcement-title"
+        @close="confirmDeleteId = null"
+    >
+        <div class="p-6">
+            <h2 id="delete-announcement-title" class="text-lg font-semibold text-gray-900">
+                Delete Announcement?
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">This will permanently delete the announcement.</p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button
+                    type="button"
+                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    @click="confirmDeleteId = null"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    :disabled="deleteForm.processing"
+                    class="inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 disabled:opacity-50"
+                    @click="executeDelete"
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+    </Modal>
 </template>

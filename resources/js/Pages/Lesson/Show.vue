@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
+import Modal from '@/Components/Modal.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import type { Course, CourseSection, Lesson, Module, Resource } from '@/Types/models';
 import { useFileSize } from '@/composables/useFileSize';
@@ -19,6 +21,7 @@ const props = defineProps<{
 
 const publishForm = useForm({});
 const deleteForm = useForm({});
+const confirmDeleteResourceId = ref<number | null>(null);
 
 const uploadForm = useForm({
     title: '',
@@ -30,10 +33,17 @@ function togglePublish(): void {
     publishForm.post(route('lessons.publish', props.lesson.id));
 }
 
-function destroyResource(resourceId: number): void {
-    if (confirm('Delete this resource? The file will be permanently removed.')) {
-        deleteForm.delete(route('resources.destroy', resourceId));
-    }
+function confirmDeleteResource(resourceId: number): void {
+    confirmDeleteResourceId.value = resourceId;
+}
+
+function executeDeleteResource(): void {
+    if (confirmDeleteResourceId.value === null) return;
+    deleteForm.delete(route('resources.destroy', confirmDeleteResourceId.value), {
+        onSuccess: () => {
+            confirmDeleteResourceId.value = null;
+        },
+    });
 }
 
 function handleFileChange(event: Event): void {
@@ -195,7 +205,7 @@ const { formatBytes } = useFileSize();
                                     type="button"
                                     class="rounded border border-red-300 bg-white px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500"
                                     :aria-label="`Delete ${resource.title}`"
-                                    @click="destroyResource(resource.id)"
+                                    @click="confirmDeleteResource(resource.id)"
                                 >
                                     Delete
                                 </button>
@@ -342,4 +352,37 @@ const { formatBytes } = useFileSize();
             </div>
         </div>
     </AuthenticatedLayout>
+
+    <Modal
+        :show="confirmDeleteResourceId !== null"
+        max-width="sm"
+        labelledby="delete-resource-title"
+        @close="confirmDeleteResourceId = null"
+    >
+        <div class="p-6">
+            <h2 id="delete-resource-title" class="text-lg font-semibold text-gray-900">
+                Delete Resource?
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                The file will be permanently removed. This cannot be undone.
+            </p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button
+                    type="button"
+                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    @click="confirmDeleteResourceId = null"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    :disabled="deleteForm.processing"
+                    class="inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 disabled:opacity-50"
+                    @click="executeDeleteResource"
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+    </Modal>
 </template>

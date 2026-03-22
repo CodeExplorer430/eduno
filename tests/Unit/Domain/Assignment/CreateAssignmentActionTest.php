@@ -36,7 +36,7 @@ test('it creates an assignment with defaults for max_score and allow_resubmissio
     $assignment = $action->handle($section, ['title' => 'Default Assignment']);
 
     expect($assignment)->toBeInstanceOf(Assignment::class)
-        ->and($assignment->max_score)->toBe('100.00')
+        ->and($assignment->max_score)->toBe(100.0)
         ->and($assignment->allow_resubmission)->toBeFalse()
         ->and($assignment->published_at)->toBeNull();
 });
@@ -63,7 +63,7 @@ test('it respects custom max_score', function (): void {
         'max_score' => 50,
     ]);
 
-    expect($assignment->max_score)->toBe('50.00');
+    expect($assignment->max_score)->toBe(50.0);
 });
 
 test('it enables allow_resubmission when set', function (): void {

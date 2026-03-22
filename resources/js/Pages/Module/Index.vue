@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Modal from '@/Components/Modal.vue';
 import Pagination from '@/Components/Pagination.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import type { Course, CourseSection, Module, PaginatedResponse } from '@/Types/models';
@@ -15,15 +17,24 @@ const props = defineProps<{
 }>();
 
 const publishForm = useForm({});
+const deleteForm = useForm({});
+const confirmDeleteId = ref<number | null>(null);
 
 function togglePublish(moduleId: number): void {
     publishForm.post(route('modules.publish', moduleId));
 }
 
-function destroyModule(moduleId: number): void {
-    if (confirm('Delete this module? This cannot be undone.')) {
-        publishForm.delete(route('modules.destroy', moduleId));
-    }
+function confirmDelete(moduleId: number): void {
+    confirmDeleteId.value = moduleId;
+}
+
+function executeDelete(): void {
+    if (confirmDeleteId.value === null) return;
+    deleteForm.delete(route('modules.destroy', confirmDeleteId.value), {
+        onSuccess: () => {
+            confirmDeleteId.value = null;
+        },
+    });
 }
 </script>
 
@@ -141,7 +152,7 @@ function destroyModule(moduleId: number): void {
                                     type="button"
                                     class="rounded border border-red-300 bg-white px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500"
                                     :aria-label="`Delete ${module.title}`"
-                                    @click="destroyModule(module.id)"
+                                    @click="confirmDelete(module.id)"
                                 >
                                     Delete
                                 </button>
@@ -154,4 +165,37 @@ function destroyModule(moduleId: number): void {
             </div>
         </div>
     </AuthenticatedLayout>
+
+    <Modal
+        :show="confirmDeleteId !== null"
+        max-width="sm"
+        labelledby="delete-module-title"
+        @close="confirmDeleteId = null"
+    >
+        <div class="p-6">
+            <h2 id="delete-module-title" class="text-lg font-semibold text-gray-900">
+                Delete Module?
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                This will permanently delete the module and all its lessons. This cannot be undone.
+            </p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button
+                    type="button"
+                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    @click="confirmDeleteId = null"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    :disabled="deleteForm.processing"
+                    class="inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 disabled:opacity-50"
+                    @click="executeDelete"
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+    </Modal>
 </template>
