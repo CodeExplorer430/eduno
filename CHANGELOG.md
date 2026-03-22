@@ -2,6 +2,29 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [2.1.1] — 2026-03-22
+
+### Bug Fixes
+
+- **fix(submission): reject grade score exceeding assignment `max_score`**
+  (`StoreGradeRequest`, `UpdateGradeRequest`): Added a dynamic `max` validation
+  rule that loads the submission's assignment `max_score` and rejects any score
+  above it. Prevents instructors from accidentally awarding more points than the
+  assignment allows. (`tests/Feature/Submission/GradingTest.php`)
+
+- **fix: null guards, missing DB transaction, and validation hardening** (multiple
+  files): Added null-safety guards across controllers/actions where models could be
+  null; wrapped a missing multi-table write in a `DB::transaction()`; tightened
+  Form Request validation rules that previously allowed unexpected inputs.
+  (`tests/Feature/Submission/GradingTest.php` + related feature tests)
+
+### Tests
+
+- PHP: **491** (unchanged — fixes covered by existing test suite)
+- Vitest specs: **517** (unchanged)
+
+---
+
 ## [1.4.0] — 2026-03-21
 
 ### Usability Fix (Cosmetic — Nielsen Heuristic 2)
