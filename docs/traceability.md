@@ -101,12 +101,16 @@ code artefacts: Action class, Controller method, route name, and test file.
 
 ## FR-034–FR-037 · Notifications
 
-| FR | Description | Action | Mechanism | Test |
+| FR | Description | Action / Class | Route / Channel | Test |
 |---|---|---|---|---|
-| FR-034 | Notify students about new announcements | `PublishAnnouncement` → `AnnouncementPublishedNotification` | Laravel Horizon queued job | `tests/Feature/Announcement/AnnouncementManagementTest.php` |
-| FR-035 | Notify instructors about new submissions | `SubmitAssignment` → `NewSubmissionNotification` | Laravel Horizon queued job | `tests/Feature/Submission/SubmissionTest.php` |
-| FR-036 | Notify students when grades released | `ReleaseGrade` → `GradeReleasedNotification` | Laravel Horizon queued job | `tests/Feature/Submission/GradingTest.php` |
-| FR-037 | Deadline reminder notifications | `SendDeadlineReminders` console command (scheduled) | `app/Console/Commands/SendDeadlineReminders.php` | — |
+| FR-034 | Notify students about new announcements | `PublishAnnouncement` → `AnnouncementPublishedNotification` | `database` + `mail` via Horizon | `tests/Feature/Notification/NotificationTest.php` |
+| FR-035 | Notify instructors about new submissions | `SubmitAssignment` → `NewSubmissionNotification` | `database` + `mail` via Horizon | `tests/Feature/Notification/NotificationTest.php` |
+| FR-036 | Notify students when grades released | `ReleaseGrade` → `GradeReleasedNotification` | `database` + `mail` via Horizon | `tests/Feature/Notification/NotificationTest.php` |
+| FR-037 | Deadline reminder notifications | `SendDeadlineReminders` command → `DeadlineReminderNotification` | `database` + `mail` scheduled | `tests/Feature/Notification/NotificationTest.php` |
+
+**In-app UI:** `NotificationController` (`notifications.index`, `notifications.show`,
+`notifications.mark-as-read`, `notifications.read-all`), `NotificationBell.vue`
+(badge in nav), `Notifications/Index.vue` (paginated list page).
 
 ---
 
@@ -154,7 +158,7 @@ code artefacts: Action class, Controller method, route name, and test file.
 | Assignments | FR-020–023 | 8 | 4 Actions | 2 test classes |
 | Submissions | FR-024–029 | 4 | 1 Action | 1 test class |
 | Grading | FR-030–033 | 3 | 2 Actions | 1 test class |
-| Notifications | FR-034–037 | — | Queued Notifications | Covered via action tests |
+| Notifications | FR-034–037 | `app/Domain/Notification/Actions/` | `database` + `mail` channels; `NotificationController`, `NotificationBell.vue`, `Notifications/Index.vue` | `tests/Feature/Notification/NotificationTest.php` |
 | Reports | FR-038–040 | 2 | 2 Actions | 2 test classes |
 | Accessibility | FR-041–045 | 3 | 1 Action | 1 PHP + 36 Vue specs |
 | Audit Logs | FR-046–048 | — | Inline in Actions | Covered via grading tests |
