@@ -277,7 +277,7 @@ test('student can delete their own submitted submission', function (): void {
         ->delete(route('submissions.destroy', $submission))
         ->assertRedirect();
 
-    $this->assertDatabaseMissing('submissions', ['id' => $submission->id]);
+    $this->assertSoftDeleted('submissions', ['id' => $submission->id]);
 });
 
 test('another student cannot delete a submission', function (): void {

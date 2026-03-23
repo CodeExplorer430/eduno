@@ -179,5 +179,5 @@ test('instructor can delete their section', function (): void {
         ->delete(route('sections.destroy', $section))
         ->assertRedirect();
 
-    $this->assertDatabaseMissing('course_sections', ['id' => $section->id]);
+    $this->assertSoftDeleted('course_sections', ['id' => $section->id]);
 });
