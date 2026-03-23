@@ -17,10 +17,11 @@ use App\Enums\UserRole;
 use App\Models\User;
 use App\Notifications\AnnouncementPublishedNotification;
 use App\Notifications\DeadlineReminderNotification;
-use App\Notifications\GradeReleasedNotification;
+use App\Jobs\NotifyStudentGradeReleased;
 use App\Notifications\NewSubmissionNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 function makeNotificationSetup(): array
@@ -109,7 +110,7 @@ test('student submitting assignment sends notification to instructor', function 
 });
 
 test('releasing grade sends notification to student', function (): void {
-    Notification::fake();
+    Queue::fake();
 
     [$instructor, $section, $student] = makeNotificationSetup();
 
@@ -140,7 +141,7 @@ test('releasing grade sends notification to student', function (): void {
 
     (new ReleaseGrade())->handle($grade);
 
-    Notification::assertSentTo($student, GradeReleasedNotification::class);
+    Queue::assertPushed(NotifyStudentGradeReleased::class);
 });
 
 test('deadline reminder is sent to enrolled student who has not submitted', function (): void {

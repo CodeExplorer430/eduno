@@ -9,6 +9,7 @@ use App\Domain\Course\Models\CourseSection;
 use App\Mail\AnnouncementPublishedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendAnnouncementNotification implements ShouldQueue
@@ -28,5 +29,13 @@ class SendAnnouncementNotification implements ShouldQueue
         foreach ($students as $student) {
             Mail::to($student->email)->queue(new AnnouncementPublishedMail($this->announcement));
         }
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('SendAnnouncementNotification job failed', [
+            'announcement_id' => $this->announcement->id,
+            'message' => $exception->getMessage(),
+        ]);
     }
 }

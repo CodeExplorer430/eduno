@@ -9,6 +9,7 @@ use App\Domain\Submission\Models\Submission;
 use App\Mail\NewSubmissionMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class NotifyInstructorNewSubmission implements ShouldQueue
@@ -26,5 +27,13 @@ class NotifyInstructorNewSubmission implements ShouldQueue
         $instructor = $courseSection->instructor;
 
         Mail::to($instructor->email)->send(new NewSubmissionMail($this->submission));
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('NotifyInstructorNewSubmission job failed', [
+            'submission_id' => $this->submission->id,
+            'message' => $exception->getMessage(),
+        ]);
     }
 }
