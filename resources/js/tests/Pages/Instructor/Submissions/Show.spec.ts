@@ -9,6 +9,7 @@ const mockPatch = vi.fn();
 const mockUseForm = vi.fn(() => ({
     processing: false,
     patch: mockPatch,
+    wasSuccessful: false,
 }));
 
 vi.mock('@inertiajs/vue3', () => ({
@@ -41,6 +42,7 @@ const baseSubmission = {
     submitted_at: '2026-03-01T10:00:00Z',
     is_late: false,
     attempt_no: 1,
+    flagged_for_review: false,
     assignment: { id: 1, title: 'Lab Report', max_score: 100 },
     student: { id: 10, name: 'Maria Santos' },
     files: [],
@@ -110,6 +112,14 @@ describe('Instructor/Submissions/Show', () => {
             global: globalOpts,
         });
         expect(wrapper.find('[role="status"][aria-live="polite"]').exists()).toBe(true);
+    });
+
+    it('flag button is rendered', () => {
+        const wrapper = mount(ShowPage, {
+            props: { submission: baseSubmission },
+            global: globalOpts,
+        });
+        expect(wrapper.html()).toContain('aria-pressed');
     });
 
     it('passes WCAG axe check', async () => {

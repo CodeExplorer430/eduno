@@ -4,6 +4,7 @@ import GradeForm from '@/Components/GradeForm.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { watch } from 'vue';
 import { useAppToast } from '@/composables/useAppToast';
+import { FlagIcon } from '@heroicons/vue/24/outline';
 
 interface Grade {
     id: number;
@@ -19,6 +20,7 @@ interface Props {
         submitted_at: string;
         is_late: boolean;
         attempt_no: number;
+        flagged_for_review: boolean;
         assignment: { id: number; title: string; max_score: number };
         student: { id: number; name: string };
         files: Array<{ id: number; original_name: string; size_bytes: number }>;
@@ -53,17 +55,34 @@ const formatDate = (dateString: string): string =>
 
 const appToast = useAppToast();
 const releaseForm = useForm({});
+const flagForm = useForm({});
 
 watch(
     () => releaseForm.wasSuccessful,
     (val) => {
-        if (val) appToast.success('Grade saved.');
+        if (val) appToast.success('Grade released.');
+    }
+);
+
+watch(
+    () => flagForm.wasSuccessful,
+    (val) => {
+        if (val)
+            appToast.success(
+                props.submission.flagged_for_review
+                    ? 'Flag removed.'
+                    : 'Submission flagged for review.'
+            );
     }
 );
 
 const releaseGrade = (): void => {
     if (!props.submission.grade) return;
     releaseForm.patch(route('instructor.grades.release', props.submission.grade.id));
+};
+
+const toggleFlag = (): void => {
+    flagForm.patch(route('instructor.submissions.flag', props.submission.id));
 };
 </script>
 
@@ -91,6 +110,18 @@ const releaseGrade = (): void => {
         </template>
 
         <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+            <!-- Flagged warning banner -->
+            <div
+                v-if="submission.flagged_for_review"
+                role="alert"
+                class="mb-6 flex items-center gap-3 rounded-xl bg-amber-50 px-5 py-4 ring-1 ring-amber-200"
+            >
+                <FlagIcon class="h-5 w-5 shrink-0 text-amber-500" aria-hidden="true" />
+                <p class="text-sm font-medium text-amber-800">
+                    This submission has been flagged for review.
+                </p>
+            </div>
+
             <div class="grid gap-6 lg:grid-cols-2">
                 <!-- Left: submission details + files -->
                 <div class="space-y-6">
@@ -98,19 +129,49 @@ const releaseGrade = (): void => {
                         aria-labelledby="submission-details-heading"
                         class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
-                            <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                            <div>
-                                <h1
-                                    id="submission-details-heading"
-                                    class="font-semibold text-gray-900"
-                                >
-                                    {{ submission.assignment.title }}
-                                </h1>
-                                <p class="text-xs text-gray-500">
-                                    Submitted by <strong>{{ submission.student.name }}</strong>
-                                </p>
+                        <div
+                            class="flex items-center justify-between gap-3 border-b border-gray-100 px-6 py-4"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-4 w-1 rounded-full bg-blue-500"
+                                    aria-hidden="true"
+                                ></div>
+                                <div>
+                                    <h1
+                                        id="submission-details-heading"
+                                        class="font-semibold text-gray-900"
+                                    >
+                                        {{ submission.assignment.title }}
+                                    </h1>
+                                    <p class="text-xs text-gray-500">
+                                        Submitted by <strong>{{ submission.student.name }}</strong>
+                                    </p>
+                                </div>
                             </div>
+                            <!-- Flag toggle -->
+                            <form @submit.prevent="toggleFlag">
+                                <button
+                                    type="submit"
+                                    :disabled="flagForm.processing"
+                                    :aria-busy="flagForm.processing"
+                                    class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1"
+                                    :class="
+                                        submission.flagged_for_review
+                                            ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    "
+                                    :aria-label="
+                                        submission.flagged_for_review
+                                            ? 'Remove plagiarism flag'
+                                            : 'Flag for plagiarism review'
+                                    "
+                                    :aria-pressed="submission.flagged_for_review"
+                                >
+                                    <FlagIcon class="h-3.5 w-3.5" aria-hidden="true" />
+                                    {{ submission.flagged_for_review ? 'Flagged' : 'Flag' }}
+                                </button>
+                            </form>
                         </div>
 
                         <dl class="divide-y divide-gray-100 px-6">

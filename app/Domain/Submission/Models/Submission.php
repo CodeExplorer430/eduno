@@ -41,15 +41,17 @@ class Submission extends Model
         'submitted_at',
         'is_late',
         'attempt_no',
+        'flagged_for_review',
     ];
 
     protected function casts(): array
     {
         return [
-            'status' => SubmissionStatus::class,
-            'submitted_at' => 'datetime',
-            'is_late' => 'boolean',
-            'deleted_at' => 'datetime',
+            'status'             => SubmissionStatus::class,
+            'submitted_at'       => 'datetime',
+            'is_late'            => 'boolean',
+            'flagged_for_review' => 'boolean',
+            'deleted_at'         => 'datetime',
         ];
     }
 

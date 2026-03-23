@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Instructor;
 
 use App\Domain\Assignment\Models\Assignment;
+use App\Domain\Submission\Actions\FlagSubmission;
 use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -41,7 +43,7 @@ class SubmissionController extends Controller
             ->get();
 
         return Inertia::render('Instructor/Submissions/Index', [
-            'assignment' => $assignment->load('courseSection.course'),
+            'assignment'  => $assignment->load('courseSection.course'),
             'submissions' => $submissions,
         ]);
     }
@@ -52,7 +54,7 @@ class SubmissionController extends Controller
         $this->authorize('export', $assignment);
 
         $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Type'        => 'text/csv; charset=UTF-8',
             'Content-Disposition' => 'attachment; filename="submissions-'.$assignment->id.'.csv"',
         ];
 
@@ -62,7 +64,7 @@ class SubmissionController extends Controller
                 return;
             }
 
-            fputcsv($handle, ['ID', 'Student', 'Assignment', 'Submitted At', 'Is Late', 'Score', 'Released']);
+            fputcsv($handle, ['ID', 'Student', 'Assignment', 'Submitted At', 'Is Late', 'Score', 'Released', 'Flagged']);
 
             $assignment->submissions()
                 ->with(['student', 'grade'])
@@ -80,6 +82,7 @@ class SubmissionController extends Controller
                             $sub->is_late ? 'Yes' : 'No',
                             $grade !== null ? (string) $grade->score : '',
                             $grade !== null && $grade->released_at !== null ? (string) $grade->released_at : '',
+                            $sub->flagged_for_review ? 'Yes' : 'No',
                         ]);
                     }
                 });
@@ -100,5 +103,18 @@ class SubmissionController extends Controller
         return Inertia::render('Instructor/Submissions/Show', [
             'submission' => $submission,
         ]);
+    }
+
+    public function flag(Request $request, Submission $submission, FlagSubmission $action): RedirectResponse
+    {
+        abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
+        $this->authorize('update', $submission);
+
+        $action->handle($submission);
+
+        return back()->with(
+            'success',
+            $submission->flagged_for_review ? 'Submission flagged for review.' : 'Flag removed.'
+        );
     }
 }

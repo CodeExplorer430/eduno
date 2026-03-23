@@ -155,6 +155,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('submissions.export');
         Route::get('/submissions/{submission}', [Instructor\SubmissionController::class, 'show'])
             ->name('submissions.show');
+        Route::patch('/submissions/{submission}/flag', [Instructor\SubmissionController::class, 'flag'])
+            ->name('submissions.flag');
         Route::post('/submissions/{submission}/grade', [Instructor\GradeController::class, 'store'])
             ->name('grades.store');
         Route::patch('/grades/{grade}/release', [Instructor\GradeController::class, 'release'])
@@ -197,6 +199,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
         Route::get('/reports', [Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/export', [Admin\ReportController::class, 'export'])->name('reports.export');
+        Route::get('/settings', [Admin\SettingController::class, 'index'])->name('settings.index');
+        Route::patch('/settings', [Admin\SettingController::class, 'update'])->name('settings.update');
     });
 });
 
