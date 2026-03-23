@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Domain\Announcement\Actions\CreateAnnouncement;
 use App\Domain\Announcement\Models\Announcement;
+use App\Domain\Audit\Actions\LogAction;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Enums\UserRole;
@@ -32,7 +33,7 @@ function makeAnnouncementTestSection(): array
 
 test('it creates an announcement with correct fields', function (): void {
     [$instructor, $section] = makeAnnouncementTestSection();
-    $action = new CreateAnnouncement();
+    $action = new CreateAnnouncement(new LogAction());
 
     $announcement = $action->handle($section, [
         'title' => 'Test Announcement',
@@ -49,7 +50,7 @@ test('it creates an announcement with correct fields', function (): void {
 
 test('it persists the announcement in the database', function (): void {
     [$instructor, $section] = makeAnnouncementTestSection();
-    $action = new CreateAnnouncement();
+    $action = new CreateAnnouncement(new LogAction());
 
     $action->handle($section, ['title' => 'Stored', 'body' => 'Body'], $instructor);
 

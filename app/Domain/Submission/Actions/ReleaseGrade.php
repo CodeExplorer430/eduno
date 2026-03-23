@@ -6,7 +6,7 @@ namespace App\Domain\Submission\Actions;
 
 use App\Domain\Submission\Models\Grade;
 use App\Enums\SubmissionStatus;
-use App\Notifications\GradeReleasedNotification;
+use App\Jobs\NotifyStudentGradeReleased;
 use Illuminate\Support\Facades\DB;
 
 class ReleaseGrade
@@ -33,8 +33,7 @@ class ReleaseGrade
             return $grade;
         });
 
-        $result->load(['submission.student', 'submission.assignment']);
-        $result->submission->student->notify(new GradeReleasedNotification($result));
+        NotifyStudentGradeReleased::dispatch($result);
 
         return $result;
     }
