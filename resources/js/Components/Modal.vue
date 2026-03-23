@@ -31,11 +31,14 @@ watch(
 
             dialog.value?.showModal();
             nextTick(() => {
-                dialog.value
-                    ?.querySelector<HTMLElement>(
-                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                    )
-                    ?.focus();
+                const focusable = dialog.value?.querySelector<HTMLElement>(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                if (focusable) {
+                    focusable.focus();
+                } else {
+                    dialog.value?.focus();
+                }
             });
         } else {
             document.body.style.overflow = '';
