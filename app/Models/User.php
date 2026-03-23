@@ -21,6 +21,7 @@ use Illuminate\Notifications\Notifiable;
 
 /**
  * @property UserRole $role
+ * @property-read UserPreference|null $preferences
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

@@ -135,6 +135,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('submissions.store');
         Route::get('/submissions/{submission}', [Student\SubmissionController::class, 'show'])->name('submissions.show');
         Route::get('/grades', [Student\GradeController::class, 'index'])->name('grades.index');
+        Route::get('/grades/{grade}', [Student\GradeController::class, 'show'])->name('grades.show');
         Route::get('/announcements', [Student\AnnouncementController::class, 'index'])->name('announcements.index');
         Route::get('/lessons/{lesson}', [Student\LessonController::class, 'show'])->name('lessons.show');
         Route::get('/resources/{resource}/download', [Student\ResourceController::class, 'download'])->name('resources.download');

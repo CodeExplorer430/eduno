@@ -12,6 +12,10 @@ const mockUseForm = vi.fn(
     })
 );
 
+vi.mock('@/composables/useAppToast', () => ({
+    useAppToast: () => ({ success: vi.fn(), error: vi.fn() }),
+}));
+
 vi.mock('@inertiajs/vue3', () => ({
     Head: { template: '<div />' },
     useForm: (data: Record<string, unknown>) => mockUseForm(data),

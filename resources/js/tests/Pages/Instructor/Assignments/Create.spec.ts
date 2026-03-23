@@ -103,6 +103,7 @@ describe('Instructor/Assignments/Create', () => {
             due_at: '',
             max_score: '100',
             allow_resubmission: false,
+            allowed_file_types: [],
             errors: {},
             processing: true,
             hasErrors: false,

@@ -60,6 +60,7 @@ const cancelDelete = (): void => {
 
                 <div
                     v-if="announcements.length === 0"
+                    role="status"
                     class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center"
                 >
                     <MegaphoneIcon

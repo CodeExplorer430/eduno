@@ -17,7 +17,7 @@ const stubs = {
     Link: { template: '<a v-bind="$attrs"><slot /></a>', inheritAttrs: false },
     Breadcrumb: true,
     EmptyState: {
-        template: '<div><slot /></div>',
+        template: '<div>{{ title }}<slot /></div>',
         props: ['icon', 'title', 'description'],
     },
 };

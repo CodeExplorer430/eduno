@@ -33,9 +33,15 @@ class SendDeadlineReminders implements ShouldQueue
 
             $unsubmittedStudentIds = $enrolledStudentIds->diff($submittedStudentIds);
 
-            $students = User::whereIn('id', $unsubmittedStudentIds)->get();
+            $students = User::whereIn('id', $unsubmittedStudentIds)
+                ->with('preferences')
+                ->get();
 
             foreach ($students as $student) {
+                if ($student->preferences?->email_notifications === false) {
+                    continue;
+                }
+
                 SendDeadlineReminder::dispatch($student, $assignment);
             }
         }

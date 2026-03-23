@@ -37,6 +37,8 @@ const resourceFixture = {
     title: 'Lecture Slides.pdf',
     mime_type: 'application/pdf',
     size_bytes: 204800,
+    reading_time_minutes: null,
+    accessibility_notes: null,
 };
 
 const routeMock = vi.fn(() => '/');

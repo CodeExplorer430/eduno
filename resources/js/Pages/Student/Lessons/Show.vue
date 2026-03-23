@@ -7,6 +7,8 @@ interface ResourceItem {
     title: string;
     mime_type: string;
     size_bytes: number;
+    reading_time_minutes: number | null;
+    accessibility_notes: string | null;
 }
 
 interface LessonDetail {
@@ -121,6 +123,18 @@ const formatBytes = (bytes: number): string => {
                                     <p class="text-xs text-gray-500">
                                         {{ resource.mime_type }} &bull;
                                         {{ formatBytes(resource.size_bytes) }}
+                                        <span
+                                            v-if="resource.reading_time_minutes"
+                                            class="ml-1 inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600"
+                                        >
+                                            {{ resource.reading_time_minutes }} min read
+                                        </span>
+                                    </p>
+                                    <p
+                                        v-if="resource.accessibility_notes"
+                                        class="mt-0.5 text-xs text-gray-400"
+                                    >
+                                        {{ resource.accessibility_notes }}
                                     </p>
                                 </div>
                                 <a

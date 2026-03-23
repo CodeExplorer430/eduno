@@ -4,6 +4,10 @@ import { axe } from 'vitest-axe';
 import ShowPage from '@/Pages/Instructor/Submissions/Show.vue';
 import { mountWithPrimeVue } from '@/tests/helpers';
 
+vi.mock('@/composables/useAppToast', () => ({
+    useAppToast: () => ({ success: vi.fn(), error: vi.fn() }),
+}));
+
 const mockPatch = vi.fn();
 
 const mockUseForm = vi.fn(() => ({
@@ -101,9 +105,9 @@ describe('Instructor/Submissions/Show', () => {
             props: { submission: withUnreleasedGrade },
             global: globalOpts,
         });
-        const button = wrapper.find('button[type="submit"]');
-        expect(button.exists()).toBe(true);
-        expect(button.text()).toContain('Release Grade');
+        const buttons = wrapper.findAll('button[type="submit"]');
+        const releaseBtn = buttons.find((b) => b.text().includes('Release Grade'));
+        expect(releaseBtn).toBeDefined();
     });
 
     it('role="status" released notice shown when grade.released_at is set', () => {
