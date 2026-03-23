@@ -28,7 +28,9 @@ class StoreResourceRequest extends FormRequest
                 'max:51200',
                 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,mp4,mp3,png,jpg,jpeg,gif',
             ],
-            'visibility' => ['required', 'string', Rule::in(array_column(ResourceVisibility::cases(), 'value'))],
+            'visibility'           => ['required', 'string', Rule::in(array_column(ResourceVisibility::cases(), 'value'))],
+            'accessibility_notes'  => ['nullable', 'string', 'max:500'],
+            'reading_time_minutes' => ['nullable', 'integer', 'min:1', 'max:999'],
         ];
     }
 }

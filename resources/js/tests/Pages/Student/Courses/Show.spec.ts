@@ -33,7 +33,7 @@ const moduleWithLesson = {
     title: 'Week 1',
     order_no: 1,
     published_at: '2026-01-01',
-    lessons: [{ id: 10, title: 'Intro', type: 'text', published_at: null }],
+    lessons: [{ id: 10, title: 'Intro', type: 'text', published_at: null, resources: [] }],
 };
 
 const routeMock = vi.fn(() => '/');

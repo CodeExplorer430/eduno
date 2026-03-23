@@ -32,6 +32,8 @@ const form = useForm({
     title: '',
     file: null as File | null,
     visibility: 'enrolled' as 'enrolled' | 'public',
+    accessibility_notes: '' as string,
+    reading_time_minutes: null as number | null,
 });
 
 const selectedFiles = ref<File[]>([]);
@@ -137,6 +139,61 @@ const submit = (): void => {
                             <InputError
                                 id="visibility-error"
                                 :message="form.errors.visibility"
+                                class="mt-1"
+                            />
+                        </div>
+
+                        <div>
+                            <InputLabel
+                                for="reading-time"
+                                value="Reading Time (minutes, optional)"
+                            />
+                            <input
+                                id="reading-time"
+                                v-model.number="form.reading_time_minutes"
+                                type="number"
+                                min="1"
+                                max="999"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                :aria-describedby="
+                                    form.errors.reading_time_minutes
+                                        ? 'reading-time-error'
+                                        : undefined
+                                "
+                                placeholder="e.g. 10"
+                            />
+                            <InputError
+                                id="reading-time-error"
+                                :message="form.errors.reading_time_minutes"
+                                class="mt-1"
+                            />
+                        </div>
+
+                        <div>
+                            <InputLabel
+                                for="accessibility-notes"
+                                value="Accessibility Notes (optional)"
+                            />
+                            <textarea
+                                id="accessibility-notes"
+                                v-model="form.accessibility_notes"
+                                rows="3"
+                                maxlength="500"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                :aria-describedby="
+                                    form.errors.accessibility_notes
+                                        ? 'a11y-notes-error'
+                                        : 'a11y-notes-hint'
+                                "
+                                placeholder="e.g. Screen-reader compatible PDF with text layer"
+                            />
+                            <p id="a11y-notes-hint" class="mt-1 text-xs text-gray-500">
+                                Describe any accessibility features or limitations (max 500
+                                characters).
+                            </p>
+                            <InputError
+                                id="a11y-notes-error"
+                                :message="form.errors.accessibility_notes"
                                 class="mt-1"
                             />
                         </div>

@@ -153,10 +153,10 @@ const statusBadge: Record<string, string> = {
                                 <Link
                                     :href="route('instructor.courses.modules.index', section.id)"
                                     class="inline-flex items-center gap-1 rounded font-medium text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    :aria-label="`Manage modules for ${course.title}`"
+                                    :aria-label="`Manage modules for ${section.section_name}`"
                                 >
                                     <RectangleStackIcon class="h-4 w-4" aria-hidden="true" />
-                                    Modules
+                                    {{ section.section_name }}
                                 </Link>
                             </template>
                             <Link

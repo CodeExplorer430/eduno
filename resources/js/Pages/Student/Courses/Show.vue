@@ -11,10 +11,20 @@ import {
     ClipboardDocumentListIcon,
 } from '@heroicons/vue/24/outline';
 
+interface Resource {
+    id: number;
+    title: string;
+    mime_type: string;
+    size_bytes: number;
+    accessibility_notes: string | null;
+    reading_time_minutes: number | null;
+}
+
 interface Lesson {
     id: number;
     title: string;
     type: string;
+    resources: Resource[];
 }
 
 interface CourseModule {
@@ -87,6 +97,18 @@ const tabs: { key: Tab; label: string; icon: typeof MegaphoneIcon }[] = [
 const sortedModules = computed<CourseModule[]>(() =>
     [...props.section.modules].sort((a, b) => a.order_no - b.order_no)
 );
+
+const searchQuery = ref('');
+
+const filteredModules = computed<CourseModule[]>(() => {
+    const q = searchQuery.value.trim().toLowerCase();
+    if (!q) return sortedModules.value;
+    return sortedModules.value.filter(
+        (m) =>
+            m.title.toLowerCase().includes(q) ||
+            m.lessons.some((l) => l.title.toLowerCase().includes(q))
+    );
+});
 
 const expandedModules = ref<Set<number>>(new Set(sortedModules.value.slice(0, 1).map((m) => m.id)));
 
@@ -295,9 +317,29 @@ const formatDate = (dateString: string | null): string => {
                         </h2>
                     </div>
 
-                    <div v-if="sortedModules.length > 0" class="space-y-3">
+                    <div role="search" class="mb-4">
+                        <label for="material-search" class="sr-only">Search course materials</label>
+                        <input
+                            id="material-search"
+                            v-model="searchQuery"
+                            type="search"
+                            placeholder="Search modules and lessons…"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Search course materials"
+                        />
+                    </div>
+
+                    <p
+                        v-if="searchQuery.trim() && filteredModules.length === 0"
+                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400"
+                        role="status"
+                    >
+                        No modules or lessons match your search.
+                    </p>
+
+                    <div v-else-if="filteredModules.length > 0" class="space-y-3">
                         <article
-                            v-for="module in sortedModules"
+                            v-for="module in filteredModules"
                             :key="module.id"
                             class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
                         >
@@ -335,20 +377,51 @@ const formatDate = (dateString: string | null): string => {
                                         <li
                                             v-for="lesson in module.lessons"
                                             :key="lesson.id"
-                                            class="flex items-center justify-between py-2 text-sm"
+                                            class="py-2 text-sm"
                                         >
-                                            <Link
-                                                :href="route('student.lessons.show', lesson.id)"
-                                                class="rounded font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            <div class="flex items-center justify-between">
+                                                <Link
+                                                    :href="route('student.lessons.show', lesson.id)"
+                                                    class="rounded font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                >
+                                                    {{ lesson.title }}
+                                                </Link>
+                                                <span
+                                                    class="ms-3 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500"
+                                                    aria-label="Lesson type"
+                                                >
+                                                    {{ lessonTypeLabel(lesson.type) }}
+                                                </span>
+                                            </div>
+                                            <ul
+                                                v-if="
+                                                    lesson.resources && lesson.resources.length > 0
+                                                "
+                                                class="mt-1 space-y-1 ps-2"
+                                                aria-label="Lesson resources"
                                             >
-                                                {{ lesson.title }}
-                                            </Link>
-                                            <span
-                                                class="ms-3 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500"
-                                                aria-label="Lesson type"
-                                            >
-                                                {{ lessonTypeLabel(lesson.type) }}
-                                            </span>
+                                                <li
+                                                    v-for="resource in lesson.resources"
+                                                    :key="resource.id"
+                                                    class="text-xs text-gray-500"
+                                                >
+                                                    <span class="font-medium text-gray-700">{{
+                                                        resource.title
+                                                    }}</span>
+                                                    <span
+                                                        v-if="resource.reading_time_minutes"
+                                                        class="ml-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-600"
+                                                    >
+                                                        {{ resource.reading_time_minutes }} min read
+                                                    </span>
+                                                    <span
+                                                        v-if="resource.accessibility_notes"
+                                                        class="ml-1 text-gray-400"
+                                                    >
+                                                        — {{ resource.accessibility_notes }}
+                                                    </span>
+                                                </li>
+                                            </ul>
                                         </li>
                                     </ul>
                                 </div>

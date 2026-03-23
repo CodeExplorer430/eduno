@@ -32,11 +32,11 @@ class ModuleController extends Controller
             'assignments' => fn ($q) => $q->orderBy('due_at'),
             'assignments.submissions.grade',
             'announcements' => fn ($q) => $q->orderByDesc('published_at'),
-            'enrollments' => fn ($q) => $q->where('status', 'active')->with('user:id,name,email,created_at'),
+            'enrollments' => fn ($q) => $q->where('status', 'active')->with('student:id,name,email,created_at'),
         ]);
 
         /** @var Collection<int, \App\Models\User> $students */
-        $students = $section->enrollments->pluck('user');
+        $students = $section->enrollments->pluck('student');
 
         /** @var Collection<int, Assignment> $assignments */
         $assignments = $section->assignments->whereNotNull('published_at')->values();

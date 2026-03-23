@@ -16,6 +16,7 @@ interface Submission {
     is_late: boolean;
     attempt_no: number;
     grade?: Grade | null;
+    files?: { id: number }[];
 }
 
 const MIME_LABELS: Record<string, string> = {
@@ -51,6 +52,7 @@ interface Assignment {
 const props = defineProps<{
     assignment: Assignment;
     submission: Submission | null;
+    submissions: Submission[];
 }>();
 
 const formatDate = (dateString: string): string =>
@@ -98,6 +100,8 @@ const dueDateClass = computed<string>(() => {
     if (dueUrgency.value === 'soon') return 'text-amber-600 font-medium';
     return 'text-gray-600';
 });
+
+const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
 </script>
 
 <template>
@@ -213,6 +217,102 @@ const dueDateClass = computed<string>(() => {
                                     {{ assignment.instructions }}
                                 </div>
                             </div>
+                        </div>
+                    </section>
+
+                    <!-- Attempt History -->
+                    <section
+                        aria-labelledby="attempt-history-heading"
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    >
+                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                            <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
+                            <h2 id="attempt-history-heading" class="font-semibold text-gray-900">
+                                Attempt History
+                            </h2>
+                        </div>
+
+                        <div
+                            v-if="submissions.length === 0"
+                            class="px-6 py-5 text-sm text-gray-500"
+                        >
+                            No submissions yet.
+                        </div>
+
+                        <div v-else class="overflow-x-auto">
+                            <table
+                                class="min-w-full divide-y divide-gray-100 text-sm"
+                                aria-label="Submission attempts"
+                            >
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        >
+                                            Attempt
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        >
+                                            Submitted
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        >
+                                            Status
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        >
+                                            Files
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr v-for="attempt in submissions" :key="attempt.id">
+                                        <td class="px-5 py-3 font-medium text-gray-900">
+                                            #{{ attempt.attempt_no }}
+                                        </td>
+                                        <td class="px-5 py-3 text-gray-600">
+                                            {{ formatDate(attempt.submitted_at) }}
+                                        </td>
+                                        <td class="px-5 py-3">
+                                            <span
+                                                class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
+                                                :class="
+                                                    statusBadge[attempt.status] ??
+                                                    'bg-gray-100 text-gray-600'
+                                                "
+                                            >
+                                                {{ attempt.status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-5 py-3 text-gray-600">
+                                            {{ attempt.files?.length ?? 0 }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div
+                            v-if="
+                                assignment.allow_resubmission &&
+                                !isPastDue &&
+                                submissions.length > 0
+                            "
+                            class="border-t border-gray-100 px-6 py-4"
+                        >
+                            <Link
+                                :href="route('student.submissions.create', assignment.id)"
+                                class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            >
+                                Submit Again
+                            </Link>
                         </div>
                     </section>
 

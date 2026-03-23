@@ -39,6 +39,7 @@ class CourseController extends Controller
             'instructor:id,name,email',
             'modules' => fn ($q) => $q->whereNotNull('published_at')->orderBy('order_no'),
             'modules.lessons' => fn ($q) => $q->whereNotNull('published_at')->orderBy('order_no'),
+            'modules.lessons.resources',
             'announcements' => fn ($q) => $q->whereNotNull('published_at')->orderByDesc('published_at')->limit(10),
             'assignments' => fn ($q) => $q->whereNotNull('published_at')->with([
                 'submissions' => fn ($sq) => $sq->where('student_id', $userId),

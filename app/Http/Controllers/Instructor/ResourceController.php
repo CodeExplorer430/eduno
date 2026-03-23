@@ -41,7 +41,10 @@ class ResourceController extends Controller
         /** @var UploadedFile $file */
         $file = $request->file('file');
 
-        $action->handle($lesson, $file, $validated['title'], ResourceVisibility::from($validated['visibility']));
+        $action->handle($lesson, $file, $validated['title'], ResourceVisibility::from($validated['visibility']), [
+            'accessibility_notes'  => $validated['accessibility_notes'] ?? null,
+            'reading_time_minutes' => $validated['reading_time_minutes'] ?? null,
+        ]);
 
         return redirect()
             ->route('instructor.courses.modules.index', $section)

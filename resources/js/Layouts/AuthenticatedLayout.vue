@@ -144,6 +144,12 @@ const navItems = computed<NavItem[]>(() => {
             icon: ClipboardDocumentListIcon,
             routeName: 'admin.audit-logs.*',
         },
+        {
+            label: 'Settings',
+            href: safeRoute('admin.settings.index'),
+            icon: Cog6ToothIcon,
+            routeName: 'admin.settings.*',
+        },
     ];
 });
 

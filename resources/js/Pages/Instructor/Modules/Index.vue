@@ -21,6 +21,8 @@ interface ResourceItem {
     title: string;
     mime_type: string;
     size_bytes: number;
+    accessibility_notes: string | null;
+    reading_time_minutes: number | null;
 }
 
 interface LessonItem {
@@ -199,6 +201,19 @@ function unenrollStudent(studentId: number, studentName: string): void {
         });
     });
 }
+
+// ── Classwork search ─────────────────────────────────────────────────────────
+const searchQuery = ref('');
+
+const filteredModules = computed<ModuleItem[]>(() => {
+    const q = searchQuery.value.trim().toLowerCase();
+    if (!q) return props.section.modules;
+    return props.section.modules.filter(
+        (m) =>
+            m.title.toLowerCase().includes(q) ||
+            m.lessons.some((l) => l.title.toLowerCase().includes(q))
+    );
+});
 
 // ── Grades tab helpers ───────────────────────────────────────────────────────
 const formatDate = (dateString: string | null): string => {
@@ -428,6 +443,20 @@ const submissionCount = computed(
                         </Link>
                     </div>
 
+                    <div role="search" class="mb-4">
+                        <label for="module-search" class="sr-only"
+                            >Search modules and lessons</label
+                        >
+                        <input
+                            id="module-search"
+                            v-model="searchQuery"
+                            type="search"
+                            placeholder="Search modules and lessons…"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Search modules and lessons"
+                        />
+                    </div>
+
                     <EmptyState
                         v-if="section.modules.length === 0"
                         :icon="BookOpenIcon"
@@ -443,9 +472,17 @@ const submissionCount = computed(
                         </Link>
                     </EmptyState>
 
+                    <p
+                        v-else-if="filteredModules.length === 0"
+                        class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-8 text-center text-sm text-gray-500"
+                        role="status"
+                    >
+                        No modules or lessons match your search.
+                    </p>
+
                     <div v-else class="space-y-4">
                         <article
-                            v-for="module in section.modules"
+                            v-for="module in filteredModules"
                             :key="module.id"
                             class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
                             :aria-labelledby="`module-title-${module.id}`"
@@ -600,9 +637,23 @@ const submissionCount = computed(
                                         <li
                                             v-for="resource in lesson.resources"
                                             :key="resource.id"
-                                            class="flex items-center justify-between text-xs text-gray-600"
+                                            class="flex items-start justify-between text-xs text-gray-600"
                                         >
-                                            <span>{{ resource.title }}</span>
+                                            <div>
+                                                <span>{{ resource.title }}</span>
+                                                <span
+                                                    v-if="resource.reading_time_minutes"
+                                                    class="ml-2 inline-flex items-center rounded-full bg-blue-50 px-1.5 py-0.5 text-blue-600"
+                                                >
+                                                    {{ resource.reading_time_minutes }} min
+                                                </span>
+                                                <span
+                                                    v-if="resource.accessibility_notes"
+                                                    class="ml-1 text-gray-400"
+                                                >
+                                                    — {{ resource.accessibility_notes }}
+                                                </span>
+                                            </div>
                                             <button
                                                 type="button"
                                                 class="rounded text-red-400 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
