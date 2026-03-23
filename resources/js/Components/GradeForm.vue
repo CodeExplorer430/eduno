@@ -65,10 +65,10 @@ const submit = (): void => {
                     <textarea
                         id="grade-feedback"
                         v-model="form.feedback"
-                        rows="4"
+                        rows="6"
                         aria-describedby="grade-feedback-error"
                         :aria-invalid="!!form.errors.feedback"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        class="mt-1 block w-full min-h-[96px] resize-y rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                         placeholder="Optional feedback for the student…"
                     ></textarea>
                     <InputError
