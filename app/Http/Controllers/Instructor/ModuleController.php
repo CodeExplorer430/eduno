@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Instructor;
 
-use App\Domain\Content\Actions\CreateModule;
-use App\Domain\Content\Actions\UpdateModule;
-use App\Domain\Content\Models\Module;
+use App\Domain\Module\Actions\CreateModule;
+use App\Domain\Module\Actions\UpdateModule;
+use App\Domain\Module\Models\Module;
 use App\Domain\Course\Models\CourseSection;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Module\CreateModuleRequest;
@@ -47,7 +47,7 @@ class ModuleController extends Controller
     {
         $this->authorize('create', Module::class);
 
-        $action->execute($section->id, $request->validated());
+        $action->handle($section, $request->validated());
 
         return redirect()
             ->route('instructor.courses.modules.index', $section)
@@ -68,7 +68,7 @@ class ModuleController extends Controller
     {
         $this->authorize('update', $module);
 
-        $action->execute($module, $request->validated());
+        $action->handle($module, $request->validated());
 
         return redirect()
             ->route('instructor.courses.modules.index', $section)

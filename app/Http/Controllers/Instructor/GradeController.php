@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Instructor;
 
 use App\Domain\Grade\Actions\GradeSubmission;
 use App\Domain\Grade\Actions\ReleaseGrade;
-use App\Domain\Grade\Models\Grade;
+use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Grade\GradeSubmissionRequest;

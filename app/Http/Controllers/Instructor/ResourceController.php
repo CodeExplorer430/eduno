@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Instructor;
 
-use App\Domain\Content\Actions\DeleteResource;
-use App\Domain\Content\Actions\UploadResource;
-use App\Domain\Content\Models\Lesson;
-use App\Domain\Content\Models\Module;
-use App\Domain\Content\Models\Resource;
+use App\Domain\Module\Actions\DeleteResource;
+use App\Domain\Module\Actions\UploadResource;
+use App\Domain\Module\Models\Lesson;
+use App\Domain\Module\Models\Module;
+use App\Domain\Module\Models\Resource;
 use App\Domain\Course\Models\CourseSection;
+use App\Enums\ResourceVisibility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Resource\UploadResourceRequest;
 use Illuminate\Http\RedirectResponse;
@@ -40,7 +41,7 @@ class ResourceController extends Controller
         /** @var UploadedFile $file */
         $file = $request->file('file');
 
-        $action->execute($lesson->id, $validated['title'], $file, $validated['visibility']);
+        $action->handle($lesson, $file, $validated['title'], ResourceVisibility::from($validated['visibility']));
 
         return redirect()
             ->route('instructor.courses.modules.index', $section)
@@ -51,7 +52,7 @@ class ResourceController extends Controller
     {
         $this->authorize('delete', $resource);
 
-        $action->execute($resource);
+        $action->handle($resource);
 
         return redirect()
             ->route('instructor.courses.modules.index', $section)

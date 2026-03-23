@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Grade\Actions;
 
 use App\Domain\Audit\Actions\LogAction;
-use App\Domain\Grade\Models\Grade;
+use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;

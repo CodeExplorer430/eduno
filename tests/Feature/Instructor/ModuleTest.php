@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Domain\Content\Models\Module;
+use App\Domain\Module\Models\Module;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Enums\UserRole;

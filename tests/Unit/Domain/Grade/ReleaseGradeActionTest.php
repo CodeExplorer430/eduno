@@ -7,7 +7,7 @@ use App\Domain\Audit\Actions\LogAction;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Domain\Grade\Actions\ReleaseGrade;
-use App\Domain\Grade\Models\Grade;
+use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use App\Enums\UserRole;
 use App\Jobs\NotifyStudentGradeReleased;
