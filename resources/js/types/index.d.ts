@@ -15,6 +15,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         preferences?: UserPreferences | null;
         unread_notifications_count: number;
     };
+    userPrefs?: UserPreferences | null;
     ziggy: Config & { location: string };
     flash?: Record<string, string>;
     features: {

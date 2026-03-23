@@ -44,29 +44,28 @@ describe('Instructor/Courses/Index', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
-    it('table has aria-label="Instructor courses" when courses exist', () => {
+    it('courses list has role="list" and aria-label="My courses" when courses exist', () => {
         const wrapper = mount(IndexPage, {
             props: { courses: [courseFixture] },
             global: globalOpts,
         });
-        expect(wrapper.find('table[aria-label="Instructor courses"]').exists()).toBe(true);
+        expect(wrapper.find('[role="list"][aria-label="My courses"]').exists()).toBe(true);
     });
 
-    it('column headers use scope="col"', () => {
+    it('course cards have role="listitem" when courses exist', () => {
         const wrapper = mount(IndexPage, {
             props: { courses: [courseFixture] },
             global: globalOpts,
         });
-        const headers = wrapper.findAll('th[scope="col"]');
-        expect(headers.length).toBeGreaterThan(0);
+        expect(wrapper.find('[role="listitem"]').exists()).toBe(true);
     });
 
-    it('modules link has aria-label containing course title and section name', () => {
+    it('modules link has aria-label containing section name', () => {
         const wrapper = mount(IndexPage, {
             props: { courses: [courseFixture] },
             global: globalOpts,
         });
-        const link = wrapper.find('a[aria-label="Manage modules for Intro to HCI — A"]');
+        const link = wrapper.find('a[aria-label="Manage modules for A"]');
         expect(link.exists()).toBe(true);
     });
 

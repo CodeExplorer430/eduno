@@ -13,6 +13,7 @@
         "laravel/pennant": "^1.21",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
+        "predis/predis": "^3.4",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

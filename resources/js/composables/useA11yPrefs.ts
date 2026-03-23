@@ -7,6 +7,8 @@ export interface A11yPrefs {
     high_contrast?: boolean;
     dyslexia_font?: boolean;
     font_size?: string;
+    email_notifications?: boolean;
+    email_digest?: boolean;
 }
 
 type A11yPageProps = PageProps<{ userPrefs?: A11yPrefs }>;
@@ -22,13 +24,15 @@ export function useA11yPrefs(): {
         high_contrast: false,
         dyslexia_font: false,
         font_size: 'medium',
+        email_notifications: true,
+        email_digest: false,
     });
 
     function applyPrefs(prefs: A11yPrefs | undefined): void {
         const html = document.documentElement;
 
         html.classList.toggle('dyslexia-font', prefs?.dyslexia_font === true);
-        html.classList.toggle('reduced-motion', prefs?.reduced_motion === true);
+        html.classList.toggle('reduce-motion', prefs?.reduced_motion === true);
         html.classList.toggle('high-contrast', prefs?.high_contrast === true);
 
         if (prefs?.font_size) {

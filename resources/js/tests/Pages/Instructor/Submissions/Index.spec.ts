@@ -84,12 +84,12 @@ describe('Instructor/Submissions/Index', () => {
         expect(headers.length).toBeGreaterThan(0);
     });
 
-    it('export button has aria-label="Export submissions as CSV"', () => {
+    it('export link has aria-label="Export submissions as CSV"', () => {
         const wrapper = mount(IndexPage, {
             props: { assignment: baseAssignment, submissions: [] },
             global: globalOpts,
         });
-        expect(wrapper.find('button[aria-label="Export submissions as CSV"]').exists()).toBe(true);
+        expect(wrapper.find('a[aria-label="Export submissions as CSV"]').exists()).toBe(true);
     });
 
     it('passes WCAG axe check', async () => {

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Domain\Grade\Models\Grade;
+use App\Domain\Submission\Models\Grade;
 use App\Mail\GradeReleasedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class NotifyStudentGradeReleased implements ShouldQueue
@@ -23,5 +24,13 @@ class NotifyStudentGradeReleased implements ShouldQueue
         $student = $this->grade->submission->student;
 
         Mail::to($student->email)->send(new GradeReleasedMail($this->grade));
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('NotifyStudentGradeReleased job failed', [
+            'grade_id' => $this->grade->id,
+            'message' => $exception->getMessage(),
+        ]);
     }
 }

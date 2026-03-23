@@ -25,7 +25,7 @@ const props = defineProps<{
                 <h2 class="text-xl font-semibold leading-tight text-gray-800">My Courses</h2>
                 <Link
                     :href="route('courses.create')"
-                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     aria-label="Create new course"
                 >
                     New Course
@@ -54,7 +54,7 @@ const props = defineProps<{
                                 <div>
                                     <Link
                                         :href="route('courses.show', course.id)"
-                                        class="text-lg font-semibold text-indigo-600 hover:text-indigo-800 focus:outline-none focus:underline"
+                                        class="text-lg font-semibold text-blue-600 hover:text-blue-800 focus:outline-none focus:underline"
                                     >
                                         {{ course.code }} — {{ course.title }}
                                     </Link>
@@ -88,7 +88,7 @@ const props = defineProps<{
                     <Link
                         v-if="courses.prev_page_url"
                         :href="courses.prev_page_url"
-                        class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         Previous
                     </Link>
@@ -98,7 +98,7 @@ const props = defineProps<{
                     <Link
                         v-if="courses.next_page_url"
                         :href="courses.next_page_url"
-                        class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         Next
                     </Link>

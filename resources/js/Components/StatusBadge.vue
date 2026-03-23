@@ -15,7 +15,7 @@ const variantClasses: Record<string, string> = {
     published: 'bg-green-100 text-green-800',
     submitted: 'bg-blue-100 text-blue-800',
     graded: 'bg-green-100 text-green-800',
-    returned: 'bg-indigo-100 text-indigo-800',
+    returned: 'bg-blue-100 text-blue-800',
     pending: 'bg-gray-100 text-gray-600',
 };
 

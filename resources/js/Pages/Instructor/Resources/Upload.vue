@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import InputText from 'primevue/inputtext';
 import InputError from '@/Components/InputError.vue';
-import Button from 'primevue/button';
-import FileUpload from 'primevue/fileupload';
-import type { FileUploadSelectEvent } from 'primevue/fileupload';
+import FileUploadInput from '@/Components/FileUploadInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 interface Section {
@@ -33,11 +32,14 @@ const form = useForm({
     title: '',
     file: null as File | null,
     visibility: 'enrolled' as 'enrolled' | 'public',
+    accessibility_notes: '' as string,
+    reading_time_minutes: null as number | null,
 });
 
-const onFileSelect = (e: FileUploadSelectEvent): void => {
-    form.file = e.files[0] ?? null;
-};
+const selectedFiles = ref<File[]>([]);
+watch(selectedFiles, (files) => {
+    form.file = files[0] ?? null;
+});
 
 const submit = (): void => {
     form.post(
@@ -61,7 +63,7 @@ const submit = (): void => {
                     <li>
                         <Link
                             :href="route('instructor.courses.modules.index', section.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             {{ section.course.code }} — Modules
                         </Link>
@@ -78,7 +80,7 @@ const submit = (): void => {
                     <div class="border-b border-gray-100 px-6 py-4">
                         <h1 class="font-semibold text-gray-800">
                             Upload Resource for
-                            <span class="text-indigo-600">{{ lesson.title }}</span>
+                            <span class="text-blue-600">{{ lesson.title }}</span>
                         </h1>
                     </div>
 
@@ -93,11 +95,11 @@ const submit = (): void => {
                     <form class="space-y-5 px-6 py-6" @submit.prevent="submit">
                         <div>
                             <InputLabel for="title" value="Resource Title" />
-                            <InputText
+                            <input
                                 id="title"
                                 v-model="form.title"
                                 type="text"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
                                 :aria-describedby="form.errors.title ? 'title-error' : undefined"
                                 required
                                 autofocus
@@ -111,13 +113,11 @@ const submit = (): void => {
 
                         <div>
                             <InputLabel value="File" />
-                            <FileUpload
-                                mode="advanced"
+                            <FileUploadInput
+                                v-model="selectedFiles"
                                 accept=".pdf,.docx,.pptx,.xlsx,.mp4,.zip"
                                 :multiple="false"
-                                :auto="false"
                                 class="mt-1"
-                                @select="onFileSelect"
                             />
                             <InputError :message="form.errors.file" class="mt-1" />
                         </div>
@@ -127,7 +127,7 @@ const submit = (): void => {
                             <select
                                 id="visibility"
                                 v-model="form.visibility"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                 :aria-describedby="
                                     form.errors.visibility ? 'visibility-error' : undefined
                                 "
@@ -143,16 +143,71 @@ const submit = (): void => {
                             />
                         </div>
 
+                        <div>
+                            <InputLabel
+                                for="reading-time"
+                                value="Reading Time (minutes, optional)"
+                            />
+                            <input
+                                id="reading-time"
+                                v-model.number="form.reading_time_minutes"
+                                type="number"
+                                min="1"
+                                max="999"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                :aria-describedby="
+                                    form.errors.reading_time_minutes
+                                        ? 'reading-time-error'
+                                        : undefined
+                                "
+                                placeholder="e.g. 10"
+                            />
+                            <InputError
+                                id="reading-time-error"
+                                :message="form.errors.reading_time_minutes"
+                                class="mt-1"
+                            />
+                        </div>
+
+                        <div>
+                            <InputLabel
+                                for="accessibility-notes"
+                                value="Accessibility Notes (optional)"
+                            />
+                            <textarea
+                                id="accessibility-notes"
+                                v-model="form.accessibility_notes"
+                                rows="3"
+                                maxlength="500"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                :aria-describedby="
+                                    form.errors.accessibility_notes
+                                        ? 'a11y-notes-error'
+                                        : 'a11y-notes-hint'
+                                "
+                                placeholder="e.g. Screen-reader compatible PDF with text layer"
+                            />
+                            <p id="a11y-notes-hint" class="mt-1 text-xs text-gray-500">
+                                Describe any accessibility features or limitations (max 500
+                                characters).
+                            </p>
+                            <InputError
+                                id="a11y-notes-error"
+                                :message="form.errors.accessibility_notes"
+                                class="mt-1"
+                            />
+                        </div>
+
                         <div class="flex items-center justify-end gap-4 pt-2">
                             <Link
                                 :href="route('instructor.courses.modules.index', section.id)"
-                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                             >
                                 Cancel
                             </Link>
-                            <Button type="submit" :disabled="form.processing">
+                            <PrimaryButton type="submit" :disabled="form.processing">
                                 Upload Resource
-                            </Button>
+                            </PrimaryButton>
                         </div>
                     </form>
                 </div>

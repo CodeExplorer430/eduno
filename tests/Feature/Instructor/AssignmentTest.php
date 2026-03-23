@@ -155,7 +155,7 @@ it('instructor can delete their assignment', function () {
     );
 
     $response->assertRedirect(route('instructor.courses.index'));
-    $this->assertDatabaseMissing('assignments', ['id' => $assignment->id]);
+    $this->assertSoftDeleted('assignments', ['id' => $assignment->id]);
 });
 
 it('non-owner instructor cannot update assignment', function () {

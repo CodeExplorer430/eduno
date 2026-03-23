@@ -9,6 +9,7 @@ use App\Mail\DeadlineReminderMail;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendDeadlineReminder implements ShouldQueue
@@ -24,5 +25,14 @@ class SendDeadlineReminder implements ShouldQueue
     public function handle(): void
     {
         Mail::to($this->student->email)->send(new DeadlineReminderMail($this->assignment));
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('SendDeadlineReminder job failed', [
+            'student_id' => $this->student->id,
+            'assignment_id' => $this->assignment->id,
+            'message' => $exception->getMessage(),
+        ]);
     }
 }

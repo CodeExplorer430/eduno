@@ -16,10 +16,14 @@ const props = withDefaults(
 
 const open = ref(false);
 const panelRef = ref<HTMLElement | null>(null);
+const triggerRef = ref<HTMLElement | null>(null);
 
 const closeOnEscape = (e: KeyboardEvent) => {
     if (open.value && e.key === 'Escape') {
         open.value = false;
+        triggerRef.value
+            ?.querySelector<HTMLElement>('button, [tabindex]:not([tabindex="-1"])')
+            ?.focus() ?? triggerRef.value?.focus();
     }
 };
 
@@ -78,6 +82,7 @@ const alignmentClasses = computed(() => {
 <template>
     <div class="relative">
         <div
+            ref="triggerRef"
             @click="open = !open"
             @keydown.enter.prevent="open = !open"
             @keydown.space.prevent="open = !open"

@@ -71,7 +71,7 @@ export default defineConfig({
             manifest: {
                 name: 'Eduno LMS',
                 short_name: 'Eduno',
-                description: 'University of Caloocan City Learning Management System',
+                description: 'Eduno — Modern Learning Management System for teams, schools, and organizations',
                 theme_color: '#4f46e5',
                 background_color: '#ffffff',
                 display: 'standalone',

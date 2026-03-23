@@ -258,7 +258,7 @@ function isPastDue(): boolean {
                                 class="h-2 w-full overflow-hidden rounded bg-gray-200"
                             >
                                 <div
-                                    class="h-full bg-indigo-500 transition-all"
+                                    class="h-full bg-blue-500 transition-all"
                                     :style="{ width: `${uploadProgress}%` }"
                                 />
                             </div>

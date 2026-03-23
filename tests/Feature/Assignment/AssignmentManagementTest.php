@@ -105,7 +105,7 @@ test('instructor can delete their assignment', function (): void {
         ->delete(route('assignments.destroy', $assignment))
         ->assertRedirect();
 
-    $this->assertDatabaseMissing('assignments', ['id' => $assignment->id]);
+    $this->assertSoftDeleted('assignments', ['id' => $assignment->id]);
 });
 
 // ─── Visibility ───────────────────────────────────────────────────────────────

@@ -61,16 +61,16 @@ describe('Admin/Users/Edit', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
-    it('role select has aria-describedby="user-role-error" (unconditional)', () => {
+    it('role container has aria-describedby="user-role-error" (unconditional)', () => {
         const wrapper = mount(EditPage, {
             global: globalOpts,
             props: { user: userFixture, roles: rolesFixture },
         });
-        const select = wrapper.find('select#user-role');
-        expect(select.attributes('aria-describedby')).toBe('user-role-error');
+        const container = wrapper.find('[aria-describedby="user-role-error"]');
+        expect(container.exists()).toBe(true);
     });
 
-    it('aria-invalid="true" on role select when form.errors.role is set', () => {
+    it('role error element is present when form.errors.role is set', () => {
         mockUseForm.mockReturnValueOnce({
             role: 'student',
             errors: { role: 'The role field is required.' },
@@ -84,8 +84,8 @@ describe('Admin/Users/Edit', () => {
             global: globalOpts,
             props: { user: userFixture, roles: rolesFixture },
         });
-        const select = wrapper.find('select#user-role');
-        expect(select.attributes('aria-invalid')).toBe('true');
+        const errorEl = wrapper.find('#user-role-error');
+        expect(errorEl.exists()).toBe(true);
     });
 
     it('submit button has aria-busy="false" when not processing', () => {

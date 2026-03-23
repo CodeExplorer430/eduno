@@ -50,6 +50,8 @@ class HandleInertiaRequests extends Middleware
                 'high_contrast',
                 'dyslexia_font',
                 'font_size',
+                'email_notifications',
+                'email_digest',
             ]),
         ];
     }

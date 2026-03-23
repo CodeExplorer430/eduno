@@ -38,7 +38,7 @@ function markAll(): void {
                     v-if="unread_count > 0"
                     type="button"
                     :disabled="markAllForm.processing"
-                    class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                    class="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                     @click="markAll"
                 >
                     Mark all as read
@@ -62,7 +62,7 @@ function markAll(): void {
                     :class="[
                         'flex items-start gap-3 rounded-lg border p-4 transition-colors',
                         n.read_at === null
-                            ? 'border-indigo-200 bg-indigo-50'
+                            ? 'border-blue-200 bg-blue-50'
                             : 'border-gray-200 bg-white',
                     ]"
                 >
@@ -72,7 +72,7 @@ function markAll(): void {
                         :class="[
                             'mt-1 h-2.5 w-2.5 shrink-0 rounded-full',
                             n.read_at === null
-                                ? 'bg-indigo-500'
+                                ? 'bg-blue-500'
                                 : 'border border-gray-400 bg-transparent',
                         ]"
                     />
@@ -80,7 +80,7 @@ function markAll(): void {
                     <div class="min-w-0 flex-1">
                         <a
                             :href="route('notifications.show', n.id)"
-                            class="block text-sm font-medium text-gray-900 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 rounded"
+                            class="block text-sm font-medium text-gray-900 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                             >{{ n.data.message }}</a
                         >
                         <p class="mt-0.5 text-xs text-gray-500">{{ formatDate(n.created_at) }}</p>
@@ -89,7 +89,7 @@ function markAll(): void {
                     <button
                         v-if="n.read_at === null"
                         type="button"
-                        class="shrink-0 rounded text-xs text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+                        class="shrink-0 rounded text-xs text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
                         :aria-label="`Mark notification as read: ${n.data.message}`"
                         @click="markRead(n.id)"
                     >

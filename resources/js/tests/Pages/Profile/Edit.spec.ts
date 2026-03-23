@@ -33,9 +33,9 @@ describe('Profile/Edit', () => {
         expect(wrapper.exists()).toBe(true);
     });
 
-    it('header h2 contains "Profile"', () => {
+    it('header h1 contains "Profile"', () => {
         const wrapper = mount(EditPage, { global: globalOpts });
-        const headings = wrapper.findAll('h2');
+        const headings = wrapper.findAll('h1');
         const profileHeading = headings.find((h) => h.text().includes('Profile'));
         expect(profileHeading).toBeDefined();
     });

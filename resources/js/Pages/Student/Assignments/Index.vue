@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import AssignmentCard from '@/Components/AssignmentCard.vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import { Head } from '@inertiajs/vue3';
+import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline';
 
 interface Assignment {
     id: number;
@@ -11,9 +14,37 @@ interface Assignment {
     course_section_id: number;
 }
 
-defineProps<{
+const props = defineProps<{
     assignments: Assignment[];
 }>();
+
+type Group = 'today' | 'week' | 'later' | 'past';
+
+function getGroup(assignment: Assignment): Group {
+    if (!assignment.due_at) return 'later';
+    const due = new Date(assignment.due_at);
+    const now = new Date();
+    if (due < now) return 'past';
+    const diffDays = (due.getTime() - now.getTime()) / 86400000;
+    if (diffDays < 1) return 'today';
+    if (diffDays < 7) return 'week';
+    return 'later';
+}
+
+const grouped = computed<Record<Group, Assignment[]>>(() => {
+    const result: Record<Group, Assignment[]> = { today: [], week: [], later: [], past: [] };
+    for (const a of props.assignments) {
+        result[getGroup(a)].push(a);
+    }
+    return result;
+});
+
+const groupConfig: { key: Group; label: string; accent: string }[] = [
+    { key: 'today', label: 'Due Today', accent: 'text-red-600 border-red-200' },
+    { key: 'week', label: 'Due This Week', accent: 'text-amber-600 border-amber-200' },
+    { key: 'later', label: 'Later', accent: 'text-gray-600 border-gray-200' },
+    { key: 'past', label: 'Past Due', accent: 'text-red-400 border-red-100' },
+];
 </script>
 
 <template>
@@ -24,46 +55,46 @@ defineProps<{
             <h1 class="text-xl font-semibold leading-tight text-gray-800">My Assignments</h1>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <main>
-                    <div
-                        v-if="assignments.length > 0"
-                        class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-                        role="list"
-                        aria-label="Assignments"
+        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <EmptyState
+                v-if="assignments.length === 0"
+                :icon="ClipboardDocumentListIcon"
+                title="No assignments found."
+                description="Your instructors have not published any assignments yet."
+            />
+
+            <div v-else class="space-y-8">
+                <section
+                    v-for="group in groupConfig"
+                    v-show="grouped[group.key].length > 0"
+                    :key="group.key"
+                    :aria-label="group.label"
+                >
+                    <h2
+                        class="mb-4 flex items-center gap-2 border-l-4 pl-3 text-sm font-semibold uppercase tracking-wider"
+                        :class="group.accent"
                     >
-                        <div v-for="assignment in assignments" :key="assignment.id" role="listitem">
+                        {{ group.label }}
+                        <span
+                            class="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-normal text-gray-600"
+                        >
+                            {{ grouped[group.key].length }}
+                        </span>
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+                        role="list"
+                        :aria-label="`${group.label} assignments`"
+                    >
+                        <div
+                            v-for="assignment in grouped[group.key]"
+                            :key="assignment.id"
+                            role="listitem"
+                        >
                             <AssignmentCard :assignment="assignment" />
                         </div>
                     </div>
-
-                    <section
-                        v-else
-                        aria-label="Empty state"
-                        class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-20 text-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="mb-4 h-12 w-12 text-gray-300"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="1.5"
-                                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25Z"
-                            />
-                        </svg>
-                        <p class="text-base font-medium text-gray-500">No assignments found.</p>
-                        <p class="mt-1 text-sm text-gray-400">
-                            Your instructors have not published any assignments yet.
-                        </p>
-                    </section>
-                </main>
+                </section>
             </div>
         </div>
     </AuthenticatedLayout>

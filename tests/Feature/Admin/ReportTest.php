@@ -14,12 +14,10 @@ test('admin can view admin reports index', function (): void {
     $response->assertInertia(
         fn ($page) => $page
         ->component('Admin/Reports/Index')
-        ->has('report.total_courses')
-        ->has('report.total_sections')
-        ->has('report.total_students')
-        ->has('report.total_submissions')
-        ->has('report.late_submissions')
-        ->has('report.graded_submissions')
+        ->has('stats.total_submissions')
+        ->has('stats.late_submissions')
+        ->has('stats.graded')
+        ->has('stats.released_grades')
     );
 });
 

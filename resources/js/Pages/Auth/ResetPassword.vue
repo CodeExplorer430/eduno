@@ -2,9 +2,10 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import IconInput from '@/Components/IconInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps<{
     email: string;
@@ -28,18 +29,18 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout title="Set a new password" subtitle="Choose a strong password for your account">
         <Head title="Reset Password" />
 
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <InputText
+                <IconInput
                     id="email"
                     v-model="form.email"
+                    :icon="EnvelopeIcon"
                     type="email"
-                    class="mt-1 block w-full"
                     required
                     autofocus
                     autocomplete="username"
@@ -52,11 +53,11 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
 
-                <InputText
+                <IconInput
                     id="password"
                     v-model="form.password"
+                    :icon="LockClosedIcon"
                     type="password"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="new-password"
                     aria-describedby="password-error"
@@ -68,11 +69,11 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password_confirmation" value="Confirm Password" />
 
-                <InputText
+                <IconInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
+                    :icon="LockClosedIcon"
                     type="password"
-                    class="mt-1 block w-full"
                     required
                     autocomplete="new-password"
                     aria-describedby="password_confirmation-error"
@@ -86,10 +87,14 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex items-center justify-end">
-                <Button type="submit" :disabled="form.processing" :aria-busy="form.processing">
+                <PrimaryButton
+                    type="submit"
+                    :disabled="form.processing"
+                    :aria-busy="form.processing"
+                >
                     <span v-if="form.processing">Resetting&hellip;</span>
                     <span v-else>Reset Password</span>
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

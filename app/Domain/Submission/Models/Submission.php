@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -28,9 +29,11 @@ use Illuminate\Support\Carbon;
  * @property-read User $student
  * @property-read Collection<int, SubmissionFile> $files
  * @property-read Grade|null $grade
+ * @property Carbon|null $deleted_at
  */
 class Submission extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'assignment_id',
         'student_id',
@@ -38,14 +41,17 @@ class Submission extends Model
         'submitted_at',
         'is_late',
         'attempt_no',
+        'flagged_for_review',
     ];
 
     protected function casts(): array
     {
         return [
-            'status' => SubmissionStatus::class,
-            'submitted_at' => 'datetime',
-            'is_late' => 'boolean',
+            'status'             => SubmissionStatus::class,
+            'submitted_at'       => 'datetime',
+            'is_late'            => 'boolean',
+            'flagged_for_review' => 'boolean',
+            'deleted_at'         => 'datetime',
         ];
     }
 

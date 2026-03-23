@@ -12,10 +12,10 @@ const props = defineProps<{
 }>();
 
 const dueDate = computed(() => new Date(props.assignment.due_at));
-const now = new Date();
+const now = computed(() => new Date());
 
 const hoursUntilDue = computed(() =>
-    Math.floor((dueDate.value.getTime() - now.getTime()) / (1000 * 60 * 60))
+    Math.floor((dueDate.value.getTime() - now.value.getTime()) / (1000 * 60 * 60))
 );
 
 const urgencyClasses = computed(() => {

@@ -11,6 +11,10 @@ vi.mock('@inertiajs/vue3', () => ({
 const stubs = {
     AuthenticatedLayout: { template: '<div><slot /><slot name="header" /></div>' },
     Head: true,
+    StatCard: {
+        template: '<div :data-label="label"><slot /></div>',
+        props: ['label', 'icon', 'accent', 'animationDelay'],
+    },
 };
 
 const routeMock = vi.fn(() => '/');
@@ -42,10 +46,11 @@ describe('Admin/Reports/Index', () => {
         expect(wrapper.find('h2#stats-heading').exists()).toBe(true);
     });
 
-    it('dd element has aria-label containing "Total Submissions: 42"', () => {
+    it('StatCard for Total Submissions renders label and value 42', () => {
         const wrapper = mount(IndexPage, { global: globalOpts, props });
-        const dd = wrapper.find('dd[aria-label="Total Submissions: 42"]');
-        expect(dd.exists()).toBe(true);
+        const card = wrapper.find('[data-label="Total Submissions"]');
+        expect(card.exists()).toBe(true);
+        expect(card.text()).toContain('42');
     });
 
     it('passes WCAG axe check', async () => {

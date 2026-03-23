@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Instructor;
 
 use App\Domain\Grade\Actions\GradeSubmission;
 use App\Domain\Grade\Actions\ReleaseGrade;
-use App\Domain\Grade\Models\Grade;
+use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Grade\GradeSubmissionRequest;
@@ -39,7 +39,7 @@ class GradeController extends Controller
     public function release(Request $request, Grade $grade): RedirectResponse
     {
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
-        $this->authorize('update', $grade);
+        $this->authorize('release', $grade);
 
         $this->releaseGrade->execute($request->user(), $grade);
 

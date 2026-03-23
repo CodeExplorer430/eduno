@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Instructor;
 
 use App\Domain\Announcement\Actions\CreateAnnouncement;
+use App\Domain\Announcement\Actions\UpdateAnnouncement;
 use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Course\Models\CourseSection;
 use App\Http\Controllers\Controller;
@@ -16,8 +17,10 @@ use Inertia\Response;
 
 class AnnouncementController extends Controller
 {
-    public function __construct(private readonly CreateAnnouncement $createAnnouncement)
-    {
+    public function __construct(
+        private readonly CreateAnnouncement $createAnnouncement,
+        private readonly UpdateAnnouncement $updateAnnouncement,
+    ) {
     }
 
     public function index(Request $request): Response
@@ -40,7 +43,14 @@ class AnnouncementController extends Controller
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('create', Announcement::class);
 
-        return Inertia::render('Instructor/Announcements/Create');
+        $sections = CourseSection::where('instructor_id', $request->user()->id)
+            ->with('course:id,code,title')
+            ->get(['id', 'section_name', 'course_id']);
+
+        return Inertia::render('Instructor/Announcements/Create', [
+            'sections'           => $sections,
+            'preselectedSection' => $request->integer('section_id') ?: null,
+        ]);
     }
 
     public function store(CreateAnnouncementRequest $request): RedirectResponse
@@ -61,8 +71,13 @@ class AnnouncementController extends Controller
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $announcement);
 
+        $sections = CourseSection::where('instructor_id', $request->user()->id)
+            ->with('course:id,code,title')
+            ->get(['id', 'section_name', 'course_id']);
+
         return Inertia::render('Instructor/Announcements/Edit', [
             'announcement' => $announcement,
+            'sections'     => $sections,
         ]);
     }
 
@@ -71,7 +86,7 @@ class AnnouncementController extends Controller
         abort_unless($request->user()->isInstructor() || $request->user()->isAdmin(), 403);
         $this->authorize('update', $announcement);
 
-        $announcement->update($request->validated());
+        $this->updateAnnouncement->handle($announcement, $request->validated());
 
         return redirect()->route('instructor.announcements.index')
             ->with('success', 'Announcement updated.');

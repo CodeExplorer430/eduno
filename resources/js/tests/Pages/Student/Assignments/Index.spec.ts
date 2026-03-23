@@ -12,6 +12,7 @@ const stubs = {
     AuthenticatedLayout: { template: '<div><slot /><slot name="header" /></div>' },
     Head: true,
     AssignmentCard: { template: '<div />' },
+    EmptyState: { template: '<section aria-label="Empty state" />' },
 };
 
 const globalOpts = { stubs };
@@ -41,12 +42,12 @@ describe('Student/Assignments/Index', () => {
         expect(wrapper.find('[role="list"]').exists()).toBe(true);
     });
 
-    it('assignments grid has aria-label="Assignments" when assignments exist', () => {
+    it('assignments grid has aria-label containing "assignments" when assignments exist', () => {
         const wrapper = mount(IndexPage, {
             props: { assignments: [assignment] },
             global: globalOpts,
         });
-        expect(wrapper.find('[aria-label="Assignments"]').exists()).toBe(true);
+        expect(wrapper.find('[role="list"]').attributes('aria-label')).toContain('assignments');
     });
 
     it('each assignment item has role="listitem"', () => {

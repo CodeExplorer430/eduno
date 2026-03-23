@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Domain\Content\Models\Lesson;
-use App\Domain\Content\Models\Module;
-use App\Domain\Content\Models\Resource;
+use App\Domain\Module\Models\Lesson;
+use App\Domain\Module\Models\Module;
+use App\Domain\Module\Models\Resource;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Enums\UserRole;
@@ -42,7 +42,7 @@ it('instructor can upload a resource', function () {
     $lesson = Lesson::create([
         'module_id' => $module->id,
         'title' => 'Lesson 1',
-        'type' => 'document',
+        'type' => 'text',
         'order_no' => 1,
     ]);
 
@@ -99,7 +99,7 @@ it('instructor can delete a resource', function () {
     $lesson = Lesson::create([
         'module_id' => $module->id,
         'title' => 'Lesson 1',
-        'type' => 'document',
+        'type' => 'text',
         'order_no' => 1,
     ]);
 
@@ -160,7 +160,7 @@ it('student cannot upload a resource', function () {
     $lesson = Lesson::create([
         'module_id' => $module->id,
         'title' => 'Lesson 1',
-        'type' => 'document',
+        'type' => 'text',
         'order_no' => 1,
     ]);
 

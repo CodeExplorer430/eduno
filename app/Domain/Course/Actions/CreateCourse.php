@@ -7,6 +7,7 @@ namespace App\Domain\Course\Actions;
 use App\Domain\Course\Models\Course;
 use App\Enums\CourseStatus;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -23,25 +24,31 @@ class CreateCourse
             ]);
         }
 
-        $course = Course::create([
-            'code' => $data['code'],
-            'title' => $data['title'],
-            'description' => $data['description'] ?? null,
-            'department' => $data['department'],
-            'term' => $data['term'],
-            'academic_year' => $data['academic_year'],
-            'status' => CourseStatus::Draft,
-            'created_by' => $creator->id,
-        ]);
+        $course = DB::transaction(function () use ($creator, $data): Course {
+            $course = Course::create([
+                'code' => $data['code'],
+                'title' => $data['title'],
+                'description' => $data['description'] ?? null,
+                'department' => $data['department'],
+                'term' => $data['term'],
+                'academic_year' => $data['academic_year'],
+                'status' => CourseStatus::Draft,
+                'created_by' => $creator->id,
+            ]);
 
-        DB::table('audit_logs')->insert([
-            'actor_id' => $creator->id,
-            'action' => 'course.created',
-            'entity_type' => Course::class,
-            'entity_id' => $course->id,
-            'metadata' => json_encode(['code' => $course->code, 'title' => $course->title]),
-            'created_at' => now(),
-        ]);
+            DB::table('audit_logs')->insert([
+                'actor_id' => $creator->id,
+                'action' => 'course.created',
+                'entity_type' => Course::class,
+                'entity_id' => $course->id,
+                'metadata' => json_encode(['code' => $course->code, 'title' => $course->title]),
+                'created_at' => now(),
+            ]);
+
+            return $course;
+        });
+
+        Cache::forget('report.admin');
 
         return $course;
     }

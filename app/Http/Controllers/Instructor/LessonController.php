@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Instructor;
 
-use App\Domain\Content\Actions\CreateLesson;
-use App\Domain\Content\Actions\UpdateLesson;
-use App\Domain\Content\Models\Lesson;
-use App\Domain\Content\Models\Module;
+use App\Domain\Module\Actions\CreateLesson;
+use App\Domain\Module\Actions\UpdateLesson;
+use App\Domain\Module\Models\Lesson;
+use App\Domain\Module\Models\Module;
 use App\Domain\Course\Models\CourseSection;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lesson\CreateLessonRequest;
@@ -33,7 +33,7 @@ class LessonController extends Controller
     {
         $this->authorize('create', Lesson::class);
 
-        $action->execute($module->id, $request->validated());
+        $action->handle($module, $request->validated());
 
         return redirect()
             ->route('instructor.courses.modules.index', $section)
@@ -55,7 +55,7 @@ class LessonController extends Controller
     {
         $this->authorize('update', $lesson);
 
-        $action->execute($lesson, $request->validated());
+        $action->handle($lesson, $request->validated());
 
         return redirect()
             ->route('instructor.courses.modules.index', $section)

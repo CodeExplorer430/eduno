@@ -10,6 +10,12 @@ use App\Models\User;
 
 class GradePolicy
 {
+    public function view(User $user, Grade $grade): bool
+    {
+        return $grade->submission->student_id === $user->id
+            && $grade->released_at !== null;
+    }
+
     public function create(User $user, Submission $submission): bool
     {
         return $user->isAdmin()

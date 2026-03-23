@@ -18,15 +18,19 @@ class UserPreference extends Model
         'dyslexia_font',
         'simplified_layout',
         'language',
+        'email_notifications',
+        'email_digest',
     ];
 
     protected function casts(): array
     {
         return [
-            'high_contrast' => 'boolean',
-            'reduced_motion' => 'boolean',
-            'dyslexia_font' => 'boolean',
-            'simplified_layout' => 'boolean',
+            'high_contrast'       => 'boolean',
+            'reduced_motion'      => 'boolean',
+            'dyslexia_font'       => 'boolean',
+            'simplified_layout'   => 'boolean',
+            'email_notifications' => 'boolean',
+            'email_digest'        => 'boolean',
         ];
     }
 

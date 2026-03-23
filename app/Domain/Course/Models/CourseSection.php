@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -25,9 +26,11 @@ use Illuminate\Support\Carbon;
  * @property-read Course|null $course
  * @property-read User|null $instructor
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Enrollment> $enrollments
+ * @property Carbon|null $deleted_at
  */
 class CourseSection extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'course_id',
         'section_name',

@@ -8,11 +8,12 @@ use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
-use App\Domain\Report\Actions\GetAdminReport;
 use App\Domain\Submission\Models\Grade;
+use App\Domain\Report\Actions\GetAdminReport;
 use App\Domain\Submission\Models\Submission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,12 +35,16 @@ class DashboardController extends Controller
         $report = $adminReport->handle();
 
         return Inertia::render('Dashboard', [
-            'role' => 'admin',
-            'users_by_role' => User::selectRaw('role, count(*) as count')->groupBy('role')->pluck('count', 'role'),
-            'total_courses' => $report['total_courses'],
-            'total_submissions' => $report['total_submissions'],
-            'total_grades_released' => Grade::whereNotNull('released_at')->count(),
-            'report' => $report,
+            'role'                  => 'admin',
+            'users_by_role'         => Cache::remember(
+                'report.admin.users_by_role',
+                now()->addMinutes(10),
+                fn () => User::selectRaw('role, count(*) as count')->groupBy('role')->pluck('count', 'role'),
+            ),
+            'total_courses'         => $report['total_courses'],
+            'total_submissions'     => $report['total_submissions'],
+            'total_grades_released' => $report['released_grades_count'],
+            'report'                => $report,
         ]);
     }
 
@@ -69,25 +74,37 @@ class DashboardController extends Controller
             ->with('submission.assignment.section.course')
             ->get();
 
+        $latestGrade = $recentGrades->first();
+
         $recentAnnouncements = Announcement::whereIn('course_section_id', $sectionIds)
             ->whereNotNull('published_at')
             ->latest('published_at')
             ->limit(5)
-            ->get(['id', 'title', 'published_at', 'course_section_id']);
+            ->with([
+                'courseSection.course:id,code,title',
+                'author:id,name',
+            ])
+            ->get(['id', 'title', 'published_at', 'course_section_id', 'created_by']);
 
         return Inertia::render('Dashboard', [
             'role' => 'student',
             'enrolled_courses_count' => $enrolledSections->count(),
             'upcoming_assignments' => $upcomingAssignments,
             'recent_announcements' => $recentAnnouncements,
-            'courseSummary' => $enrolledSections->map(function (CourseSection $s): array {
+            'latest_grade' => $latestGrade ? [
+                'score'      => $latestGrade->score,
+                'max_score'  => $latestGrade->submission->assignment->max_score,
+                'assignment' => $latestGrade->submission->assignment->title,
+                'course'     => $latestGrade->submission->assignment->section->course->title,
+            ] : null,
+            'course_summary' => $enrolledSections->map(function (CourseSection $s): array {
                 /** @var Course $course */
                 $course = $s->course;
 
                 return [
-                    'id' => $s->id,
-                    'code' => $course->code,
-                    'title' => $course->title,
+                    'id'           => $s->id,
+                    'code'         => $course->code,
+                    'title'        => $course->title,
                     'section_name' => $s->section_name,
                 ];
             }),

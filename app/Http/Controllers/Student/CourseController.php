@@ -16,9 +16,9 @@ class CourseController extends Controller
     {
         $sections = $request->user()
             ->enrollments()
-            ->with(['courseSection.course', 'courseSection.instructor'])
+            ->with(['section.course', 'section.instructor'])
             ->get()
-            ->pluck('courseSection');
+            ->pluck('section');
 
         return Inertia::render('Student/Courses/Index', [
             'sections' => $sections,
@@ -32,16 +32,25 @@ class CourseController extends Controller
             403
         );
 
+        $userId = $request->user()->id;
+
         $section->load([
             'course',
-            'instructor',
+            'instructor:id,name,email',
             'modules' => fn ($q) => $q->whereNotNull('published_at')->orderBy('order_no'),
             'modules.lessons' => fn ($q) => $q->whereNotNull('published_at')->orderBy('order_no'),
-            'assignments',
+            'modules.lessons.resources',
+            'announcements' => fn ($q) => $q->whereNotNull('published_at')->orderByDesc('published_at')->limit(10),
+            'assignments' => fn ($q) => $q->whereNotNull('published_at')->with([
+                'submissions' => fn ($sq) => $sq->where('student_id', $userId),
+            ]),
+            'enrollments' => fn ($q) => $q->where('status', 'active'),
         ]);
 
         return Inertia::render('Student/Courses/Show', [
-            'section' => $section,
+            'section'       => $section,
+            'announcements' => $section->announcements->values(),
+            'assignments'   => $section->assignments->values(),
         ]);
     }
 }

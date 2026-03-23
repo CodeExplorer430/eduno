@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Domain\Grade\Models\Grade;
+use App\Domain\Submission\Models\Grade;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 it('has expected fillable attributes', function (): void {
@@ -22,5 +22,5 @@ it('uses submission relationship', function (): void {
 
 it('uses grader relationship', function (): void {
     $grade = new Grade();
-    expect($grade->grader())->toBeInstanceOf(BelongsTo::class);
+    expect($grade->gradedBy())->toBeInstanceOf(BelongsTo::class);
 });

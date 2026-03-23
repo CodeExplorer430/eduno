@@ -137,7 +137,7 @@ test('instructor can delete their own course', function (): void {
         ->delete(route('courses.destroy', $course))
         ->assertRedirect(route('courses.index'));
 
-    $this->assertDatabaseMissing('courses', ['id' => $course->id]);
+    $this->assertSoftDeleted('courses', ['id' => $course->id]);
 });
 
 test('admin can update any course', function (): void {

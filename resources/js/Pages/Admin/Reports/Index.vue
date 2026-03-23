@@ -1,6 +1,14 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import StatCard from '@/Components/StatCard.vue';
 import { Head } from '@inertiajs/vue3';
+import {
+    DocumentTextIcon,
+    ExclamationTriangleIcon,
+    AcademicCapIcon,
+    StarIcon,
+} from '@heroicons/vue/24/outline';
 
 interface Props {
     stats: {
@@ -11,41 +19,23 @@ interface Props {
     };
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
-interface StatCard {
-    label: string;
-    key: keyof Props['stats'];
-    description: string;
-    colorClass: string;
-}
-
-const cards: StatCard[] = [
-    {
-        label: 'Total Submissions',
-        key: 'total_submissions',
-        description: 'All submissions across all assignments',
-        colorClass: 'bg-blue-50 text-blue-700',
-    },
-    {
-        label: 'Late Submissions',
-        key: 'late_submissions',
-        description: 'Submissions received after the due date',
-        colorClass: 'bg-red-50 text-red-700',
-    },
-    {
-        label: 'Graded',
-        key: 'graded',
-        description: 'Submissions that have received a grade',
-        colorClass: 'bg-green-50 text-green-700',
-    },
-    {
-        label: 'Released Grades',
-        key: 'released_grades',
-        description: 'Grades visible to students',
-        colorClass: 'bg-purple-50 text-purple-700',
-    },
-];
+const gradedPct = computed(() =>
+    props.stats.total_submissions > 0
+        ? Math.round((props.stats.graded / props.stats.total_submissions) * 100)
+        : 0
+);
+const latePct = computed(() =>
+    props.stats.total_submissions > 0
+        ? Math.round((props.stats.late_submissions / props.stats.total_submissions) * 100)
+        : 0
+);
+const releasedPct = computed(() =>
+    props.stats.graded > 0
+        ? Math.round((props.stats.released_grades / props.stats.graded) * 100)
+        : 0
+);
 </script>
 
 <template>
@@ -57,7 +47,7 @@ const cards: StatCard[] = [
                 <h1 class="text-xl font-bold text-gray-900">Reports</h1>
                 <a
                     :href="route('admin.reports.export')"
-                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     download
                 >
                     Export CSV
@@ -73,25 +63,93 @@ const cards: StatCard[] = [
                             Summary Statistics
                         </h2>
 
-                        <dl class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                            <div
-                                v-for="card in cards"
-                                :key="card.key"
-                                class="overflow-hidden rounded-lg bg-white shadow-sm px-6 py-5"
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                            <StatCard
+                                label="Total Submissions"
+                                :icon="DocumentTextIcon"
+                                accent="blue"
+                                :animation-delay="0"
                             >
-                                <dt class="truncate text-sm font-medium text-gray-500">
-                                    {{ card.label }}
-                                </dt>
-                                <dd class="mt-2" :aria-label="`${card.label}: ${stats[card.key]}`">
-                                    <span class="text-3xl font-bold" :class="card.colorClass">
-                                        {{ stats[card.key].toLocaleString() }}
-                                    </span>
-                                    <p class="mt-1 text-xs text-gray-400">
-                                        {{ card.description }}
-                                    </p>
-                                </dd>
+                                {{ stats.total_submissions.toLocaleString() }}
+                            </StatCard>
+                            <StatCard
+                                label="Late Submissions"
+                                :icon="ExclamationTriangleIcon"
+                                accent="red"
+                                :animation-delay="80"
+                            >
+                                {{ stats.late_submissions.toLocaleString() }}
+                            </StatCard>
+                            <StatCard
+                                label="Graded"
+                                :icon="AcademicCapIcon"
+                                accent="green"
+                                :animation-delay="160"
+                            >
+                                {{ stats.graded.toLocaleString() }}
+                            </StatCard>
+                            <StatCard
+                                label="Released Grades"
+                                :icon="StarIcon"
+                                accent="cyan"
+                                :animation-delay="240"
+                            >
+                                {{ stats.released_grades.toLocaleString() }}
+                            </StatCard>
+                        </div>
+                    </section>
+
+                    <!-- Submission Breakdown -->
+                    <section
+                        class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        aria-labelledby="breakdown-heading"
+                    >
+                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                            <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
+                            <h2 id="breakdown-heading" class="font-semibold text-gray-800">
+                                Submission Breakdown
+                            </h2>
+                        </div>
+                        <div class="space-y-4 px-6 py-5">
+                            <div>
+                                <div class="mb-1 flex justify-between text-sm">
+                                    <span class="text-gray-600">Graded rate</span>
+                                    <span class="font-medium text-gray-900">{{ gradedPct }}%</span>
+                                </div>
+                                <div class="h-2 rounded-full bg-gray-100">
+                                    <div
+                                        class="h-2 rounded-full bg-green-500 transition-all duration-700"
+                                        :style="`width: ${gradedPct}%`"
+                                    />
+                                </div>
                             </div>
-                        </dl>
+                            <div>
+                                <div class="mb-1 flex justify-between text-sm">
+                                    <span class="text-gray-600">Late rate</span>
+                                    <span class="font-medium text-gray-900">{{ latePct }}%</span>
+                                </div>
+                                <div class="h-2 rounded-full bg-gray-100">
+                                    <div
+                                        class="h-2 rounded-full bg-red-400 transition-all duration-700"
+                                        :style="`width: ${latePct}%`"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="mb-1 flex justify-between text-sm">
+                                    <span class="text-gray-600">Grades released</span>
+                                    <span class="font-medium text-gray-900"
+                                        >{{ releasedPct }}%</span
+                                    >
+                                </div>
+                                <div class="h-2 rounded-full bg-gray-100">
+                                    <div
+                                        class="h-2 rounded-full bg-cyan-500 transition-all duration-700"
+                                        :style="`width: ${releasedPct}%`"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </section>
                 </main>
             </div>

@@ -27,7 +27,9 @@ class UploadResourceRequest extends FormRequest
                 'mimes:pdf,docx,pptx,xlsx,mp4,zip',
                 'max:51200',
             ],
-            'visibility' => ['required', Rule::in(['enrolled', 'public'])],
+            'visibility'           => ['required', Rule::in(['enrolled', 'public'])],
+            'accessibility_notes'  => ['nullable', 'string', 'max:500'],
+            'reading_time_minutes' => ['nullable', 'integer', 'min:1', 'max:999'],
         ];
     }
 }

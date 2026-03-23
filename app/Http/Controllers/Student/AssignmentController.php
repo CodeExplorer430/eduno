@@ -35,16 +35,19 @@ class AssignmentController extends Controller
 
         $assignment->load(['courseSection.course']);
 
-        $submission = $request->user()
+        $submissions = $request->user()
             ->submissions()
             ->where('assignment_id', $assignment->id)
             ->with('files', 'grade')
-            ->latest()
-            ->first();
+            ->orderByDesc('attempt_no')
+            ->get();
+
+        $submission = $submissions->first();
 
         return Inertia::render('Student/Assignments/Show', [
-            'assignment' => $assignment,
-            'submission' => $submission,
+            'assignment'  => $assignment,
+            'submission'  => $submission,
+            'submissions' => $submissions,
         ]);
     }
 }

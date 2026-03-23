@@ -8,6 +8,8 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
+import AnimateOnScroll from 'primevue/animateonscroll';
+import Ripple from 'primevue/ripple';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -28,9 +30,14 @@ createServer((page) =>
                     ...page.props.ziggy,
                     location: new URL(page.props.ziggy.location),
                 })
-                .use(PrimeVue, { theme: { preset: Aura, options: { darkModeSelector: '.dark' } } })
+                .use(PrimeVue, {
+                    theme: { preset: Aura, options: { darkModeSelector: '.dark' } },
+                    ripple: true,
+                })
                 .use(ToastService)
-                .use(ConfirmationService);
+                .use(ConfirmationService)
+                .directive('animateonscroll', AnimateOnScroll)
+                .directive('ripple', Ripple);
         },
     })
 );

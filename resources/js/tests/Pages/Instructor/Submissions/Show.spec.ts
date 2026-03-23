@@ -4,11 +4,16 @@ import { axe } from 'vitest-axe';
 import ShowPage from '@/Pages/Instructor/Submissions/Show.vue';
 import { mountWithPrimeVue } from '@/tests/helpers';
 
+vi.mock('@/composables/useAppToast', () => ({
+    useAppToast: () => ({ success: vi.fn(), error: vi.fn() }),
+}));
+
 const mockPatch = vi.fn();
 
 const mockUseForm = vi.fn(() => ({
     processing: false,
     patch: mockPatch,
+    wasSuccessful: false,
 }));
 
 vi.mock('@inertiajs/vue3', () => ({
@@ -41,6 +46,7 @@ const baseSubmission = {
     submitted_at: '2026-03-01T10:00:00Z',
     is_late: false,
     attempt_no: 1,
+    flagged_for_review: false,
     assignment: { id: 1, title: 'Lab Report', max_score: 100 },
     student: { id: 10, name: 'Maria Santos' },
     files: [],
@@ -99,9 +105,9 @@ describe('Instructor/Submissions/Show', () => {
             props: { submission: withUnreleasedGrade },
             global: globalOpts,
         });
-        const button = wrapper.find('button[type="submit"]');
-        expect(button.exists()).toBe(true);
-        expect(button.text()).toContain('Release Grade');
+        const buttons = wrapper.findAll('button[type="submit"]');
+        const releaseBtn = buttons.find((b) => b.text().includes('Release Grade'));
+        expect(releaseBtn).toBeDefined();
     });
 
     it('role="status" released notice shown when grade.released_at is set', () => {
@@ -110,6 +116,14 @@ describe('Instructor/Submissions/Show', () => {
             global: globalOpts,
         });
         expect(wrapper.find('[role="status"][aria-live="polite"]').exists()).toBe(true);
+    });
+
+    it('flag button is rendered', () => {
+        const wrapper = mount(ShowPage, {
+            props: { submission: baseSubmission },
+            global: globalOpts,
+        });
+        expect(wrapper.html()).toContain('aria-pressed');
     });
 
     it('passes WCAG axe check', async () => {

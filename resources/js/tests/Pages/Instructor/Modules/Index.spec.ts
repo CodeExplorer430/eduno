@@ -7,18 +7,19 @@ import { mountWithPrimeVue } from '@/tests/helpers';
 vi.mock('@inertiajs/vue3', () => ({
     Head: { template: '<div />' },
     Link: { template: '<a v-bind="$attrs"><slot /></a>', inheritAttrs: false },
-    router: { delete: vi.fn() },
+    router: { delete: vi.fn(), get: vi.fn() },
+    useForm: vi.fn(() => ({ processing: false, delete: vi.fn() })),
 }));
 
 const stubs = {
     AuthenticatedLayout: { template: '<div><slot /><slot name="header" /></div>' },
     Head: true,
     Link: { template: '<a v-bind="$attrs"><slot /></a>', inheritAttrs: false },
-    Dialog: {
-        template: '<div v-if="$attrs.visible"><slot /><slot name="footer" /></div>',
-        inheritAttrs: false,
+    Breadcrumb: true,
+    EmptyState: {
+        template: '<div>{{ title }}<slot /></div>',
+        props: ['icon', 'title', 'description'],
     },
-    Button: { template: '<button><slot /></button>' },
 };
 
 const section = {
@@ -26,6 +27,8 @@ const section = {
     section_name: 'A',
     course: { id: 1, code: 'CCS123', title: 'Intro to HCI' },
     modules: [] as (typeof moduleFixture)[],
+    assignments: [],
+    announcements: [],
 };
 
 const moduleFixture = {
@@ -37,23 +40,30 @@ const moduleFixture = {
     lessons: [],
 };
 
+const baseProps = {
+    section,
+    students: [],
+    assignments: [],
+    gradebook: {},
+};
+
 const routeMock = vi.fn(() => '/');
 
 const globalOpts = { stubs, mocks: { route: routeMock } };
 
 describe('Instructor/Modules/Index', () => {
     it('renders without crashing', () => {
-        const wrapper = mount(IndexPage, { global: globalOpts, props: { section } });
+        const wrapper = mount(IndexPage, { global: globalOpts, props: baseProps });
         expect(wrapper.exists()).toBe(true);
     });
 
     it('shows "No modules yet." text when modules is empty', () => {
-        const wrapper = mount(IndexPage, { global: globalOpts, props: { section } });
+        const wrapper = mount(IndexPage, { global: globalOpts, props: baseProps });
         expect(wrapper.html()).toContain('No modules yet.');
     });
 
     it('"Add Module" link is present', () => {
-        const wrapper = mount(IndexPage, { global: globalOpts, props: { section } });
+        const wrapper = mount(IndexPage, { global: globalOpts, props: baseProps });
         expect(wrapper.html()).toContain('Add Module');
     });
 
@@ -61,7 +71,7 @@ describe('Instructor/Modules/Index', () => {
         const sectionWithModules = { ...section, modules: [moduleFixture] };
         const wrapper = mount(IndexPage, {
             global: globalOpts,
-            props: { section: sectionWithModules },
+            props: { ...baseProps, section: sectionWithModules },
         });
         expect(wrapper.html()).toContain('aria-labelledby="module-title-10"');
     });
@@ -70,7 +80,7 @@ describe('Instructor/Modules/Index', () => {
         const sectionWithModules = { ...section, modules: [moduleFixture] };
         const wrapper = mount(IndexPage, {
             global: globalOpts,
-            props: { section: sectionWithModules },
+            props: { ...baseProps, section: sectionWithModules },
         });
         expect(wrapper.html()).toContain('aria-label="Add lesson to Week 1"');
     });
@@ -79,24 +89,14 @@ describe('Instructor/Modules/Index', () => {
         const sectionWithModules = { ...section, modules: [moduleFixture] };
         const wrapper = mount(IndexPage, {
             global: globalOpts,
-            props: { section: sectionWithModules },
+            props: { ...baseProps, section: sectionWithModules },
         });
         expect(wrapper.html()).toContain('aria-label="Edit module Week 1"');
     });
 
-    it('delete confirmation dialog is not visible initially', () => {
-        const sectionWithModules = { ...section, modules: [moduleFixture] };
-        const wrapper = mount(IndexPage, {
-            global: globalOpts,
-            props: { section: sectionWithModules },
-        });
-        const vm = wrapper.vm as unknown as { confirmDialog: { visible: boolean } };
-        expect(vm.confirmDialog.visible).toBe(false);
-    });
-
     it('passes WCAG axe check', async () => {
         const wrapper = mountWithPrimeVue(IndexPage, {
-            props: { section },
+            props: baseProps,
             global: {
                 mocks: { route: routeMock },
                 stubs,

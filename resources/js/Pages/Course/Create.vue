@@ -52,7 +52,7 @@ function submit(): void {
                                         type="text"
                                         required
                                         autocomplete="off"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.code ? 'code-error' : undefined
                                         "
@@ -80,7 +80,7 @@ function submit(): void {
                                         v-model="form.title"
                                         type="text"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.title ? 'title-error' : undefined
                                         "
@@ -107,7 +107,7 @@ function submit(): void {
                                         id="description"
                                         v-model="form.description"
                                         rows="3"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.description
                                                 ? 'description-error'
@@ -137,7 +137,7 @@ function submit(): void {
                                         v-model="form.department"
                                         type="text"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.department ? 'department-error' : undefined
                                         "
@@ -167,7 +167,7 @@ function submit(): void {
                                             type="text"
                                             required
                                             placeholder="e.g. 1st Semester"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                             :aria-describedby="
                                                 form.errors.term ? 'term-error' : undefined
                                             "
@@ -196,7 +196,7 @@ function submit(): void {
                                             type="text"
                                             required
                                             placeholder="e.g. 2025-2026"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                             :aria-describedby="
                                                 form.errors.academic_year
                                                     ? 'academic-year-error'
@@ -219,14 +219,14 @@ function submit(): void {
                             <div class="mt-6 flex justify-end gap-3">
                                 <a
                                     :href="route('courses.index')"
-                                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     Cancel
                                 </a>
                                 <button
                                     type="submit"
                                     :disabled="form.processing"
-                                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                                     :aria-busy="form.processing"
                                 >
                                     {{ form.processing ? 'Creating…' : 'Create Course' }}

@@ -17,6 +17,8 @@ use Illuminate\Support\Carbon;
  * @property string $mime_type
  * @property int $size_bytes
  * @property ResourceVisibility $visibility
+ * @property string|null $accessibility_notes
+ * @property int|null $reading_time_minutes
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read Lesson $lesson
@@ -30,12 +32,15 @@ class Resource extends Model
         'mime_type',
         'size_bytes',
         'visibility',
+        'accessibility_notes',
+        'reading_time_minutes',
     ];
 
     protected function casts(): array
     {
         return [
-            'visibility' => ResourceVisibility::class,
+            'visibility'           => ResourceVisibility::class,
+            'reading_time_minutes' => 'integer',
         ];
     }
 

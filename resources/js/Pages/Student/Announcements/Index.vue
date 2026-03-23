@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import EmptyState from '@/Components/EmptyState.vue';
+import Pagination from '@/Components/Pagination.vue';
+import { Head } from '@inertiajs/vue3';
+import { MegaphoneIcon } from '@heroicons/vue/24/outline';
 
 interface Course {
     id: number;
@@ -51,6 +55,28 @@ const props = defineProps<{
     announcements: Paginated;
 }>();
 
+const courseFilter = ref<number | null>(null);
+
+const allCourses = computed<Course[]>(() => {
+    const seen = new Set<number>();
+    const result: Course[] = [];
+    for (const a of props.announcements.data) {
+        const c = a.course_section.course;
+        if (!seen.has(c.id)) {
+            seen.add(c.id);
+            result.push(c);
+        }
+    }
+    return result;
+});
+
+const filtered = computed<AnnouncementItem[]>(() => {
+    if (!courseFilter.value) return props.announcements.data;
+    return props.announcements.data.filter(
+        (a) => a.course_section.course.id === courseFilter.value
+    );
+});
+
 const formatDate = (iso: string): string => {
     return new Date(iso).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -58,9 +84,6 @@ const formatDate = (iso: string): string => {
         day: 'numeric',
     });
 };
-
-const decodePaginationLabel = (label: string): string =>
-    label.replace(/&laquo;/g, '«').replace(/&raquo;/g, '»');
 </script>
 
 <template>
@@ -71,22 +94,42 @@ const decodePaginationLabel = (label: string): string =>
             <h1 class="text-xl font-semibold leading-tight text-gray-800">Announcements</h1>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
-                <main>
-                    <div
-                        v-if="announcements.data.length > 0"
-                        class="space-y-4"
-                        role="feed"
-                        aria-label="Course announcements"
-                    >
-                        <article
-                            v-for="announcement in announcements.data"
-                            :key="announcement.id"
-                            class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm"
-                            :aria-labelledby="`announcement-title-${announcement.id}`"
-                        >
-                            <header class="border-b border-gray-100 bg-gray-50 px-6 py-4">
+        <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+            <!-- Course filter -->
+            <div v-if="allCourses.length > 1" class="mb-6">
+                <label for="course-filter" class="sr-only">Filter by course</label>
+                <select
+                    id="course-filter"
+                    v-model="courseFilter"
+                    class="block w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto"
+                >
+                    <option :value="null">All Courses</option>
+                    <option v-for="course in allCourses" :key="course.id" :value="course.id">
+                        {{ course.code }} — {{ course.title }}
+                    </option>
+                </select>
+            </div>
+
+            <div
+                v-if="filtered.length > 0"
+                class="space-y-4"
+                role="feed"
+                aria-label="Course announcements"
+            >
+                <article
+                    v-for="announcement in filtered"
+                    :key="announcement.id"
+                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    :aria-labelledby="`announcement-title-${announcement.id}`"
+                >
+                    <header class="border-b border-gray-100 px-6 py-4">
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50"
+                            >
+                                <MegaphoneIcon class="h-4 w-4 text-blue-600" aria-hidden="true" />
+                            </div>
+                            <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-4">
                                     <h2
                                         :id="`announcement-title-${announcement.id}`"
@@ -102,7 +145,7 @@ const decodePaginationLabel = (label: string): string =>
                                     </time>
                                 </div>
                                 <p class="mt-1 text-sm text-gray-500">
-                                    <span class="font-medium text-indigo-600">
+                                    <span class="font-medium text-blue-600">
                                         {{ announcement.course_section.course.code }}
                                     </span>
                                     &mdash;
@@ -110,55 +153,29 @@ const decodePaginationLabel = (label: string): string =>
                                     &bull;
                                     {{ announcement.author.name }}
                                 </p>
-                            </header>
-
-                            <div class="px-6 py-4">
-                                <p class="whitespace-pre-wrap text-sm text-gray-700">
-                                    {{ announcement.body }}
-                                </p>
                             </div>
-                        </article>
-                    </div>
-
-                    <div
-                        v-else
-                        class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-20 text-center"
-                    >
-                        <p class="text-base font-medium text-gray-500">No announcements yet.</p>
-                        <p class="mt-1 text-sm text-gray-400">
-                            Announcements from your enrolled courses will appear here.
+                        </div>
+                    </header>
+                    <div class="px-6 py-4">
+                        <p class="whitespace-pre-wrap text-sm text-gray-700">
+                            {{ announcement.body }}
                         </p>
                     </div>
-
-                    <!-- Pagination -->
-                    <nav
-                        v-if="announcements.links && announcements.links.length > 3"
-                        class="mt-6 flex items-center justify-center gap-1"
-                        aria-label="Pagination"
-                    >
-                        <template v-for="link in announcements.links" :key="link.label">
-                            <Link
-                                v-if="link.url"
-                                :href="link.url"
-                                class="rounded px-3 py-1 text-sm transition"
-                                :class="
-                                    link.active
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'text-gray-600 hover:bg-gray-100'
-                                "
-                                :aria-current="link.active ? 'page' : undefined"
-                                >{{ decodePaginationLabel(link.label) }}</Link
-                            >
-                            <span
-                                v-else
-                                class="rounded px-3 py-1 text-sm text-gray-300"
-                                aria-disabled="true"
-                                >{{ decodePaginationLabel(link.label) }}</span
-                            >
-                        </template>
-                    </nav>
-                </main>
+                </article>
             </div>
+
+            <EmptyState
+                v-else
+                :icon="MegaphoneIcon"
+                title="No announcements yet."
+                description="Announcements from your enrolled courses will appear here."
+            />
+
+            <Pagination
+                v-if="announcements.links && announcements.links.length > 3"
+                :links="announcements.links"
+                class="mt-6"
+            />
         </div>
     </AuthenticatedLayout>
 </template>

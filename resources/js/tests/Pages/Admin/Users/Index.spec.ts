@@ -10,6 +10,8 @@ vi.mock('@inertiajs/vue3', () => ({
         template: '<a v-bind="$attrs"><slot /></a>',
         inheritAttrs: false,
     },
+    router: { get: vi.fn() },
+    usePage: vi.fn(() => ({ props: { flash: {} } })),
 }));
 
 const stubs = {
@@ -51,10 +53,20 @@ const usersFixture = {
     ],
 };
 
+const extraProps = {
+    filters: { search: null, role: null },
+    summary: { total: 2, student: 1, instructor: 0, admin: 1 },
+    roles: [
+        { name: 'Student', value: 'student' },
+        { name: 'Instructor', value: 'instructor' },
+        { name: 'Admin', value: 'admin' },
+    ],
+};
+
 describe('Admin/Users/Index', () => {
     it('renders without crashing', () => {
         const wrapper = mount(IndexPage, {
-            props: { users: usersFixture },
+            props: { users: usersFixture, ...extraProps },
             global: globalOpts,
         });
         expect(wrapper.exists()).toBe(true);
@@ -62,7 +74,7 @@ describe('Admin/Users/Index', () => {
 
     it('table has aria-label="Registered users"', () => {
         const wrapper = mount(IndexPage, {
-            props: { users: usersFixture },
+            props: { users: usersFixture, ...extraProps },
             global: globalOpts,
         });
         expect(wrapper.find('table[aria-label="Registered users"]').exists()).toBe(true);
@@ -70,7 +82,7 @@ describe('Admin/Users/Index', () => {
 
     it('column headers use scope="col"', () => {
         const wrapper = mount(IndexPage, {
-            props: { users: usersFixture },
+            props: { users: usersFixture, ...extraProps },
             global: globalOpts,
         });
         const headers = wrapper.findAll('th[scope="col"]');
@@ -79,7 +91,7 @@ describe('Admin/Users/Index', () => {
 
     it('edit link has aria-label containing user name', () => {
         const wrapper = mount(IndexPage, {
-            props: { users: usersFixture },
+            props: { users: usersFixture, ...extraProps },
             global: globalOpts,
         });
         expect(wrapper.find('a[aria-label="Edit Alice Admin"]').exists()).toBe(true);
@@ -87,7 +99,7 @@ describe('Admin/Users/Index', () => {
 
     it('<time> element exists with datetime attribute matching created_at', () => {
         const wrapper = mount(IndexPage, {
-            props: { users: usersFixture },
+            props: { users: usersFixture, ...extraProps },
             global: globalOpts,
         });
         const time = wrapper.find('time');
@@ -97,7 +109,7 @@ describe('Admin/Users/Index', () => {
 
     it('pagination nav has aria-label="Pagination" when links > 3', () => {
         const wrapper = mount(IndexPage, {
-            props: { users: usersFixture },
+            props: { users: usersFixture, ...extraProps },
             global: globalOpts,
         });
         expect(wrapper.find('nav[aria-label="Pagination"]').exists()).toBe(true);
@@ -105,7 +117,7 @@ describe('Admin/Users/Index', () => {
 
     it('passes WCAG axe check', async () => {
         const wrapper = mountWithPrimeVue(IndexPage, {
-            props: { users: usersFixture },
+            props: { users: usersFixture, ...extraProps },
             global: globalOpts,
         });
         const results = await axe(wrapper.element, { rules: { region: { enabled: false } } });

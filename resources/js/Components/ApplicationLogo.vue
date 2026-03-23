@@ -5,7 +5,7 @@
         aria-hidden="true"
         focusable="false"
     >
-        <rect width="64" height="64" rx="14" fill="#4f46e5" />
+        <rect width="64" height="64" rx="14" fill="#2563EB" />
         <path fill="white" d="M12 10H52V20H22V28H46V36H22V44H52V54H12V10Z" />
     </svg>
 </template>

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -26,9 +27,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property-read CourseSection $section
  * @property-read Collection<int, Submission> $submissions
+ * @property Carbon|null $deleted_at
  */
 class Assignment extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'course_section_id',
         'title',
@@ -47,7 +50,8 @@ class Assignment extends Model
             'published_at' => 'datetime',
             'allow_resubmission' => 'boolean',
             'allowed_file_types' => 'array',
-            'max_score' => 'decimal:2',
+            'max_score' => 'float',
+            'deleted_at' => 'datetime',
         ];
     }
 

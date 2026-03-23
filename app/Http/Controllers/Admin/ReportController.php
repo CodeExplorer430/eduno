@@ -16,8 +16,15 @@ class ReportController extends Controller
     {
         $this->authorize('admin');
 
+        $report = $action->handle();
+
         return Inertia::render('Admin/Reports/Index', [
-            'report' => $action->handle(),
+            'stats' => [
+                'total_submissions' => $report['total_submissions'],
+                'late_submissions'  => $report['late_submissions'],
+                'graded'            => $report['graded_submissions'],
+                'released_grades'   => $report['released_grades_count'],
+            ],
         ]);
     }
 }

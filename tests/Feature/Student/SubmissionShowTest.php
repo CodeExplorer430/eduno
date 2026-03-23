@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use App\Domain\Assignment\Models\Assignment;
-use App\Domain\Content\Models\Lesson;
-use App\Domain\Content\Models\Module;
-use App\Domain\Content\Models\Resource;
+use App\Domain\Module\Models\Lesson;
+use App\Domain\Module\Models\Module;
+use App\Domain\Module\Models\Resource;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Domain\Course\Models\Enrollment;
@@ -220,7 +220,7 @@ it('enrolled student can download a resource', function () {
     $lesson = Lesson::create([
         'module_id' => $module->id,
         'title' => 'Lesson 1',
-        'type' => 'document',
+        'type' => 'text',
         'order_no' => 1,
         'published_at' => now(),
     ]);

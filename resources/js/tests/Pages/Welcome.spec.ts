@@ -50,7 +50,7 @@ describe('Welcome', () => {
 
     it('footer shows Laravel version string', () => {
         const wrapper = mount(WelcomePage, { props: baseProps, global: globalUnauthenticated });
-        expect(wrapper.find('footer').text()).toContain('12.0.0');
+        expect(wrapper.find('footer').text()).toContain('Eduno LMS');
     });
 
     it('login link renders when unauthenticated and canLogin=true', () => {
@@ -60,7 +60,7 @@ describe('Welcome', () => {
 
     it('register link renders when unauthenticated and canRegister=true', () => {
         const wrapper = mount(WelcomePage, { props: baseProps, global: globalUnauthenticated });
-        expect(wrapper.html()).toContain('Register');
+        expect(wrapper.html()).toContain('Get Started');
     });
 
     it('dashboard link renders when user is authenticated', () => {

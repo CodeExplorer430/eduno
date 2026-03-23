@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { mountWithPrimeVue } from '@/tests/helpers';
 
 // ---------------------------------------------------------------------------
 // Mutable page-props object — tests mutate this before each mount so that
@@ -10,15 +10,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 let mockPageProps: {
     auth: {
         user: { name: string; email: string; role: string };
-        preferences: Record<string, unknown> | null;
     };
+    userPrefs: Record<string, unknown> | null;
     features: Record<string, boolean>;
     flash: Record<string, string>;
 } = {
     auth: {
         user: { name: 'Test User', email: 'test@example.com', role: 'student' },
-        preferences: null,
     },
+    userPrefs: null,
     features: {},
     flash: {},
 };
@@ -46,6 +46,8 @@ const stubs = {
     DropdownLink: { template: '<a href="#"><slot /></a>' },
     Link: { template: '<a href="#"><slot /></a>' },
     Head: true,
+    NotificationBell: true,
+    Toast: true,
 };
 
 const globalOpts = {
@@ -68,8 +70,8 @@ afterEach(() => {
     mockPageProps = {
         auth: {
             user: { name: 'Test User', email: 'test@example.com', role: 'student' },
-            preferences: null,
         },
+        userPrefs: null,
         features: {},
         flash: {},
     };
@@ -78,58 +80,58 @@ afterEach(() => {
 describe('AuthenticatedLayout — watchEffect class application', () => {
     it('applies high-contrast class when features["high-contrast"] is true', async () => {
         mockPageProps.features = { 'high-contrast': true };
-        mount(AuthenticatedLayout, { global: globalOpts });
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('high-contrast')).toBe(true);
     });
 
     it('does not apply high-contrast when features["high-contrast"] is false', async () => {
         mockPageProps.features = { 'high-contrast': false };
-        mount(AuthenticatedLayout, { global: globalOpts });
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('high-contrast')).toBe(false);
     });
 
     it('Pennant flag false overrides user preference true — no high-contrast class', async () => {
         mockPageProps.features = { 'high-contrast': false };
-        mockPageProps.auth.preferences = { high_contrast: true };
-        mount(AuthenticatedLayout, { global: globalOpts });
+        mockPageProps.userPrefs = { high_contrast: true };
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('high-contrast')).toBe(false);
     });
 
     it('falls back to prefs.high_contrast when features object is absent', async () => {
         mockPageProps.features = {};
-        mockPageProps.auth.preferences = { high_contrast: true };
-        mount(AuthenticatedLayout, { global: globalOpts });
+        mockPageProps.userPrefs = { high_contrast: true };
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('high-contrast')).toBe(true);
     });
 
     it('applies simplified class when features["simplified-layout"] is true', async () => {
         mockPageProps.features = { 'simplified-layout': true };
-        mount(AuthenticatedLayout, { global: globalOpts });
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('simplified')).toBe(true);
     });
 
-    it('applies reduce-motion class when prefs.reduced_motion is true', async () => {
-        mockPageProps.auth.preferences = { reduced_motion: true };
-        mount(AuthenticatedLayout, { global: globalOpts });
+    it('applies reduce-motion class when userPrefs.reduced_motion is true', async () => {
+        mockPageProps.userPrefs = { reduced_motion: true };
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('reduce-motion')).toBe(true);
     });
 
-    it('applies font-large class when prefs.font_size is "large"', async () => {
-        mockPageProps.auth.preferences = { font_size: 'large' };
-        mount(AuthenticatedLayout, { global: globalOpts });
+    it('applies font-large class when userPrefs.font_size is "large"', async () => {
+        mockPageProps.userPrefs = { font_size: 'large' };
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('font-large')).toBe(true);
     });
 
-    it('defaults to font-medium when prefs is null', async () => {
-        mockPageProps.auth.preferences = null;
-        mount(AuthenticatedLayout, { global: globalOpts });
+    it('defaults to font-medium when userPrefs is null', async () => {
+        mockPageProps.userPrefs = null;
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('font-medium')).toBe(true);
     });
@@ -137,10 +139,17 @@ describe('AuthenticatedLayout — watchEffect class application', () => {
     it('removes stale font class when new font preference is applied', async () => {
         // Simulate a pre-existing stale font class on the html element
         document.documentElement.classList.add('font-small');
-        mockPageProps.auth.preferences = { font_size: 'large' };
-        mount(AuthenticatedLayout, { global: globalOpts });
+        mockPageProps.userPrefs = { font_size: 'large' };
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
         await nextTick();
         expect(document.documentElement.classList.contains('font-small')).toBe(false);
         expect(document.documentElement.classList.contains('font-large')).toBe(true);
+    });
+
+    it('applies dyslexia-font class when userPrefs.dyslexia_font is true', async () => {
+        mockPageProps.userPrefs = { dyslexia_font: true };
+        mountWithPrimeVue(AuthenticatedLayout, { global: globalOpts });
+        await nextTick();
+        expect(document.documentElement.classList.contains('dyslexia-font')).toBe(true);
     });
 });
