@@ -68,7 +68,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('lessons/{lesson}/publish', [LessonController::class, 'publish'])->name('lessons.publish');
 
     // Resources
-    Route::post('lessons/{lesson}/resources', [ResourceController::class, 'store'])->name('lessons.resources.store');
+    Route::post('lessons/{lesson}/resources', [ResourceController::class, 'store'])
+        ->middleware('throttle:30,1')
+        ->name('lessons.resources.store');
     Route::delete('resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
     Route::get('resources/{resource}/download', [ResourceController::class, 'show'])->name('resources.download');
 
@@ -86,6 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('assignments/{assignment}/submissions', [SubmissionController::class, 'index'])
         ->name('assignments.submissions.index');
     Route::post('assignments/{assignment}/submissions', [SubmissionController::class, 'store'])
+        ->middleware('throttle:30,1')
         ->name('assignments.submissions.store');
     Route::get('submissions/{submission}', [SubmissionController::class, 'show'])
         ->name('submissions.show');
@@ -127,7 +130,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/assignments', [Student\AssignmentController::class, 'index'])->name('assignments.index');
         Route::get('/assignments/{assignment}', [Student\AssignmentController::class, 'show'])->name('assignments.show');
         Route::get('/assignments/{assignment}/submit', [Student\SubmissionController::class, 'create'])->name('submissions.create');
-        Route::post('/assignments/{assignment}/submit', [Student\SubmissionController::class, 'store'])->name('submissions.store');
+        Route::post('/assignments/{assignment}/submit', [Student\SubmissionController::class, 'store'])
+            ->middleware('throttle:30,1')
+            ->name('submissions.store');
         Route::get('/submissions/{submission}', [Student\SubmissionController::class, 'show'])->name('submissions.show');
         Route::get('/grades', [Student\GradeController::class, 'index'])->name('grades.index');
         Route::get('/announcements', [Student\AnnouncementController::class, 'index'])->name('announcements.index');
@@ -174,7 +179,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                 Route::prefix('{lesson}/resources')->name('resources.')->group(function () {
                     Route::get('/upload', [Instructor\ResourceController::class, 'create'])->name('create');
-                    Route::post('/', [Instructor\ResourceController::class, 'store'])->name('store');
+                    Route::post('/', [Instructor\ResourceController::class, 'store'])
+                        ->middleware('throttle:30,1')
+                        ->name('store');
                     Route::delete('/{resource}', [Instructor\ResourceController::class, 'destroy'])->name('destroy');
                 });
             });

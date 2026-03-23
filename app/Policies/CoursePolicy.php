@@ -16,7 +16,14 @@ class CoursePolicy
 
     public function view(User $user, Course $course): bool
     {
-        return true;
+        if ($user->isAdmin() || $user->id === $course->created_by) {
+            return true;
+        }
+
+        return $user->enrollments()
+            ->whereHas('section', fn ($q) => $q->where('course_id', $course->id))
+            ->where('status', 'active')
+            ->exists();
     }
 
     public function create(User $user): bool
