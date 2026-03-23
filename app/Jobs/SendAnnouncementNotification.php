@@ -24,9 +24,13 @@ class SendAnnouncementNotification implements ShouldQueue
     {
         /** @var CourseSection $courseSection */
         $courseSection = $this->announcement->courseSection;
-        $students = $courseSection->enrollments()->with('user')->get()->pluck('user');
+        $students = $courseSection->enrollments()->with('student.preferences')->get()->pluck('student');
 
         foreach ($students as $student) {
+            if ($student->preferences?->email_notifications === false) {
+                continue;
+            }
+
             Mail::to($student->email)->queue(new AnnouncementPublishedMail($this->announcement));
         }
     }

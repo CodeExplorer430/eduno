@@ -14,10 +14,10 @@ use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use App\Enums\SubmissionStatus;
 use App\Enums\UserRole;
-use App\Models\User;
-use App\Notifications\AnnouncementPublishedNotification;
-use App\Notifications\DeadlineReminderNotification;
 use App\Jobs\NotifyStudentGradeReleased;
+use App\Jobs\SendAnnouncementNotification;
+use App\Models\User;
+use App\Notifications\DeadlineReminderNotification;
 use App\Notifications\NewSubmissionNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Notification;
@@ -52,10 +52,10 @@ function makeNotificationSetup(): array
     return [$instructor, $section, $student];
 }
 
-test('publishing announcement sends notification to enrolled students', function (): void {
-    Notification::fake();
+test('publishing announcement dispatches SendAnnouncementNotification job', function (): void {
+    Queue::fake();
 
-    [$instructor, $section, $student] = makeNotificationSetup();
+    [$instructor, $section] = makeNotificationSetup();
 
     $announcement = Announcement::create([
         'course_section_id' => $section->id,
@@ -67,7 +67,7 @@ test('publishing announcement sends notification to enrolled students', function
 
     (new PublishAnnouncement())->handle($announcement);
 
-    Notification::assertSentTo($student, AnnouncementPublishedNotification::class);
+    Queue::assertPushed(SendAnnouncementNotification::class, fn ($job) => $job->announcement->id === $announcement->id);
 });
 
 test('unpublishing announcement does not send notification', function (): void {

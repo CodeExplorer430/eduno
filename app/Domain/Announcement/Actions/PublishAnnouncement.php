@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Announcement\Actions;
 
 use App\Domain\Announcement\Models\Announcement;
-use App\Notifications\AnnouncementPublishedNotification;
-use Illuminate\Support\Facades\Notification;
+use App\Jobs\SendAnnouncementNotification;
 
 class PublishAnnouncement
 {
@@ -20,16 +19,7 @@ class PublishAnnouncement
 
         if ($wasUnpublished) {
             $announcement->refresh();
-            $section = $announcement->section;
-
-            if ($section !== null) {
-                $students = $section->enrollments()
-                    ->with('student')
-                    ->get()
-                    ->pluck('student');
-
-                Notification::send($students, new AnnouncementPublishedNotification($announcement));
-            }
+            SendAnnouncementNotification::dispatch($announcement);
         }
 
         return $announcement;

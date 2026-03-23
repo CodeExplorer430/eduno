@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Submission\Models\Submission;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -17,8 +18,10 @@ class SendDeadlineReminders implements ShouldQueue
 
     public function handle(): void
     {
+        $hours = (int) Setting::get('deadline_reminder_hours', 24);
+
         $assignments = Assignment::query()
-            ->whereBetween('due_at', [now(), now()->addHours(24)])
+            ->whereBetween('due_at', [now(), now()->addHours($hours)])
             ->whereNotNull('published_at')
             ->with('section.enrollments')
             ->get();
