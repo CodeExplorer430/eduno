@@ -22,6 +22,16 @@ class GradeSeeder extends Seeder
             return;
         }
 
+        DB::transaction(function () use ($instructors): void {
+            $this->seed($instructors);
+        });
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<int, \App\Models\User>  $instructors
+     */
+    private function seed(\Illuminate\Database\Eloquent\Collection $instructors): void
+    {
         // Grade and release all submissions from the first assignment in each section
         // (simulates one graded assignment cycle per section)
         $submissions = Submission::doesntHave('grade')

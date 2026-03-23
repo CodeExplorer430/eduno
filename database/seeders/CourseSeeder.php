@@ -17,6 +17,7 @@ use App\Enums\SubmissionStatus;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CourseSeeder extends Seeder
 {
@@ -28,6 +29,18 @@ class CourseSeeder extends Seeder
         if ($instructors->isEmpty() || $students->isEmpty()) {
             return;
         }
+
+        DB::transaction(function () use ($instructors, $students): void {
+            $this->seed($instructors, $students);
+        });
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<int, User>  $instructors
+     * @param  \Illuminate\Database\Eloquent\Collection<int, User>  $students
+     */
+    private function seed(\Illuminate\Database\Eloquent\Collection $instructors, \Illuminate\Database\Eloquent\Collection $students): void
+    {
 
         $coursesData = [
             // 1st Year — 1st Semester
@@ -143,14 +156,19 @@ class CourseSeeder extends Seeder
                         'published_at' => now()->subDay(),
                     ]);
 
-                    // Each student submits
+                    // Each student submits (~20% are late)
                     foreach ($sectionStudents as $student) {
+                        $isLate = rand(1, 100) <= 20;
+                        $submittedAt = $isLate
+                            ? $assignment->due_at->copy()->addHours(rand(1, 72))
+                            : now()->subHours(rand(1, 48));
+
                         Submission::create([
                             'assignment_id' => $assignment->id,
                             'student_id' => $student->id,
                             'status' => SubmissionStatus::Submitted,
-                            'submitted_at' => now()->subHours(rand(1, 48)),
-                            'is_late' => false,
+                            'submitted_at' => $submittedAt,
+                            'is_late' => $isLate,
                             'attempt_no' => 1,
                         ]);
                     }
