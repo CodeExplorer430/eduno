@@ -22,6 +22,7 @@ import {
     UserCircleIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    FlagIcon,
 } from '@heroicons/vue/24/outline';
 import type { PageProps } from '@/types';
 
@@ -143,6 +144,12 @@ const navItems = computed<NavItem[]>(() => {
             href: safeRoute('admin.audit-logs.index'),
             icon: ClipboardDocumentListIcon,
             routeName: 'admin.audit-logs.*',
+        },
+        {
+            label: 'Flagged',
+            href: safeRoute('admin.flagged-submissions.index'),
+            icon: FlagIcon,
+            routeName: 'admin.flagged-submissions.*',
         },
         {
             label: 'Settings',

@@ -198,6 +198,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/courses', [Admin\CourseController::class, 'index'])->name('courses.index');
         Route::patch('/courses/{course}/status', [Admin\CourseController::class, 'updateStatus'])->name('courses.updateStatus');
         Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
+        Route::get('/audit-logs/export', [Admin\AuditLogController::class, 'export'])->name('audit-logs.export');
+        Route::get('/flagged-submissions', [Admin\FlaggedSubmissionController::class, 'index'])->name('flagged-submissions.index');
         Route::get('/reports', [Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/export', [Admin\ReportController::class, 'export'])->name('reports.export');
         Route::get('/settings', [Admin\SettingController::class, 'index'])->name('settings.index');

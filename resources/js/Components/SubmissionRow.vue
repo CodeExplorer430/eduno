@@ -2,6 +2,7 @@
 import Tag from 'primevue/tag';
 import { Link } from '@inertiajs/vue3';
 import { useFormatDate } from '@/composables/useFormatDate';
+import { FlagIcon } from '@heroicons/vue/24/solid';
 
 interface Props {
     submission: {
@@ -11,6 +12,7 @@ interface Props {
         is_late: boolean;
         attempt_no: number;
         status: string;
+        flagged_for_review: boolean;
         grade?: { score: number; released_at: string | null } | null;
     };
     maxScore: number;
@@ -37,7 +39,16 @@ const scoreLabel = (): string => {
 <template>
     <tr class="transition hover:bg-gray-50">
         <td class="px-6 py-4 text-sm font-medium text-gray-900">
-            {{ submission.student.name }}
+            <span class="inline-flex items-center gap-1.5">
+                {{ submission.student.name }}
+                <span
+                    v-if="submission.flagged_for_review"
+                    title="Flagged for plagiarism review"
+                    aria-label="Flagged for plagiarism review"
+                >
+                    <FlagIcon class="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
+                </span>
+            </span>
         </td>
         <td class="px-6 py-4 text-sm text-gray-600">
             <time :datetime="submission.submitted_at">

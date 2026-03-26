@@ -39,6 +39,7 @@ const baseSubmission = {
     is_late: false,
     attempt_no: 1,
     status: 'submitted',
+    flagged_for_review: false,
     grade: null,
 };
 

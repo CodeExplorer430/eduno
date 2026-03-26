@@ -8,6 +8,16 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int         $id
+ * @property int|null    $actor_id
+ * @property string      $action
+ * @property string|null $entity_type
+ * @property int|null    $entity_id
+ * @property array<string, mixed>|null $metadata
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property-read User|null $actor
+ */
 class AuditLog extends Model
 {
     public $timestamps = false;
