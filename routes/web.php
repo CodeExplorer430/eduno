@@ -158,6 +158,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('submissions.show');
         Route::patch('/submissions/{submission}/flag', [Instructor\SubmissionController::class, 'flag'])
             ->name('submissions.flag');
+        Route::get('/sections/{section}/gradebook', [Instructor\GradebookController::class, 'show'])
+            ->name('gradebook.show');
+        Route::get('/sections/{section}/gradebook/export', [Instructor\GradebookController::class, 'export'])
+            ->name('gradebook.export');
         Route::post('/submissions/{submission}/grade', [Instructor\GradeController::class, 'store'])
             ->name('grades.store');
         Route::patch('/grades/{grade}/release', [Instructor\GradeController::class, 'release'])
