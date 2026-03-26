@@ -64,7 +64,7 @@ test('student dashboard has required props', function (): void {
             ->component('Dashboard')
             ->has('course_summary')
             ->has('upcoming')
-            ->has('recentGrades')
+            ->has('recent_grades')
     );
 });
 
@@ -142,7 +142,7 @@ test('instructor dashboard has required props', function (): void {
         fn ($page) => $page
             ->component('Dashboard')
             ->has('sections')
-            ->has('pendingSubmissions')
+            ->has('recent_submissions')
     );
 });
 
@@ -183,7 +183,7 @@ test('instructor pending submissions excludes graded submissions', function (): 
     $response->assertInertia(
         fn ($page) => $page
             ->component('Dashboard')
-            ->where('pendingSubmissions', fn ($subs) => collect($subs)->where('id', $submission->id)->isEmpty())
+            ->where('recent_submissions', fn ($subs) => collect($subs)->where('id', $submission->id)->isEmpty())
     );
 });
 
