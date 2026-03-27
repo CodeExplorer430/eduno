@@ -137,6 +137,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/grades', [Student\GradeController::class, 'index'])->name('grades.index');
         Route::get('/grades/{grade}', [Student\GradeController::class, 'show'])->name('grades.show');
         Route::get('/announcements', [Student\AnnouncementController::class, 'index'])->name('announcements.index');
+        Route::get('/lessons', [Student\LessonController::class, 'index'])->name('lessons.index');
         Route::get('/lessons/{lesson}', [Student\LessonController::class, 'show'])->name('lessons.show');
         Route::get('/resources/{resource}/download', [Student\ResourceController::class, 'download'])->name('resources.download');
     });
@@ -178,6 +179,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/{module}', [Instructor\ModuleController::class, 'destroy'])->name('destroy');
 
             Route::prefix('{module}/lessons')->name('lessons.')->group(function () {
+                Route::get('/', [Instructor\LessonController::class, 'index'])->name('index');
                 Route::get('/create', [Instructor\LessonController::class, 'create'])->name('create');
                 Route::post('/', [Instructor\LessonController::class, 'store'])->name('store');
                 Route::get('/{lesson}/edit', [Instructor\LessonController::class, 'edit'])->name('edit');

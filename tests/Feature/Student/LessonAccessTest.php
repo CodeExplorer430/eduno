@@ -307,3 +307,103 @@ it('guest is redirected from lesson show', function () {
 
     $response->assertRedirect(route('login'));
 });
+
+// ─── Lesson Index Tests ───────────────────────────────────────────────────────
+
+function latMakeEnrolledLesson(User $instructor, User $student, string $code, bool $published = true): array
+{
+    $course = Course::create([
+        'code'          => $code,
+        'title'         => 'Lesson Index Test Course',
+        'department'    => 'CS',
+        'term'          => '1st',
+        'academic_year' => '2025-2026',
+        'status'        => 'published',
+        'created_by'    => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id'     => $course->id,
+        'section_name'  => 'A',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    Enrollment::create([
+        'user_id'           => $student->id,
+        'course_section_id' => $section->id,
+        'status'            => 'active',
+        'enrolled_at'       => now(),
+    ]);
+
+    $module = Module::create([
+        'course_section_id' => $section->id,
+        'title'             => 'Module 1',
+        'order_no'          => 1,
+        'published_at'      => now(),
+    ]);
+
+    $lesson = Lesson::create([
+        'module_id'    => $module->id,
+        'title'        => 'Index Test Lesson',
+        'type'         => 'text',
+        'order_no'     => 1,
+        'published_at' => $published ? now() : null,
+    ]);
+
+    return [$section, $module, $lesson];
+}
+
+it('student sees published lessons on lesson index', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student    = User::factory()->create(['role' => UserRole::Student]);
+
+    [,, $lesson] = latMakeEnrolledLesson($instructor, $student, 'LAI101');
+
+    $this->actingAs($student)
+        ->get(route('student.lessons.index'))
+        ->assertOk()
+        ->assertInertia(
+            fn ($page) => $page
+            ->component('Student/Lessons/Index')
+            ->has('lessons', 1)
+        );
+});
+
+it('student does not see draft lessons on lesson index', function () {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $student    = User::factory()->create(['role' => UserRole::Student]);
+
+    latMakeEnrolledLesson($instructor, $student, 'LAI102', published: false);
+
+    $this->actingAs($student)
+        ->get(route('student.lessons.index'))
+        ->assertOk()
+        ->assertInertia(
+            fn ($page) => $page
+            ->component('Student/Lessons/Index')
+            ->has('lessons', 0)
+        );
+});
+
+it('student does not see lessons from unenrolled sections on lesson index', function () {
+    $instructor  = User::factory()->create(['role' => UserRole::Instructor]);
+    $student     = User::factory()->create(['role' => UserRole::Student]);
+    $otherStudent = User::factory()->create(['role' => UserRole::Student]);
+
+    // Enroll only $otherStudent
+    latMakeEnrolledLesson($instructor, $otherStudent, 'LAI103');
+
+    $this->actingAs($student)
+        ->get(route('student.lessons.index'))
+        ->assertOk()
+        ->assertInertia(
+            fn ($page) => $page
+            ->component('Student/Lessons/Index')
+            ->has('lessons', 0)
+        );
+});
+
+it('guest is redirected from student lesson index', function () {
+    $this->get(route('student.lessons.index'))
+        ->assertRedirect(route('login'));
+});
