@@ -170,6 +170,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('announcements', Instructor\AnnouncementController::class)
             ->except(['show']);
 
+        Route::prefix('sections/{section}/roster')->name('roster.')->group(function () {
+            Route::get('/', [Instructor\RosterController::class, 'index'])->name('index');
+            Route::post('/', [Instructor\RosterController::class, 'store'])->name('store');
+            Route::delete('/{enrollment}', [Instructor\RosterController::class, 'destroy'])->name('destroy');
+        });
+
         Route::prefix('courses/{section}/modules')->name('courses.modules.')->group(function () {
             Route::get('/', [Instructor\ModuleController::class, 'index'])->name('index');
             Route::get('/create', [Instructor\ModuleController::class, 'create'])->name('create');
