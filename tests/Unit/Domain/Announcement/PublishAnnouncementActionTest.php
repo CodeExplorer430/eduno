@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Domain\Accessibility\Models\UserPreference;
 use App\Domain\Announcement\Actions\PublishAnnouncement;
 use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
+use App\Domain\Course\Models\Enrollment;
 use App\Enums\UserRole;
 use App\Models\User;
+use App\Notifications\AnnouncementPublishedNotification;
 use Illuminate\Support\Facades\Notification;
 
 function makePublishTestSection(): array
@@ -111,4 +114,109 @@ test('publishing an announcement whose section was deleted sets published_at wit
     $resolvers = $property->getValue(null);
     unset($resolvers[Announcement::class]['section']);
     $property->setValue(null, $resolvers);
+});
+
+// ─── Notification & Email Tests ───────────────────────────────────────────────
+
+test('notification is sent to active enrolled students on first publish', function (): void {
+    Notification::fake();
+    [$instructor, $section] = makePublishTestSection();
+
+    $active1   = User::factory()->create(['role' => UserRole::Student]);
+    $active2   = User::factory()->create(['role' => UserRole::Student]);
+    $inactive  = User::factory()->create(['role' => UserRole::Student]);
+
+    Enrollment::create(['user_id' => $active1->id, 'course_section_id' => $section->id, 'status' => 'active', 'enrolled_at' => now()]);
+    Enrollment::create(['user_id' => $active2->id, 'course_section_id' => $section->id, 'status' => 'active', 'enrolled_at' => now()]);
+    Enrollment::create(['user_id' => $inactive->id, 'course_section_id' => $section->id, 'status' => 'dropped', 'enrolled_at' => now()]);
+
+    $announcement = Announcement::create([
+        'course_section_id' => $section->id,
+        'title'             => 'Notification Test',
+        'body'              => 'Body.',
+        'created_by'        => $instructor->id,
+        'published_at'      => null,
+    ]);
+
+    (new PublishAnnouncement())->handle($announcement);
+
+    Notification::assertSentTo($active1, AnnouncementPublishedNotification::class);
+    Notification::assertSentTo($active2, AnnouncementPublishedNotification::class);
+    Notification::assertNotSentTo($inactive, AnnouncementPublishedNotification::class);
+});
+
+test('no notification is sent when announcement is unpublished', function (): void {
+    Notification::fake();
+    [$instructor, $section] = makePublishTestSection();
+
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    Enrollment::create(['user_id' => $student->id, 'course_section_id' => $section->id, 'status' => 'active', 'enrolled_at' => now()]);
+
+    $announcement = Announcement::create([
+        'course_section_id' => $section->id,
+        'title'             => 'Published First',
+        'body'              => 'Body.',
+        'created_by'        => $instructor->id,
+        'published_at'      => now()->subMinute(),
+    ]);
+
+    // Second call toggles off — should send no notification.
+    (new PublishAnnouncement())->handle($announcement);
+
+    Notification::assertNothingSent();
+});
+
+test('notification uses mail channel when user has no preferences row', function (): void {
+    Notification::fake();
+    [$instructor, $section] = makePublishTestSection();
+
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    Enrollment::create(['user_id' => $student->id, 'course_section_id' => $section->id, 'status' => 'active', 'enrolled_at' => now()]);
+    // No UserPreference row — mail should be included by default.
+
+    $announcement = Announcement::create([
+        'course_section_id' => $section->id,
+        'title'             => 'Default Prefs',
+        'body'              => 'Body.',
+        'created_by'        => $instructor->id,
+        'published_at'      => null,
+    ]);
+
+    (new PublishAnnouncement())->handle($announcement);
+
+    Notification::assertSentTo(
+        $student,
+        AnnouncementPublishedNotification::class,
+        fn ($notification, $channels) => in_array('mail', $channels, true)
+    );
+});
+
+test('notification skips mail channel when user has email_notifications disabled', function (): void {
+    Notification::fake();
+    [$instructor, $section] = makePublishTestSection();
+
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    Enrollment::create(['user_id' => $student->id, 'course_section_id' => $section->id, 'status' => 'active', 'enrolled_at' => now()]);
+
+    UserPreference::create([
+        'user_id'             => $student->id,
+        'email_notifications' => false,
+    ]);
+
+    $announcement = Announcement::create([
+        'course_section_id' => $section->id,
+        'title'             => 'Opt-Out Test',
+        'body'              => 'Body.',
+        'created_by'        => $instructor->id,
+        'published_at'      => null,
+    ]);
+
+    (new PublishAnnouncement())->handle($announcement);
+
+    Notification::assertSentTo(
+        $student,
+        AnnouncementPublishedNotification::class,
+        fn ($notification, $channels) => ! in_array('mail', $channels, true)
+                                      && in_array('database', $channels, true)
+    );
 });
