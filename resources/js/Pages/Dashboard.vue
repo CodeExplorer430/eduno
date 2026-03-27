@@ -11,6 +11,10 @@ import {
     UsersIcon,
     MegaphoneIcon,
     ClockIcon,
+    ExclamationTriangleIcon,
+    FlagIcon,
+    AcademicCapIcon,
+    UserGroupIcon,
 } from '@heroicons/vue/24/outline';
 import type { Announcement, Assignment, Submission } from '@/Types/models';
 import { useFormatDate } from '@/composables/useFormatDate';
@@ -78,6 +82,8 @@ interface Props {
     // instructor
     courses_count?: number;
     pending_submissions_count?: number;
+    unreleased_grades_count?: number;
+    flagged_count?: number;
     recent_submissions?: RecentSubmission[];
     upcoming_deadlines?: UpcomingAssignmentSummary[];
     sections?: SectionSummary[];
@@ -367,7 +373,7 @@ const greeting = computed(() => {
                     <!-- Stats -->
                     <section aria-labelledby="instructor-stats-heading">
                         <h2 id="instructor-stats-heading" class="sr-only">Your statistics</h2>
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                             <StatCard
                                 label="Course Sections"
                                 :icon="BookOpenIcon"
@@ -379,14 +385,58 @@ const greeting = computed(() => {
                             <StatCard
                                 label="Pending Submissions"
                                 :icon="ClipboardDocumentListIcon"
-                                value-class="text-blue-600"
                                 :animation-delay="80"
                                 accent="cyan"
                             >
                                 {{ props.pending_submissions_count ?? 0 }}
                             </StatCard>
+                            <StatCard
+                                label="Unreleased Grades"
+                                :icon="ChartBarIcon"
+                                :animation-delay="160"
+                                accent="amber"
+                            >
+                                {{ props.unreleased_grades_count ?? 0 }}
+                            </StatCard>
+                            <StatCard
+                                label="Flagged Submissions"
+                                :icon="FlagIcon"
+                                :animation-delay="240"
+                                accent="red"
+                            >
+                                {{ props.flagged_count ?? 0 }}
+                            </StatCard>
                         </div>
                     </section>
+
+                    <!-- Unreleased grades reminder banner -->
+                    <div
+                        v-if="(props.unreleased_grades_count ?? 0) > 0"
+                        class="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        <ExclamationTriangleIcon
+                            class="mt-0.5 h-5 w-5 shrink-0 text-amber-500"
+                            aria-hidden="true"
+                        />
+                        <div class="flex-1 text-sm text-amber-800">
+                            <span class="font-semibold">
+                                {{ props.unreleased_grades_count }}
+                                {{
+                                    props.unreleased_grades_count === 1 ? 'grade' : 'grades'
+                                }}
+                                waiting to be released.
+                            </span>
+                            Students cannot see their scores until you release them.
+                        </div>
+                        <Link
+                            :href="route('instructor.submissions.all')"
+                            class="shrink-0 rounded text-sm font-medium text-amber-700 underline hover:text-amber-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1"
+                        >
+                            View Submissions →
+                        </Link>
+                    </div>
 
                     <!-- My Sections -->
                     <section
@@ -407,16 +457,47 @@ const greeting = computed(() => {
                             <li
                                 v-for="section in props.sections"
                                 :key="section.id"
-                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-gray-50"
+                                class="px-6 py-4 transition-colors hover:bg-gray-50"
                             >
-                                <span class="font-medium text-gray-800">
-                                    <span class="font-mono">{{ section.course.code }}</span>
-                                    — {{ section.section_name }}
-                                </span>
-                                <span class="flex gap-4 text-xs text-gray-500">
-                                    <span>{{ section.enrollments_count }} enrolled</span>
-                                    <span>{{ section.assignments_count }} assignments</span>
-                                </span>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-800">
+                                        <span class="font-mono">{{ section.course.code }}</span>
+                                        — {{ section.section_name }}
+                                    </span>
+                                    <span class="flex gap-4 text-xs text-gray-500">
+                                        <span>{{ section.enrollments_count }} enrolled</span>
+                                        <span>{{ section.assignments_count }} assignments</span>
+                                    </span>
+                                </div>
+                                <!-- Quick-action links -->
+                                <div class="mt-2 flex gap-4">
+                                    <Link
+                                        :href="
+                                            route('instructor.courses.modules.index', section.id)
+                                        "
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        :aria-label="`Go to Modules for ${section.section_name}`"
+                                    >
+                                        <BookOpenIcon class="h-3.5 w-3.5" aria-hidden="true" />
+                                        Modules
+                                    </Link>
+                                    <Link
+                                        :href="route('instructor.roster.index', section.id)"
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        :aria-label="`Go to Roster for ${section.section_name}`"
+                                    >
+                                        <UserGroupIcon class="h-3.5 w-3.5" aria-hidden="true" />
+                                        Roster
+                                    </Link>
+                                    <Link
+                                        :href="route('instructor.gradebook.show', section.id)"
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        :aria-label="`Go to Gradebook for ${section.section_name}`"
+                                    >
+                                        <AcademicCapIcon class="h-3.5 w-3.5" aria-hidden="true" />
+                                        Gradebook
+                                    </Link>
+                                </div>
                             </li>
                         </ul>
                     </section>
