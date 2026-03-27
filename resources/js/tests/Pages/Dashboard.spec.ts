@@ -21,19 +21,21 @@ const globalOpts = {
 const studentProps = {
     role: 'student' as const,
     enrolled_courses_count: 3,
-    upcoming_assignments: [
+    upcoming: [
         {
             id: 1,
-            course_section_id: 1,
             title: 'Lab Report 1',
-            instructions: null,
+            course_name: 'Intro to Computing',
+            course_code: 'CCS101',
             due_at: '2026-04-05T23:59:00Z',
-            max_score: 50,
-            allow_resubmission: false,
-            allowed_file_types: null,
-            published_at: '2026-03-01T00:00:00Z',
-            created_at: '2026-03-01T00:00:00Z',
-            updated_at: '2026-03-01T00:00:00Z',
+        },
+    ],
+    recent_grades: [
+        {
+            assignment_title: 'Problem Set 1',
+            score: 88,
+            max_score: 100,
+            course_name: 'Intro to Computing',
         },
     ],
     recent_announcements: [
@@ -88,6 +90,17 @@ const instructorProps = {
     role: 'instructor' as const,
     courses_count: 5,
     pending_submissions_count: 2,
+    unreleased_grades_count: 3,
+    flagged_count: 1,
+    sections: [
+        {
+            id: 1,
+            section_name: 'A',
+            course: { id: 1, code: 'CCS101', title: 'Intro to Computing' },
+            enrollments_count: 30,
+            assignments_count: 4,
+        },
+    ],
     recent_submissions: [
         {
             id: 1,
@@ -163,12 +176,38 @@ describe('Dashboard — student role', () => {
         expect(wrapper.text()).toContain('None yet');
     });
 
-    it('shows assignment title and due date in upcoming assignments list', () => {
+    it('shows assignment title in upcoming assignments list', () => {
         const wrapper = mount(Dashboard, {
             props: studentProps,
             global: globalOpts,
         });
         expect(wrapper.text()).toContain('Lab Report 1');
+    });
+
+    it('shows course code badge in upcoming assignments', () => {
+        const wrapper = mount(Dashboard, {
+            props: studentProps,
+            global: globalOpts,
+        });
+        expect(wrapper.text()).toContain('CCS101');
+    });
+
+    it('shows recent grades section with score', () => {
+        const wrapper = mount(Dashboard, {
+            props: studentProps,
+            global: globalOpts,
+        });
+        expect(wrapper.text()).toContain('Recent Grades');
+        expect(wrapper.text()).toContain('Problem Set 1');
+        expect(wrapper.text()).toContain('88');
+    });
+
+    it('shows "No assignments due" empty state when upcoming is empty', () => {
+        const wrapper = mount(Dashboard, {
+            props: { ...studentProps, upcoming: [] },
+            global: globalOpts,
+        });
+        expect(wrapper.text()).toContain('No assignments due in the next 7 days.');
     });
 
     it('shows announcement title in recent announcements', () => {
@@ -177,14 +216,6 @@ describe('Dashboard — student role', () => {
             global: globalOpts,
         });
         expect(wrapper.text()).toContain('Welcome to the course');
-    });
-
-    it('shows "No assignments due" empty state when upcoming_assignments is empty', () => {
-        const wrapper = mount(Dashboard, {
-            props: { ...studentProps, upcoming_assignments: [] },
-            global: globalOpts,
-        });
-        expect(wrapper.text()).toContain('No assignments due in the next 7 days.');
     });
 
     it('passes WCAG axe check', async () => {
@@ -231,6 +262,56 @@ describe('Dashboard — instructor role', () => {
             global: globalOpts,
         });
         expect(wrapper.text()).toContain('No recent submissions.');
+    });
+
+    it('shows my sections list with enrollment count', () => {
+        const wrapper = mount(Dashboard, {
+            props: instructorProps,
+            global: globalOpts,
+        });
+        expect(wrapper.text()).toContain('My Sections');
+        expect(wrapper.text()).toContain('CCS101');
+        expect(wrapper.text()).toContain('30 enrolled');
+    });
+
+    it('renders "Unreleased Grades" stat card', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('Unreleased Grades');
+        expect(wrapper.text()).toContain('3');
+    });
+
+    it('renders "Flagged Submissions" stat card', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('Flagged Submissions');
+        expect(wrapper.text()).toContain('1');
+    });
+
+    it('amber banner is visible when unreleased_grades_count > 0', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('waiting to be released');
+        expect(wrapper.text()).toContain('View Submissions →');
+    });
+
+    it('amber banner is hidden when unreleased_grades_count is 0', () => {
+        const wrapper = mount(Dashboard, {
+            props: { ...instructorProps, unreleased_grades_count: 0 },
+            global: globalOpts,
+        });
+        expect(wrapper.text()).not.toContain('waiting to be released');
+    });
+
+    it('section cards render Modules / Roster / Gradebook quick-links', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('Modules');
+        expect(wrapper.text()).toContain('Roster');
+        expect(wrapper.text()).toContain('Gradebook');
+    });
+
+    it('section quick-links have descriptive aria-labels', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.find('a[aria-label="Go to Modules for A"]').exists()).toBe(true);
+        expect(wrapper.find('a[aria-label="Go to Roster for A"]').exists()).toBe(true);
+        expect(wrapper.find('a[aria-label="Go to Gradebook for A"]').exists()).toBe(true);
     });
 
     it('passes WCAG axe check', async () => {

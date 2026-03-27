@@ -3,6 +3,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Breadcrumb from '@/Components/Breadcrumb.vue';
 import SubmissionRow from '@/Components/SubmissionRow.vue';
 import { Head } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { FlagIcon } from '@heroicons/vue/24/outline';
 
 interface Submission {
     id: number;
@@ -11,6 +13,7 @@ interface Submission {
     is_late: boolean;
     attempt_no: number;
     status: string;
+    flagged_for_review: boolean;
     grade?: { score: number; released_at: string | null } | null;
 }
 
@@ -25,6 +28,14 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const showFlaggedOnly = ref(false);
+
+const filteredSubmissions = computed<Submission[]>(() =>
+    showFlaggedOnly.value
+        ? props.submissions.filter((s) => s.flagged_for_review)
+        : props.submissions
+);
 </script>
 
 <template>
@@ -53,6 +64,21 @@ const props = defineProps<Props>();
                             &middot; Max score: {{ assignment.max_score }}
                         </p>
                     </div>
+                    <button
+                        type="button"
+                        :class="[
+                            'inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500',
+                            showFlaggedOnly
+                                ? 'border-amber-400 bg-amber-50 text-amber-700 hover:bg-amber-100'
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
+                        ]"
+                        :aria-pressed="showFlaggedOnly"
+                        aria-label="Toggle show flagged submissions only"
+                        @click="showFlaggedOnly = !showFlaggedOnly"
+                    >
+                        <FlagIcon class="h-4 w-4" aria-hidden="true" />
+                        Flagged only
+                    </button>
                     <a
                         :href="route('instructor.submissions.export', assignment.id)"
                         class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -63,7 +89,7 @@ const props = defineProps<Props>();
                 </header>
 
                 <div
-                    v-if="submissions.length === 0"
+                    v-if="filteredSubmissions.length === 0"
                     role="status"
                     class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center"
                 >
@@ -127,7 +153,7 @@ const props = defineProps<Props>();
                             </thead>
                             <tbody class="divide-y divide-gray-100 bg-white">
                                 <SubmissionRow
-                                    v-for="sub in submissions"
+                                    v-for="sub in filteredSubmissions"
                                     :key="sub.id"
                                     :submission="sub"
                                     :max-score="assignment.max_score"

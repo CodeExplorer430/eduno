@@ -137,6 +137,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/grades', [Student\GradeController::class, 'index'])->name('grades.index');
         Route::get('/grades/{grade}', [Student\GradeController::class, 'show'])->name('grades.show');
         Route::get('/announcements', [Student\AnnouncementController::class, 'index'])->name('announcements.index');
+        Route::get('/lessons', [Student\LessonController::class, 'index'])->name('lessons.index');
         Route::get('/lessons/{lesson}', [Student\LessonController::class, 'show'])->name('lessons.show');
         Route::get('/resources/{resource}/download', [Student\ResourceController::class, 'download'])->name('resources.download');
     });
@@ -158,12 +159,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('submissions.show');
         Route::patch('/submissions/{submission}/flag', [Instructor\SubmissionController::class, 'flag'])
             ->name('submissions.flag');
+        Route::get('/sections/{section}/gradebook', [Instructor\GradebookController::class, 'show'])
+            ->name('gradebook.show');
+        Route::get('/sections/{section}/gradebook/export', [Instructor\GradebookController::class, 'export'])
+            ->name('gradebook.export');
         Route::post('/submissions/{submission}/grade', [Instructor\GradeController::class, 'store'])
             ->name('grades.store');
         Route::patch('/grades/{grade}/release', [Instructor\GradeController::class, 'release'])
             ->name('grades.release');
         Route::resource('announcements', Instructor\AnnouncementController::class)
             ->except(['show']);
+
+        Route::prefix('sections/{section}/roster')->name('roster.')->group(function () {
+            Route::get('/', [Instructor\RosterController::class, 'index'])->name('index');
+            Route::post('/', [Instructor\RosterController::class, 'store'])->name('store');
+            Route::delete('/{enrollment}', [Instructor\RosterController::class, 'destroy'])->name('destroy');
+        });
 
         Route::prefix('courses/{section}/modules')->name('courses.modules.')->group(function () {
             Route::get('/', [Instructor\ModuleController::class, 'index'])->name('index');
@@ -174,6 +185,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/{module}', [Instructor\ModuleController::class, 'destroy'])->name('destroy');
 
             Route::prefix('{module}/lessons')->name('lessons.')->group(function () {
+                Route::get('/', [Instructor\LessonController::class, 'index'])->name('index');
                 Route::get('/create', [Instructor\LessonController::class, 'create'])->name('create');
                 Route::post('/', [Instructor\LessonController::class, 'store'])->name('store');
                 Route::get('/{lesson}/edit', [Instructor\LessonController::class, 'edit'])->name('edit');
@@ -198,6 +210,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/courses', [Admin\CourseController::class, 'index'])->name('courses.index');
         Route::patch('/courses/{course}/status', [Admin\CourseController::class, 'updateStatus'])->name('courses.updateStatus');
         Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index');
+        Route::get('/audit-logs/export', [Admin\AuditLogController::class, 'export'])->name('audit-logs.export');
+        Route::get('/flagged-submissions', [Admin\FlaggedSubmissionController::class, 'index'])->name('flagged-submissions.index');
         Route::get('/reports', [Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/export', [Admin\ReportController::class, 'export'])->name('reports.export');
         Route::get('/settings', [Admin\SettingController::class, 'index'])->name('settings.index');

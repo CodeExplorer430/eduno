@@ -94,6 +94,101 @@ it('instructor can update their lesson', function () {
     $this->assertDatabaseHas('lessons', ['id' => $lesson->id, 'title' => 'Updated Lesson', 'type' => 'video']);
 });
 
+// ─── Lesson Index Tests ───────────────────────────────────────────────────────
+
+function liMakeSection(User $instructor): array
+{
+    $course = Course::create([
+        'code'          => 'LI' . fake()->unique()->numberBetween(100, 999),
+        'title'         => 'Lesson Index Course',
+        'department'    => 'CS',
+        'term'          => '1st',
+        'academic_year' => '2025-2026',
+        'status'        => 'published',
+        'created_by'    => $instructor->id,
+    ]);
+
+    $section = CourseSection::create([
+        'course_id'     => $course->id,
+        'section_name'  => 'A',
+        'instructor_id' => $instructor->id,
+    ]);
+
+    $module = Module::create([
+        'course_section_id' => $section->id,
+        'title'             => 'Module 1',
+        'order_no'          => 1,
+    ]);
+
+    return [$section, $module];
+}
+
+function liMakeLesson(Module $module): Lesson
+{
+    return Lesson::create([
+        'module_id'    => $module->id,
+        'title'        => 'Test Lesson',
+        'type'         => 'text',
+        'order_no'     => 1,
+        'published_at' => now(),
+    ]);
+}
+
+test('instructor can view lesson index for their module', function (): void {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    [$section, $module] = liMakeSection($instructor);
+
+    $this->actingAs($instructor)
+        ->get(route('instructor.courses.modules.lessons.index', ['section' => $section, 'module' => $module]))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->component('Instructor/Lessons/Index'));
+});
+
+test('instructor cannot view lesson index for another instructor module', function (): void {
+    $owner = User::factory()->create(['role' => UserRole::Instructor]);
+    $other = User::factory()->create(['role' => UserRole::Instructor]);
+    [$section, $module] = liMakeSection($owner);
+
+    $this->actingAs($other)
+        ->get(route('instructor.courses.modules.lessons.index', ['section' => $section, 'module' => $module]))
+        ->assertForbidden();
+});
+
+test('admin can view lesson index for any module', function (): void {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    $admin      = User::factory()->create(['role' => UserRole::Admin]);
+    [$section, $module] = liMakeSection($instructor);
+
+    $this->actingAs($admin)
+        ->get(route('instructor.courses.modules.lessons.index', ['section' => $section, 'module' => $module]))
+        ->assertOk();
+});
+
+test('guest is redirected from instructor lesson index', function (): void {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    [$section, $module] = liMakeSection($instructor);
+
+    $this->get(route('instructor.courses.modules.lessons.index', ['section' => $section, 'module' => $module]))
+        ->assertRedirect(route('login'));
+});
+
+test('lesson index response has section module and lessons props', function (): void {
+    $instructor = User::factory()->create(['role' => UserRole::Instructor]);
+    [$section, $module] = liMakeSection($instructor);
+    liMakeLesson($module);
+
+    $this->actingAs($instructor)
+        ->get(route('instructor.courses.modules.lessons.index', ['section' => $section, 'module' => $module]))
+        ->assertOk()
+        ->assertInertia(
+            fn ($page) => $page
+            ->component('Instructor/Lessons/Index')
+            ->has('section')
+            ->has('module')
+            ->has('lessons', 1)
+        );
+});
+
 it('student cannot create a lesson', function () {
     $instructor = User::factory()->create(['role' => UserRole::Instructor]);
     $student = User::factory()->create(['role' => UserRole::Student]);

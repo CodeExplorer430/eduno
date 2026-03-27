@@ -11,9 +11,36 @@ import {
     UsersIcon,
     MegaphoneIcon,
     ClockIcon,
+    ExclamationTriangleIcon,
+    FlagIcon,
+    AcademicCapIcon,
+    UserGroupIcon,
 } from '@heroicons/vue/24/outline';
-import type { Assignment, Announcement, Submission } from '@/Types/models';
+import type { Announcement, Assignment, Submission } from '@/Types/models';
 import { useFormatDate } from '@/composables/useFormatDate';
+
+interface UpcomingAssignmentSummary {
+    id: number;
+    title: string;
+    course_name: string;
+    course_code: string;
+    due_at: string | null;
+}
+
+interface RecentGradeSummary {
+    assignment_title: string;
+    score: number;
+    max_score: number;
+    course_name: string;
+}
+
+interface SectionSummary {
+    id: number;
+    section_name: string;
+    course: { id: number; code: string; title: string };
+    enrollments_count: number;
+    assignments_count: number;
+}
 
 interface LatestGrade {
     score: number;
@@ -47,15 +74,19 @@ interface Props {
     role: 'student' | 'instructor' | 'admin';
     // student
     enrolled_courses_count?: number;
-    upcoming_assignments?: Assignment[];
+    upcoming?: UpcomingAssignmentSummary[];
     recent_announcements?: RecentAnnouncement[];
+    recent_grades?: RecentGradeSummary[];
     latest_grade?: LatestGrade | null;
     course_summary?: CourseSummary[];
     // instructor
     courses_count?: number;
     pending_submissions_count?: number;
+    unreleased_grades_count?: number;
+    flagged_count?: number;
     recent_submissions?: RecentSubmission[];
-    upcoming_deadlines?: Assignment[];
+    upcoming_deadlines?: UpcomingAssignmentSummary[];
+    sections?: SectionSummary[];
     // admin
     users_by_role?: { student: number; instructor: number; admin: number };
     total_courses?: number;
@@ -130,7 +161,7 @@ const greeting = computed(() => {
                                 :animation-delay="80"
                                 accent="amber"
                             >
-                                {{ props.upcoming_assignments?.length ?? 0 }}
+                                {{ props.upcoming?.length ?? 0 }}
                             </StatCard>
                             <StatCard
                                 label="Latest Grade"
@@ -162,19 +193,24 @@ const greeting = computed(() => {
                             </h2>
                         </div>
                         <div
-                            v-if="(props.upcoming_assignments?.length ?? 0) > 0"
+                            v-if="(props.upcoming?.length ?? 0) > 0"
                             class="divide-y divide-gray-100"
                         >
                             <div
-                                v-for="assignment in props.upcoming_assignments"
+                                v-for="assignment in props.upcoming"
                                 :key="assignment.id"
                                 class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-gray-50"
                             >
-                                <span class="flex items-start gap-3 font-medium text-gray-800">
+                                <span class="flex items-center gap-3 font-medium text-gray-800">
                                     <ClockIcon
                                         class="h-4 w-4 shrink-0 text-gray-400"
                                         aria-hidden="true"
                                     />
+                                    <span
+                                        class="rounded-full bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600"
+                                    >
+                                        {{ assignment.course_code }}
+                                    </span>
                                     {{ assignment.title }}
                                 </span>
                                 <time
@@ -249,6 +285,47 @@ const greeting = computed(() => {
                         </p>
                     </section>
 
+                    <!-- Recent Grades -->
+                    <section
+                        v-if="(props.recent_grades?.length ?? 0) > 0"
+                        aria-labelledby="recent-grades-heading"
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-gray-100 px-6 py-4"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="h-4 w-1 rounded-full bg-green-500" aria-hidden="true" />
+                                <h2 id="recent-grades-heading" class="font-semibold text-gray-800">
+                                    Recent Grades
+                                </h2>
+                            </div>
+                            <Link
+                                :href="route('student.grades.index')"
+                                class="rounded text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                View all
+                            </Link>
+                        </div>
+                        <div class="divide-y divide-gray-100">
+                            <div
+                                v-for="(grade, idx) in props.recent_grades"
+                                :key="idx"
+                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-gray-50"
+                            >
+                                <div>
+                                    <p class="font-medium text-gray-800">
+                                        {{ grade.assignment_title }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">{{ grade.course_name }}</p>
+                                </div>
+                                <span class="font-semibold text-gray-900">
+                                    {{ grade.score }} / {{ grade.max_score }}
+                                </span>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- My Courses -->
                     <section
                         v-if="(props.course_summary?.length ?? 0) > 0"
@@ -296,7 +373,7 @@ const greeting = computed(() => {
                     <!-- Stats -->
                     <section aria-labelledby="instructor-stats-heading">
                         <h2 id="instructor-stats-heading" class="sr-only">Your statistics</h2>
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                             <StatCard
                                 label="Course Sections"
                                 :icon="BookOpenIcon"
@@ -308,13 +385,121 @@ const greeting = computed(() => {
                             <StatCard
                                 label="Pending Submissions"
                                 :icon="ClipboardDocumentListIcon"
-                                value-class="text-blue-600"
                                 :animation-delay="80"
                                 accent="cyan"
                             >
                                 {{ props.pending_submissions_count ?? 0 }}
                             </StatCard>
+                            <StatCard
+                                label="Unreleased Grades"
+                                :icon="ChartBarIcon"
+                                :animation-delay="160"
+                                accent="amber"
+                            >
+                                {{ props.unreleased_grades_count ?? 0 }}
+                            </StatCard>
+                            <StatCard
+                                label="Flagged Submissions"
+                                :icon="FlagIcon"
+                                :animation-delay="240"
+                                accent="red"
+                            >
+                                {{ props.flagged_count ?? 0 }}
+                            </StatCard>
                         </div>
+                    </section>
+
+                    <!-- Unreleased grades reminder banner -->
+                    <div
+                        v-if="(props.unreleased_grades_count ?? 0) > 0"
+                        class="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        <ExclamationTriangleIcon
+                            class="mt-0.5 h-5 w-5 shrink-0 text-amber-500"
+                            aria-hidden="true"
+                        />
+                        <div class="flex-1 text-sm text-amber-800">
+                            <span class="font-semibold">
+                                {{ props.unreleased_grades_count }}
+                                {{
+                                    props.unreleased_grades_count === 1 ? 'grade' : 'grades'
+                                }}
+                                waiting to be released.
+                            </span>
+                            Students cannot see their scores until you release them.
+                        </div>
+                        <Link
+                            :href="route('instructor.submissions.all')"
+                            class="shrink-0 rounded text-sm font-medium text-amber-700 underline hover:text-amber-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1"
+                        >
+                            View Submissions →
+                        </Link>
+                    </div>
+
+                    <!-- My Sections -->
+                    <section
+                        v-if="(props.sections?.length ?? 0) > 0"
+                        aria-labelledby="instructor-sections-heading"
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    >
+                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                            <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
+                            <h2
+                                id="instructor-sections-heading"
+                                class="font-semibold text-gray-800"
+                            >
+                                My Sections
+                            </h2>
+                        </div>
+                        <ul class="divide-y divide-gray-100" role="list">
+                            <li
+                                v-for="section in props.sections"
+                                :key="section.id"
+                                class="px-6 py-4 transition-colors hover:bg-gray-50"
+                            >
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-800">
+                                        <span class="font-mono">{{ section.course.code }}</span>
+                                        — {{ section.section_name }}
+                                    </span>
+                                    <span class="flex gap-4 text-xs text-gray-500">
+                                        <span>{{ section.enrollments_count }} enrolled</span>
+                                        <span>{{ section.assignments_count }} assignments</span>
+                                    </span>
+                                </div>
+                                <!-- Quick-action links -->
+                                <div class="mt-2 flex gap-4">
+                                    <Link
+                                        :href="
+                                            route('instructor.courses.modules.index', section.id)
+                                        "
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        :aria-label="`Go to Modules for ${section.section_name}`"
+                                    >
+                                        <BookOpenIcon class="h-3.5 w-3.5" aria-hidden="true" />
+                                        Modules
+                                    </Link>
+                                    <Link
+                                        :href="route('instructor.roster.index', section.id)"
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        :aria-label="`Go to Roster for ${section.section_name}`"
+                                    >
+                                        <UserGroupIcon class="h-3.5 w-3.5" aria-hidden="true" />
+                                        Roster
+                                    </Link>
+                                    <Link
+                                        :href="route('instructor.gradebook.show', section.id)"
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        :aria-label="`Go to Gradebook for ${section.section_name}`"
+                                    >
+                                        <AcademicCapIcon class="h-3.5 w-3.5" aria-hidden="true" />
+                                        Gradebook
+                                    </Link>
+                                </div>
+                            </li>
+                        </ul>
                     </section>
 
                     <!-- Upcoming Deadlines -->

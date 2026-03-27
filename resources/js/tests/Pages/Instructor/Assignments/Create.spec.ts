@@ -4,16 +4,20 @@ import { axe } from 'vitest-axe';
 import CreatePage from '@/Pages/Instructor/Assignments/Create.vue';
 import { mountWithPrimeVue } from '@/tests/helpers';
 
-const mockUseForm = vi.fn(
-    (initial: Record<string, unknown>): Record<string, unknown> => ({
+let lastForm: { allowed_file_types: string[]; [key: string]: unknown };
+
+const mockUseForm = vi.fn((initial: Record<string, unknown>): Record<string, unknown> => {
+    lastForm = {
         ...initial,
+        allowed_file_types: (initial.allowed_file_types as string[]) ?? [],
         errors: {} as Record<string, string>,
         processing: false,
         hasErrors: false,
         post: vi.fn(),
         reset: vi.fn(),
-    })
-);
+    };
+    return lastForm;
+});
 
 vi.mock('@inertiajs/vue3', () => ({
     Head: { template: '<div />' },
@@ -112,6 +116,81 @@ describe('Instructor/Assignments/Create', () => {
         });
         const wrapper = mount(CreatePage, { global: globalOpts, props: { section } });
         expect(wrapper.find('button[type="submit"]').attributes('disabled')).toBeDefined();
+    });
+
+    it('renders 7 file type chips', () => {
+        const wrapper = mount(CreatePage, { global: globalOpts, props: { section } });
+        const chips = wrapper.findAll('input[type="checkbox"][class="sr-only"]');
+        expect(chips).toHaveLength(7);
+    });
+
+    it('selecting "Image (PNG/JPG)" adds both image/png and image/jpeg', async () => {
+        const wrapper = mount(CreatePage, { global: globalOpts, props: { section } });
+        const checkbox = wrapper.find('input[id="file-type-Image (PNG/JPG)"]');
+        await checkbox.trigger('change');
+        expect(lastForm.allowed_file_types).toContain('image/png');
+        expect(lastForm.allowed_file_types).toContain('image/jpeg');
+    });
+
+    it('selecting "Word (.doc/.docx)" adds both msword and docx mimes', async () => {
+        const wrapper = mount(CreatePage, { global: globalOpts, props: { section } });
+        const checkbox = wrapper.find('input[id="file-type-Word (.doc/.docx)"]');
+        await checkbox.trigger('change');
+        expect(lastForm.allowed_file_types).toContain('application/msword');
+        expect(lastForm.allowed_file_types).toContain(
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        );
+    });
+
+    it('selecting "PDF" adds only application/pdf', async () => {
+        const wrapper = mount(CreatePage, { global: globalOpts, props: { section } });
+        const checkbox = wrapper.find('input[id="file-type-PDF"]');
+        await checkbox.trigger('change');
+        expect(lastForm.allowed_file_types).toContain('application/pdf');
+        expect(lastForm.allowed_file_types).toHaveLength(1);
+    });
+
+    it('deselecting "Image (PNG/JPG)" when both mimes are present removes both', async () => {
+        mockUseForm.mockReturnValueOnce({
+            title: '',
+            instructions: '',
+            due_at: '',
+            max_score: '100',
+            allow_resubmission: false,
+            allowed_file_types: ['image/png', 'image/jpeg'],
+            errors: {},
+            processing: false,
+            hasErrors: false,
+            post: vi.fn(),
+            reset: vi.fn(),
+        });
+        mount(CreatePage, { global: globalOpts, props: { section } });
+        const checkbox = document.querySelector('input[id="file-type-Image (PNG/JPG)"]');
+        (checkbox as HTMLInputElement)?.dispatchEvent(new Event('change'));
+        const types = lastForm.allowed_file_types;
+        expect(types).not.toContain('image/png');
+        expect(types).not.toContain('image/jpeg');
+    });
+
+    it('isSelected is true when only image/png is present (backward compat)', () => {
+        mockUseForm.mockReturnValueOnce({
+            title: '',
+            instructions: '',
+            due_at: '',
+            max_score: '100',
+            allow_resubmission: false,
+            allowed_file_types: ['image/png'],
+            errors: {},
+            processing: false,
+            hasErrors: false,
+            post: vi.fn(),
+            reset: vi.fn(),
+        });
+        const wrapper = mount(CreatePage, { global: globalOpts, props: { section } });
+        const imageLabel = wrapper
+            .findAll('label')
+            .find((l) => l.text().includes('Image (PNG/JPG)'));
+        expect(imageLabel?.classes()).toContain('text-blue-700');
     });
 
     it('passes WCAG axe check', async () => {
