@@ -15,14 +15,23 @@ const stubs = {
         template: '<div :data-label="label"><slot /></div>',
         props: ['label', 'icon', 'accent', 'animationDelay'],
     },
+    Chart: { template: '<canvas />', props: ['type', 'data', 'options'] },
 };
 
 const routeMock = vi.fn(() => '/');
 
 const globalOpts = { stubs, mocks: { route: routeMock } };
 
+const emptyCharts = {
+    submission_trend: { labels: [], onTime: [], late: [] },
+    grade_distribution: { labels: [], counts: [] },
+    late_rate_by_course: { labels: [], rates: [] },
+    status_breakdown: { labels: [], counts: [] },
+};
+
 const props = {
     stats: { total_submissions: 42, late_submissions: 5, graded: 38, released_grades: 30 },
+    charts: emptyCharts,
 };
 
 describe('Admin/Reports/Index', () => {

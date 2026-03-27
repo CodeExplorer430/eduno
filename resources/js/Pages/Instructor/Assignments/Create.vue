@@ -14,27 +14,53 @@ const props = defineProps<{ section: Section }>();
 
 interface FileTypeOption {
     label: string;
-    mime: string;
+    mimes: string[];
 }
 
 const FILE_TYPE_OPTIONS: FileTypeOption[] = [
-    { label: 'PDF', mime: 'application/pdf' },
+    { label: 'PDF', mimes: ['application/pdf'] },
     {
-        label: 'Word (.docx)',
-        mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        label: 'Word (.doc/.docx)',
+        mimes: [
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ],
     },
     {
-        label: 'PowerPoint (.pptx)',
-        mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        label: 'PowerPoint (.ppt/.pptx)',
+        mimes: [
+            'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        ],
     },
-    { label: 'ZIP', mime: 'application/zip' },
-    { label: 'Plain Text (.txt)', mime: 'text/plain' },
-    { label: 'Image (PNG/JPG)', mime: 'image/png' },
+    { label: 'ZIP', mimes: ['application/zip'] },
+    { label: 'Plain Text (.txt)', mimes: ['text/plain'] },
+    { label: 'Image (PNG/JPG)', mimes: ['image/png', 'image/jpeg'] },
     {
-        label: 'Excel (.xlsx)',
-        mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        label: 'Excel (.xls/.xlsx)',
+        mimes: [
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ],
     },
 ];
+
+function isSelected(option: FileTypeOption): boolean {
+    return option.mimes.some((m) => form.allowed_file_types.includes(m));
+}
+
+function toggleOption(option: FileTypeOption): void {
+    const allSelected = option.mimes.every((m) => form.allowed_file_types.includes(m));
+    if (allSelected) {
+        form.allowed_file_types = form.allowed_file_types.filter((m) => !option.mimes.includes(m));
+    } else {
+        for (const m of option.mimes) {
+            if (!form.allowed_file_types.includes(m)) {
+                form.allowed_file_types.push(m);
+            }
+        }
+    }
+}
 
 const form = useForm<{
     title: string;
@@ -208,20 +234,20 @@ const submit = (): void => {
                             >
                                 <label
                                     v-for="option in FILE_TYPE_OPTIONS"
-                                    :key="option.mime"
+                                    :key="option.label"
                                     class="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-sm transition-colors"
                                     :class="
-                                        form.allowed_file_types.includes(option.mime)
+                                        isSelected(option)
                                             ? 'border-blue-500 bg-blue-50 text-blue-700'
                                             : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
                                     "
                                 >
                                     <input
-                                        :id="`file-type-${option.mime}`"
-                                        v-model="form.allowed_file_types"
+                                        :id="`file-type-${option.label}`"
                                         type="checkbox"
-                                        :value="option.mime"
+                                        :checked="isSelected(option)"
                                         class="sr-only"
+                                        @change="toggleOption(option)"
                                     />
                                     {{ option.label }}
                                 </label>

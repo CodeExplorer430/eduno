@@ -8,6 +8,8 @@ use App\Domain\Course\Models\CourseSection;
 use App\Domain\Course\Models\Enrollment;
 use App\Enums\UserRole;
 use App\Models\User;
+use App\Notifications\AnnouncementPublishedNotification;
+use Illuminate\Support\Facades\Notification;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -296,4 +298,25 @@ test('unenrolled student cannot view a published announcement', function (): voi
     $this->actingAs($student)
         ->get(route('announcements.show', $announcement))
         ->assertForbidden();
+});
+
+test('publishing an announcement via HTTP dispatches notification to enrolled students', function (): void {
+    Notification::fake();
+
+    [$instructor, $section] = makeAnnouncementSection();
+    $announcement = makeAnnouncement($section, $instructor, false); // unpublished
+
+    $student = User::factory()->create(['role' => UserRole::Student]);
+    Enrollment::create([
+        'user_id'           => $student->id,
+        'course_section_id' => $section->id,
+        'status'            => 'active',
+        'enrolled_at'       => now(),
+    ]);
+
+    $this->actingAs($instructor)
+        ->post(route('announcements.publish', $announcement))
+        ->assertRedirect();
+
+    Notification::assertSentTo($student, AnnouncementPublishedNotification::class);
 });

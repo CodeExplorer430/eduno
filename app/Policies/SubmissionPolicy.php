@@ -56,6 +56,15 @@ class SubmissionPolicy
             ->exists();
     }
 
+    public function update(User $user, Submission $submission): bool
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return $user->id === $submission->assignment->section->instructor_id;
+    }
+
     public function delete(User $user, Submission $submission): bool
     {
         return $user->id === $submission->student_id

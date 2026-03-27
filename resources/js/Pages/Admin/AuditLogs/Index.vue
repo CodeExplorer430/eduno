@@ -2,8 +2,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 import type { AuditLog } from '@/Types/models';
+
+const exportFormat = ref<'csv' | 'pdf' | 'xlsx'>('csv');
 
 interface AuditLogWithActor extends AuditLog {
     actor?: { id: number; name: string; email: string } | null;
@@ -30,6 +33,15 @@ const filterAction = ref<string>(props.filters.action ?? '');
 const filterActorEmail = ref<string>(props.filters.actor_email ?? '');
 const filterFrom = ref<string>(props.filters.from ?? '');
 const filterTo = ref<string>(props.filters.to ?? '');
+
+const exportUrl = computed<string>(() => {
+    const params = new URLSearchParams({ format: exportFormat.value });
+    if (filterAction.value) params.set('action', filterAction.value);
+    if (filterActorEmail.value) params.set('actor_email', filterActorEmail.value);
+    if (filterFrom.value) params.set('from', filterFrom.value);
+    if (filterTo.value) params.set('to', filterTo.value);
+    return route('admin.audit-logs.export') + '?' + params.toString();
+});
 
 function applyFilters(): void {
     router.get(
@@ -74,7 +86,29 @@ function getInitials(name: string): string {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-bold text-gray-900">Audit Logs</h1>
+            <div class="flex items-center justify-between">
+                <h1 class="text-xl font-bold text-gray-900">Audit Logs</h1>
+                <div class="flex items-center gap-2">
+                    <label for="audit-export-format" class="sr-only">Export format</label>
+                    <select
+                        id="audit-export-format"
+                        v-model="exportFormat"
+                        class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="csv">CSV</option>
+                        <option value="pdf">PDF</option>
+                        <option value="xlsx">Excel</option>
+                    </select>
+                    <a
+                        :href="exportUrl"
+                        class="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        download
+                    >
+                        <ArrowDownTrayIcon class="h-4 w-4" aria-hidden="true" />
+                        Export
+                    </a>
+                </div>
+            </div>
         </template>
 
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

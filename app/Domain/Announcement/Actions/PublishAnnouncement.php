@@ -24,6 +24,7 @@ class PublishAnnouncement
 
             if ($section !== null) {
                 $students = $section->enrollments()
+                    ->where('status', 'active')
                     ->with('student')
                     ->get()
                     ->pluck('student');

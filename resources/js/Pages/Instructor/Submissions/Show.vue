@@ -70,8 +70,8 @@ watch(
         if (val)
             appToast.success(
                 props.submission.flagged_for_review
-                    ? 'Flag removed.'
-                    : 'Submission flagged for review.'
+                    ? 'Submission flagged for review.'
+                    : 'Flag removed.'
             );
     }
 );
