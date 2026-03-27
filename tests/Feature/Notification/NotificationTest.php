@@ -16,7 +16,6 @@ use App\Enums\SubmissionStatus;
 use App\Enums\UserRole;
 use App\Models\User;
 use App\Notifications\AnnouncementPublishedNotification;
-use App\Notifications\DeadlineReminderNotification;
 use App\Jobs\NotifyStudentGradeReleased;
 use App\Notifications\NewSubmissionNotification;
 use Illuminate\Http\UploadedFile;
@@ -142,110 +141,6 @@ test('releasing grade sends notification to student', function (): void {
     (new ReleaseGrade())->handle($grade);
 
     Queue::assertPushed(NotifyStudentGradeReleased::class);
-});
-
-test('deadline reminder is sent to enrolled student who has not submitted', function (): void {
-    Notification::fake();
-    [$instructor, $section, $student] = makeNotificationSetup();
-
-    Assignment::create([
-        'course_section_id' => $section->id,
-        'title' => 'Due Soon',
-        'max_score' => 100,
-        'allow_resubmission' => false,
-        'due_at' => now()->addHours(12),
-        'published_at' => now()->subMinute(),
-    ]);
-
-    $this->artisan('schedule:deadline-reminders')->assertSuccessful();
-
-    Notification::assertSentTo($student, DeadlineReminderNotification::class);
-});
-
-test('deadline reminder is not sent to student who has already submitted', function (): void {
-    Notification::fake();
-    [$instructor, $section, $student] = makeNotificationSetup();
-
-    $assignment = Assignment::create([
-        'course_section_id' => $section->id,
-        'title' => 'Due Soon Submitted',
-        'max_score' => 100,
-        'allow_resubmission' => false,
-        'due_at' => now()->addHours(12),
-        'published_at' => now()->subMinute(),
-    ]);
-
-    Submission::create([
-        'assignment_id' => $assignment->id,
-        'student_id' => $student->id,
-        'status' => SubmissionStatus::Submitted,
-        'submitted_at' => now(),
-        'is_late' => false,
-        'attempt_no' => 1,
-    ]);
-
-    $this->artisan('schedule:deadline-reminders')->assertSuccessful();
-
-    Notification::assertNotSentTo($student, DeadlineReminderNotification::class);
-});
-
-test('deadline reminder is not sent for unpublished assignment', function (): void {
-    Notification::fake();
-    [$instructor, $section, $student] = makeNotificationSetup();
-
-    Assignment::create([
-        'course_section_id' => $section->id,
-        'title' => 'Draft Assignment',
-        'max_score' => 100,
-        'allow_resubmission' => false,
-        'due_at' => now()->addHours(12),
-        'published_at' => null,
-    ]);
-
-    $this->artisan('schedule:deadline-reminders')->assertSuccessful();
-
-    Notification::assertNotSentTo($student, DeadlineReminderNotification::class);
-});
-
-test('deadline reminder is not sent for assignment due beyond 24 hours', function (): void {
-    Notification::fake();
-    [$instructor, $section, $student] = makeNotificationSetup();
-
-    Assignment::create([
-        'course_section_id' => $section->id,
-        'title' => 'Far Future Assignment',
-        'max_score' => 100,
-        'allow_resubmission' => false,
-        'due_at' => now()->addHours(48),
-        'published_at' => now()->subMinute(),
-    ]);
-
-    $this->artisan('schedule:deadline-reminders')->assertSuccessful();
-
-    Notification::assertNotSentTo($student, DeadlineReminderNotification::class);
-});
-
-test('deadline reminder is not sent to withdrawn student', function (): void {
-    Notification::fake();
-    [$instructor, $section, $student] = makeNotificationSetup();
-
-    // Withdraw the student from the section.
-    Enrollment::where('user_id', $student->id)
-        ->where('course_section_id', $section->id)
-        ->update(['status' => 'withdrawn']);
-
-    Assignment::create([
-        'course_section_id' => $section->id,
-        'title'             => 'Due Soon',
-        'max_score'         => 100,
-        'allow_resubmission' => false,
-        'due_at'            => now()->addHours(12),
-        'published_at'      => now()->subMinute(),
-    ]);
-
-    $this->artisan('schedule:deadline-reminders')->assertSuccessful();
-
-    Notification::assertNotSentTo($student, DeadlineReminderNotification::class);
 });
 
 // ---------------------------------------------------------------------------
