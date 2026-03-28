@@ -6,6 +6,7 @@ export interface UserPreferences {
     reduced_motion: boolean;
     dyslexia_font: boolean;
     simplified_layout: boolean;
+    dark_mode: boolean;
     language: string;
 }
 
@@ -15,6 +16,8 @@ export interface User {
     email: string;
     role: 'student' | 'instructor' | 'admin';
     email_verified_at: string | null;
+    bio?: string | null;
+    phone?: string | null;
     preferences?: UserPreferences;
     created_at: string;
     updated_at: string;

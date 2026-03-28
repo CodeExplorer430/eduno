@@ -96,4 +96,36 @@ class ProfileTest extends TestCase
 
         $this->assertNotNull($user->fresh());
     }
+
+    public function test_profile_bio_and_phone_can_be_saved(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->patch('/profile', [
+                'name'  => $user->name,
+                'email' => $user->email,
+                'bio'   => 'A short biography.',
+                'phone' => '+63 912 345 6789',
+            ])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/profile');
+
+        $fresh = $user->fresh();
+        $this->assertSame('A short biography.', $fresh->bio);
+        $this->assertSame('+63 912 345 6789', $fresh->phone);
+    }
+
+    public function test_bio_longer_than_1000_characters_is_rejected(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->patch('/profile', [
+                'name'  => $user->name,
+                'email' => $user->email,
+                'bio'   => str_repeat('a', 1001),
+            ])
+            ->assertSessionHasErrors('bio');
+    }
 }
