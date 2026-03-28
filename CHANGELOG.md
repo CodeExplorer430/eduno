@@ -2,6 +2,177 @@
 
 All notable changes to Eduno LMS are documented here.
 
+## [2.6.0] — 2026-03-28
+
+### Tests
+
+- **test(ui): fill 23 Vue page spec gaps + fix 3 a11y bugs** (PR #46): Added 23
+  missing Vitest spec files, bringing Vue page coverage from 72% (56/76 pages) to
+  100% (79/79 pages). Every spec includes automated `vitest-axe` WCAG axe assertions.
+
+  New specs: `Error`, `Admin/{FlaggedSubmissions/Index,Settings/Index}`,
+  `Student/{Grades/Index,Grades/Show,Courses/Index,Submissions/Create}`,
+  `Profile/Accessibility`, `Instructor/{Announcements/Create,Announcements/Edit,Submissions/All}`,
+  `Announcement/{Create,Edit,Show}`, `Assignment/{Create,Edit}`,
+  `Course/{Create,Edit}`, `Module/{Index,Create,Edit}`, `Lesson/{Create,Edit}`.
+
+### Bug Fixes (Accessibility)
+
+Three real WCAG violations caught by the new axe checks and fixed:
+
+- **`Admin/Settings/Index.vue`** (WCAG 4.1.2 Name, Role, Value): All four
+  `role="switch"` toggle buttons were missing an accessible name. Fixed by adding
+  descriptive `aria-label` attributes.
+- **`Student/Grades/Index.vue`** (WCAG 4.1.2 Name, Role, Value): The score
+  progress bar `<div>` used `aria-label` without a valid ARIA role. Replaced with
+  `role="progressbar"` + `aria-valuenow`, `aria-valuemin`, `aria-valuemax`.
+
+### Tests
+
+- PHP: **491** (unchanged)
+- Vitest specs: **552** (79 spec files, 470 passing tests)
+
+---
+
+## [2.5.0] — 2026-03-28
+
+### Features
+
+- **feat(report): CSV, XLSX, and PDF export for audit logs and submissions** (PR #44):
+  - `AuditLogsExport` class (Maatwebsite/Excel) — exports full audit log with actor
+    name, action, target, old/new values, and timestamp.
+  - `SubmissionsExport` class — exports all submissions with student name, assignment,
+    course, section, status, score, and submitted-at timestamp.
+  - PDF variants via DomPDF (`barryvdh/laravel-dompdf`) with Blade templates in
+    `resources/views/exports/`.
+  - Admin export routes (`GET /admin/reports/audit-logs/export/{format}`,
+    `GET /admin/reports/submissions/export/{format}`) protected by `admin` middleware
+    and `ReportPolicy`.
+  - Report index page updated with CSV / XLSX / PDF download buttons.
+  - Audit log index page updated with export button.
+
+### Tests
+
+- **test: fill coverage gaps — action unit tests + Vue component specs** (PR #43):
+  - New PHP unit tests: `FlagSubmissionActionTest`, `GetUserNotificationsTest`,
+    `MarkNotificationReadTest`, `MarkAllNotificationsReadTest`,
+    `ExportAuditLogsToCsvTest`, `ExportAuditLogsToPdfTest`,
+    `ExportSubmissionsToCsvTest`, `ExportSubmissionsToPdfTest`,
+    `GetAdminAnalyticsTest`.
+  - New Vue component specs: `StatCard`, `DeadlineItem`, `IconInput`,
+    `FileUploadInput`, `ResourceItem` — all with `vitest-axe` WCAG assertions.
+
+- PHP: **579** (+88 action unit tests)
+- Vitest specs: **529** (+12 component specs)
+
+---
+
+## [2.4.0] — 2026-03-28
+
+### Features
+
+- **feat(ui): implement dark mode via Tailwind CSS class strategy** (PR #41):
+  Comprehensive `dark:` variant classes applied across all pages, layouts, and
+  components. Dark mode preference stored in the user's accessibility preferences
+  (`dark_mode` field) and toggled via the existing Accessibility Preferences page.
+  Uses Tailwind v4 class strategy (no `prefers-color-scheme` media query) so the
+  user's explicit choice always wins over the OS setting.
+
+### Tests
+
+- PHP: **491** (unchanged)
+- Vitest specs: **517** (unchanged — existing axe checks cover dark mode markup)
+
+---
+
+## [2.3.0] — 2026-03-28
+
+### Bug Fixes
+
+- **fix(grade): query `Grade` directly to preserve submission relation in student
+  index** (PR #38): The student grades index was loading grades via the submission
+  relation, causing the `submission` eager-load to be dropped. Fixed by querying
+  `Grade::with(['submission.assignment.courseSection.course'])` directly.
+- **fix(grade): increase feedback textarea rows and allow vertical resize** (PR #39):
+  Feedback `<textarea>` in the grade form was too small (3 rows, no resize). Increased
+  to 6 rows and enabled vertical resize.
+- **fix(ui): add `bio` and `phone` fields to user profile edit form** (PR #40):
+  The profile edit page was missing the `bio` (multiline) and `phone` (text) fields
+  that exist in the database. Both fields are now editable and validated.
+
+### Tests
+
+- PHP: **491** (unchanged — fixes covered by existing test suite)
+- Vitest specs: **517** (unchanged)
+
+---
+
+## [2.2.0] — 2026-03-28
+
+### Features
+
+- **feat: reports, dashboards, gradebook, lesson browse, announcement emails** (PR #34):
+  - **Admin Analytics**: 8-week submission-trend chart data, grade band distribution
+    (A/B/C/D/F), late-submission rate, and submission status breakdown via
+    `GetAdminAnalytics` action with Redis caching (5-min TTL).
+  - **Instructor Gradebook**: `GetGradebook` action builds a full grade matrix
+    (students × assignments) for a course section. Gradebook page displays score
+    cells with colour-coded badges and CSV download.
+  - **Lesson Browse**: Instructor and student-facing lesson browse index pages added
+    under `Instructor/Lessons` and `Student/Lessons`.
+  - **Announcement Email Digest**: `AnnouncementPublishedNotification` now sends
+    an email digest to enrolled students when a new announcement is published,
+    controlled by the user's `email_notifications` preference.
+  - **Dashboard improvements**: Role-specific dashboards refined with upcoming
+    deadlines, recent activity, and quick-action links.
+
+- **feat(enrollment): instructor student roster with enroll by email** (PR #36):
+  Instructors can view a sortable student roster for each of their course sections.
+  A modal form allows enrolling a new student by email address; if the email
+  matches an existing account, the student is enrolled immediately. The roster
+  page is accessible at `GET /sections/{section}/roster`.
+
+- **feat(dashboard): instructor unreleased grades, flagged count, section
+  quick-links** (PR #37): Instructor dashboard now surfaces the count of unreleased
+  grades (graded but not yet released to students) and the count of flagged
+  submissions, both linking to the relevant admin/instructor pages.
+
+- **fix(notification): remove dead deadline-reminder queue commands and add job unit
+  tests** (PR #35): Removed two stale Artisan commands that duplicated the
+  `SendDeadlineReminders` job and were no longer wired to the scheduler. Added
+  dedicated unit tests for all four queue job classes.
+
+- **Full SaaS frontend revamp**: All Admin, Instructor, Student, and Profile pages
+  rebuilt with a consistent Tailwind design system — sidebar navigation, stat cards,
+  table layouts, and toast notifications. Removed the last PrimeVue dependencies.
+
+- **Security hardening** (`sec(auth)`): Strengthened authentication middleware, added
+  stricter input validation across Form Requests, and added upload rate limiting.
+
+- **Performance**: Redis caching for admin dashboard aggregates (5-min TTL via
+  `Cache::remember`). Added database indexes for submission/grade foreign keys and
+  soft-delete columns.
+
+- **Resubmission history, email preferences, resource metadata search**: Students can
+  view their full resubmission history on the assignment page. Users can toggle email
+  notification preferences per notification type. Resources can be searched by title
+  and tag metadata.
+
+- **Admin settings page**: Site-wide configuration (site name, registration toggle,
+  maintenance mode, email digest toggle, deadline reminder lead time) manageable from
+  `Admin/Settings`.
+
+- **Late submission fixtures** (`DemoSeeder` extended): Added late-submission demo
+  data so the plagiarism flag and late-detection workflows are exercised in the demo
+  environment.
+
+### Tests
+
+- PHP: **491** (job unit tests added for all four queue job classes)
+- Vitest specs: **517** (no new page specs — UI changes covered by existing axe suite)
+
+---
+
 ## [2.1.2] — 2026-03-22
 
 ### Maintenance
