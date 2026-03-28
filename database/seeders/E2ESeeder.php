@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Domain\Announcement\Models\Announcement;
 use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Domain\Course\Models\Enrollment;
+use App\Domain\Submission\Models\Submission;
 use App\Enums\CourseStatus;
+use App\Enums\SubmissionStatus;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -70,12 +73,44 @@ class E2ESeeder extends Seeder
             ['status' => 'active', 'enrolled_at' => now()]
         );
 
+        // Primary assignment — kept clear so submission.spec.ts can upload and submit
         Assignment::firstOrCreate(
             ['course_section_id' => $section->id, 'title' => 'E2E Assignment'],
             [
                 'max_score' => 100,
                 'allow_resubmission' => false,
                 'due_at' => now()->addDays(5),
+                'published_at' => now()->subMinute(),
+            ]
+        );
+
+        // Dedicated assignment with a pre-seeded submission for grading.spec.ts
+        $gradingAssignment = Assignment::firstOrCreate(
+            ['course_section_id' => $section->id, 'title' => 'E2E Grading Assignment'],
+            [
+                'max_score' => 50,
+                'allow_resubmission' => false,
+                'due_at' => now()->addDays(10),
+                'published_at' => now()->subMinutes(2),
+            ]
+        );
+
+        Submission::firstOrCreate(
+            ['assignment_id' => $gradingAssignment->id, 'student_id' => $student->id],
+            [
+                'status' => SubmissionStatus::Submitted,
+                'submitted_at' => now()->subHour(),
+                'is_late' => false,
+                'attempt_no' => 1,
+            ]
+        );
+
+        // Announcement visible in student dashboard Recent Announcements
+        Announcement::firstOrCreate(
+            ['course_section_id' => $section->id, 'title' => 'E2E Announcement'],
+            [
+                'body' => 'Welcome to E2E Test Course. This is a test announcement.',
+                'created_by' => $instructor->id,
                 'published_at' => now()->subMinute(),
             ]
         );
