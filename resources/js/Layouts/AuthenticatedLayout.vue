@@ -6,6 +6,7 @@ import NotificationBell from '@/Components/NotificationBell.vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { Link, usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 import {
     HomeIcon,
     BookOpenIcon,
@@ -31,6 +32,7 @@ const prefs = computed(() => page.props.userPrefs);
 const userRole = computed(() => page.props.auth?.user?.role);
 const features = computed(() => page.props.features);
 const toast = useToast();
+const { t } = useI18n();
 
 const sidebarOpen = ref(false);
 const sidebarCollapsed = ref(false); // SSR-safe default
@@ -62,32 +64,37 @@ function safeRoute(name: string): string {
 const navItems = computed<NavItem[]>(() => {
     const role = userRole.value;
     const base: NavItem[] = [
-        { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon, routeName: 'dashboard' },
+        {
+            label: t('nav.dashboard'),
+            href: route('dashboard'),
+            icon: HomeIcon,
+            routeName: 'dashboard',
+        },
     ];
 
     if (role === 'student') {
         return [
             ...base,
             {
-                label: 'My Courses',
+                label: t('nav.my_courses'),
                 href: safeRoute('student.courses.index'),
                 icon: BookOpenIcon,
                 routeName: 'student.courses.*',
             },
             {
-                label: 'Assignments',
+                label: t('nav.assignments'),
                 href: safeRoute('student.assignments.index'),
                 icon: ClipboardDocumentListIcon,
                 routeName: 'student.assignments.*',
             },
             {
-                label: 'Grades',
+                label: t('nav.grades'),
                 href: safeRoute('student.grades.index'),
                 icon: AcademicCapIcon,
                 routeName: 'student.grades.*',
             },
             {
-                label: 'Announcements',
+                label: t('nav.announcements'),
                 href: safeRoute('student.announcements.index'),
                 icon: MegaphoneIcon,
                 routeName: 'student.announcements.*',
@@ -99,19 +106,19 @@ const navItems = computed<NavItem[]>(() => {
         return [
             ...base,
             {
-                label: 'My Courses',
+                label: t('nav.my_courses'),
                 href: safeRoute('instructor.courses.index'),
                 icon: BookOpenIcon,
                 routeName: 'instructor.courses.*',
             },
             {
-                label: 'Submissions',
+                label: t('nav.submissions'),
                 href: safeRoute('instructor.submissions.all'),
                 icon: DocumentTextIcon,
                 routeName: 'instructor.submissions.*',
             },
             {
-                label: 'Announcements',
+                label: t('nav.announcements'),
                 href: safeRoute('instructor.announcements.index'),
                 icon: MegaphoneIcon,
                 routeName: 'instructor.announcements.*',
@@ -122,25 +129,25 @@ const navItems = computed<NavItem[]>(() => {
     return [
         ...base,
         {
-            label: 'Users',
+            label: t('nav.users'),
             href: safeRoute('admin.users.index'),
             icon: UsersIcon,
             routeName: 'admin.users.*',
         },
         {
-            label: 'Courses',
+            label: t('nav.courses'),
             href: safeRoute('admin.courses.index'),
             icon: BookOpenIcon,
             routeName: 'admin.courses.*',
         },
         {
-            label: 'Reports',
+            label: t('nav.reports'),
             href: safeRoute('admin.reports.index'),
             icon: ChartBarIcon,
             routeName: 'admin.reports.*',
         },
         {
-            label: 'Audit Logs',
+            label: t('nav.audit_logs'),
             href: safeRoute('admin.audit-logs.index'),
             icon: ClipboardDocumentListIcon,
             routeName: 'admin.audit-logs.*',
@@ -152,7 +159,7 @@ const navItems = computed<NavItem[]>(() => {
             routeName: 'admin.flagged-submissions.*',
         },
         {
-            label: 'Settings',
+            label: t('nav.settings'),
             href: safeRoute('admin.settings.index'),
             icon: Cog6ToothIcon,
             routeName: 'admin.settings.*',

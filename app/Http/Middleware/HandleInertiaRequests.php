@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -36,7 +38,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user'                     => $request->user(),
+                'user'                       => $request->user(),
                 'unread_notifications_count' => fn () => Auth::check()
                     ? Auth::user()->unreadNotifications()->count()
                     : 0,
@@ -45,6 +47,8 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
+            'locale'       => fn () => $this->resolveLocale($request),
+            'translations' => fn () => $this->loadTranslations($request),
             'userPrefs' => fn () => $request->user()?->preferences?->only([
                 'reduced_motion',
                 'high_contrast',
@@ -53,7 +57,27 @@ class HandleInertiaRequests extends Middleware
                 'dark_mode',
                 'email_notifications',
                 'email_digest',
+                'language',
             ]),
         ];
+    }
+
+    private function resolveLocale(Request $request): string
+    {
+        $language = $request->user()?->preferences?->language;
+
+        return in_array($language, ['en', 'fil'], strict: true) ? $language : App::getLocale();
+    }
+
+    /** @return array<string, mixed> */
+    private function loadTranslations(Request $request): array
+    {
+        $locale = $this->resolveLocale($request);
+        App::setLocale($locale);
+
+        /** @var array<string, mixed>|string $raw */
+        $raw = Lang::get('app');
+
+        return is_array($raw) ? $raw : [];
     }
 }

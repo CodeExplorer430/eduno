@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
     MagnifyingGlassIcon,
     BoltSlashIcon,
@@ -24,7 +25,10 @@ const fontSizeOptions = [
     { label: 'X-Large', value: 'xlarge' },
 ];
 
-const languageOptions = [{ label: 'English', value: 'en' }];
+const languageOptions = [
+    { label: 'English', value: 'en' },
+    { label: 'Filipino', value: 'fil' },
+];
 
 const form = useForm({
     font_size: props.preferences?.font_size ?? 'medium',
@@ -35,12 +39,13 @@ const form = useForm({
     language: props.preferences?.language ?? 'en',
 });
 
+const { t } = useI18n();
 const appToast = useAppToast();
 
 watch(
     () => form.wasSuccessful,
     (val) => {
-        if (val) appToast.success('Preferences saved.');
+        if (val) appToast.success(t('accessibility.saved'));
     }
 );
 
@@ -50,12 +55,12 @@ function submit(): void {
 </script>
 
 <template>
-    <Head title="Accessibility Preferences" />
+    <Head :title="t('accessibility.title')" />
 
     <AuthenticatedLayout>
         <template #header>
             <h1 class="text-xl font-semibold leading-tight text-gray-800">
-                Accessibility Preferences
+                {{ t('accessibility.title') }}
             </h1>
         </template>
 
@@ -372,7 +377,7 @@ function submit(): void {
                         :disabled="form.processing"
                         class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60"
                     >
-                        {{ form.processing ? 'Saving…' : 'Save Preferences' }}
+                        {{ form.processing ? '…' : t('accessibility.save') }}
                     </button>
                 </div>
             </form>
