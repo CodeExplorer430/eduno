@@ -24,7 +24,16 @@ class AnnouncementPublishedNotification extends Notification implements ShouldQu
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        $channels = ['database'];
+
+        $prefs       = $notifiable->preferences;
+        $emailEnabled = $prefs === null || $prefs->email_notifications !== false;
+
+        if ($emailEnabled) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
     }
 
     /**

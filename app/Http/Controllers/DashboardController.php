@@ -87,17 +87,16 @@ class DashboardController extends Controller
             ->get(['id', 'title', 'published_at', 'course_section_id', 'created_by']);
 
         return Inertia::render('Dashboard', [
-            'role' => 'student',
+            'role'                  => 'student',
             'enrolled_courses_count' => $enrolledSections->count(),
-            'upcoming_assignments' => $upcomingAssignments,
-            'recent_announcements' => $recentAnnouncements,
-            'latest_grade' => $latestGrade ? [
+            'recent_announcements'  => $recentAnnouncements,
+            'latest_grade'          => $latestGrade ? [
                 'score'      => $latestGrade->score,
                 'max_score'  => $latestGrade->submission->assignment->max_score,
                 'assignment' => $latestGrade->submission->assignment->title,
                 'course'     => $latestGrade->submission->assignment->section->course->title,
             ] : null,
-            'course_summary' => $enrolledSections->map(function (CourseSection $s): array {
+            'course_summary'        => $enrolledSections->map(function (CourseSection $s): array {
                 /** @var Course $course */
                 $course = $s->course;
 
@@ -108,30 +107,30 @@ class DashboardController extends Controller
                     'section_name' => $s->section_name,
                 ];
             }),
-            'upcoming' => $upcomingAssignments->map(function (Assignment $a): array {
+            'upcoming'              => $upcomingAssignments->map(function (Assignment $a): array {
                 /** @var CourseSection $section */
                 $section = $a->section;
                 /** @var Course $course */
                 $course = $section->course;
 
                 return [
-                    'id' => $a->id,
-                    'title' => $a->title,
+                    'id'          => $a->id,
+                    'title'       => $a->title,
                     'course_name' => $course->title,
                     'course_code' => $course->code,
-                    'due_at' => $a->due_at,
+                    'due_at'      => $a->due_at,
                 ];
             }),
-            'recentGrades' => $recentGrades->map(function (Grade $g): array {
+            'recent_grades'         => $recentGrades->map(function (Grade $g): array {
                 $assignment = $g->submission->assignment;
                 /** @var Course $course */
                 $course = $assignment->section->course;
 
                 return [
                     'assignment_title' => $assignment->title,
-                    'score' => $g->score,
-                    'max_score' => $assignment->max_score,
-                    'course_name' => $course->title,
+                    'score'            => $g->score,
+                    'max_score'        => $assignment->max_score,
+                    'course_name'      => $course->title,
                 ];
             }),
         ]);
@@ -163,14 +162,25 @@ class DashboardController extends Controller
             ->limit(10)
             ->get(['id', 'title', 'due_at', 'course_section_id']);
 
+        $unreleasedGradesCount = Grade::whereHas(
+            'submission.assignment',
+            fn ($q) => $q->whereIn('course_section_id', $sectionIds)
+        )->whereNull('released_at')->count();
+
+        $flaggedCount = Submission::whereHas(
+            'assignment',
+            fn ($q) => $q->whereIn('course_section_id', $sectionIds)
+        )->where('flagged_for_review', true)->count();
+
         return Inertia::render('Dashboard', [
-            'role' => 'instructor',
-            'courses_count' => $sections->count(),
+            'role'                      => 'instructor',
+            'courses_count'             => $sections->count(),
             'pending_submissions_count' => $pendingSubmissions->count(),
-            'recent_submissions' => $pendingSubmissions,
-            'upcoming_deadlines' => $upcomingDeadlines,
-            'sections' => $sections,
-            'pendingSubmissions' => $pendingSubmissions,
+            'unreleased_grades_count'   => $unreleasedGradesCount,
+            'flagged_count'             => $flaggedCount,
+            'recent_submissions'        => $pendingSubmissions,
+            'upcoming_deadlines'        => $upcomingDeadlines,
+            'sections'                  => $sections,
         ]);
     }
 }

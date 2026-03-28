@@ -14,11 +14,28 @@ use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Requests\Lesson\UpdateLessonRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class LessonController extends Controller
 {
+    public function index(Request $request, CourseSection $section, Module $module): Response
+    {
+        $this->authorize('update', $section->course);
+
+        $section->load('course');
+
+        /** @var Collection<int, Lesson> $lessons */
+        $lessons = $module->lessons()->orderBy('order_no')->get();
+
+        return Inertia::render('Instructor/Lessons/Index', [
+            'section' => $section,
+            'module'  => $module,
+            'lessons' => $lessons,
+        ]);
+    }
+
     public function create(Request $request, CourseSection $section, Module $module): Response
     {
         $this->authorize('create', Lesson::class);

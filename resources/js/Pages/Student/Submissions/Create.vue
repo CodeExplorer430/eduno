@@ -55,6 +55,11 @@ const submit = (): void => {
 };
 
 const hasFiles = computed<boolean>(() => form.files.length > 0);
+
+const acceptAttr = computed<string | undefined>(() => {
+    const types = props.assignment.allowed_file_types;
+    return types?.length ? types.join(',') : undefined;
+});
 </script>
 
 <template>
@@ -151,6 +156,7 @@ const hasFiles = computed<boolean>(() => form.files.length > 0);
                                     <FileUploadInput
                                         v-model="form.files"
                                         :multiple="true"
+                                        :accept="acceptAttr"
                                         aria-describedby="files-error"
                                     />
 

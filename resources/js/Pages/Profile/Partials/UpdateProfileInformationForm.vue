@@ -15,6 +15,8 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
+    bio: user.bio ?? '',
+    phone: user.phone ?? '',
 });
 </script>
 
@@ -81,6 +83,37 @@ const form = useForm({
                 >
                     A new verification link has been sent to your email address.
                 </div>
+            </div>
+
+            <div>
+                <InputLabel for="phone" value="Phone" />
+
+                <InputText
+                    id="phone"
+                    v-model="form.phone"
+                    type="tel"
+                    class="mt-1 block w-full"
+                    autocomplete="tel"
+                    aria-describedby="phone-error"
+                />
+
+                <InputError id="phone-error" class="mt-2" :message="form.errors.phone" />
+            </div>
+
+            <div>
+                <InputLabel for="bio" value="Bio" />
+
+                <textarea
+                    id="bio"
+                    v-model="form.bio"
+                    rows="4"
+                    class="mt-1 block w-full resize-y rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                    aria-describedby="bio-error"
+                    maxlength="1000"
+                    placeholder="Tell others a bit about yourself…"
+                ></textarea>
+
+                <InputError id="bio-error" class="mt-2" :message="form.errors.bio" />
             </div>
 
             <div class="flex items-center gap-4">
