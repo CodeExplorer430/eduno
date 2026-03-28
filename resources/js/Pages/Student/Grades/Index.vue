@@ -250,6 +250,16 @@ function gradeLetter(pct: number): string {
                                                 class="h-2 w-24 overflow-hidden rounded-full bg-gray-100"
                                             >
                                                 <div
+                                                    role="progressbar"
+                                                    :aria-valuenow="
+                                                        scorePercent(
+                                                            grade.score,
+                                                            grade.submission?.assignment?.max_score
+                                                        )
+                                                    "
+                                                    aria-valuemin="0"
+                                                    aria-valuemax="100"
+                                                    :aria-label="`${scorePercent(grade.score, grade.submission?.assignment?.max_score)}%`"
                                                     class="h-full rounded-full transition-all"
                                                     :class="
                                                         scoreBarClass(
@@ -263,7 +273,6 @@ function gradeLetter(pct: number): string {
                                                     :style="{
                                                         width: `${scorePercent(grade.score, grade.submission?.assignment?.max_score)}%`,
                                                     }"
-                                                    :aria-label="`${scorePercent(grade.score, grade.submission?.assignment?.max_score)}%`"
                                                 ></div>
                                             </div>
                                             <span
