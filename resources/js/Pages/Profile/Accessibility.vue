@@ -8,6 +8,7 @@ import {
     BoltSlashIcon,
     ViewColumnsIcon,
     LanguageIcon,
+    MoonIcon,
 } from '@heroicons/vue/24/outline';
 import type { UserPreferences } from '@/Types/models';
 import { useAppToast } from '@/composables/useAppToast';
@@ -30,6 +31,7 @@ const form = useForm({
     high_contrast: props.preferences?.high_contrast ?? false,
     reduced_motion: props.preferences?.reduced_motion ?? false,
     simplified_layout: props.preferences?.simplified_layout ?? false,
+    dark_mode: props.preferences?.dark_mode ?? false,
     language: props.preferences?.language ?? 'en',
 });
 
@@ -268,6 +270,45 @@ function submit(): void {
                                     :class="
                                         form.simplified_layout ? 'translate-x-5' : 'translate-x-0'
                                     "
+                                ></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dark Mode -->
+                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
+                        <div class="flex items-center gap-3 px-6 py-5">
+                            <div
+                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-50"
+                            >
+                                <MoonIcon class="h-5 w-5 text-slate-600" aria-hidden="true" />
+                            </div>
+                            <div class="flex-1">
+                                <label
+                                    for="dark_mode"
+                                    class="block cursor-pointer font-semibold text-gray-900"
+                                >
+                                    Dark Mode
+                                </label>
+                                <p id="dark_mode_desc" class="text-sm text-gray-500">
+                                    Switches the interface to a dark colour scheme.
+                                </p>
+                                <InputError class="mt-1" :message="form.errors.dark_mode" />
+                            </div>
+                            <button
+                                id="dark_mode"
+                                type="button"
+                                :aria-pressed="form.dark_mode"
+                                :aria-describedby="'dark_mode_desc'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                :class="form.dark_mode ? 'bg-blue-600' : 'bg-gray-300'"
+                                @click="form.dark_mode = !form.dark_mode"
+                            >
+                                <span class="sr-only">Toggle dark mode</span>
+                                <span
+                                    aria-hidden="true"
+                                    class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                    :class="form.dark_mode ? 'translate-x-5' : 'translate-x-0'"
                                 ></span>
                             </button>
                         </div>

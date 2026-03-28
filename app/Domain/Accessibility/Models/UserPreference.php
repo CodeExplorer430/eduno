@@ -17,6 +17,7 @@ class UserPreference extends Model
         'reduced_motion',
         'dyslexia_font',
         'simplified_layout',
+        'dark_mode',
         'language',
         'email_notifications',
         'email_digest',
@@ -29,6 +30,7 @@ class UserPreference extends Model
             'reduced_motion'      => 'boolean',
             'dyslexia_font'       => 'boolean',
             'simplified_layout'   => 'boolean',
+            'dark_mode'           => 'boolean',
             'email_notifications' => 'boolean',
             'email_digest'        => 'boolean',
         ];

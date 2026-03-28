@@ -50,6 +50,7 @@ class HandleInertiaRequests extends Middleware
                 'high_contrast',
                 'dyslexia_font',
                 'font_size',
+                'dark_mode',
                 'email_notifications',
                 'email_digest',
             ]),

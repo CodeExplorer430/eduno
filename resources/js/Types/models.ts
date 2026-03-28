@@ -6,6 +6,7 @@ export interface UserPreferences {
     reduced_motion: boolean;
     dyslexia_font: boolean;
     simplified_layout: boolean;
+    dark_mode: boolean;
     language: string;
 }
 
