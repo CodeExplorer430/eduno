@@ -423,9 +423,7 @@ const greeting = computed(() => {
                         <div class="flex-1 text-sm text-amber-800">
                             <span class="font-semibold">
                                 {{ props.unreleased_grades_count }}
-                                {{
-                                    props.unreleased_grades_count === 1 ? 'grade' : 'grades'
-                                }}
+                                {{ props.unreleased_grades_count === 1 ? 'grade' : 'grades' }}
                                 waiting to be released.
                             </span>
                             Students cannot see their scores until you release them.
