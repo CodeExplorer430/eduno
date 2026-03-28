@@ -9,8 +9,12 @@ use App\Domain\Assignment\Models\Assignment;
 use App\Domain\Course\Models\Course;
 use App\Domain\Course\Models\CourseSection;
 use App\Domain\Course\Models\Enrollment;
+use App\Domain\Module\Models\Lesson;
+use App\Domain\Module\Models\Module;
+use App\Domain\Submission\Models\Grade;
 use App\Domain\Submission\Models\Submission;
 use App\Enums\CourseStatus;
+use App\Enums\LessonType;
 use App\Enums\SubmissionStatus;
 use App\Enums\UserRole;
 use App\Models\User;
@@ -95,7 +99,7 @@ class E2ESeeder extends Seeder
             ]
         );
 
-        Submission::firstOrCreate(
+        $submission = Submission::firstOrCreate(
             ['assignment_id' => $gradingAssignment->id, 'student_id' => $student->id],
             [
                 'status' => SubmissionStatus::Submitted,
@@ -105,12 +109,43 @@ class E2ESeeder extends Seeder
             ]
         );
 
+        // Pre-seeded released grade so student-grades.spec.ts can verify grade display
+        Grade::updateOrCreate(
+            ['submission_id' => $submission->id],
+            [
+                'graded_by' => $instructor->id,
+                'score' => 42,
+                'feedback' => 'E2E pre-seeded grade for testing.',
+                'released_at' => now()->subMinutes(30),
+            ]
+        );
+
         // Announcement visible in student dashboard Recent Announcements
         Announcement::firstOrCreate(
             ['course_section_id' => $section->id, 'title' => 'E2E Announcement'],
             [
                 'body' => 'Welcome to E2E Test Course. This is a test announcement.',
                 'created_by' => $instructor->id,
+                'published_at' => now()->subMinute(),
+            ]
+        );
+
+        // Module and lesson for content-navigation tests
+        $module = Module::firstOrCreate(
+            ['course_section_id' => $section->id, 'title' => 'E2E Module'],
+            [
+                'description' => 'Module created by the E2E seeder.',
+                'order_no' => 1,
+                'published_at' => now()->subMinute(),
+            ]
+        );
+
+        Lesson::firstOrCreate(
+            ['module_id' => $module->id, 'title' => 'E2E Lesson'],
+            [
+                'content' => 'Lesson content seeded for E2E tests.',
+                'type' => LessonType::Text,
+                'order_no' => 1,
                 'published_at' => now()->subMinute(),
             ]
         );

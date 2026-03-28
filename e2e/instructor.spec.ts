@@ -9,10 +9,10 @@ test('dashboard has My Sections heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'My Sections' })).toBeVisible();
 });
 
-test('dashboard has Pending Submissions heading', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Pending Submissions' })).toBeVisible();
+test('dashboard has Pending Submissions stat card', async ({ page }) => {
+    await expect(page.getByText('Pending Submissions')).toBeVisible();
 });
 
-test('E2E Test Course is visible in sections list', async ({ page }) => {
-    await expect(page.getByText('E2E Test Course')).toBeVisible();
+test('E2E101 section code is visible in sections list', async ({ page }) => {
+    await expect(page.getByText('E2E101')).toBeVisible();
 });

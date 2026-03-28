@@ -79,7 +79,7 @@ const form = useForm<{
 });
 
 const submit = (): void => {
-    form.post(route('instructor.courses.assignments.store', { course: props.section.id }));
+    form.post(route('instructor.courses.assignments.store', props.section.id));
 };
 </script>
 

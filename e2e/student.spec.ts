@@ -21,9 +21,10 @@ test('dashboard has Recent Grades heading', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Recent Grades' })).toBeVisible();
 });
 
-test('E2E Assignment link is visible and navigates to assignment page', async ({ page }) => {
-    const link = page.getByRole('link', { name: 'E2E Assignment' });
+test('E2E Assignment is visible on assignments page and navigates to detail', async ({ page }) => {
+    await page.goto('/student/assignments');
+    const link = page.getByRole('link', { name: /E2E Assignment/i }).first();
     await expect(link).toBeVisible();
     await link.click();
-    await expect(page).toHaveURL(/\/assignments\/\d+/);
+    await expect(page).toHaveURL(/\/student\/assignments\/\d+/);
 });
