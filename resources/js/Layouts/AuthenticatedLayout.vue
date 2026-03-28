@@ -192,6 +192,7 @@ watchEffect(() => {
     html.classList.toggle('reduce-motion', p?.reduced_motion ?? false);
     html.classList.toggle('simplified', f?.['simplified-layout'] ?? p?.simplified_layout ?? false);
     html.classList.toggle('dyslexia-font', p?.dyslexia_font ?? false);
+    html.classList.toggle('dark', p?.dark_mode ?? false);
 });
 </script>
 
@@ -355,12 +356,12 @@ watchEffect(() => {
         >
             <!-- Top header -->
             <header
-                class="sticky top-0 z-30 flex h-16 items-center gap-4 bg-white px-4 shadow-sm sm:px-6"
+                class="sticky top-0 z-30 flex h-16 items-center gap-4 bg-white px-4 shadow-sm sm:px-6 dark:bg-slate-900 dark:shadow-slate-800"
             >
                 <!-- Hamburger (mobile only) -->
                 <button
                     type="button"
-                    class="rounded-md p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden"
+                    class="rounded-md p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden dark:text-slate-300 dark:hover:text-white"
                     :aria-expanded="sidebarOpen"
                     aria-controls="sidebar"
                     aria-label="Open navigation"
@@ -381,7 +382,7 @@ watchEffect(() => {
             <!-- Page content -->
             <main
                 id="main-content"
-                class="flex-1 min-w-0 overflow-x-hidden bg-slate-50 pb-16 lg:pb-0"
+                class="flex-1 min-w-0 overflow-x-hidden bg-slate-50 pb-16 lg:pb-0 dark:bg-slate-950"
             >
                 <slot />
             </main>

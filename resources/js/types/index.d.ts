@@ -7,6 +7,8 @@ export interface User {
     email: string;
     role: 'student' | 'instructor' | 'admin';
     email_verified_at?: string;
+    bio?: string | null;
+    phone?: string | null;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {

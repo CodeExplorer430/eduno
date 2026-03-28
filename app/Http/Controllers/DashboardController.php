@@ -162,13 +162,25 @@ class DashboardController extends Controller
             ->limit(10)
             ->get(['id', 'title', 'due_at', 'course_section_id']);
 
+        $unreleasedGradesCount = Grade::whereHas(
+            'submission.assignment',
+            fn ($q) => $q->whereIn('course_section_id', $sectionIds)
+        )->whereNull('released_at')->count();
+
+        $flaggedCount = Submission::whereHas(
+            'assignment',
+            fn ($q) => $q->whereIn('course_section_id', $sectionIds)
+        )->where('flagged_for_review', true)->count();
+
         return Inertia::render('Dashboard', [
-            'role'                     => 'instructor',
-            'courses_count'            => $sections->count(),
+            'role'                      => 'instructor',
+            'courses_count'             => $sections->count(),
             'pending_submissions_count' => $pendingSubmissions->count(),
-            'recent_submissions'       => $pendingSubmissions,
-            'upcoming_deadlines'       => $upcomingDeadlines,
-            'sections'                 => $sections,
+            'unreleased_grades_count'   => $unreleasedGradesCount,
+            'flagged_count'             => $flaggedCount,
+            'recent_submissions'        => $pendingSubmissions,
+            'upcoming_deadlines'        => $upcomingDeadlines,
+            'sections'                  => $sections,
         ]);
     }
 }

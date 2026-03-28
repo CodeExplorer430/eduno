@@ -90,6 +90,8 @@ const instructorProps = {
     role: 'instructor' as const,
     courses_count: 5,
     pending_submissions_count: 2,
+    unreleased_grades_count: 3,
+    flagged_count: 1,
     sections: [
         {
             id: 1,
@@ -270,6 +272,46 @@ describe('Dashboard — instructor role', () => {
         expect(wrapper.text()).toContain('My Sections');
         expect(wrapper.text()).toContain('CCS101');
         expect(wrapper.text()).toContain('30 enrolled');
+    });
+
+    it('renders "Unreleased Grades" stat card', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('Unreleased Grades');
+        expect(wrapper.text()).toContain('3');
+    });
+
+    it('renders "Flagged Submissions" stat card', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('Flagged Submissions');
+        expect(wrapper.text()).toContain('1');
+    });
+
+    it('amber banner is visible when unreleased_grades_count > 0', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('waiting to be released');
+        expect(wrapper.text()).toContain('View Submissions →');
+    });
+
+    it('amber banner is hidden when unreleased_grades_count is 0', () => {
+        const wrapper = mount(Dashboard, {
+            props: { ...instructorProps, unreleased_grades_count: 0 },
+            global: globalOpts,
+        });
+        expect(wrapper.text()).not.toContain('waiting to be released');
+    });
+
+    it('section cards render Modules / Roster / Gradebook quick-links', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.text()).toContain('Modules');
+        expect(wrapper.text()).toContain('Roster');
+        expect(wrapper.text()).toContain('Gradebook');
+    });
+
+    it('section quick-links have descriptive aria-labels', () => {
+        const wrapper = mount(Dashboard, { props: instructorProps, global: globalOpts });
+        expect(wrapper.find('a[aria-label="Go to Modules for A"]').exists()).toBe(true);
+        expect(wrapper.find('a[aria-label="Go to Roster for A"]').exists()).toBe(true);
+        expect(wrapper.find('a[aria-label="Go to Gradebook for A"]').exists()).toBe(true);
     });
 
     it('passes WCAG axe check', async () => {
