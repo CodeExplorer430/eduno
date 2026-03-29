@@ -47,7 +47,17 @@ createInertiaApp({
                 lang: getInitialLocale(),
                 resolve: async (lang: string) => {
                     const langs = import.meta.glob('../../lang/php_*.json');
-                    return await langs[`../../lang/php_${lang}.json`]();
+                    const loader = langs[`../../lang/php_${lang}.json`];
+                    if (!loader) return {};
+                    const data = (await loader()) as Record<string, string>;
+                    // PHP files are namespaced by filename (e.g., lang/en/app.php → 'app.*').
+                    // Strip the 'app.' prefix so components use keys like 'nav.dashboard' directly.
+                    const prefix = 'app.';
+                    return Object.fromEntries(
+                        Object.entries(data)
+                            .filter(([k]) => k.startsWith(prefix))
+                            .map(([k, v]) => [k.slice(prefix.length), v])
+                    );
                 },
             })
             .use(PrimeVue, {
