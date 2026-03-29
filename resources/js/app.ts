@@ -48,16 +48,19 @@ createInertiaApp({
                 resolve: async (lang: string) => {
                     const langs = import.meta.glob('../../lang/php_*.json');
                     const loader = langs[`../../lang/php_${lang}.json`];
-                    if (!loader) return {};
-                    const data = (await loader()) as Record<string, string>;
-                    // PHP files are namespaced by filename (e.g., lang/en/app.php → 'app.*').
-                    // Strip the 'app.' prefix so components use keys like 'nav.dashboard' directly.
+                    if (!loader) return { default: {} };
+                    // PHP files are namespaced by filename (lang/en/app.php → keys prefixed 'app.').
+                    // Strip the prefix so components use keys like 'nav.dashboard' directly.
+                    // Must return { default: {...} } — the Vite module format laravel-vue-i18n expects.
+                    const module = (await loader()) as { default: Record<string, string> };
                     const prefix = 'app.';
-                    return Object.fromEntries(
-                        Object.entries(data)
-                            .filter(([k]) => k.startsWith(prefix))
-                            .map(([k, v]) => [k.slice(prefix.length), v])
-                    );
+                    return {
+                        default: Object.fromEntries(
+                            Object.entries(module.default)
+                                .filter(([k]) => k.startsWith(prefix))
+                                .map(([k, v]) => [k.slice(prefix.length), v])
+                        ),
+                    };
                 },
             })
             .use(PrimeVue, {

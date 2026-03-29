@@ -37,14 +37,16 @@ createServer((page) =>
                     resolve: async (lang: string) => {
                         const langs = import.meta.glob('../../lang/php_*.json');
                         const loader = langs[`../../lang/php_${lang}.json`];
-                        if (!loader) return {};
-                        const data = (await loader()) as Record<string, string>;
+                        if (!loader) return { default: {} };
+                        const module = (await loader()) as { default: Record<string, string> };
                         const prefix = 'app.';
-                        return Object.fromEntries(
-                            Object.entries(data)
-                                .filter(([k]) => k.startsWith(prefix))
-                                .map(([k, v]) => [k.slice(prefix.length), v])
-                        );
+                        return {
+                            default: Object.fromEntries(
+                                Object.entries(module.default)
+                                    .filter(([k]) => k.startsWith(prefix))
+                                    .map(([k, v]) => [k.slice(prefix.length), v])
+                            ),
+                        };
                     },
                 })
                 .use(PrimeVue, {
