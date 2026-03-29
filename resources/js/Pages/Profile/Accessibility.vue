@@ -154,7 +154,9 @@ function submit(): void {
                     </div>
 
                     <!-- High Contrast -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-purple-50"
@@ -210,7 +212,9 @@ function submit(): void {
                     </div>
 
                     <!-- Reduced Motion -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-50"
@@ -252,7 +256,9 @@ function submit(): void {
                     </div>
 
                     <!-- Simplified Layout -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-50"
@@ -299,7 +305,9 @@ function submit(): void {
                     </div>
 
                     <!-- Dark Mode -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-50"
@@ -341,8 +349,12 @@ function submit(): void {
                     </div>
 
                     <!-- Language -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
+                        <div
+                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                        >
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50"
                             >

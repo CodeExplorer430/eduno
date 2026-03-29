@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 
+/* Force class-based dark mode — Tailwind v4 defaults to prefers-color-scheme;
+   this overrides it so only the html.dark class (set by user DB preference
+   in AuthenticatedLayout watchEffect) activates dark: variants. */
+@variant dark (&:where(.dark, .dark *));
+
 /* Accessibility preference classes applied to <html> by AuthenticatedLayout */
 
 .font-small  { font-size: 14px; }
