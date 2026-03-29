@@ -25,6 +25,7 @@ it('saves valid preferences', function () {
         'high_contrast' => true,
         'reduced_motion' => false,
         'simplified_layout' => true,
+        'dark_mode' => false,
         'language' => 'en',
     ]);
 
@@ -49,6 +50,7 @@ it('rejects invalid font_size', function () {
         'high_contrast' => false,
         'reduced_motion' => false,
         'simplified_layout' => false,
+        'dark_mode' => false,
         'language' => 'en',
     ]);
 
@@ -65,6 +67,7 @@ it('creates preferences record when none exists', function () {
         'high_contrast' => false,
         'reduced_motion' => false,
         'simplified_layout' => false,
+        'dark_mode' => false,
         'language' => 'en',
     ]);
 
@@ -87,6 +90,7 @@ it('updates existing preferences on subsequent save', function () {
         'high_contrast' => true,
         'reduced_motion' => true,
         'simplified_layout' => false,
+        'dark_mode' => false,
         'language' => 'en',
     ]);
 

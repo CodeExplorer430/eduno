@@ -44,26 +44,28 @@ const submit = (): void => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('instructor.courses.modules.index', section.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-gray-200"
                         >
                             {{ section.course.code }} — Modules
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">Add Lesson</li>
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
+                        Add Lesson
+                    </li>
                 </ol>
             </nav>
         </template>
 
         <div class="py-12">
             <div class="mx-auto max-w-xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden rounded-lg bg-white shadow-sm">
-                    <div class="border-b border-gray-100 px-6 py-4">
-                        <h1 class="font-semibold text-gray-800">
+                <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-slate-800">
+                    <div class="border-b border-gray-100 px-6 py-4 dark:border-slate-700">
+                        <h1 class="font-semibold text-gray-800 dark:text-gray-200">
                             Add Lesson to <span class="text-blue-600">{{ module.title }}</span>
                         </h1>
                     </div>
@@ -83,7 +85,7 @@ const submit = (): void => {
                                 id="title"
                                 v-model="form.title"
                                 type="text"
-                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 bg-white py-2.5 px-3 text-sm text-gray-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 :aria-describedby="form.errors.title ? 'title-error' : undefined"
                                 required
                                 autofocus
@@ -100,7 +102,7 @@ const submit = (): void => {
                             <select
                                 id="type"
                                 v-model="form.type"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 :aria-describedby="form.errors.type ? 'type-error' : undefined"
                                 required
                             >
@@ -117,7 +119,7 @@ const submit = (): void => {
                             <textarea
                                 id="content"
                                 v-model="form.content"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 rows="6"
                                 :aria-describedby="
                                     form.errors.content ? 'content-error' : undefined
@@ -137,7 +139,7 @@ const submit = (): void => {
                                 v-model.number="form.order_no"
                                 type="number"
                                 min="0"
-                                class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 :aria-describedby="form.errors.order_no ? 'order-error' : undefined"
                                 required
                             />
@@ -153,7 +155,7 @@ const submit = (): void => {
                                 id="published"
                                 v-model="form.published"
                                 type="checkbox"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800"
                             />
                             <InputLabel for="published" value="Publish immediately" class="mb-0" />
                         </div>
@@ -161,7 +163,7 @@ const submit = (): void => {
                         <div class="flex items-center justify-end gap-4 pt-2">
                             <Link
                                 :href="route('instructor.courses.modules.index', section.id)"
-                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                                class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded dark:text-slate-400 dark:hover:text-gray-200"
                             >
                                 Cancel
                             </Link>

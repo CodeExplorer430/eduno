@@ -47,10 +47,10 @@ const isPastDue = (dateStr: string | null): boolean => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-bold text-gray-900">
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">
                     Assignments —
                     {{ props.section.course?.title ?? 'Section' }}
-                    <span class="text-base font-normal text-gray-500"
+                    <span class="text-base font-normal text-gray-500 dark:text-slate-400"
                         >({{ props.section.section_name }})</span
                     >
                 </h1>
@@ -72,23 +72,36 @@ const isPastDue = (dateStr: string | null): boolean => {
                 description="Create one to get started."
             />
 
-            <div v-else class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+            <div
+                v-else
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                    <h2 class="font-semibold text-gray-900">Assignment List</h2>
+                    <h2 class="font-semibold text-gray-900 dark:text-white">Assignment List</h2>
                 </div>
-                <ul class="divide-y divide-gray-100" role="list" aria-label="Assignments">
+                <ul
+                    class="divide-y divide-gray-100 dark:divide-slate-700"
+                    role="list"
+                    aria-label="Assignments"
+                >
                     <li
                         v-for="assignment in props.assignments"
                         :key="assignment.id"
-                        class="flex items-center justify-between px-6 py-4 transition-colors hover:bg-gray-50"
+                        class="flex items-center justify-between px-6 py-4 transition-colors hover:bg-gray-50 dark:hover:bg-slate-700/50"
                     >
                         <div>
-                            <p class="font-medium text-gray-900">{{ assignment.title }}</p>
+                            <p class="font-medium text-gray-900 dark:text-white">
+                                {{ assignment.title }}
+                            </p>
                             <p
                                 class="mt-0.5 text-sm"
                                 :class="
-                                    isPastDue(assignment.due_at) ? 'text-red-600' : 'text-gray-500'
+                                    isPastDue(assignment.due_at)
+                                        ? 'text-red-600'
+                                        : 'text-gray-500 dark:text-slate-400'
                                 "
                             >
                                 Due: {{ formatDate(assignment.due_at) }}
@@ -98,7 +111,7 @@ const isPastDue = (dateStr: string | null): boolean => {
                                     >Past Due</span
                                 >
                             </p>
-                            <p class="mt-0.5 text-xs text-gray-400">
+                            <p class="mt-0.5 text-xs text-gray-400 dark:text-slate-500">
                                 Max score: {{ assignment.max_score }}
                             </p>
                         </div>

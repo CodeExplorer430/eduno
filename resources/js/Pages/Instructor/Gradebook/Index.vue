@@ -72,10 +72,13 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                 <!-- Page header -->
                 <header class="mb-6 flex flex-wrap items-start justify-between gap-4">
                     <div>
-                        <h1 id="gradebook-heading" class="text-xl font-bold text-gray-900">
+                        <h1
+                            id="gradebook-heading"
+                            class="text-xl font-bold text-gray-900 dark:text-white"
+                        >
                             Gradebook
                         </h1>
-                        <p class="mt-1 text-sm text-gray-500">
+                        <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
                             <span class="font-mono font-medium">{{ section.course.code }}</span>
                             — {{ section.course.title }} · Section {{ section.section_name }}
                         </p>
@@ -83,7 +86,7 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
 
                     <a
                         :href="route('instructor.gradebook.export', section.id)"
-                        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         aria-label="Export gradebook as CSV"
                     >
                         Export CSV
@@ -94,16 +97,18 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                 <div
                     v-if="students.length === 0"
                     role="status"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
-                    <p class="text-sm text-gray-500">No enrolled students yet.</p>
+                    <p class="text-sm text-gray-500 dark:text-slate-400">
+                        No enrolled students yet.
+                    </p>
                 </div>
 
                 <!-- Empty state: no assignments -->
                 <div
                     v-else-if="assignments.length === 0"
                     role="status"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
                     <p class="text-sm text-gray-500">No published assignments yet.</p>
                 </div>
@@ -111,7 +116,7 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                 <!-- Gradebook matrix -->
                 <div
                     v-else
-                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
                     <div class="overflow-x-auto">
                         <table
@@ -119,11 +124,11 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                             :aria-label="`Gradebook for ${section.course.code} ${section.section_name}`"
                         >
                             <!-- Column headers -->
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-50 dark:bg-slate-900">
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="sticky left-0 z-10 min-w-[180px] bg-gray-50 px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="sticky left-0 z-10 min-w-[180px] bg-gray-50 px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:bg-slate-900 dark:text-slate-400"
                                     >
                                         Student
                                     </th>
@@ -131,18 +136,20 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                                         v-for="assignment in assignments"
                                         :key="assignment.id"
                                         scope="col"
-                                        class="min-w-[110px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="min-w-[110px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         <span class="block truncate" :title="assignment.title">
                                             {{ assignment.title }}
                                         </span>
-                                        <span class="block font-normal normal-case text-gray-400">
+                                        <span
+                                            class="block font-normal normal-case text-gray-400 dark:text-slate-500"
+                                        >
                                             /{{ assignment.max_score }}
                                         </span>
                                     </th>
                                     <th
                                         scope="col"
-                                        class="min-w-[80px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="min-w-[80px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         Total
                                     </th>
@@ -150,15 +157,17 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                             </thead>
 
                             <!-- Student rows -->
-                            <tbody class="divide-y divide-gray-100 bg-white">
+                            <tbody
+                                class="divide-y divide-gray-100 bg-white dark:divide-slate-700 dark:bg-slate-800"
+                            >
                                 <tr
                                     v-for="student in students"
                                     :key="student.id"
-                                    class="transition-colors hover:bg-gray-50"
+                                    class="transition-colors hover:bg-gray-50 dark:hover:bg-slate-700/50"
                                 >
                                     <!-- Sticky student name -->
                                     <td
-                                        class="sticky left-0 z-10 whitespace-nowrap bg-white px-6 py-3 font-medium text-gray-900 group-hover:bg-gray-50"
+                                        class="sticky left-0 z-10 whitespace-nowrap bg-white px-6 py-3 font-medium text-gray-900 group-hover:bg-gray-50 dark:bg-slate-800 dark:text-white"
                                     >
                                         {{ student.name }}
                                     </td>
@@ -193,7 +202,7 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                                         </span>
                                         <span
                                             v-else
-                                            class="text-gray-300"
+                                            class="text-gray-300 dark:text-slate-600"
                                             aria-label="Not submitted"
                                         >
                                             —
@@ -201,17 +210,21 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                                     </td>
 
                                     <!-- Row total -->
-                                    <td class="px-4 py-3 text-center font-semibold text-gray-700">
+                                    <td
+                                        class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300"
+                                    >
                                         {{ student.total > 0 ? student.total : '—' }}
                                     </td>
                                 </tr>
                             </tbody>
 
                             <!-- Averages footer -->
-                            <tfoot class="border-t-2 border-gray-200 bg-gray-50">
+                            <tfoot
+                                class="border-t-2 border-gray-200 bg-gray-50 dark:border-slate-600 dark:bg-slate-900"
+                            >
                                 <tr>
                                     <td
-                                        class="sticky left-0 z-10 bg-gray-50 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="sticky left-0 z-10 bg-gray-50 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:bg-slate-900 dark:text-slate-400"
                                     >
                                         Average
                                     </td>

@@ -179,7 +179,7 @@ const formatDate = (dateString: string | null): string => {
             <!-- Course hero -->
             <section
                 aria-labelledby="course-info-heading"
-                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
             >
                 <div class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-6">
                     <span
@@ -192,21 +192,32 @@ const formatDate = (dateString: string | null): string => {
                     </h1>
                 </div>
                 <div class="px-6 py-5">
-                    <p v-if="section.course.description" class="mb-4 text-sm text-gray-600">
+                    <p
+                        v-if="section.course.description"
+                        class="mb-4 text-sm text-gray-600 dark:text-gray-400"
+                    >
                         {{ section.course.description }}
                     </p>
                     <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
                         <div>
-                            <dt class="font-medium text-gray-500">Section</dt>
-                            <dd class="mt-0.5 text-gray-800">{{ section.section_name }}</dd>
+                            <dt class="font-medium text-gray-500 dark:text-slate-400">Section</dt>
+                            <dd class="mt-0.5 text-gray-800 dark:text-gray-200">
+                                {{ section.section_name }}
+                            </dd>
                         </div>
                         <div>
-                            <dt class="font-medium text-gray-500">Instructor</dt>
-                            <dd class="mt-0.5 text-gray-800">{{ section.instructor.name }}</dd>
+                            <dt class="font-medium text-gray-500 dark:text-slate-400">
+                                Instructor
+                            </dt>
+                            <dd class="mt-0.5 text-gray-800 dark:text-gray-200">
+                                {{ section.instructor.name }}
+                            </dd>
                         </div>
                         <div v-if="section.schedule_text">
-                            <dt class="font-medium text-gray-500">Schedule</dt>
-                            <dd class="mt-0.5 text-gray-800">{{ section.schedule_text }}</dd>
+                            <dt class="font-medium text-gray-500 dark:text-slate-400">Schedule</dt>
+                            <dd class="mt-0.5 text-gray-800 dark:text-gray-200">
+                                {{ section.schedule_text }}
+                            </dd>
                         </div>
                     </dl>
                 </div>
@@ -214,7 +225,7 @@ const formatDate = (dateString: string | null): string => {
 
             <!-- Tab bar -->
             <div
-                class="flex gap-1 overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-100"
+                class="flex gap-1 overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 role="tablist"
                 aria-label="Course tabs"
             >
@@ -230,7 +241,7 @@ const formatDate = (dateString: string | null): string => {
                     :class="
                         activeTab === tab.key
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-gray-600 hover:bg-gray-50'
+                            : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-slate-700/50'
                     "
                     @click="setTab(tab.key)"
                 >
@@ -248,20 +259,20 @@ const formatDate = (dateString: string | null): string => {
             >
                 <div
                     v-if="announcements.length === 0"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
                     <MegaphoneIcon
-                        class="mx-auto mb-3 h-10 w-10 text-gray-300"
+                        class="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-slate-600"
                         aria-hidden="true"
                     />
-                    <p class="text-sm text-gray-500">No announcements yet.</p>
+                    <p class="text-sm text-gray-500 dark:text-slate-400">No announcements yet.</p>
                 </div>
 
                 <ul v-else class="space-y-4" aria-label="Announcements">
                     <li
                         v-for="announcement in announcements"
                         :key="announcement.id"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                     >
                         <article :aria-labelledby="`ann-${announcement.id}-title`">
                             <div class="px-6 py-5">
@@ -277,11 +288,11 @@ const formatDate = (dateString: string | null): string => {
                                     <div class="min-w-0">
                                         <h3
                                             :id="`ann-${announcement.id}-title`"
-                                            class="font-semibold text-gray-900"
+                                            class="font-semibold text-gray-900 dark:text-white"
                                         >
                                             {{ announcement.title }}
                                         </h3>
-                                        <p class="mt-0.5 text-xs text-gray-500">
+                                        <p class="mt-0.5 text-xs text-gray-500 dark:text-slate-400">
                                             <time
                                                 v-if="announcement.published_at"
                                                 :datetime="announcement.published_at"
@@ -289,7 +300,7 @@ const formatDate = (dateString: string | null): string => {
                                                 {{ formatDate(announcement.published_at) }}
                                             </time>
                                         </p>
-                                        <p class="mt-3 text-sm text-gray-600">
+                                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
                                             {{ announcement.body }}
                                         </p>
                                     </div>
@@ -312,7 +323,10 @@ const formatDate = (dateString: string | null): string => {
                 <section aria-labelledby="modules-heading">
                     <div class="mb-4 flex items-center gap-3">
                         <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                        <h2 id="modules-heading" class="text-lg font-semibold text-gray-800">
+                        <h2
+                            id="modules-heading"
+                            class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                        >
                             Course Modules
                         </h2>
                     </div>
@@ -324,14 +338,14 @@ const formatDate = (dateString: string | null): string => {
                             v-model="searchQuery"
                             type="search"
                             placeholder="Search modules and lessons…"
-                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                             aria-label="Search course materials"
                         />
                     </div>
 
                     <p
                         v-if="searchQuery.trim() && filteredModules.length === 0"
-                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400"
+                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-500"
                         role="status"
                     >
                         No modules or lessons match your search.
@@ -341,11 +355,11 @@ const formatDate = (dateString: string | null): string => {
                         <article
                             v-for="module in filteredModules"
                             :key="module.id"
-                            class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+                            class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-slate-600 dark:bg-slate-800"
                         >
                             <button
                                 type="button"
-                                class="flex w-full items-center justify-between px-5 py-3 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                                class="flex w-full items-center justify-between px-5 py-3 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:hover:bg-slate-700/50"
                                 :aria-expanded="expandedModules.has(module.id)"
                                 :aria-controls="`module-content-${module.id}`"
                                 @click="toggleModule(module.id)"
@@ -356,10 +370,12 @@ const formatDate = (dateString: string | null): string => {
                                     >
                                         {{ module.order_no }}
                                     </span>
-                                    <h3 class="font-medium text-gray-900">{{ module.title }}</h3>
+                                    <h3 class="font-medium text-gray-900 dark:text-white">
+                                        {{ module.title }}
+                                    </h3>
                                 </div>
                                 <ChevronDownIcon
-                                    class="h-5 w-5 text-gray-400 transition-transform"
+                                    class="h-5 w-5 text-gray-400 transition-transform dark:text-slate-500"
                                     :class="expandedModules.has(module.id) ? 'rotate-180' : ''"
                                     aria-hidden="true"
                                 />
@@ -371,9 +387,12 @@ const formatDate = (dateString: string | null): string => {
                             >
                                 <div
                                     v-if="module.lessons.length > 0"
-                                    class="border-t border-gray-100 px-5 py-3"
+                                    class="border-t border-gray-100 px-5 py-3 dark:border-slate-700"
                                 >
-                                    <ul class="divide-y divide-gray-100" aria-label="Lessons">
+                                    <ul
+                                        class="divide-y divide-gray-100 dark:divide-slate-700"
+                                        aria-label="Lessons"
+                                    >
                                         <li
                                             v-for="lesson in module.lessons"
                                             :key="lesson.id"
@@ -387,7 +406,7 @@ const formatDate = (dateString: string | null): string => {
                                                     {{ lesson.title }}
                                                 </Link>
                                                 <span
-                                                    class="ms-3 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500"
+                                                    class="ms-3 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-slate-700 dark:text-slate-400"
                                                     aria-label="Lesson type"
                                                 >
                                                     {{ lessonTypeLabel(lesson.type) }}
@@ -403,11 +422,12 @@ const formatDate = (dateString: string | null): string => {
                                                 <li
                                                     v-for="resource in lesson.resources"
                                                     :key="resource.id"
-                                                    class="text-xs text-gray-500"
+                                                    class="text-xs text-gray-500 dark:text-slate-400"
                                                 >
-                                                    <span class="font-medium text-gray-700">{{
-                                                        resource.title
-                                                    }}</span>
+                                                    <span
+                                                        class="font-medium text-gray-700 dark:text-gray-300"
+                                                        >{{ resource.title }}</span
+                                                    >
                                                     <span
                                                         v-if="resource.reading_time_minutes"
                                                         class="ml-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-600"
@@ -416,7 +436,7 @@ const formatDate = (dateString: string | null): string => {
                                                     </span>
                                                     <span
                                                         v-if="resource.accessibility_notes"
-                                                        class="ml-1 text-gray-400"
+                                                        class="ml-1 text-gray-400 dark:text-slate-500"
                                                     >
                                                         — {{ resource.accessibility_notes }}
                                                     </span>
@@ -427,7 +447,7 @@ const formatDate = (dateString: string | null): string => {
                                 </div>
                                 <div
                                     v-else
-                                    class="border-t border-gray-100 px-5 py-3 text-sm text-gray-400"
+                                    class="border-t border-gray-100 px-5 py-3 text-sm text-gray-400 dark:border-slate-700 dark:text-slate-500"
                                 >
                                     No lessons in this module yet.
                                 </div>
@@ -437,7 +457,7 @@ const formatDate = (dateString: string | null): string => {
 
                     <p
                         v-else
-                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400"
+                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-500"
                     >
                         No modules have been published for this course yet.
                     </p>
@@ -447,7 +467,10 @@ const formatDate = (dateString: string | null): string => {
                 <section aria-labelledby="assignments-heading">
                     <div class="mb-4 flex items-center gap-3">
                         <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                        <h2 id="assignments-heading" class="text-lg font-semibold text-gray-800">
+                        <h2
+                            id="assignments-heading"
+                            class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                        >
                             Assignments
                         </h2>
                     </div>
@@ -456,16 +479,16 @@ const formatDate = (dateString: string | null): string => {
                         <div
                             v-for="assignment in assignments"
                             :key="assignment.id"
-                            class="flex items-center justify-between overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                            class="flex items-center justify-between overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                         >
                             <div>
                                 <Link
                                     :href="route('student.assignments.show', assignment.id)"
-                                    class="font-medium text-gray-900 hover:text-blue-600 focus:outline-none focus:underline"
+                                    class="font-medium text-gray-900 hover:text-blue-600 focus:outline-none focus:underline dark:text-white"
                                 >
                                     {{ assignment.title }}
                                 </Link>
-                                <p class="mt-0.5 text-xs text-gray-500">
+                                <p class="mt-0.5 text-xs text-gray-500 dark:text-slate-400">
                                     Due {{ formatDate(assignment.due_at) }} &middot;
                                     {{ assignment.max_score }} pts
                                 </p>
@@ -474,7 +497,7 @@ const formatDate = (dateString: string | null): string => {
                                 class="shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium"
                                 :class="
                                     statusBadge[submissionStatus(assignment)] ??
-                                    'bg-gray-100 text-gray-500'
+                                    'bg-gray-100 text-gray-500 dark:bg-slate-700 dark:text-slate-400'
                                 "
                             >
                                 {{
@@ -487,7 +510,7 @@ const formatDate = (dateString: string | null): string => {
 
                     <p
                         v-else
-                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400"
+                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-500"
                     >
                         No assignments have been published for this course yet.
                     </p>
@@ -503,10 +526,14 @@ const formatDate = (dateString: string | null): string => {
             >
                 <div class="space-y-4">
                     <!-- Instructor card -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
+                        <div
+                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                        >
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                            <h2 class="font-semibold text-gray-900">Instructor</h2>
+                            <h2 class="font-semibold text-gray-900 dark:text-white">Instructor</h2>
                         </div>
                         <div class="flex items-center gap-4 px-6 py-5">
                             <span
@@ -516,23 +543,29 @@ const formatDate = (dateString: string | null): string => {
                                 {{ section.instructor.name.charAt(0).toUpperCase() }}
                             </span>
                             <div>
-                                <p class="font-medium text-gray-900">
+                                <p class="font-medium text-gray-900 dark:text-white">
                                     {{ section.instructor.name }}
                                 </p>
-                                <p class="text-sm text-gray-500">{{ section.instructor.email }}</p>
+                                <p class="text-sm text-gray-500 dark:text-slate-400">
+                                    {{ section.instructor.email }}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Student count (privacy-preserving) -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
+                        <div
+                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                        >
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                            <h2 class="font-semibold text-gray-900">Students</h2>
+                            <h2 class="font-semibold text-gray-900 dark:text-white">Students</h2>
                         </div>
                         <div class="px-6 py-5">
-                            <p class="text-sm text-gray-600">
-                                <span class="font-semibold text-gray-900">{{
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                <span class="font-semibold text-gray-900 dark:text-white">{{
                                     section.enrollments.length
                                 }}</span>
                                 student{{ section.enrollments.length === 1 ? '' : 's' }} enrolled in

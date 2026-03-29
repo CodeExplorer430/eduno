@@ -33,6 +33,7 @@ class AccessibilityController extends Controller
             (bool) $validated['high_contrast'],
             (bool) $validated['reduced_motion'],
             (bool) $validated['simplified_layout'],
+            (bool) $validated['dark_mode'],
             $validated['language'],
         );
 

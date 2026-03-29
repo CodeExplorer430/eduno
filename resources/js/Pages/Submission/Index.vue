@@ -15,7 +15,7 @@ const props = defineProps<{
 
     <main class="mx-auto max-w-5xl px-4 py-8">
         <nav aria-label="Breadcrumb" class="mb-4">
-            <ol class="flex gap-2 text-sm text-gray-500">
+            <ol class="flex gap-2 text-sm text-gray-500 dark:text-slate-400">
                 <li>
                     <Link :href="route('assignments.show', assignment.id)" class="hover:underline">
                         {{ assignment.title }}
@@ -29,7 +29,7 @@ const props = defineProps<{
         <div class="mb-6 flex items-center justify-between">
             <h1 class="text-2xl font-bold">
                 Submissions
-                <span class="ml-2 text-lg font-normal text-gray-500"
+                <span class="ml-2 text-lg font-normal text-gray-500 dark:text-slate-400"
                     >({{ submissions.meta.total }})</span
                 >
             </h1>
@@ -37,7 +37,7 @@ const props = defineProps<{
             <a
                 v-if="canManage"
                 :href="route('assignments.submissions.export', assignment.id)"
-                class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                class="rounded border border-gray-300 dark:border-slate-600 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
                 Export CSV
             </a>
@@ -45,7 +45,7 @@ const props = defineProps<{
 
         <div
             v-if="submissions.data.length === 0"
-            class="rounded border border-dashed border-gray-300 px-6 py-12 text-center text-gray-500"
+            class="rounded border border-dashed border-gray-300 dark:border-slate-600 px-6 py-12 text-center text-gray-500 dark:text-slate-400"
             role="status"
         >
             No submissions yet.
@@ -53,7 +53,9 @@ const props = defineProps<{
 
         <table v-else class="w-full border-collapse text-sm">
             <thead>
-                <tr class="border-b border-gray-200 text-left text-gray-600">
+                <tr
+                    class="border-b border-gray-200 dark:border-slate-600 text-left text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                >
                     <th scope="col" class="py-3 pr-4 font-medium">Student</th>
                     <th scope="col" class="py-3 pr-4 font-medium">Submitted At</th>
                     <th scope="col" class="py-3 pr-4 font-medium">Attempt</th>
@@ -66,7 +68,7 @@ const props = defineProps<{
                 <tr
                     v-for="submission in submissions.data"
                     :key="submission.id"
-                    class="border-b border-gray-100 hover:bg-gray-50"
+                    class="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50"
                 >
                     <td class="py-3 pr-4">
                         <Link
@@ -76,7 +78,9 @@ const props = defineProps<{
                             {{ submission.student?.name }}
                         </Link>
                     </td>
-                    <td class="py-3 pr-4 text-gray-600">
+                    <td
+                        class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
                         {{ new Date(submission.submitted_at).toLocaleString() }}
                         <span
                             v-if="submission.is_late"
@@ -85,10 +89,24 @@ const props = defineProps<{
                             Late
                         </span>
                     </td>
-                    <td class="py-3 pr-4 text-gray-600">#{{ submission.attempt_no }}</td>
-                    <td class="py-3 pr-4 text-gray-600">{{ submission.files?.length ?? 0 }}</td>
-                    <td class="py-3 pr-4 text-gray-600 capitalize">{{ submission.status }}</td>
-                    <td class="py-3 text-gray-600">
+                    <td
+                        class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
+                        #{{ submission.attempt_no }}
+                    </td>
+                    <td
+                        class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
+                        {{ submission.files?.length ?? 0 }}
+                    </td>
+                    <td
+                        class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500 capitalize"
+                    >
+                        {{ submission.status }}
+                    </td>
+                    <td
+                        class="py-3 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
                         {{ submission.grade ? submission.grade.score : '—' }}
                         <span
                             v-if="submission.grade && !submission.grade.released_at"

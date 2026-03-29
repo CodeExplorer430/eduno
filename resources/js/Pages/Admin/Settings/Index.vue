@@ -54,13 +54,13 @@ function setBool(
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-bold text-gray-900">Settings</h1>
+            <h1 class="text-xl font-bold text-gray-900 dark:text-white">Settings</h1>
         </template>
 
         <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
             <!-- Tab bar -->
             <div
-                class="mb-6 flex gap-1 overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-100"
+                class="mb-6 flex gap-1 overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 role="tablist"
                 aria-label="Settings sections"
             >
@@ -76,7 +76,7 @@ function setBool(
                     :class="
                         activeTab === tab.key
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-gray-600 hover:bg-gray-50'
+                            : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-slate-700'
                     "
                     @click="activeTab = tab.key"
                 >
@@ -93,17 +93,23 @@ function setBool(
                     role="tabpanel"
                     aria-labelledby="tab-general"
                 >
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                    >
+                        <div
+                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                        >
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                            <h2 class="font-semibold text-gray-900">General Settings</h2>
+                            <h2 class="font-semibold text-gray-900 dark:text-white">
+                                General Settings
+                            </h2>
                         </div>
-                        <div class="divide-y divide-gray-100 px-6">
+                        <div class="divide-y divide-gray-100 px-6 dark:divide-slate-700">
                             <!-- Site name -->
                             <div class="py-4">
                                 <label
                                     for="site_name"
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                 >
                                     Site Name
                                 </label>
@@ -112,7 +118,7 @@ function setBool(
                                     v-model="form.site_name"
                                     type="text"
                                     maxlength="100"
-                                    class="mt-1 block w-full max-w-sm rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    class="mt-1 block w-full max-w-sm rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     :aria-describedby="
                                         form.errors.site_name ? 'site-name-error' : undefined
                                     "
@@ -129,10 +135,10 @@ function setBool(
                             <!-- Student self-registration -->
                             <div class="flex items-center justify-between py-4">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-700">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Student Self-Registration
                                     </p>
-                                    <p class="text-xs text-gray-500">
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">
                                         Allow new students to register without an invitation.
                                     </p>
                                 </div>
@@ -164,10 +170,10 @@ function setBool(
                             <!-- Maintenance mode -->
                             <div class="flex items-center justify-between py-4">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-700">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Maintenance Mode
                                     </p>
-                                    <p class="text-xs text-gray-500">
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">
                                         Take the site offline for non-admin users.
                                     </p>
                                 </div>
@@ -215,10 +221,10 @@ function setBool(
                             <!-- Email notifications -->
                             <div class="flex items-center justify-between py-4">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-700">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Email Notifications
                                     </p>
-                                    <p class="text-xs text-gray-500">
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">
                                         Send email alerts for grades, deadlines, and announcements.
                                     </p>
                                 </div>
@@ -256,17 +262,17 @@ function setBool(
                             <div class="py-4">
                                 <label
                                     for="deadline_reminder_hours"
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                 >
                                     Deadline Reminder Lead Time
                                 </label>
-                                <p class="text-xs text-gray-500">
+                                <p class="text-xs text-gray-500 dark:text-slate-400">
                                     How far in advance to remind students of upcoming deadlines.
                                 </p>
                                 <select
                                     id="deadline_reminder_hours"
                                     v-model="form.deadline_reminder_hours"
-                                    class="mt-2 block w-36 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    class="mt-2 block w-36 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 >
                                     <option :value="12">12 hours</option>
                                     <option :value="24">24 hours</option>
@@ -277,10 +283,10 @@ function setBool(
                             <!-- Email digest -->
                             <div class="flex items-center justify-between py-4">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-700">
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Announcement Email Digest
                                     </p>
-                                    <p class="text-xs text-gray-500">
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">
                                         Send a digest email when new announcements are published.
                                     </p>
                                 </div>

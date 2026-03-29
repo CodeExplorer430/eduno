@@ -91,7 +91,9 @@ const formatDate = (iso: string): string => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-semibold leading-tight text-gray-800">Announcements</h1>
+            <h1 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                Announcements
+            </h1>
         </template>
 
         <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
@@ -101,7 +103,7 @@ const formatDate = (iso: string): string => {
                 <select
                     id="course-filter"
                     v-model="courseFilter"
-                    class="block w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto"
+                    class="block w-full rounded-lg border border-gray-200 dark:border-slate-600 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto"
                 >
                     <option :value="null">All Courses</option>
                     <option v-for="course in allCourses" :key="course.id" :value="course.id">
@@ -119,10 +121,10 @@ const formatDate = (iso: string): string => {
                 <article
                     v-for="announcement in filtered"
                     :key="announcement.id"
-                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 dark:bg-slate-800 ring-gray-100 dark:ring-slate-700"
                     :aria-labelledby="`announcement-title-${announcement.id}`"
                 >
-                    <header class="border-b border-gray-100 px-6 py-4">
+                    <header class="border-b border-gray-100 dark:border-slate-700 px-6 py-4">
                         <div class="flex items-start gap-3">
                             <div
                                 class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50"
@@ -133,18 +135,18 @@ const formatDate = (iso: string): string => {
                                 <div class="flex items-start justify-between gap-4">
                                     <h2
                                         :id="`announcement-title-${announcement.id}`"
-                                        class="font-semibold text-gray-900"
+                                        class="font-semibold text-gray-900 dark:text-white"
                                     >
                                         {{ announcement.title }}
                                     </h2>
                                     <time
                                         :datetime="announcement.published_at"
-                                        class="shrink-0 text-xs text-gray-400"
+                                        class="shrink-0 text-xs text-gray-400 dark:text-slate-500"
                                     >
                                         {{ formatDate(announcement.published_at) }}
                                     </time>
                                 </div>
-                                <p class="mt-1 text-sm text-gray-500">
+                                <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
                                     <span class="font-medium text-blue-600">
                                         {{ announcement.course_section.course.code }}
                                     </span>
@@ -157,7 +159,7 @@ const formatDate = (iso: string): string => {
                         </div>
                     </header>
                     <div class="px-6 py-4">
-                        <p class="whitespace-pre-wrap text-sm text-gray-700">
+                        <p class="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
                             {{ announcement.body }}
                         </p>
                     </div>

@@ -31,17 +31,19 @@ const submit = (): void => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('instructor.courses.index')"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-gray-200"
                         >
                             Courses
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">Create Course</li>
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
+                        Create Course
+                    </li>
                 </ol>
             </nav>
         </template>
@@ -49,15 +51,20 @@ const submit = (): void => {
         <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
             <section
                 aria-labelledby="create-course-heading"
-                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
             >
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
                     <div>
-                        <h1 id="create-course-heading" class="font-semibold text-gray-900">
+                        <h1
+                            id="create-course-heading"
+                            class="font-semibold text-gray-900 dark:text-white"
+                        >
                             Create Course
                         </h1>
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-gray-500 dark:text-slate-400">
                             Fill in the details to create a new course.
                         </p>
                     </div>
@@ -77,7 +84,7 @@ const submit = (): void => {
                                     id="course-code"
                                     v-model="form.code"
                                     type="text"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     aria-describedby="course-code-error"
                                     :aria-invalid="!!form.errors.code"
                                     required
@@ -100,7 +107,7 @@ const submit = (): void => {
                                     id="course-title"
                                     v-model="form.title"
                                     type="text"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     aria-describedby="course-title-error"
                                     :aria-invalid="!!form.errors.title"
                                     required
@@ -120,7 +127,7 @@ const submit = (): void => {
                                     rows="4"
                                     aria-describedby="course-description-error"
                                     :aria-invalid="!!form.errors.description"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     placeholder="Optional course description…"
                                 ></textarea>
                                 <InputError
@@ -143,7 +150,7 @@ const submit = (): void => {
                                     id="course-department"
                                     v-model="form.department"
                                     type="text"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     aria-describedby="course-department-error"
                                     :aria-invalid="!!form.errors.department"
                                     required
@@ -165,7 +172,7 @@ const submit = (): void => {
                                     id="course-term"
                                     v-model="form.term"
                                     type="text"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     aria-describedby="course-term-error"
                                     :aria-invalid="!!form.errors.term"
                                     placeholder="e.g. 1st Semester"
@@ -188,7 +195,7 @@ const submit = (): void => {
                                     id="course-academic-year"
                                     v-model="form.academic_year"
                                     type="text"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     aria-describedby="course-academic-year-error"
                                     :aria-invalid="!!form.errors.academic_year"
                                     placeholder="e.g. 2025–2026"
@@ -213,11 +220,11 @@ const submit = (): void => {
                     </div>
 
                     <div
-                        class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4"
+                        class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 dark:border-slate-700 dark:bg-slate-900"
                     >
                         <Link
                             :href="route('instructor.courses.index')"
-                            class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         >
                             Cancel
                         </Link>

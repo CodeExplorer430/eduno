@@ -33,7 +33,7 @@ function markAll(): void {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-semibold text-gray-900">Notifications</h1>
+                <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Notifications</h1>
                 <button
                     v-if="unread_count > 0"
                     type="button"
@@ -50,7 +50,7 @@ function markAll(): void {
             <p
                 v-if="notifications.data.length === 0"
                 role="status"
-                class="text-center text-gray-500"
+                class="text-center text-gray-500 dark:text-slate-400"
             >
                 You have no notifications yet.
             </p>
@@ -63,7 +63,7 @@ function markAll(): void {
                         'flex items-start gap-3 rounded-lg border p-4 transition-colors',
                         n.read_at === null
                             ? 'border-blue-200 bg-blue-50'
-                            : 'border-gray-200 bg-white',
+                            : 'border-gray-200 dark:border-slate-600 bg-white',
                     ]"
                 >
                     <!-- read/unread indicator dot -->
@@ -80,10 +80,12 @@ function markAll(): void {
                     <div class="min-w-0 flex-1">
                         <a
                             :href="route('notifications.show', n.id)"
-                            class="block text-sm font-medium text-gray-900 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+                            class="block text-sm font-medium text-gray-900 dark:text-white hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                             >{{ n.data.message }}</a
                         >
-                        <p class="mt-0.5 text-xs text-gray-500">{{ formatDate(n.created_at) }}</p>
+                        <p class="mt-0.5 text-xs text-gray-500 dark:text-slate-400">
+                            {{ formatDate(n.created_at) }}
+                        </p>
                     </div>
 
                     <button

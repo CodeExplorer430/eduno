@@ -70,11 +70,11 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('student.assignments.index')"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                            class="hover:text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             Assignments
                         </Link>
@@ -83,13 +83,15 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                     <li>
                         <Link
                             :href="route('student.assignments.show', submission.assignment.id)"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                            class="hover:text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             {{ submission.assignment.title }}
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">Submission</li>
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
+                        Submission
+                    </li>
                 </ol>
             </nav>
         </template>
@@ -101,15 +103,18 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                     aria-labelledby="submission-heading"
                     class="overflow-hidden rounded-lg bg-white shadow-sm"
                 >
-                    <header class="border-b border-gray-100 px-6 py-4">
+                    <header class="border-b border-gray-100 dark:border-slate-700 px-6 py-4">
                         <div class="flex items-start justify-between gap-4">
                             <div>
-                                <h1 id="submission-heading" class="text-xl font-bold text-gray-900">
+                                <h1
+                                    id="submission-heading"
+                                    class="text-xl font-bold text-gray-900 dark:text-white"
+                                >
                                     {{ submission.assignment.title }}
                                 </h1>
                                 <p
                                     v-if="submission.assignment.course_section"
-                                    class="mt-0.5 text-sm text-gray-500"
+                                    class="mt-0.5 text-sm text-gray-500 dark:text-slate-400"
                                 >
                                     {{ submission.assignment.course_section.course?.title }} &mdash;
                                     {{ submission.assignment.course_section.section_name }}
@@ -122,18 +127,32 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                     <div class="px-6 py-5">
                         <dl class="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                                <dt class="font-medium text-gray-700">Submitted At</dt>
-                                <dd class="text-gray-600">
+                                <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                    Submitted At
+                                </dt>
+                                <dd
+                                    class="text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                                >
                                     {{ formatDate(submission.submitted_at) }}
                                 </dd>
                             </div>
                             <div>
-                                <dt class="font-medium text-gray-700">Attempt</dt>
-                                <dd class="text-gray-600">#{{ submission.attempt_no }}</dd>
+                                <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                    Attempt
+                                </dt>
+                                <dd
+                                    class="text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                                >
+                                    #{{ submission.attempt_no }}
+                                </dd>
                             </div>
                             <div>
-                                <dt class="font-medium text-gray-700">Max Score</dt>
-                                <dd class="text-gray-600">
+                                <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                    Max Score
+                                </dt>
+                                <dd
+                                    class="text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                                >
                                     {{ submission.assignment.max_score }} pts
                                 </dd>
                             </div>
@@ -150,8 +169,11 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                     aria-labelledby="files-heading"
                     class="overflow-hidden rounded-lg bg-white shadow-sm"
                 >
-                    <header class="border-b border-gray-100 px-6 py-4">
-                        <h2 id="files-heading" class="font-semibold text-gray-800">
+                    <header class="border-b border-gray-100 dark:border-slate-700 px-6 py-4">
+                        <h2
+                            id="files-heading"
+                            class="font-semibold text-gray-800 dark:text-gray-200"
+                        >
                             Submitted Files
                         </h2>
                     </header>
@@ -159,7 +181,7 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                     <div class="px-6 py-5">
                         <ul
                             v-if="submission.files.length > 0"
-                            class="divide-y divide-gray-100"
+                            class="divide-y divide-gray-100 dark:divide-slate-700"
                             aria-label="Submitted files"
                         >
                             <li
@@ -167,19 +189,23 @@ const gradeReleased = computed<boolean>(() => !!props.submission.grade?.released
                                 :key="file.id"
                                 class="flex items-center justify-between py-3 text-sm"
                             >
-                                <span class="flex items-center gap-2 text-gray-800">
+                                <span
+                                    class="flex items-center gap-2 text-gray-800 dark:text-gray-200"
+                                >
                                     <DocumentIcon
-                                        class="h-4 w-4 shrink-0 text-gray-400"
+                                        class="h-4 w-4 shrink-0 text-gray-400 dark:text-slate-500"
                                         aria-hidden="true"
                                     />
                                     {{ file.original_name }}
                                 </span>
-                                <span class="ms-4 shrink-0 text-xs text-gray-400">
+                                <span
+                                    class="ms-4 shrink-0 text-xs text-gray-400 dark:text-slate-500"
+                                >
                                     {{ formatSize(file.size_bytes) }}
                                 </span>
                             </li>
                         </ul>
-                        <p v-else class="text-sm text-gray-400">
+                        <p v-else class="text-sm text-gray-400 dark:text-slate-500">
                             No files attached to this submission.
                         </p>
                     </div>

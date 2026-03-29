@@ -104,7 +104,7 @@ const submit = () => {
             <div class="mt-4 flex items-center justify-end">
                 <Link
                     :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 underline hover:text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                     Already registered?
                 </Link>
@@ -124,7 +124,7 @@ const submit = () => {
         <!-- OAuth divider -->
         <div class="mt-6 flex items-center gap-3" aria-hidden="true">
             <div class="h-px flex-1 bg-gray-200"></div>
-            <span class="text-xs text-gray-400 select-none">or</span>
+            <span class="text-xs text-gray-400 dark:text-slate-500 select-none">or</span>
             <div class="h-px flex-1 bg-gray-200"></div>
         </div>
 
@@ -132,7 +132,7 @@ const submit = () => {
         <a
             :href="route('auth.google.redirect')"
             aria-label="Sign up with Google"
-            class="mt-4 flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="mt-4 flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm transition hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
             <!-- Google "G" logo (official brand SVG) -->
             <svg

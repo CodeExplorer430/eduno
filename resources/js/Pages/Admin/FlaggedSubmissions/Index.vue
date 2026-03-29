@@ -38,24 +38,29 @@ const { formatDate } = useFormatDate();
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-bold text-gray-900">Flagged Submissions</h1>
+            <h1 class="text-xl font-bold text-gray-900 dark:text-white">Flagged Submissions</h1>
         </template>
 
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <div
                 v-if="submissions.data.length === 0"
                 role="status"
-                class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center"
+                class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center dark:border-slate-600 dark:bg-slate-800"
             >
-                <p class="text-sm text-gray-500">
+                <p class="text-sm text-gray-500 dark:text-slate-400">
                     No submissions are currently flagged for review.
                 </p>
             </div>
 
-            <div v-else class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+            <div
+                v-else
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-amber-500" aria-hidden="true"></div>
-                    <h2 class="font-semibold text-gray-900">
+                    <h2 class="font-semibold text-gray-900 dark:text-white">
                         {{ submissions.data.length }} flagged
                         {{ submissions.data.length === 1 ? 'submission' : 'submissions' }}
                     </h2>
@@ -63,38 +68,38 @@ const { formatDate } = useFormatDate();
 
                 <div class="overflow-x-auto">
                     <table
-                        class="min-w-full divide-y divide-gray-100"
+                        class="min-w-full divide-y divide-gray-100 dark:divide-slate-700"
                         aria-label="Flagged submissions"
                     >
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 dark:bg-slate-900">
                             <tr>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Student
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Assignment
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Course — Section
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Submitted At
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Late
                                 </th>
@@ -103,28 +108,32 @@ const { formatDate } = useFormatDate();
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 bg-white">
+                        <tbody
+                            class="divide-y divide-gray-100 bg-white dark:divide-slate-700 dark:bg-slate-800"
+                        >
                             <tr
                                 v-for="sub in submissions.data"
                                 :key="sub.id"
-                                class="transition-colors hover:bg-amber-50"
+                                class="transition-colors hover:bg-amber-50 dark:hover:bg-slate-700/50"
                             >
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">
+                                <td
+                                    class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
+                                >
                                     {{ sub.student.name }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-700">
+                                <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
                                     {{ sub.assignment.title }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
+                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
                                     {{ sub.assignment.course_section?.course?.title }}
                                     <span
                                         v-if="sub.assignment.course_section"
-                                        class="text-gray-400"
+                                        class="text-gray-400 dark:text-slate-500"
                                     >
                                         — {{ sub.assignment.course_section.section_name }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
+                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
                                     <time :datetime="sub.submitted_at">
                                         {{ formatDate(sub.submitted_at) }}
                                     </time>
@@ -136,7 +145,9 @@ const { formatDate } = useFormatDate();
                                     >
                                         Late
                                     </span>
-                                    <span v-else class="text-gray-400">On time</span>
+                                    <span v-else class="text-gray-400 dark:text-slate-500"
+                                        >On time</span
+                                    >
                                 </td>
                                 <td class="px-6 py-4 text-sm">
                                     <Link

@@ -10,7 +10,7 @@ const props = withDefaults(
         animationDelay?: number;
         accent?: 'blue' | 'cyan' | 'amber' | 'green' | 'red';
     }>(),
-    { valueClass: 'text-gray-900', animationDelay: 0, accent: 'blue' }
+    { valueClass: 'text-gray-900 dark:text-white', animationDelay: 0, accent: 'blue' }
 );
 
 const accentClasses = computed(() => {
@@ -40,7 +40,7 @@ const accentBarClass = computed(() => {
     <div
         v-animateonscroll="{ enterClass: 'animate-fadein' }"
         :style="`animation-delay: ${animationDelay}ms`"
-        class="relative overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+        class="relative overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:bg-slate-800 dark:ring-slate-700"
     >
         <!-- Left accent bar -->
         <div class="absolute left-0 top-0 h-full w-1 rounded-l-xl" :class="accentBarClass" />
@@ -48,7 +48,9 @@ const accentBarClass = computed(() => {
         <div class="px-5 py-5 pl-6">
             <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0 flex-1">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    <p
+                        class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-slate-400"
+                    >
                         {{ label }}
                     </p>
                     <p class="mt-2 text-3xl font-bold tracking-tight" :class="valueClass">

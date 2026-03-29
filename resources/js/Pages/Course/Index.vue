@@ -22,7 +22,9 @@ const props = defineProps<{
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">My Courses</h2>
+                <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                    My Courses
+                </h2>
                 <Link
                     :href="route('courses.create')"
                     class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -40,7 +42,7 @@ const props = defineProps<{
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     role="status"
                 >
-                    <div class="p-6 text-gray-500">No courses found.</div>
+                    <div class="p-6 text-gray-500 dark:text-slate-400">No courses found.</div>
                 </div>
 
                 <ul v-else class="space-y-4" aria-label="Course list">
@@ -58,7 +60,9 @@ const props = defineProps<{
                                     >
                                         {{ course.code }} — {{ course.title }}
                                     </Link>
-                                    <p class="mt-1 text-sm text-gray-600">
+                                    <p
+                                        class="mt-1 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                                    >
                                         {{ course.department }} &middot; {{ course.term }}
                                         {{ course.academic_year }}
                                     </p>
@@ -68,7 +72,8 @@ const props = defineProps<{
                                         'bg-yellow-100 text-yellow-800': course.status === 'draft',
                                         'bg-green-100 text-green-800':
                                             course.status === 'published',
-                                        'bg-gray-100 text-gray-600': course.status === 'archived',
+                                        'bg-gray-100 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500':
+                                            course.status === 'archived',
                                     }"
                                     class="rounded-full px-3 py-1 text-xs font-medium capitalize"
                                     :aria-label="`Status: ${course.status}`"
@@ -88,17 +93,19 @@ const props = defineProps<{
                     <Link
                         v-if="courses.prev_page_url"
                         :href="courses.prev_page_url"
-                        class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         Previous
                     </Link>
-                    <span class="text-sm text-gray-600">
+                    <span
+                        class="text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
                         Page {{ courses.current_page }} of {{ courses.last_page }}
                     </span>
                     <Link
                         v-if="courses.next_page_url"
                         :href="courses.next_page_url"
-                        class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         Next
                     </Link>

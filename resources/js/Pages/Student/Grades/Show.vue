@@ -33,17 +33,17 @@ const formatDate = (dateString: string): string =>
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('student.grades.index')"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             My Grades
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
                         {{ grade.assignment.title }}
                     </li>
                 </ol>
@@ -51,34 +51,44 @@ const formatDate = (dateString: string): string =>
         </template>
 
         <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+            <div
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 dark:bg-slate-800 ring-gray-100 dark:ring-slate-700 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 dark:border-slate-700 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                    <h1 id="grade-heading" class="font-semibold text-gray-900">
+                    <h1 id="grade-heading" class="font-semibold text-gray-900 dark:text-white">
                         {{ grade.assignment.title }}
                     </h1>
                 </div>
 
                 <div class="px-6 py-6">
-                    <dl class="divide-y divide-gray-100">
+                    <dl class="divide-y divide-gray-100 dark:divide-slate-700">
                         <div class="flex items-start gap-4 py-3">
-                            <dt class="w-32 shrink-0 text-sm font-medium text-gray-500">Score</dt>
+                            <dt
+                                class="w-32 shrink-0 text-sm font-medium text-gray-500 dark:text-slate-400"
+                            >
+                                Score
+                            </dt>
                             <dd
-                                class="text-sm font-semibold text-gray-900"
+                                class="text-sm font-semibold text-gray-900 dark:text-white"
                                 :aria-label="`Score: ${grade.score} out of ${grade.assignment.max_score}`"
                             >
                                 {{ grade.score }}
-                                <span class="font-normal text-gray-400">
+                                <span class="font-normal text-gray-400 dark:text-slate-500">
                                     / {{ grade.assignment.max_score }}
                                 </span>
                             </dd>
                         </div>
 
                         <div class="flex items-start gap-4 py-3">
-                            <dt class="w-32 shrink-0 text-sm font-medium text-gray-500">
+                            <dt
+                                class="w-32 shrink-0 text-sm font-medium text-gray-500 dark:text-slate-400"
+                            >
                                 Released
                             </dt>
-                            <dd class="text-sm text-gray-700">
+                            <dd class="text-sm text-gray-700 dark:text-gray-300">
                                 <time :datetime="grade.released_at">
                                     {{ formatDate(grade.released_at) }}
                                 </time>
@@ -86,12 +96,16 @@ const formatDate = (dateString: string): string =>
                         </div>
 
                         <div class="flex items-start gap-4 py-3">
-                            <dt class="w-32 shrink-0 text-sm font-medium text-gray-500">
+                            <dt
+                                class="w-32 shrink-0 text-sm font-medium text-gray-500 dark:text-slate-400"
+                            >
                                 Feedback
                             </dt>
-                            <dd class="text-sm text-gray-700">
+                            <dd class="text-sm text-gray-700 dark:text-gray-300">
                                 <span v-if="grade.feedback">{{ grade.feedback }}</span>
-                                <span v-else class="text-gray-400">No feedback provided.</span>
+                                <span v-else class="text-gray-400 dark:text-slate-500"
+                                    >No feedback provided.</span
+                                >
                             </dd>
                         </div>
                     </dl>
@@ -107,7 +121,7 @@ const formatDate = (dateString: string): string =>
                     <div class="mt-6">
                         <Link
                             :href="route('student.assignments.show', grade.assignment.id)"
-                            class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
                             Back to Assignment
                         </Link>

@@ -20,22 +20,27 @@ defineProps<{
 <template>
     <Head title="Welcome to Eduno" />
 
-    <div class="flex min-h-screen flex-col bg-white text-gray-900">
+    <div
+        class="flex min-h-screen flex-col bg-white text-gray-900 dark:bg-slate-900 dark:text-white"
+    >
         <!-- Navbar -->
-        <nav class="border-b border-gray-200 bg-white" aria-label="Main navigation">
+        <nav
+            class="border-b border-gray-200 bg-white dark:border-slate-700 dark:bg-slate-800"
+            aria-label="Main navigation"
+        >
             <div
                 class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
             >
                 <div class="flex items-center gap-3">
                     <ApplicationLogo class="h-9 w-9" />
-                    <span class="text-xl font-bold text-gray-900">Eduno</span>
+                    <span class="text-xl font-bold text-gray-900 dark:text-white">Eduno</span>
                 </div>
 
                 <div v-if="canLogin" class="flex items-center gap-2">
                     <template v-if="$page.props.auth?.user">
                         <Link
                             :href="route('dashboard')"
-                            class="rounded-md px-4 py-2 text-sm font-medium text-gray-700 transition hover:text-blue-600 focus-visible:ring-2 focus-visible:ring-blue-300"
+                            class="rounded-md px-4 py-2 text-sm font-medium text-gray-700 transition hover:text-blue-600 focus-visible:ring-2 focus-visible:ring-blue-300 dark:text-gray-300 dark:hover:text-blue-400"
                         >
                             Dashboard
                         </Link>
@@ -43,7 +48,7 @@ defineProps<{
                     <template v-else>
                         <Link
                             :href="route('login')"
-                            class="rounded-md px-4 py-2 text-sm font-medium text-gray-700 transition hover:text-blue-600 focus-visible:ring-2 focus-visible:ring-blue-300"
+                            class="rounded-md px-4 py-2 text-sm font-medium text-gray-700 transition hover:text-blue-600 focus-visible:ring-2 focus-visible:ring-blue-300 dark:text-gray-300 dark:hover:text-blue-400"
                         >
                             Log in
                         </Link>
@@ -173,24 +178,31 @@ defineProps<{
             </section>
 
             <!-- Features -->
-            <section class="bg-slate-50 py-20" aria-labelledby="features-heading">
+            <section class="bg-slate-50 py-20 dark:bg-slate-900" aria-labelledby="features-heading">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <h2 id="features-heading" class="text-center text-3xl font-bold text-gray-900">
+                    <h2
+                        id="features-heading"
+                        class="text-center text-3xl font-bold text-gray-900 dark:text-white"
+                    >
                         Everything you need in one platform
                     </h2>
                     <div class="mt-12 grid gap-8 sm:grid-cols-3">
                         <article
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 0ms`"
-                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
+                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0 dark:bg-slate-800 dark:ring-slate-700"
                         >
                             <div
                                 class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-sm shadow-blue-200"
                             >
                                 <BookOpenIcon class="h-6 w-6 text-white" aria-hidden="true" />
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-900">Manage Courses</h3>
-                            <p class="mt-2 text-sm leading-relaxed text-gray-600">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                Manage Courses
+                            </h3>
+                            <p
+                                class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+                            >
                                 Create and organize courses with modules and lessons. Instructors
                                 have full control over course content and student enrollment.
                             </p>
@@ -199,7 +211,7 @@ defineProps<{
                         <article
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 100ms`"
-                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
+                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0 dark:bg-slate-800 dark:ring-slate-700"
                         >
                             <div
                                 class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-sm shadow-cyan-200"
@@ -209,10 +221,12 @@ defineProps<{
                                     aria-hidden="true"
                                 />
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-900">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                 Assignments &amp; Submissions
                             </h3>
-                            <p class="mt-2 text-sm leading-relaxed text-gray-600">
+                            <p
+                                class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+                            >
                                 Create assignments with deadlines, accept file submissions, and
                                 release grades with per-student feedback.
                             </p>
@@ -221,15 +235,19 @@ defineProps<{
                         <article
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 200ms`"
-                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0"
+                            class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md motion-reduce:hover:translate-y-0 dark:bg-slate-800 dark:ring-slate-700"
                         >
                             <div
                                 class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm shadow-amber-200"
                             >
                                 <ChartBarIcon class="h-6 w-6 text-white" aria-hidden="true" />
                             </div>
-                            <h3 class="text-lg font-semibold text-gray-900">Track Progress</h3>
-                            <p class="mt-2 text-sm leading-relaxed text-gray-600">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                Track Progress
+                            </h3>
+                            <p
+                                class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+                            >
                                 Students and instructors get a real-time dashboard showing grades,
                                 submission status, and course completion at a glance.
                             </p>
@@ -239,18 +257,21 @@ defineProps<{
             </section>
 
             <!-- How it works -->
-            <section class="bg-white py-20" aria-labelledby="how-it-works-heading">
+            <section
+                class="bg-white py-20 dark:bg-slate-800"
+                aria-labelledby="how-it-works-heading"
+            >
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <h2
                         id="how-it-works-heading"
-                        class="text-center text-3xl font-bold text-gray-900"
+                        class="text-center text-3xl font-bold text-gray-900 dark:text-white"
                     >
                         Up and running in minutes
                     </h2>
                     <div class="relative mt-12 grid gap-8 sm:grid-cols-3">
                         <!-- Connector line on desktop -->
                         <div
-                            class="pointer-events-none absolute top-6 left-[calc(100%/6+1.5rem)] right-[calc(100%/6+1.5rem)] hidden h-px bg-gray-200 sm:block decorative"
+                            class="pointer-events-none absolute top-6 left-[calc(100%/6+1.5rem)] right-[calc(100%/6+1.5rem)] hidden h-px bg-gray-200 sm:block decorative dark:bg-slate-600"
                             aria-hidden="true"
                         />
                         <!-- Step 1 -->
@@ -264,10 +285,10 @@ defineProps<{
                             >
                                 1
                             </div>
-                            <h3 class="mt-4 text-base font-semibold text-gray-900">
+                            <h3 class="mt-4 text-base font-semibold text-gray-900 dark:text-white">
                                 Create your account
                             </h3>
-                            <p class="mt-2 text-sm text-gray-600">
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                                 Register with your email and choose your role as a student,
                                 instructor, or admin.
                             </p>
@@ -283,10 +304,10 @@ defineProps<{
                             >
                                 2
                             </div>
-                            <h3 class="mt-4 text-base font-semibold text-gray-900">
+                            <h3 class="mt-4 text-base font-semibold text-gray-900 dark:text-white">
                                 Enroll in courses
                             </h3>
-                            <p class="mt-2 text-sm text-gray-600">
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                                 Browse the course catalog and enroll in your sections for the
                                 semester.
                             </p>
@@ -302,10 +323,10 @@ defineProps<{
                             >
                                 3
                             </div>
-                            <h3 class="mt-4 text-base font-semibold text-gray-900">
+                            <h3 class="mt-4 text-base font-semibold text-gray-900 dark:text-white">
                                 Track your progress
                             </h3>
-                            <p class="mt-2 text-sm text-gray-600">
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                                 Submit assignments, receive grades, and monitor your performance
                                 from your personalized dashboard.
                             </p>
@@ -315,22 +336,27 @@ defineProps<{
             </section>
 
             <!-- For Each Role -->
-            <section class="bg-gray-100 py-20" aria-labelledby="roles-heading">
+            <section class="bg-gray-100 py-20 dark:bg-slate-900" aria-labelledby="roles-heading">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <h2 id="roles-heading" class="text-center text-3xl font-bold text-gray-900">
+                    <h2
+                        id="roles-heading"
+                        class="text-center text-3xl font-bold text-gray-900 dark:text-white"
+                    >
                         Built for every role
                     </h2>
                     <div class="mt-12 grid gap-6 sm:grid-cols-3">
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 0ms`"
-                            class="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                            class="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-blue-900 dark:from-slate-800 dark:to-slate-800"
                         >
-                            <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                            <h3
+                                class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white"
+                            >
                                 <AcademicCapIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
                                 Students
                             </h3>
-                            <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                            <ul class="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                                 <li>Browse and enroll in courses</li>
                                 <li>Submit assignments and view grades</li>
                                 <li>Access learning materials anytime</li>
@@ -341,13 +367,15 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 100ms`"
-                            class="rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                            class="rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-cyan-900 dark:from-slate-800 dark:to-slate-800"
                         >
-                            <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                            <h3
+                                class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white"
+                            >
                                 <UsersIcon class="h-5 w-5 text-cyan-500" aria-hidden="true" />
                                 Instructors
                             </h3>
-                            <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                            <ul class="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                                 <li>Create and manage course content</li>
                                 <li>Design assignments with rubrics</li>
                                 <li>Grade submissions and release feedback</li>
@@ -358,13 +386,15 @@ defineProps<{
                         <div
                             v-animateonscroll="{ enterClass: 'animate-fadein' }"
                             :style="`animation-delay: 200ms`"
-                            class="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                            class="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-amber-900 dark:from-slate-800 dark:to-slate-800"
                         >
-                            <h3 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                            <h3
+                                class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white"
+                            >
                                 <Cog6ToothIcon class="h-5 w-5 text-amber-500" aria-hidden="true" />
                                 Admins
                             </h3>
-                            <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                            <ul class="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
                                 <li>Manage users and role assignments</li>
                                 <li>Oversee all courses and enrollments</li>
                                 <li>View audit logs and activity reports</li>
@@ -398,9 +428,13 @@ defineProps<{
         </main>
 
         <!-- Footer -->
-        <footer class="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500">
+        <footer
+            class="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
+        >
             <p>© 2026 Eduno LMS</p>
-            <p class="mt-1 text-xs text-gray-400">Empowering Learners, Inspiring Excellence</p>
+            <p class="mt-1 text-xs text-gray-400 dark:text-slate-500">
+                Empowering Learners, Inspiring Excellence
+            </p>
         </footer>
     </div>
 </template>

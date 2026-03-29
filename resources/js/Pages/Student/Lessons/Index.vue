@@ -52,7 +52,7 @@ const groups = computed<LessonGroup[]>(() => {
 });
 
 const typeBadgeClass: Record<string, string> = {
-    text: 'bg-gray-100 text-gray-700',
+    text: 'bg-gray-100 text-gray-700 dark:text-gray-300',
     pdf: 'bg-red-100 text-red-700',
     video: 'bg-purple-100 text-purple-700',
     link: 'bg-blue-100 text-blue-700',
@@ -64,7 +64,9 @@ const typeBadgeClass: Record<string, string> = {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-semibold leading-tight text-gray-800">My Lessons</h1>
+            <h1 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                My Lessons
+            </h1>
         </template>
 
         <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
@@ -91,30 +93,34 @@ const typeBadgeClass: Record<string, string> = {
                         </span>
                         {{ group.moduleTitle }}
                         <span
-                            class="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-normal normal-case text-gray-600"
+                            class="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-normal normal-case text-gray-600 dark:text-gray-400 dark:text-slate-500"
                         >
                             {{ group.lessons.length }}
                         </span>
                     </h2>
 
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                        <ul class="divide-y divide-gray-100" role="list">
+                    <div
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 dark:bg-slate-800 ring-gray-100 dark:ring-slate-700"
+                    >
+                        <ul class="divide-y divide-gray-100 dark:divide-slate-700" role="list">
                             <li
                                 v-for="lesson in group.lessons"
                                 :key="lesson.id"
-                                class="flex items-center justify-between px-6 py-4 transition-colors hover:bg-gray-50"
+                                class="flex items-center justify-between px-6 py-4 transition-colors hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50"
                             >
                                 <div class="flex min-w-0 items-center gap-3">
                                     <span
                                         class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium capitalize"
                                         :class="
                                             typeBadgeClass[lesson.type] ??
-                                            'bg-gray-100 text-gray-700'
+                                            'bg-gray-100 text-gray-700 dark:text-gray-300'
                                         "
                                     >
                                         {{ lesson.type }}
                                     </span>
-                                    <span class="truncate text-sm font-medium text-gray-900">
+                                    <span
+                                        class="truncate text-sm font-medium text-gray-900 dark:text-white"
+                                    >
                                         {{ lesson.title }}
                                     </span>
                                 </div>

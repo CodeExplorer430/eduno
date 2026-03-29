@@ -43,7 +43,7 @@ const cancelDelete = (): void => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-bold text-gray-900">Announcements</h1>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">Announcements</h1>
                 <Link
                     :href="route('instructor.announcements.create')"
                     class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -61,13 +61,13 @@ const cancelDelete = (): void => {
                 <div
                     v-if="announcements.length === 0"
                     role="status"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
                     <MegaphoneIcon
-                        class="mx-auto mb-3 h-10 w-10 text-gray-300"
+                        class="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-slate-600"
                         aria-hidden="true"
                     />
-                    <p class="text-sm text-gray-500">
+                    <p class="text-sm text-gray-500 dark:text-slate-400">
                         No announcements yet. Create one to notify your students.
                     </p>
                 </div>
@@ -76,7 +76,7 @@ const cancelDelete = (): void => {
                     <li
                         v-for="announcement in announcements"
                         :key="announcement.id"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                     >
                         <article :aria-labelledby="`announcement-${announcement.id}-title`">
                             <div class="px-6 py-5">
@@ -93,11 +93,13 @@ const cancelDelete = (): void => {
                                         <div>
                                             <h3
                                                 :id="`announcement-${announcement.id}-title`"
-                                                class="text-base font-semibold text-gray-900"
+                                                class="text-base font-semibold text-gray-900 dark:text-white"
                                             >
                                                 {{ announcement.title }}
                                             </h3>
-                                            <p class="mt-0.5 text-xs text-gray-500">
+                                            <p
+                                                class="mt-0.5 text-xs text-gray-500 dark:text-slate-400"
+                                            >
                                                 <span class="font-medium text-blue-600">
                                                     {{ announcement.course_section?.course?.title }}
                                                 </span>
@@ -125,7 +127,9 @@ const cancelDelete = (): void => {
                                             Edit
                                         </Link>
                                         <template v-if="confirmTarget === announcement.id">
-                                            <span class="text-sm text-gray-600">Delete?</span>
+                                            <span class="text-sm text-gray-600 dark:text-gray-400"
+                                                >Delete?</span
+                                            >
                                             <button
                                                 type="button"
                                                 class="rounded text-sm font-medium text-red-600 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-500"
@@ -136,7 +140,7 @@ const cancelDelete = (): void => {
                                             </button>
                                             <button
                                                 type="button"
-                                                class="rounded text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                class="rounded text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-slate-400 dark:hover:text-gray-200"
                                                 @click="cancelDelete"
                                             >
                                                 No
@@ -153,7 +157,9 @@ const cancelDelete = (): void => {
                                         </button>
                                     </div>
                                 </header>
-                                <p class="mt-3 line-clamp-2 text-sm text-gray-600">
+                                <p
+                                    class="mt-3 line-clamp-2 text-sm text-gray-600 dark:text-gray-400"
+                                >
                                     {{ announcement.body }}
                                 </p>
                             </div>

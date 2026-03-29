@@ -46,22 +46,31 @@ function executeDelete(): void {
             <div class="flex items-center justify-between">
                 <div>
                     <nav aria-label="Breadcrumb">
-                        <ol class="flex items-center gap-2 text-sm text-gray-500">
+                        <ol
+                            class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400"
+                        >
                             <li>
                                 <Link
                                     :href="route('courses.show', section.course_id)"
-                                    class="hover:text-gray-700 focus:underline focus:outline-none"
+                                    class="hover:text-gray-700 dark:text-gray-300 focus:underline focus:outline-none"
                                 >
                                     {{ section.course?.title ?? 'Course' }}
                                 </Link>
                             </li>
                             <li aria-hidden="true">/</li>
-                            <li class="font-medium text-gray-800" aria-current="page">
+                            <li
+                                class="font-medium text-gray-800 dark:text-gray-200"
+                                aria-current="page"
+                            >
                                 {{ section.section_name }} — Modules
                             </li>
                         </ol>
                     </nav>
-                    <h2 class="mt-1 text-xl font-semibold leading-tight text-gray-800">Modules</h2>
+                    <h2
+                        class="mt-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                    >
+                        Modules
+                    </h2>
                 </div>
                 <Link
                     v-if="canManage"
@@ -81,7 +90,7 @@ function executeDelete(): void {
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     role="status"
                 >
-                    <div class="p-6 text-gray-500">
+                    <div class="p-6 text-gray-500 dark:text-slate-400">
                         No modules yet.
                         <span v-if="canManage">
                             <Link
@@ -103,7 +112,9 @@ function executeDelete(): void {
                         <div class="flex items-center justify-between p-4">
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs font-medium text-gray-400">
+                                    <span
+                                        class="text-xs font-medium text-gray-400 dark:text-slate-500"
+                                    >
                                         {{ module.order_no }}.
                                     </span>
                                     <Link
@@ -122,7 +133,7 @@ function executeDelete(): void {
                                 </div>
                                 <p
                                     v-if="module.description"
-                                    class="ml-5 mt-0.5 text-sm text-gray-500"
+                                    class="ml-5 mt-0.5 text-sm text-gray-500 dark:text-slate-400"
                                 >
                                     {{ module.description }}
                                 </p>
@@ -131,7 +142,7 @@ function executeDelete(): void {
                             <div v-if="canManage" class="ml-4 flex shrink-0 gap-2">
                                 <button
                                     type="button"
-                                    class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="rounded border border-gray-300 dark:border-slate-600 bg-white px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     :aria-label="
                                         module.published_at
                                             ? `Unpublish ${module.title}`
@@ -143,7 +154,7 @@ function executeDelete(): void {
                                 </button>
                                 <Link
                                     :href="route('modules.edit', module.id)"
-                                    class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="rounded border border-gray-300 dark:border-slate-600 bg-white px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     :aria-label="`Edit ${module.title}`"
                                 >
                                     Edit
@@ -173,16 +184,21 @@ function executeDelete(): void {
         @close="confirmDeleteId = null"
     >
         <div class="p-6">
-            <h2 id="delete-module-title" class="text-lg font-semibold text-gray-900">
+            <h2
+                id="delete-module-title"
+                class="text-lg font-semibold text-gray-900 dark:text-white"
+            >
                 Delete Module?
             </h2>
-            <p class="mt-2 text-sm text-gray-600">
+            <p
+                class="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+            >
                 This will permanently delete the module and all its lessons. This cannot be undone.
             </p>
             <div class="mt-6 flex justify-end gap-3">
                 <button
                     type="button"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     @click="confirmDeleteId = null"
                 >
                     Cancel

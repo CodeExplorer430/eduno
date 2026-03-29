@@ -27,7 +27,7 @@ function executeDelete(): void {
 
     <main class="mx-auto max-w-3xl px-4 py-8">
         <nav aria-label="Breadcrumb" class="mb-4">
-            <ol class="flex gap-2 text-sm text-gray-500">
+            <ol class="flex gap-2 text-sm text-gray-500 dark:text-slate-400">
                 <li>
                     <Link
                         :href="
@@ -46,12 +46,14 @@ function executeDelete(): void {
         <article>
             <header class="mb-6">
                 <div class="flex items-start justify-between gap-4">
-                    <h1 class="text-2xl font-bold text-gray-900">{{ announcement.title }}</h1>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                        {{ announcement.title }}
+                    </h1>
 
                     <div v-if="canManage" class="flex shrink-0 gap-2">
                         <button
                             type="button"
-                            class="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                            class="rounded border border-gray-300 dark:border-slate-600 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                             :aria-label="
                                 announcement.published_at
                                     ? 'Unpublish announcement'
@@ -63,7 +65,7 @@ function executeDelete(): void {
                         </button>
                         <Link
                             :href="route('announcements.edit', announcement.id)"
-                            class="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                            class="rounded border border-gray-300 dark:border-slate-600 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                         >
                             Edit
                         </Link>
@@ -77,12 +79,12 @@ function executeDelete(): void {
                     </div>
                 </div>
 
-                <p class="mt-2 text-sm text-gray-500">
+                <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">
                     <span
                         :class="
                             announcement.published_at
                                 ? 'bg-green-100 text-green-700'
-                                : 'bg-gray-100 text-gray-600'
+                                : 'bg-gray-100 text-gray-600 dark:text-gray-400 dark:text-slate-500'
                         "
                         class="mr-2 inline-block rounded-full px-2 py-0.5 text-xs font-medium"
                     >
@@ -93,7 +95,7 @@ function executeDelete(): void {
                 </p>
             </header>
 
-            <div class="prose max-w-none text-gray-800">
+            <div class="prose max-w-none text-gray-800 dark:text-gray-200">
                 <p class="whitespace-pre-wrap">{{ announcement.body }}</p>
             </div>
         </article>
@@ -106,14 +108,19 @@ function executeDelete(): void {
         @close="showDeleteModal = false"
     >
         <div class="p-6">
-            <h2 id="delete-announcement-title" class="text-lg font-semibold text-gray-900">
+            <h2
+                id="delete-announcement-title"
+                class="text-lg font-semibold text-gray-900 dark:text-white"
+            >
                 Delete Announcement?
             </h2>
-            <p class="mt-2 text-sm text-gray-600">This will permanently delete the announcement.</p>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500">
+                This will permanently delete the announcement.
+            </p>
             <div class="mt-6 flex justify-end gap-3">
                 <button
                     type="button"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     @click="showDeleteModal = false"
                 >
                     Cancel

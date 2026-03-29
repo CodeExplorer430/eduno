@@ -43,29 +43,36 @@ function isEnrolled(section: EnrichedSection): boolean {
             <div class="flex items-center justify-between">
                 <div>
                     <nav aria-label="Breadcrumb">
-                        <ol class="flex items-center gap-2 text-sm text-gray-500">
+                        <ol
+                            class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400"
+                        >
                             <li>
                                 <Link
                                     :href="route('courses.index')"
-                                    class="hover:text-gray-700 focus:underline focus:outline-none"
+                                    class="hover:text-gray-700 dark:text-gray-300 focus:underline focus:outline-none"
                                 >
                                     Courses
                                 </Link>
                             </li>
                             <li aria-hidden="true">/</li>
-                            <li class="text-gray-800 font-medium" aria-current="page">
+                            <li
+                                class="text-gray-800 dark:text-gray-200 font-medium"
+                                aria-current="page"
+                            >
                                 {{ course.code }}
                             </li>
                         </ol>
                     </nav>
-                    <h2 class="mt-1 text-xl font-semibold leading-tight text-gray-800">
+                    <h2
+                        class="mt-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                    >
                         {{ course.title }}
                     </h2>
                 </div>
                 <Link
                     v-if="authUser.role === 'instructor' || authUser.role === 'admin'"
                     :href="route('courses.edit', course.id)"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     :aria-label="`Edit course ${course.title}`"
                 >
                     Edit Course
@@ -80,33 +87,37 @@ function isEnrolled(section: EnrichedSection): boolean {
                         <dl class="grid grid-cols-2 gap-4 sm:grid-cols-3">
                             <div>
                                 <dt
-                                    class="text-xs font-medium uppercase tracking-wide text-gray-500"
+                                    class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400"
                                 >
                                     Department
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900">{{ course.department }}</dd>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    {{ course.department }}
+                                </dd>
                             </div>
                             <div>
                                 <dt
-                                    class="text-xs font-medium uppercase tracking-wide text-gray-500"
+                                    class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400"
                                 >
                                     Term
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900">{{ course.term }}</dd>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+                                    {{ course.term }}
+                                </dd>
                             </div>
                             <div>
                                 <dt
-                                    class="text-xs font-medium uppercase tracking-wide text-gray-500"
+                                    class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400"
                                 >
                                     Academic Year
                                 </dt>
-                                <dd class="mt-1 text-sm text-gray-900">
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white">
                                     {{ course.academic_year }}
                                 </dd>
                             </div>
                             <div>
                                 <dt
-                                    class="text-xs font-medium uppercase tracking-wide text-gray-500"
+                                    class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400"
                                 >
                                     Status
                                 </dt>
@@ -117,7 +128,7 @@ function isEnrolled(section: EnrichedSection): boolean {
                                                 course.status === 'draft',
                                             'bg-green-100 text-green-800':
                                                 course.status === 'published',
-                                            'bg-gray-100 text-gray-600':
+                                            'bg-gray-100 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500':
                                                 course.status === 'archived',
                                         }"
                                         class="rounded-full px-2 py-0.5 text-xs font-medium capitalize"
@@ -127,18 +138,26 @@ function isEnrolled(section: EnrichedSection): boolean {
                                 </dd>
                             </div>
                         </dl>
-                        <p v-if="course.description" class="mt-4 text-sm text-gray-700">
+                        <p
+                            v-if="course.description"
+                            class="mt-4 text-sm text-gray-700 dark:text-gray-300"
+                        >
                             {{ course.description }}
                         </p>
                     </div>
                 </div>
 
                 <section aria-labelledby="sections-heading">
-                    <h3 id="sections-heading" class="text-lg font-semibold text-gray-800">
+                    <h3
+                        id="sections-heading"
+                        class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                    >
                         Sections
-                        <span class="text-sm font-normal text-gray-500">(classes / blocks)</span>
+                        <span class="text-sm font-normal text-gray-500 dark:text-slate-400"
+                            >(classes / blocks)</span
+                        >
                     </h3>
-                    <p class="text-sm text-gray-500">
+                    <p class="text-sm text-gray-500 dark:text-slate-400">
                         Sections correspond to your enrolled class block (e.g., BSCS-2A).
                     </p>
 
@@ -146,7 +165,9 @@ function isEnrolled(section: EnrichedSection): boolean {
                         v-if="course.sections.length === 0"
                         class="mt-4 overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
-                        <div class="p-6 text-sm text-gray-500">No sections yet.</div>
+                        <div class="p-6 text-sm text-gray-500 dark:text-slate-400">
+                            No sections yet.
+                        </div>
                     </div>
 
                     <ul v-else class="mt-4 space-y-3">
@@ -157,17 +178,17 @@ function isEnrolled(section: EnrichedSection): boolean {
                         >
                             <div class="flex items-center justify-between p-4">
                                 <div>
-                                    <p class="font-medium text-gray-900">
+                                    <p class="font-medium text-gray-900 dark:text-white">
                                         {{ section.section_name
                                         }}{{ section.block_code ? ` (${section.block_code})` : '' }}
                                     </p>
-                                    <p class="text-sm text-gray-500">
+                                    <p class="text-sm text-gray-500 dark:text-slate-400">
                                         Instructor: {{ section.instructor?.name }}
                                         <span v-if="section.schedule_text">
                                             &middot; {{ section.schedule_text }}</span
                                         >
                                     </p>
-                                    <p class="text-xs text-gray-400">
+                                    <p class="text-xs text-gray-400 dark:text-slate-500">
                                         {{ section.enrollments?.length ?? 0 }} enrolled
                                     </p>
                                 </div>

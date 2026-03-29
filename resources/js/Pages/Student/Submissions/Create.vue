@@ -68,11 +68,11 @@ const acceptAttr = computed<string | undefined>(() => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('student.assignments.index')"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                            class="hover:text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             Assignments
                         </Link>
@@ -81,13 +81,15 @@ const acceptAttr = computed<string | undefined>(() => {
                     <li>
                         <Link
                             :href="route('student.assignments.show', assignment.id)"
-                            class="hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                            class="hover:text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         >
                             {{ assignment.title }}
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">Submit</li>
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
+                        Submit
+                    </li>
                 </ol>
             </nav>
         </template>
@@ -99,19 +101,30 @@ const acceptAttr = computed<string | undefined>(() => {
                         aria-labelledby="submit-heading"
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <header class="border-b border-gray-100 px-6 py-4">
-                            <h1 id="submit-heading" class="text-lg font-bold text-gray-900">
+                        <header class="border-b border-gray-100 dark:border-slate-700 px-6 py-4">
+                            <h1
+                                id="submit-heading"
+                                class="text-lg font-bold text-gray-900 dark:text-white"
+                            >
                                 Submit Assignment
                             </h1>
-                            <p class="mt-0.5 text-sm text-gray-500">{{ assignment.title }}</p>
+                            <p class="mt-0.5 text-sm text-gray-500 dark:text-slate-400">
+                                {{ assignment.title }}
+                            </p>
                         </header>
 
                         <!-- Assignment summary -->
-                        <div class="border-b border-gray-100 bg-gray-50 px-6 py-4">
+                        <div
+                            class="border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 px-6 py-4"
+                        >
                             <dl class="flex flex-wrap gap-8 text-sm">
                                 <div>
-                                    <dt class="font-medium text-gray-700">Due Date</dt>
-                                    <dd class="text-gray-600">
+                                    <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                        Due Date
+                                    </dt>
+                                    <dd
+                                        class="text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                                    >
                                         {{
                                             assignment.due_at
                                                 ? formatDate(assignment.due_at)
@@ -120,8 +133,14 @@ const acceptAttr = computed<string | undefined>(() => {
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="font-medium text-gray-700">Max Score</dt>
-                                    <dd class="text-gray-600">{{ assignment.max_score }} pts</dd>
+                                    <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                        Max Score
+                                    </dt>
+                                    <dd
+                                        class="text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                                    >
+                                        {{ assignment.max_score }} pts
+                                    </dd>
                                 </div>
                                 <div
                                     v-if="
@@ -129,8 +148,12 @@ const acceptAttr = computed<string | undefined>(() => {
                                         assignment.allowed_file_types.length > 0
                                     "
                                 >
-                                    <dt class="font-medium text-gray-700">Accepted File Types</dt>
-                                    <dd class="text-gray-600">
+                                    <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                        Accepted File Types
+                                    </dt>
+                                    <dd
+                                        class="text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                                    >
                                         {{
                                             assignment.allowed_file_types
                                                 .map((m) => MIME_LABELS[m] ?? m)
@@ -146,7 +169,7 @@ const acceptAttr = computed<string | undefined>(() => {
                                 <div role="group" aria-labelledby="files-label">
                                     <p
                                         id="files-label"
-                                        class="mb-2 block text-sm font-medium text-gray-700"
+                                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         Submission Files
                                         <span class="text-red-500" aria-hidden="true">*</span>
@@ -189,11 +212,11 @@ const acceptAttr = computed<string | undefined>(() => {
                             </div>
 
                             <footer
-                                class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4"
+                                class="flex items-center justify-end gap-3 border-t border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 px-6 py-4"
                             >
                                 <Link
                                     :href="route('student.assignments.show', assignment.id)"
-                                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    class="inline-flex items-center rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 dark:text-gray-300 shadow-sm transition hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     Cancel
                                 </Link>

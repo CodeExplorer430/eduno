@@ -52,7 +52,9 @@ const groupConfig: { key: Group; label: string; accent: string }[] = [
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-semibold leading-tight text-gray-800">My Assignments</h1>
+            <h1 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                My Assignments
+            </h1>
         </template>
 
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -76,7 +78,7 @@ const groupConfig: { key: Group; label: string; accent: string }[] = [
                     >
                         {{ group.label }}
                         <span
-                            class="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-normal text-gray-600"
+                            class="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-normal text-gray-600 dark:bg-slate-700 dark:text-gray-400"
                         >
                             {{ grouped[group.key].length }}
                         </span>

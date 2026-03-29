@@ -96,7 +96,7 @@ withDefaults(
         </aside>
 
         <!-- RIGHT PANEL — white form area -->
-        <div class="flex flex-1 flex-col bg-white min-h-screen">
+        <div class="flex flex-1 flex-col bg-white min-h-screen dark:bg-slate-950">
             <!-- Top gradient accent bar -->
             <div class="h-1 bg-gradient-to-r from-blue-600 to-cyan-500" aria-hidden="true" />
 
@@ -112,8 +112,12 @@ withDefaults(
 
                 <!-- Optional form heading -->
                 <div v-if="title || subtitle" class="mb-8 w-full max-w-md">
-                    <h1 v-if="title" class="text-2xl font-bold text-gray-900">{{ title }}</h1>
-                    <p v-if="subtitle" class="mt-1 text-sm text-gray-500">{{ subtitle }}</p>
+                    <h1 v-if="title" class="text-2xl font-bold text-gray-900 dark:text-white">
+                        {{ title }}
+                    </h1>
+                    <p v-if="subtitle" class="mt-1 text-sm text-gray-500 dark:text-slate-400">
+                        {{ subtitle }}
+                    </p>
                 </div>
 
                 <!-- Form slot -->

@@ -98,8 +98,11 @@ function getInitials(name: string): string {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="flex items-center gap-2 text-xl font-bold text-gray-900">
-                <UserGroupIcon class="h-6 w-6 text-gray-700" aria-hidden="true" />
+            <h1 class="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
+                <UserGroupIcon
+                    class="h-6 w-6 text-gray-700 dark:text-gray-300"
+                    aria-hidden="true"
+                />
                 User Management
             </h1>
         </template>
@@ -108,15 +111,19 @@ function getInitials(name: string): string {
             <!-- Stats strip -->
             <div class="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <div
-                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                    <p
+                        class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
+                    >
                         Total Users
                     </p>
-                    <p class="mt-1 text-2xl font-bold text-gray-900">{{ summary.total }}</p>
+                    <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+                        {{ summary.total }}
+                    </p>
                 </div>
                 <div
-                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
                     <p class="text-xs font-semibold uppercase tracking-wider text-green-600">
                         Students
@@ -124,7 +131,7 @@ function getInitials(name: string): string {
                     <p class="mt-1 text-2xl font-bold text-green-700">{{ summary.student }}</p>
                 </div>
                 <div
-                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
                     <p class="text-xs font-semibold uppercase tracking-wider text-blue-600">
                         Instructors
@@ -132,7 +139,7 @@ function getInitials(name: string): string {
                     <p class="mt-1 text-2xl font-bold text-blue-700">{{ summary.instructor }}</p>
                 </div>
                 <div
-                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
                     <p class="text-xs font-semibold uppercase tracking-wider text-purple-600">
                         Admins
@@ -162,12 +169,12 @@ function getInitials(name: string): string {
             <!-- Filter bar -->
             <section
                 aria-label="Filter users"
-                class="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-100"
+                class="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
             >
                 <div class="flex-1 min-w-48">
                     <label
                         for="user-search"
-                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500"
+                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                     >
                         Search
                     </label>
@@ -176,21 +183,21 @@ function getInitials(name: string): string {
                         v-model="search"
                         type="search"
                         placeholder="Name or email…"
-                        class="block w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="block w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                         aria-label="Search users by name or email"
                     />
                 </div>
                 <div>
                     <label
                         for="role-filter"
-                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500"
+                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                     >
                         Role
                     </label>
                     <select
                         id="role-filter"
                         v-model="roleFilter"
-                        class="block w-40 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="block w-40 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     >
                         <option value="">All Roles</option>
                         <option v-for="r in roles" :key="r.value" :value="r.value">
@@ -201,49 +208,55 @@ function getInitials(name: string): string {
             </section>
 
             <!-- Table -->
-            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+            <div
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                    <h2 class="font-semibold text-gray-900">All Users</h2>
+                    <h2 class="font-semibold text-gray-900 dark:text-white">All Users</h2>
                 </div>
                 <div class="overflow-x-auto">
                     <table
-                        class="min-w-full divide-y divide-gray-100"
+                        class="min-w-full divide-y divide-gray-100 dark:divide-slate-700"
                         aria-label="Registered users"
                     >
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 dark:bg-slate-900">
                             <tr>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     User
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Role
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Joined
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     <span class="sr-only">Actions</span>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 bg-white">
+                        <tbody
+                            class="divide-y divide-gray-100 bg-white dark:divide-slate-700 dark:bg-slate-800"
+                        >
                             <tr v-if="users.data.length === 0">
                                 <td
                                     colspan="4"
-                                    class="px-6 py-12 text-center text-sm text-gray-400"
+                                    class="px-6 py-12 text-center text-sm text-gray-400 dark:text-slate-500"
                                 >
                                     No users found.
                                 </td>
@@ -251,7 +264,7 @@ function getInitials(name: string): string {
                             <tr
                                 v-for="user in users.data"
                                 :key="user.id"
-                                class="transition-colors hover:bg-gray-50"
+                                class="transition-colors hover:bg-gray-50 dark:hover:bg-slate-700/50"
                             >
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
@@ -262,10 +275,14 @@ function getInitials(name: string): string {
                                             {{ getInitials(user.name) }}
                                         </div>
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900">
+                                            <p
+                                                class="text-sm font-medium text-gray-900 dark:text-white"
+                                            >
                                                 {{ user.name }}
                                             </p>
-                                            <p class="text-xs text-gray-500">{{ user.email }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-slate-400">
+                                                {{ user.email }}
+                                            </p>
                                         </div>
                                     </div>
                                 </td>
@@ -279,7 +296,7 @@ function getInitials(name: string): string {
                                         {{ user.role }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
+                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
                                     <time :datetime="user.created_at">
                                         {{ formatDate(user.created_at) }}
                                     </time>

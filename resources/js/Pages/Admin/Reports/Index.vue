@@ -184,13 +184,13 @@ const lateRateOptions = {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-bold text-gray-900">Reports</h1>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">Reports</h1>
                 <div class="flex items-center gap-2">
                     <label for="export-format" class="sr-only">Export format</label>
                     <select
                         id="export-format"
                         v-model="exportFormat"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     >
                         <option value="csv">CSV</option>
                         <option value="pdf">PDF</option>
@@ -198,7 +198,7 @@ const lateRateOptions = {
                     </select>
                     <a
                         :href="exportUrl()"
-                        class="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         download
                     >
                         <ArrowDownTrayIcon class="h-4 w-4" aria-hidden="true" />
@@ -213,7 +213,10 @@ const lateRateOptions = {
                 <main>
                     <!-- Summary Statistics -->
                     <section aria-labelledby="stats-heading">
-                        <h2 id="stats-heading" class="mb-6 text-lg font-semibold text-gray-900">
+                        <h2
+                            id="stats-heading"
+                            class="mb-6 text-lg font-semibold text-gray-900 dark:text-white"
+                        >
                             Summary Statistics
                         </h2>
 
@@ -255,22 +258,31 @@ const lateRateOptions = {
 
                     <!-- Submission Breakdown (progress bars) -->
                     <section
-                        class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                         aria-labelledby="breakdown-heading"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                        <div
+                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                        >
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
-                            <h2 id="breakdown-heading" class="font-semibold text-gray-800">
+                            <h2
+                                id="breakdown-heading"
+                                class="font-semibold text-gray-800 dark:text-gray-200"
+                            >
                                 Submission Breakdown
                             </h2>
                         </div>
                         <div class="space-y-4 px-6 py-5">
                             <div>
                                 <div class="mb-1 flex justify-between text-sm">
-                                    <span class="text-gray-600">Graded rate</span>
-                                    <span class="font-medium text-gray-900">{{ gradedPct }}%</span>
+                                    <span class="text-gray-600 dark:text-gray-400"
+                                        >Graded rate</span
+                                    >
+                                    <span class="font-medium text-gray-900 dark:text-white"
+                                        >{{ gradedPct }}%</span
+                                    >
                                 </div>
-                                <div class="h-2 rounded-full bg-gray-100">
+                                <div class="h-2 rounded-full bg-gray-100 dark:bg-slate-700">
                                     <div
                                         class="h-2 rounded-full bg-green-500 transition-all duration-700"
                                         :style="`width: ${gradedPct}%`"
@@ -279,10 +291,12 @@ const lateRateOptions = {
                             </div>
                             <div>
                                 <div class="mb-1 flex justify-between text-sm">
-                                    <span class="text-gray-600">Late rate</span>
-                                    <span class="font-medium text-gray-900">{{ latePct }}%</span>
+                                    <span class="text-gray-600 dark:text-gray-400">Late rate</span>
+                                    <span class="font-medium text-gray-900 dark:text-white"
+                                        >{{ latePct }}%</span
+                                    >
                                 </div>
-                                <div class="h-2 rounded-full bg-gray-100">
+                                <div class="h-2 rounded-full bg-gray-100 dark:bg-slate-700">
                                     <div
                                         class="h-2 rounded-full bg-red-400 transition-all duration-700"
                                         :style="`width: ${latePct}%`"
@@ -291,12 +305,14 @@ const lateRateOptions = {
                             </div>
                             <div>
                                 <div class="mb-1 flex justify-between text-sm">
-                                    <span class="text-gray-600">Grades released</span>
-                                    <span class="font-medium text-gray-900"
+                                    <span class="text-gray-600 dark:text-gray-400"
+                                        >Grades released</span
+                                    >
+                                    <span class="font-medium text-gray-900 dark:text-white"
                                         >{{ releasedPct }}%</span
                                     >
                                 </div>
-                                <div class="h-2 rounded-full bg-gray-100">
+                                <div class="h-2 rounded-full bg-gray-100 dark:bg-slate-700">
                                     <div
                                         class="h-2 rounded-full bg-cyan-500 transition-all duration-700"
                                         :style="`width: ${releasedPct}%`"
@@ -308,12 +324,17 @@ const lateRateOptions = {
 
                     <!-- Chart 1: Submission Trend -->
                     <section
-                        class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                         aria-labelledby="trend-heading"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                        <div
+                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                        >
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
-                            <h2 id="trend-heading" class="font-semibold text-gray-800">
+                            <h2
+                                id="trend-heading"
+                                class="font-semibold text-gray-800 dark:text-gray-200"
+                            >
                                 Submission Trend — Last 8 Weeks
                             </h2>
                         </div>
@@ -339,12 +360,17 @@ const lateRateOptions = {
                     <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
                         <!-- Chart 2: Grade Distribution -->
                         <section
-                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                             aria-labelledby="grade-dist-heading"
                         >
-                            <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                            <div
+                                class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                            >
                                 <div class="h-4 w-1 rounded-full bg-green-500" aria-hidden="true" />
-                                <h2 id="grade-dist-heading" class="font-semibold text-gray-800">
+                                <h2
+                                    id="grade-dist-heading"
+                                    class="font-semibold text-gray-800 dark:text-gray-200"
+                                >
                                     Grade Distribution
                                 </h2>
                             </div>
@@ -368,15 +394,20 @@ const lateRateOptions = {
 
                         <!-- Chart 3: Submission Status Breakdown -->
                         <section
-                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                             aria-labelledby="status-heading"
                         >
-                            <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                            <div
+                                class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                            >
                                 <div
                                     class="h-4 w-1 rounded-full bg-purple-500"
                                     aria-hidden="true"
                                 />
-                                <h2 id="status-heading" class="font-semibold text-gray-800">
+                                <h2
+                                    id="status-heading"
+                                    class="font-semibold text-gray-800 dark:text-gray-200"
+                                >
                                     Submission Status Breakdown
                                 </h2>
                             </div>
@@ -401,12 +432,15 @@ const lateRateOptions = {
 
                     <!-- Chart 4: Late Rate by Course -->
                     <section
-                        class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                         aria-labelledby="late-rate-heading"
                     >
                         <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
                             <div class="h-4 w-1 rounded-full bg-red-500" aria-hidden="true" />
-                            <h2 id="late-rate-heading" class="font-semibold text-gray-800">
+                            <h2
+                                id="late-rate-heading"
+                                class="font-semibold text-gray-800 dark:text-gray-200"
+                            >
                                 Late Submission Rate by Course
                             </h2>
                         </div>

@@ -45,19 +45,19 @@ const formatBytes = (bytes: number): string => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('student.courses.show', lesson.module.course_section.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             {{ lesson.module.course_section.course.code }}
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="text-gray-500">{{ lesson.module.title }}</li>
+                    <li class="text-gray-500 dark:text-slate-400">{{ lesson.module.title }}</li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
                         {{ lesson.title }}
                     </li>
                 </ol>
@@ -72,7 +72,9 @@ const formatBytes = (bytes: number): string => {
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                         aria-labelledby="lesson-title"
                     >
-                        <header class="border-b border-gray-100 bg-blue-50 px-6 py-4">
+                        <header
+                            class="border-b border-gray-100 dark:border-slate-700 bg-blue-50 px-6 py-4"
+                        >
                             <div class="flex items-center gap-3">
                                 <span
                                     class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700"
@@ -80,7 +82,10 @@ const formatBytes = (bytes: number): string => {
                                     {{ lesson.type }}
                                 </span>
                             </div>
-                            <h1 id="lesson-title" class="mt-1 text-xl font-bold text-gray-900">
+                            <h1
+                                id="lesson-title"
+                                class="mt-1 text-xl font-bold text-gray-900 dark:text-white"
+                            >
                                 {{ lesson.title }}
                             </h1>
                         </header>
@@ -88,11 +93,11 @@ const formatBytes = (bytes: number): string => {
                         <div class="px-6 py-6">
                             <div
                                 v-if="lesson.content"
-                                class="prose prose-sm max-w-none whitespace-pre-wrap text-gray-700"
+                                class="prose prose-sm max-w-none whitespace-pre-wrap text-gray-700 dark:text-gray-300"
                             >
                                 {{ lesson.content }}
                             </div>
-                            <p v-else class="text-sm text-gray-400">
+                            <p v-else class="text-sm text-gray-400 dark:text-slate-500">
                                 No written content for this lesson.
                             </p>
                         </div>
@@ -104,23 +109,29 @@ const formatBytes = (bytes: number): string => {
                         aria-labelledby="resources-heading"
                         class="overflow-hidden rounded-lg bg-white shadow-sm"
                     >
-                        <div class="border-b border-gray-100 px-6 py-4">
-                            <h2 id="resources-heading" class="font-semibold text-gray-800">
+                        <div class="border-b border-gray-100 dark:border-slate-700 px-6 py-4">
+                            <h2
+                                id="resources-heading"
+                                class="font-semibold text-gray-800 dark:text-gray-200"
+                            >
                                 Downloads
                             </h2>
                         </div>
 
-                        <ul class="divide-y divide-gray-100" aria-label="Lesson resources">
+                        <ul
+                            class="divide-y divide-gray-100 dark:divide-slate-700"
+                            aria-label="Lesson resources"
+                        >
                             <li
                                 v-for="resource in lesson.resources"
                                 :key="resource.id"
                                 class="flex items-center justify-between px-6 py-3"
                             >
                                 <div>
-                                    <p class="text-sm font-medium text-gray-800">
+                                    <p class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                         {{ resource.title }}
                                     </p>
-                                    <p class="text-xs text-gray-500">
+                                    <p class="text-xs text-gray-500 dark:text-slate-400">
                                         {{ resource.mime_type }} &bull;
                                         {{ formatBytes(resource.size_bytes) }}
                                         <span
@@ -132,7 +143,7 @@ const formatBytes = (bytes: number): string => {
                                     </p>
                                     <p
                                         v-if="resource.accessibility_notes"
-                                        class="mt-0.5 text-xs text-gray-400"
+                                        class="mt-0.5 text-xs text-gray-400 dark:text-slate-500"
                                     >
                                         {{ resource.accessibility_notes }}
                                     </p>

@@ -16,7 +16,7 @@ it('creates a UserPreference record for the user', function () {
 
     $user = User::factory()->create(['role' => UserRole::Student]);
 
-    $preferences = $action->execute($user, 'medium', false, false, false, 'en');
+    $preferences = $action->execute($user, 'medium', false, false, false, false, 'en');
 
     expect($preferences)->toBeInstanceOf(UserPreference::class);
     expect($preferences->user_id)->toBe($user->id);
@@ -38,8 +38,8 @@ it('updates an existing UserPreference instead of creating a duplicate', functio
 
     $user = User::factory()->create(['role' => UserRole::Student]);
 
-    $action->execute($user, 'medium', false, false, false, 'en');
-    $action->execute($user, 'large', true, false, false, 'en');
+    $action->execute($user, 'medium', false, false, false, false, 'en');
+    $action->execute($user, 'large', true, false, false, false, 'en');
 
     expect(UserPreference::where('user_id', $user->id)->count())->toBe(1);
     $this->assertDatabaseHas('user_preferences', [

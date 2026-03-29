@@ -6,6 +6,7 @@ export interface A11yPrefs {
     reduced_motion?: boolean;
     high_contrast?: boolean;
     dyslexia_font?: boolean;
+    dark_mode?: boolean;
     font_size?: string;
     email_notifications?: boolean;
     email_digest?: boolean;

@@ -110,17 +110,17 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('student.assignments.index')"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-gray-200"
                         >
                             Assignments
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
                         {{ assignment.title }}
                     </li>
                 </ol>
@@ -133,18 +133,21 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
                 <div class="space-y-6 lg:col-span-2">
                     <section
                         aria-labelledby="assignment-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                     >
                         <div
-                            class="flex items-start justify-between gap-4 border-b border-gray-100 px-6 py-4"
+                            class="flex items-start justify-between gap-4 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
                         >
                             <div>
-                                <h1 id="assignment-heading" class="text-lg font-bold text-gray-900">
+                                <h1
+                                    id="assignment-heading"
+                                    class="text-lg font-bold text-gray-900 dark:text-white"
+                                >
                                     {{ assignment.title }}
                                 </h1>
                                 <p
                                     v-if="assignment.course_section"
-                                    class="mt-0.5 text-sm text-gray-500"
+                                    class="mt-0.5 text-sm text-gray-500 dark:text-slate-400"
                                 >
                                     {{ assignment.course_section.course?.title }} —
                                     {{ assignment.course_section.section_name }}
@@ -153,7 +156,8 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
                             <span
                                 class="inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
                                 :class="
-                                    statusBadge[submissionStatus] ?? 'bg-gray-100 text-gray-600'
+                                    statusBadge[submissionStatus] ??
+                                    'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-400'
                                 "
                             >
                                 {{ submissionStatus }}
@@ -163,7 +167,9 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
                         <div class="px-6 py-5">
                             <dl class="mb-5 grid grid-cols-2 gap-4 text-sm">
                                 <div>
-                                    <dt class="font-medium text-gray-700">Due Date</dt>
+                                    <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                        Due Date
+                                    </dt>
                                     <dd :class="dueDateClass">
                                         {{
                                             assignment.due_at
@@ -173,12 +179,18 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="font-medium text-gray-700">Max Score</dt>
-                                    <dd class="text-gray-600">{{ assignment.max_score }} pts</dd>
+                                    <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                        Max Score
+                                    </dt>
+                                    <dd class="text-gray-600 dark:text-gray-400">
+                                        {{ assignment.max_score }} pts
+                                    </dd>
                                 </div>
                                 <div>
-                                    <dt class="font-medium text-gray-700">Resubmission</dt>
-                                    <dd class="text-gray-600">
+                                    <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                        Resubmission
+                                    </dt>
+                                    <dd class="text-gray-600 dark:text-gray-400">
                                         {{
                                             assignment.allow_resubmission
                                                 ? 'Allowed'
@@ -193,8 +205,10 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
                                     "
                                     class="col-span-2"
                                 >
-                                    <dt class="font-medium text-gray-700">Accepted File Types</dt>
-                                    <dd class="text-gray-600">
+                                    <dt class="font-medium text-gray-700 dark:text-gray-300">
+                                        Accepted File Types
+                                    </dt>
+                                    <dd class="text-gray-600 dark:text-gray-400">
                                         {{
                                             assignment.allowed_file_types
                                                 .map((m) => MIME_LABELS[m] ?? m)
@@ -206,13 +220,15 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
 
                             <div
                                 v-if="assignment.instructions"
-                                class="border-t border-gray-100 pt-4"
+                                class="border-t border-gray-100 pt-4 dark:border-slate-700"
                             >
-                                <h2 class="mb-2 text-sm font-semibold text-gray-700">
+                                <h2
+                                    class="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300"
+                                >
                                     Instructions
                                 </h2>
                                 <div
-                                    class="prose prose-sm max-w-none whitespace-pre-wrap text-gray-600"
+                                    class="prose prose-sm max-w-none whitespace-pre-wrap text-gray-600 dark:text-gray-400"
                                 >
                                     {{ assignment.instructions }}
                                 </div>
@@ -227,57 +243,62 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
                     >
                         <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                            <h2 id="attempt-history-heading" class="font-semibold text-gray-900">
+                            <h2
+                                id="attempt-history-heading"
+                                class="font-semibold text-gray-900 dark:text-white"
+                            >
                                 Attempt History
                             </h2>
                         </div>
 
                         <div
                             v-if="submissions.length === 0"
-                            class="px-6 py-5 text-sm text-gray-500"
+                            class="px-6 py-5 text-sm text-gray-500 dark:text-slate-400"
                         >
                             No submissions yet.
                         </div>
 
                         <div v-else class="overflow-x-auto">
                             <table
-                                class="min-w-full divide-y divide-gray-100 text-sm"
+                                class="min-w-full divide-y divide-gray-100 text-sm dark:divide-slate-700"
                                 aria-label="Submission attempts"
                             >
-                                <thead class="bg-gray-50">
+                                <thead class="bg-gray-50 dark:bg-slate-900">
                                     <tr>
                                         <th
                                             scope="col"
-                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                         >
                                             Attempt
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                         >
                                             Submitted
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                         >
                                             Status
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                            class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                         >
                                             Files
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-100">
+                                <tbody class="divide-y divide-gray-100 dark:divide-slate-700">
                                     <tr v-for="attempt in submissions" :key="attempt.id">
-                                        <td class="px-5 py-3 font-medium text-gray-900">
+                                        <td
+                                            class="px-5 py-3 font-medium text-gray-900 dark:text-white"
+                                        >
                                             #{{ attempt.attempt_no }}
                                         </td>
-                                        <td class="px-5 py-3 text-gray-600">
+                                        <td class="px-5 py-3 text-gray-600 dark:text-gray-400">
                                             {{ formatDate(attempt.submitted_at) }}
                                         </td>
                                         <td class="px-5 py-3">
@@ -285,13 +306,13 @@ const isPastDue = computed<boolean>(() => dueUrgency.value === 'past');
                                                 class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
                                                 :class="
                                                     statusBadge[attempt.status] ??
-                                                    'bg-gray-100 text-gray-600'
+                                                    'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-400'
                                                 "
                                             >
                                                 {{ attempt.status }}
                                             </span>
                                         </td>
-                                        <td class="px-5 py-3 text-gray-600">
+                                        <td class="px-5 py-3 text-gray-600 dark:text-gray-400">
                                             {{ attempt.files?.length ?? 0 }}
                                         </td>
                                     </tr>

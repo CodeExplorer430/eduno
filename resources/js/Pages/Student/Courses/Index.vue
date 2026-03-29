@@ -23,7 +23,9 @@ defineProps<{
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-semibold leading-tight text-gray-800">My Courses</h1>
+            <h1 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                My Courses
+            </h1>
         </template>
 
         <div class="py-12">

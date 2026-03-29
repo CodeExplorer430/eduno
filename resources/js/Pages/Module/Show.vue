@@ -46,11 +46,13 @@ function togglePublishLesson(lessonId: number): void {
             <div class="flex items-start justify-between">
                 <div>
                     <nav aria-label="Breadcrumb">
-                        <ol class="flex items-center gap-2 text-sm text-gray-500">
+                        <ol
+                            class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400"
+                        >
                             <li>
                                 <Link
                                     :href="route('courses.show', module.section.course_id)"
-                                    class="hover:text-gray-700 focus:underline focus:outline-none"
+                                    class="hover:text-gray-700 dark:text-gray-300 focus:underline focus:outline-none"
                                 >
                                     {{ module.section.course?.title ?? 'Course' }}
                                 </Link>
@@ -61,19 +63,24 @@ function togglePublishLesson(lessonId: number): void {
                                     :href="
                                         route('sections.modules.index', module.course_section_id)
                                     "
-                                    class="hover:text-gray-700 focus:underline focus:outline-none"
+                                    class="hover:text-gray-700 dark:text-gray-300 focus:underline focus:outline-none"
                                 >
                                     Modules
                                 </Link>
                             </li>
                             <li aria-hidden="true">/</li>
-                            <li class="font-medium text-gray-800" aria-current="page">
+                            <li
+                                class="font-medium text-gray-800 dark:text-gray-200"
+                                aria-current="page"
+                            >
                                 {{ module.title }}
                             </li>
                         </ol>
                     </nav>
                     <div class="mt-1 flex items-center gap-2">
-                        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                        <h2
+                            class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                        >
                             {{ module.title }}
                         </h2>
                         <span
@@ -89,7 +96,7 @@ function togglePublishLesson(lessonId: number): void {
                 <div v-if="canManage" class="flex gap-2">
                     <button
                         type="button"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         :aria-label="module.published_at ? 'Unpublish module' : 'Publish module'"
                         @click="togglePublish"
                     >
@@ -97,7 +104,7 @@ function togglePublishLesson(lessonId: number): void {
                     </button>
                     <Link
                         :href="route('modules.edit', module.id)"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         aria-label="Edit module"
                     >
                         Edit
@@ -112,14 +119,17 @@ function togglePublishLesson(lessonId: number): void {
                     v-if="module.description"
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
-                    <div class="p-6 text-sm text-gray-700">
+                    <div class="p-6 text-sm text-gray-700 dark:text-gray-300">
                         {{ module.description }}
                     </div>
                 </div>
 
                 <section aria-labelledby="lessons-heading">
                     <div class="flex items-center justify-between">
-                        <h3 id="lessons-heading" class="text-lg font-semibold text-gray-800">
+                        <h3
+                            id="lessons-heading"
+                            class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                        >
                             Lessons
                         </h3>
                         <Link
@@ -136,7 +146,9 @@ function togglePublishLesson(lessonId: number): void {
                         v-if="lessons.length === 0"
                         class="mt-4 overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
-                        <div class="p-6 text-sm text-gray-500">No lessons yet.</div>
+                        <div class="p-6 text-sm text-gray-500 dark:text-slate-400">
+                            No lessons yet.
+                        </div>
                     </div>
 
                     <ol v-else class="mt-4 space-y-3">
@@ -148,7 +160,7 @@ function togglePublishLesson(lessonId: number): void {
                             <div class="flex items-center justify-between p-4">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs text-gray-400"
+                                        <span class="text-xs text-gray-400 dark:text-slate-500"
                                             >{{ lesson.order_no }}.</span
                                         >
                                         <Link
@@ -158,7 +170,7 @@ function togglePublishLesson(lessonId: number): void {
                                             {{ lesson.title }}
                                         </Link>
                                         <span
-                                            class="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-600"
+                                            class="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
                                         >
                                             {{ lesson.type }}
                                         </span>
@@ -175,7 +187,7 @@ function togglePublishLesson(lessonId: number): void {
                                 <div v-if="canManage" class="ml-4 flex shrink-0 gap-2">
                                     <button
                                         type="button"
-                                        class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        class="rounded border border-gray-300 dark:border-slate-600 bg-white px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         :aria-label="
                                             lesson.published_at
                                                 ? `Unpublish ${lesson.title}`
@@ -187,7 +199,7 @@ function togglePublishLesson(lessonId: number): void {
                                     </button>
                                     <Link
                                         :href="route('lessons.edit', lesson.id)"
-                                        class="rounded border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        class="rounded border border-gray-300 dark:border-slate-600 bg-white px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         :aria-label="`Edit ${lesson.title}`"
                                     >
                                         Edit
@@ -216,16 +228,21 @@ function togglePublishLesson(lessonId: number): void {
         @close="confirmDeleteLessonId = null"
     >
         <div class="p-6">
-            <h2 id="delete-lesson-title" class="text-lg font-semibold text-gray-900">
+            <h2
+                id="delete-lesson-title"
+                class="text-lg font-semibold text-gray-900 dark:text-white"
+            >
                 Delete Lesson
             </h2>
-            <p class="mt-2 text-sm text-gray-600">
+            <p
+                class="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+            >
                 Are you sure you want to delete this lesson? This cannot be undone.
             </p>
             <div class="mt-6 flex justify-end gap-3">
                 <button
                     type="button"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     @click="confirmDeleteLessonId = null"
                 >
                     Cancel

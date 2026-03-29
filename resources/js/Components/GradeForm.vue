@@ -29,7 +29,10 @@ const submit = (): void => {
 <template>
     <section aria-labelledby="grade-form-heading">
         <header class="mb-4">
-            <h2 id="grade-form-heading" class="text-base font-semibold text-gray-900">
+            <h2
+                id="grade-form-heading"
+                class="text-base font-semibold text-gray-900 dark:text-white"
+            >
                 {{ existingGrade ? 'Update Grade' : 'Grade Submission' }}
             </h2>
         </header>
@@ -55,7 +58,9 @@ const submit = (): void => {
                             :aria-invalid="!!form.errors.score"
                             required
                         />
-                        <span class="text-sm text-gray-500">/ {{ maxScore }} pts</span>
+                        <span class="text-sm text-gray-500 dark:text-slate-400"
+                            >/ {{ maxScore }} pts</span
+                        >
                     </div>
                     <InputError id="grade-score-error" class="mt-1" :message="form.errors.score" />
                 </div>
@@ -68,7 +73,7 @@ const submit = (): void => {
                         rows="6"
                         aria-describedby="grade-feedback-error"
                         :aria-invalid="!!form.errors.feedback"
-                        class="mt-1 block w-full min-h-[96px] resize-y rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        class="mt-1 block w-full min-h-[96px] resize-y rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400"
                         placeholder="Optional feedback for the student…"
                     ></textarea>
                     <InputError

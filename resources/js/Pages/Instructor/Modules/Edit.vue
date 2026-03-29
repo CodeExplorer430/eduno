@@ -46,26 +46,32 @@ const submit = (): void => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('instructor.courses.modules.index', section.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-gray-200"
                         >
                             {{ section.course.code }} — Modules
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">Edit Module</li>
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
+                        Edit Module
+                    </li>
                 </ol>
             </nav>
         </template>
 
         <div class="mx-auto max-w-xl px-4 py-8 sm:px-6 lg:px-8">
-            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+            <div
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                    <h1 class="font-semibold text-gray-900">Edit Module</h1>
+                    <h1 class="font-semibold text-gray-900 dark:text-white">Edit Module</h1>
                 </div>
 
                 <div
@@ -83,7 +89,7 @@ const submit = (): void => {
                             id="title"
                             v-model="form.title"
                             type="text"
-                            class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                             :aria-describedby="form.errors.title ? 'title-error' : undefined"
                             required
                             autofocus
@@ -96,7 +102,7 @@ const submit = (): void => {
                         <textarea
                             id="description"
                             v-model="form.description"
-                            class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                             rows="3"
                             :aria-describedby="
                                 form.errors.description ? 'description-error' : undefined
@@ -116,7 +122,7 @@ const submit = (): void => {
                             v-model.number="form.order_no"
                             type="number"
                             min="0"
-                            class="mt-1 block w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="mt-1 block w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                             :aria-describedby="form.errors.order_no ? 'order-error' : undefined"
                             required
                         />
@@ -128,15 +134,17 @@ const submit = (): void => {
                             id="published"
                             v-model="form.published"
                             type="checkbox"
-                            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800"
                         />
                         <InputLabel for="published" value="Published" class="mb-0" />
                     </div>
 
-                    <div class="flex items-center justify-end gap-4 border-t border-gray-100 pt-4">
+                    <div
+                        class="flex items-center justify-end gap-4 border-t border-gray-100 pt-4 dark:border-slate-700"
+                    >
                         <Link
                             :href="route('instructor.courses.modules.index', section.id)"
-                            class="rounded text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded text-sm text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-slate-400 dark:hover:text-gray-200"
                         >
                             Cancel
                         </Link>
