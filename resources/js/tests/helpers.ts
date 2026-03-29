@@ -2,9 +2,6 @@ import { mount } from '@vue/test-utils';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import Aura from '@primevue/themes/aura';
-import { createI18n } from 'vue-i18n';
-
-const i18n = createI18n({ legacy: false, locale: 'en', messages: { en: {} } });
 
 type MountOptions = Parameters<typeof mount>[1];
 
@@ -15,7 +12,7 @@ export function mountWithPrimeVue(
     const { global: globalOpts, ...restOptions } = (options ?? {}) as Record<string, unknown>;
     return mount(component, {
         global: {
-            plugins: [[PrimeVue, { theme: { preset: Aura } }], ToastService, i18n],
+            plugins: [[PrimeVue, { theme: { preset: Aura } }], ToastService],
             ...((globalOpts ?? {}) as Record<string, unknown>),
         },
         ...restOptions,

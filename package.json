@@ -71,9 +71,9 @@
     "@heroicons/vue": "^2.2.0",
     "@primevue/themes": "^4.5.4",
     "chart.js": "^4.5.1",
+    "laravel-vue-i18n": "^2.8.0",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.4",
-    "tailwindcss": "^4.2.1",
-    "vue-i18n": "^9.14.5"
+    "tailwindcss": "^4.2.1"
   }
 }

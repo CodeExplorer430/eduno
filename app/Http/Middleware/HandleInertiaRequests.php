@@ -7,7 +7,6 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Lang;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -49,8 +48,7 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
-            'locale'       => fn () => $this->resolveLocale($request),
-            'translations' => fn () => $this->loadTranslations($request),
+            'locale'    => fn () => $this->resolveLocale($request),
             'userPrefs' => fn () => $request->user()?->preferences?->only([
                 'reduced_motion',
                 'high_contrast',
@@ -67,19 +65,11 @@ class HandleInertiaRequests extends Middleware
     private function resolveLocale(Request $request): string
     {
         $language = $request->user()?->preferences?->language;
+        $locale   = in_array($language, ['en', 'fil'], strict: true) ? $language : App::getLocale();
 
-        return in_array($language, ['en', 'fil'], strict: true) ? $language : App::getLocale();
-    }
-
-    /** @return array<string, mixed> */
-    private function loadTranslations(Request $request): array
-    {
-        $locale = $this->resolveLocale($request);
+        // Set PHP application locale so server-side strings (validation, etc.) match the user's language.
         App::setLocale($locale);
 
-        /** @var array<string, mixed>|string $raw */
-        $raw = Lang::get('app');
-
-        return is_array($raw) ? $raw : [];
+        return $locale;
     }
 }

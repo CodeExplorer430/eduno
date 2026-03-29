@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { trans as t } from 'laravel-vue-i18n';
 import {
     MagnifyingGlassIcon,
     BoltSlashIcon,
@@ -39,7 +39,6 @@ const form = useForm({
     language: props.preferences?.language ?? 'en',
 });
 
-const { t } = useI18n();
 const appToast = useAppToast();
 
 watch(

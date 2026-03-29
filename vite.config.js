@@ -3,6 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import i18n from 'laravel-vue-i18n/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -30,6 +31,7 @@ export default defineConfig({
                 },
             },
         }),
+        i18n(),
         VitePWA({
             registerType: 'autoUpdate',
             navigateFallback: null, // CRITICAL: do NOT intercept HTML navigations (Inertia SSR)

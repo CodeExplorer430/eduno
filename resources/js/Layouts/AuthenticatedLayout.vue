@@ -6,7 +6,7 @@ import NotificationBell from '@/Components/NotificationBell.vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { Link, usePage } from '@inertiajs/vue3';
-import { useI18n } from 'vue-i18n';
+import { trans as t } from 'laravel-vue-i18n';
 import {
     HomeIcon,
     BookOpenIcon,
@@ -32,7 +32,6 @@ const prefs = computed(() => page.props.userPrefs);
 const userRole = computed(() => page.props.auth?.user?.role);
 const features = computed(() => page.props.features);
 const toast = useToast();
-const { t } = useI18n();
 
 const sidebarOpen = ref(false);
 const sidebarCollapsed = ref(false); // SSR-safe default

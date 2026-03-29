@@ -11,9 +11,7 @@ import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import AnimateOnScroll from 'primevue/animateonscroll';
 import Ripple from 'primevue/ripple';
-import { createI18n } from 'vue-i18n';
-import en from './locales/en';
-import fil from './locales/fil';
+import { i18nVue, loadLanguageAsync } from 'laravel-vue-i18n';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -34,13 +32,6 @@ function getInitialLocale(): string {
     return 'en';
 }
 
-const i18n = createI18n({
-    legacy: false,
-    locale: getInitialLocale(),
-    fallbackLocale: 'en',
-    messages: { en, fil },
-});
-
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
@@ -52,7 +43,13 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .use(i18n)
+            .use(i18nVue, {
+                lang: getInitialLocale(),
+                resolve: async (lang: string) => {
+                    const langs = import.meta.glob('../../lang/php_*.json');
+                    return await langs[`../../lang/php_${lang}.json`]();
+                },
+            })
             .use(PrimeVue, {
                 theme: { preset: Aura, options: { darkModeSelector: '.dark' } },
                 ripple: true,
@@ -73,6 +70,6 @@ createInertiaApp({
 router.on('navigate', (event) => {
     const locale = (event.detail.page.props as { locale?: string }).locale;
     if (locale && (locale === 'en' || locale === 'fil')) {
-        i18n.global.locale.value = locale;
+        void loadLanguageAsync(locale);
     }
 });
