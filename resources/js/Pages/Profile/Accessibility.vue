@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
     MagnifyingGlassIcon,
@@ -18,12 +18,12 @@ const props = defineProps<{
     preferences: UserPreferences | null;
 }>();
 
-const fontSizeOptions = [
-    { label: 'Small', value: 'small' },
-    { label: 'Medium', value: 'medium' },
-    { label: 'Large', value: 'large' },
-    { label: 'X-Large', value: 'xlarge' },
-];
+const fontSizeOptions = computed(() => [
+    { label: t('accessibility.font_size_small'), value: 'small' },
+    { label: t('accessibility.font_size_medium'), value: 'medium' },
+    { label: t('accessibility.font_size_large'), value: 'large' },
+    { label: t('accessibility.font_size_xlarge'), value: 'xlarge' },
+]);
 
 const languageOptions = [
     { label: 'English', value: 'en' },
@@ -84,13 +84,13 @@ function submit(): void {
                             </div>
                             <div class="flex-1">
                                 <h2 class="font-semibold text-gray-900 dark:text-white">
-                                    Font Size
+                                    {{ t('accessibility.font_size') }}
                                 </h2>
                                 <p
                                     id="font_size_desc"
                                     class="text-sm text-gray-500 dark:text-slate-400"
                                 >
-                                    Choose the base text size across the application.
+                                    {{ t('accessibility.font_size_desc') }}
                                 </p>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ function submit(): void {
                                 <p
                                     class="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-slate-500"
                                 >
-                                    Preview
+                                    {{ t('accessibility.preview') }}
                                 </p>
                                 <p
                                     :style="{
@@ -147,7 +147,7 @@ function submit(): void {
                                     }"
                                     class="text-gray-800 dark:text-gray-200"
                                 >
-                                    The quick brown fox jumps over the lazy dog.
+                                    {{ t('accessibility.preview_text') }}
                                 </p>
                             </div>
                         </div>
@@ -182,13 +182,13 @@ function submit(): void {
                                     for="high_contrast"
                                     class="block font-semibold text-gray-900 cursor-pointer dark:text-white"
                                 >
-                                    High Contrast
+                                    {{ t('accessibility.high_contrast') }}
                                 </label>
                                 <p
                                     id="high_contrast_desc"
                                     class="text-sm text-gray-500 dark:text-slate-400"
                                 >
-                                    Increases contrast ratio to improve readability.
+                                    {{ t('accessibility.high_contrast_desc') }}
                                 </p>
                                 <InputError class="mt-1" :message="form.errors.high_contrast" />
                             </div>
@@ -226,13 +226,13 @@ function submit(): void {
                                     for="reduced_motion"
                                     class="block font-semibold text-gray-900 cursor-pointer dark:text-white"
                                 >
-                                    Reduce Motion
+                                    {{ t('accessibility.reduced_motion') }}
                                 </label>
                                 <p
                                     id="reduced_motion_desc"
                                     class="text-sm text-gray-500 dark:text-slate-400"
                                 >
-                                    Disables animations and transitions throughout the application.
+                                    {{ t('accessibility.reduced_motion_desc') }}
                                 </p>
                                 <InputError class="mt-1" :message="form.errors.reduced_motion" />
                             </div>
@@ -273,13 +273,13 @@ function submit(): void {
                                     for="simplified_layout"
                                     class="block font-semibold text-gray-900 cursor-pointer dark:text-white"
                                 >
-                                    Simplified Layout
+                                    {{ t('accessibility.simplified_layout') }}
                                 </label>
                                 <p
                                     id="simplified_layout_desc"
                                     class="text-sm text-gray-500 dark:text-slate-400"
                                 >
-                                    Hides decorative elements to reduce visual complexity.
+                                    {{ t('accessibility.simplified_layout_desc') }}
                                 </p>
                                 <InputError class="mt-1" :message="form.errors.simplified_layout" />
                             </div>
@@ -319,13 +319,13 @@ function submit(): void {
                                     for="dark_mode"
                                     class="block cursor-pointer font-semibold text-gray-900 dark:text-white"
                                 >
-                                    Dark Mode
+                                    {{ t('accessibility.dark_mode') }}
                                 </label>
                                 <p
                                     id="dark_mode_desc"
                                     class="text-sm text-gray-500 dark:text-slate-400"
                                 >
-                                    Switches the interface to a dark colour scheme.
+                                    {{ t('accessibility.dark_mode_desc') }}
                                 </p>
                                 <InputError class="mt-1" :message="form.errors.dark_mode" />
                             </div>
@@ -362,13 +362,13 @@ function submit(): void {
                             </div>
                             <div class="flex-1">
                                 <h2 class="font-semibold text-gray-900 dark:text-white">
-                                    Language
+                                    {{ t('accessibility.language') }}
                                 </h2>
                                 <p
                                     id="language_desc"
                                     class="text-sm text-gray-500 dark:text-slate-400"
                                 >
-                                    Select your preferred interface language.
+                                    {{ t('accessibility.language_desc') }}
                                 </p>
                             </div>
                         </div>
