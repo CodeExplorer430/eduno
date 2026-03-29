@@ -23,6 +23,14 @@ use App\Policies\LessonPolicy;
 use App\Policies\ModulePolicy;
 use App\Policies\ResourcePolicy;
 use App\Policies\SubmissionPolicy;
+use App\Listeners\LogFailedLogin;
+use App\Listeners\LogSuccessfulLogin;
+use App\Listeners\LogSuccessfulLogout;
+use App\Policies\UserPolicy;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -53,7 +61,12 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Assignment::class, AssignmentPolicy::class);
         Gate::policy(Submission::class, SubmissionPolicy::class);
         Gate::policy(Grade::class, GradePolicy::class);
+        Gate::policy(User::class, UserPolicy::class);
 
         Gate::define('admin', fn (User $user) => $user->isAdmin());
+
+        Event::listen(Login::class, LogSuccessfulLogin::class);
+        Event::listen(Logout::class, LogSuccessfulLogout::class);
+        Event::listen(Failed::class, LogFailedLogin::class);
     }
 }

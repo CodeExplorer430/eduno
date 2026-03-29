@@ -20,7 +20,7 @@ class RosterController extends Controller
 {
     public function index(Request $request, CourseSection $section): Response
     {
-        $this->authorize('update', $section->course);
+        $this->authorize('update', $section);
 
         $section->load('course');
 
@@ -47,7 +47,7 @@ class RosterController extends Controller
 
     public function store(Request $request, CourseSection $section, EnrollStudent $action): RedirectResponse
     {
-        $this->authorize('update', $section->course);
+        $this->authorize('update', $section);
 
         $validated = $request->validate([
             'email' => 'required|email|exists:users,email',
@@ -66,7 +66,7 @@ class RosterController extends Controller
 
     public function destroy(Request $request, CourseSection $section, Enrollment $enrollment, UnenrollStudent $action): RedirectResponse
     {
-        $this->authorize('update', $section->course);
+        $this->authorize('update', $section);
 
         abort_if($enrollment->course_section_id !== $section->id, 404);
 

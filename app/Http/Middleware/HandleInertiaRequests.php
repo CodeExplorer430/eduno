@@ -38,7 +38,9 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user'                       => $request->user(),
+                'user'                       => $request->user()?->only([
+                    'id', 'name', 'email', 'role',
+                ]),
                 'unread_notifications_count' => fn () => Auth::check()
                     ? Auth::user()->unreadNotifications()->count()
                     : 0,

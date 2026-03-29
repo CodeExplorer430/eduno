@@ -13,7 +13,14 @@ class ModulePolicy
 {
     public function viewAny(User $user, CourseSection $section): bool
     {
-        return true;
+        if ($user->isAdmin() || $user->id === $section->instructor_id) {
+            return true;
+        }
+
+        return Enrollment::where('user_id', $user->id)
+            ->where('course_section_id', $section->id)
+            ->where('status', 'active')
+            ->exists();
     }
 
     public function view(User $user, Model $module): bool

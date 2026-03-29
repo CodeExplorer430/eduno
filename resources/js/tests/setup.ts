@@ -7,8 +7,8 @@ expect.extend({ toHaveNoViolations });
 
 // Make route() and $t() available in every component template
 config.global.mocks = {
-    route: vi.fn(() => '/mock-route'),
-    $t: (key: string) => key,
+    route: vi.fn((): string => '/mock-route'),
+    $t: (key: string): string => key,
 };
 
 vi.mock('@inertiajs/vue3', () => ({
@@ -48,6 +48,9 @@ vi.mock('@inertiajs/vue3', () => ({
 vi.stubGlobal('route', () => '/mock-route');
 
 vi.mock('vue-i18n', () => ({
-    useI18n: () => ({ t: (key: string) => key, locale: { value: 'en' } }),
-    createI18n: vi.fn(() => ({ install: vi.fn() })),
+    useI18n: (): { t: (key: string) => string; locale: { value: string } } => ({
+        t: (key: string): string => key,
+        locale: { value: 'en' },
+    }),
+    createI18n: vi.fn((): { install: () => void } => ({ install: vi.fn() })),
 }));

@@ -22,6 +22,7 @@ class LessonController extends Controller
 {
     public function index(Request $request, CourseSection $section, Module $module): Response
     {
+        abort_if($module->course_section_id !== $section->id, 403);
         $this->authorize('update', $section->course);
 
         $section->load('course');
@@ -38,6 +39,7 @@ class LessonController extends Controller
 
     public function create(Request $request, CourseSection $section, Module $module): Response
     {
+        abort_if($module->course_section_id !== $section->id, 403);
         $this->authorize('create', Lesson::class);
 
         return Inertia::render('Instructor/Lessons/Create', [
@@ -48,6 +50,7 @@ class LessonController extends Controller
 
     public function store(CreateLessonRequest $request, CourseSection $section, Module $module, CreateLesson $action): RedirectResponse
     {
+        abort_if($module->course_section_id !== $section->id, 403);
         $this->authorize('create', Lesson::class);
 
         $action->handle($module, $request->validated());
@@ -59,6 +62,7 @@ class LessonController extends Controller
 
     public function edit(Request $request, CourseSection $section, Module $module, Lesson $lesson): Response
     {
+        abort_if($module->course_section_id !== $section->id, 403);
         $this->authorize('update', $lesson);
 
         return Inertia::render('Instructor/Lessons/Edit', [
@@ -70,6 +74,7 @@ class LessonController extends Controller
 
     public function update(UpdateLessonRequest $request, CourseSection $section, Module $module, Lesson $lesson, UpdateLesson $action): RedirectResponse
     {
+        abort_if($module->course_section_id !== $section->id, 403);
         $this->authorize('update', $lesson);
 
         $action->handle($lesson, $request->validated());
@@ -81,6 +86,7 @@ class LessonController extends Controller
 
     public function destroy(Request $request, CourseSection $section, Module $module, Lesson $lesson): RedirectResponse
     {
+        abort_if($module->course_section_id !== $section->id, 403);
         $this->authorize('delete', $lesson);
 
         $lesson->delete();
