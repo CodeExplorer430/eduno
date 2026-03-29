@@ -44,6 +44,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
             .use(i18nVue, {
+                shared: true,
                 lang: getInitialLocale(),
                 resolve: async (lang: string) => {
                     const langs = import.meta.glob('../../lang/php_*.json');

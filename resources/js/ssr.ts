@@ -33,6 +33,7 @@ createServer((page) =>
                     location: new URL(page.props.ziggy.location),
                 })
                 .use(i18nVue, {
+                    shared: true,
                     lang: locale,
                     resolve: async (lang: string) => {
                         const langs = import.meta.glob('../../lang/php_*.json');
