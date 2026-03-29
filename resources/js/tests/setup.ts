@@ -1,8 +1,15 @@
 import { vi, expect } from 'vitest';
+import { config } from '@vue/test-utils';
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
 const { toHaveNoViolations } = require('vitest-axe/matchers') as Record<string, any>;
 
 expect.extend({ toHaveNoViolations });
+
+// Make route() and $t() available in every component template
+config.global.mocks = {
+    route: vi.fn(() => '/mock-route'),
+    $t: (key: string) => key,
+};
 
 vi.mock('@inertiajs/vue3', () => ({
     Head: { template: '<slot />' },
@@ -39,3 +46,8 @@ vi.mock('@inertiajs/vue3', () => ({
 }));
 
 vi.stubGlobal('route', () => '/mock-route');
+
+vi.mock('vue-i18n', () => ({
+    useI18n: () => ({ t: (key: string) => key, locale: { value: 'en' } }),
+    createI18n: vi.fn(() => ({ install: vi.fn() })),
+}));
