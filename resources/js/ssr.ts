@@ -11,37 +11,12 @@ import ConfirmationService from 'primevue/confirmationservice';
 import AnimateOnScroll from 'primevue/animateonscroll';
 import Ripple from 'primevue/ripple';
 import { createI18n } from 'vue-i18n';
+import en from '@/locales/en';
+import fil from '@/locales/fil';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-// Eagerly bundle both locale JSONs — synchronous, no async chunk needed on server.
-const rawLocales = import.meta.glob('../../lang/php_*.json', { eager: true }) as Record<
-    string,
-    { default: Record<string, string> }
->;
-
-type NestedMessages = { [key: string]: string | NestedMessages };
-
-function buildMessages(raw: Record<string, string>): NestedMessages {
-    const prefix = 'app.';
-    const result: NestedMessages = {};
-    for (const [key, value] of Object.entries(raw)) {
-        if (!key.startsWith(prefix)) continue;
-        const parts = key.slice(prefix.length).split('.');
-        let cur: NestedMessages = result;
-        for (let i = 0; i < parts.length - 1; i++) {
-            cur[parts[i]] ??= {};
-            cur = cur[parts[i]] as NestedMessages;
-        }
-        cur[parts[parts.length - 1]] = value;
-    }
-    return result;
-}
-
-const messages = {
-    en: buildMessages(rawLocales['../../lang/php_en.json']?.default ?? {}),
-    fil: buildMessages(rawLocales['../../lang/php_fil.json']?.default ?? {}),
-};
+const messages = { en, fil };
 
 createServer((page) =>
     createInertiaApp({
