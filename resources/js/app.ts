@@ -11,9 +11,35 @@ import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import AnimateOnScroll from 'primevue/animateonscroll';
 import Ripple from 'primevue/ripple';
-import { i18nVue, loadLanguageAsync } from 'laravel-vue-i18n';
+import { createI18n } from 'vue-i18n';
+import type { Ref } from 'vue';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+// Eagerly bundle both locale JSONs into the main chunk — no async loading, no race conditions.
+const rawLocales = import.meta.glob('../../lang/php_*.json', { eager: true }) as Record<
+    string,
+    { default: Record<string, string> }
+>;
+
+// Convert flat 'app.nav.dashboard' keys → nested { nav: { dashboard: '...' } }
+type NestedMessages = { [key: string]: string | NestedMessages };
+
+function buildMessages(raw: Record<string, string>): NestedMessages {
+    const prefix = 'app.';
+    const result: NestedMessages = {};
+    for (const [key, value] of Object.entries(raw)) {
+        if (!key.startsWith(prefix)) continue;
+        const parts = key.slice(prefix.length).split('.');
+        let cur: NestedMessages = result;
+        for (let i = 0; i < parts.length - 1; i++) {
+            cur[parts[i]] ??= {};
+            cur = cur[parts[i]] as NestedMessages;
+        }
+        cur[parts[parts.length - 1]] = value;
+    }
+    return result;
+}
 
 // Resolve the initial locale from the Inertia page payload embedded in the
 // HTML by the server. Falls back to 'en' if unavailable.
@@ -32,6 +58,16 @@ function getInitialLocale(): string {
     return 'en';
 }
 
+const i18n = createI18n({
+    legacy: false as const,
+    locale: getInitialLocale(),
+    fallbackLocale: 'en',
+    messages: {
+        en: buildMessages(rawLocales['../../lang/php_en.json']?.default ?? {}),
+        fil: buildMessages(rawLocales['../../lang/php_fil.json']?.default ?? {}),
+    },
+});
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
@@ -43,27 +79,7 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .use(i18nVue, {
-                shared: true,
-                lang: getInitialLocale(),
-                resolve: async (lang: string) => {
-                    const langs = import.meta.glob('../../lang/php_*.json');
-                    const loader = langs[`../../lang/php_${lang}.json`];
-                    if (!loader) return { default: {} };
-                    // PHP files are namespaced by filename (lang/en/app.php → keys prefixed 'app.').
-                    // Strip the prefix so components use keys like 'nav.dashboard' directly.
-                    // Must return { default: {...} } — the Vite module format laravel-vue-i18n expects.
-                    const module = (await loader()) as { default: Record<string, string> };
-                    const prefix = 'app.';
-                    return {
-                        default: Object.fromEntries(
-                            Object.entries(module.default)
-                                .filter(([k]) => k.startsWith(prefix))
-                                .map(([k, v]) => [k.slice(prefix.length), v])
-                        ),
-                    };
-                },
-            })
+            .use(i18n)
             .use(PrimeVue, {
                 theme: { preset: Aura, options: { darkModeSelector: '.dark' } },
                 ripple: true,
@@ -84,6 +100,6 @@ createInertiaApp({
 router.on('navigate', (event) => {
     const locale = (event.detail.page.props as { locale?: string }).locale;
     if (locale && (locale === 'en' || locale === 'fil')) {
-        void loadLanguageAsync(locale);
+        (i18n.global.locale as Ref<string>).value = locale;
     }
 });

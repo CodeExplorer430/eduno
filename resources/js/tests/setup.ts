@@ -47,11 +47,10 @@ vi.mock('@inertiajs/vue3', () => ({
 
 vi.stubGlobal('route', () => '/mock-route');
 
-vi.mock('laravel-vue-i18n', () => ({
-    i18nVue: { install: vi.fn() },
-    loadLanguageAsync: vi.fn(),
-    trans: (key: string): string => key,
-    wTrans: (key: string): { value: string } => ({ value: key }),
-    getActiveLanguage: (): string => 'en',
-    currentLocale: { value: 'en' },
+vi.mock('vue-i18n', () => ({
+    createI18n: (): { install: ReturnType<typeof vi.fn> } => ({ install: vi.fn() }),
+    useI18n: (): { t: (key: string) => string; locale: { value: string } } => ({
+        t: (key: string): string => key,
+        locale: { value: 'en' },
+    }),
 }));

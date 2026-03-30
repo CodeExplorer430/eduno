@@ -3,7 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
-import { trans as t } from 'laravel-vue-i18n';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 import {
     MagnifyingGlassIcon,
     BoltSlashIcon,

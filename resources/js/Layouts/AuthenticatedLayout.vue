@@ -6,7 +6,7 @@ import NotificationBell from '@/Components/NotificationBell.vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { Link, usePage } from '@inertiajs/vue3';
-import { trans as t } from 'laravel-vue-i18n';
+import { useI18n } from 'vue-i18n';
 import {
     HomeIcon,
     BookOpenIcon,
@@ -27,6 +27,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import type { PageProps } from '@/types';
 
+const { t } = useI18n();
 const page = usePage<PageProps>();
 const prefs = computed(() => page.props.userPrefs);
 const userRole = computed(() => page.props.auth?.user?.role);
