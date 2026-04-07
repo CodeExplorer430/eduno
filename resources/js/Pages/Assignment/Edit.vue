@@ -27,7 +27,7 @@ function submit(): void {
 
     <main class="mx-auto max-w-2xl px-4 py-8">
         <nav aria-label="Breadcrumb" class="mb-4">
-            <ol class="flex gap-2 text-sm text-gray-500">
+            <ol class="flex gap-2 text-sm text-gray-500 dark:text-slate-400">
                 <li>
                     <Link :href="route('assignments.show', assignment.id)" class="hover:underline">
                         {{ assignment.title }}
@@ -43,7 +43,10 @@ function submit(): void {
         <form novalidate @submit.prevent="submit">
             <div class="space-y-5">
                 <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700">
+                    <label
+                        for="title"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                         Title <span aria-hidden="true">*</span>
                     </label>
                     <input
@@ -52,7 +55,7 @@ function submit(): void {
                         type="text"
                         required
                         autocomplete="off"
-                        class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         :aria-describedby="form.errors.title ? 'title-error' : undefined"
                         :aria-invalid="!!form.errors.title"
                     />
@@ -67,14 +70,16 @@ function submit(): void {
                 </div>
 
                 <div>
-                    <label for="instructions" class="block text-sm font-medium text-gray-700"
+                    <label
+                        for="instructions"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >Instructions</label
                     >
                     <textarea
                         id="instructions"
                         v-model="form.instructions"
                         rows="6"
-                        class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         :aria-describedby="
                             form.errors.instructions ? 'instructions-error' : undefined
                         "
@@ -91,14 +96,16 @@ function submit(): void {
                 </div>
 
                 <div>
-                    <label for="due_at" class="block text-sm font-medium text-gray-700"
+                    <label
+                        for="due_at"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >Due Date</label
                     >
                     <input
                         id="due_at"
                         v-model="form.due_at"
                         type="datetime-local"
-                        class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         :aria-describedby="form.errors.due_at ? 'due-at-error' : undefined"
                         :aria-invalid="!!form.errors.due_at"
                     />
@@ -116,7 +123,9 @@ function submit(): void {
                 </div>
 
                 <div>
-                    <label for="max_score" class="block text-sm font-medium text-gray-700"
+                    <label
+                        for="max_score"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                         >Max Score</label
                     >
                     <input
@@ -126,7 +135,7 @@ function submit(): void {
                         min="1"
                         max="9999"
                         step="0.01"
-                        class="mt-1 block w-40 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        class="mt-1 block w-40 rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         :aria-describedby="form.errors.max_score ? 'max-score-error' : undefined"
                         :aria-invalid="!!form.errors.max_score"
                     />
@@ -145,9 +154,12 @@ function submit(): void {
                         id="allow_resubmission"
                         v-model="form.allow_resubmission"
                         type="checkbox"
-                        class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                        class="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
                     />
-                    <label for="allow_resubmission" class="text-sm font-medium text-gray-700">
+                    <label
+                        for="allow_resubmission"
+                        class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                         Allow resubmission
                     </label>
                 </div>
@@ -163,7 +175,7 @@ function submit(): void {
                 </button>
                 <Link
                     :href="route('assignments.show', assignment.id)"
-                    class="rounded border border-gray-300 px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                    class="rounded border border-gray-300 dark:border-slate-600 px-5 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 >
                     Cancel
                 </Link>

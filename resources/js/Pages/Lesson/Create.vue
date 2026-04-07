@@ -24,7 +24,9 @@ function submit(): void {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Create Lesson</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                Create Lesson
+            </h2>
         </template>
 
         <div class="py-12">
@@ -45,7 +47,7 @@ function submit(): void {
                                 <div>
                                     <label
                                         for="title"
-                                        class="block text-sm font-medium text-gray-700"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         Title <span aria-hidden="true">*</span>
                                     </label>
@@ -54,7 +56,7 @@ function submit(): void {
                                         v-model="form.title"
                                         type="text"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.title ? 'title-error' : undefined
                                         "
@@ -73,7 +75,7 @@ function submit(): void {
                                 <div>
                                     <label
                                         for="type"
-                                        class="block text-sm font-medium text-gray-700"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         Type <span aria-hidden="true">*</span>
                                     </label>
@@ -81,7 +83,7 @@ function submit(): void {
                                         id="type"
                                         v-model="form.type"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.type ? 'type-error' : undefined
                                         "
@@ -105,12 +107,12 @@ function submit(): void {
                                 <div>
                                     <label
                                         for="content"
-                                        class="block text-sm font-medium text-gray-700"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         Content
                                         <span
                                             v-if="form.type === 'link'"
-                                            class="text-xs text-gray-500"
+                                            class="text-xs text-gray-500 dark:text-slate-400"
                                             >(URL)</span
                                         >
                                     </label>
@@ -119,7 +121,7 @@ function submit(): void {
                                         id="content"
                                         v-model="form.content"
                                         rows="6"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.content ? 'content-error' : undefined
                                         "
@@ -133,7 +135,7 @@ function submit(): void {
                                         :placeholder="
                                             form.type === 'link' ? 'https://...' : 'Optional notes'
                                         "
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.content ? 'content-error' : undefined
                                         "
@@ -152,7 +154,7 @@ function submit(): void {
                                 <div>
                                     <label
                                         for="order_no"
-                                        class="block text-sm font-medium text-gray-700"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         Order (optional)
                                     </label>
@@ -161,7 +163,7 @@ function submit(): void {
                                         v-model.number="form.order_no"
                                         type="number"
                                         min="0"
-                                        class="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        class="mt-1 block w-32 rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             form.errors.order_no ? 'order-error' : undefined
                                         "
@@ -181,7 +183,7 @@ function submit(): void {
                             <div class="mt-6 flex justify-end gap-3">
                                 <Link
                                     :href="route('modules.show', module.id)"
-                                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     Cancel
                                 </Link>

@@ -33,7 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'role',
+        'google_id',
         'bio',
         'phone',
     ];
@@ -41,6 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'google_id',
     ];
 
     protected function casts(): array

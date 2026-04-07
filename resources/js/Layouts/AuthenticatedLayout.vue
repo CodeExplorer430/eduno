@@ -3,9 +3,11 @@ import { ref, computed, watchEffect, onMounted, watch } from 'vue';
 import type { Component } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NotificationBell from '@/Components/NotificationBell.vue';
+import AccessibilityFAB from '@/Components/AccessibilityFAB.vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { Link, usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 import {
     HomeIcon,
     BookOpenIcon,
@@ -26,6 +28,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import type { PageProps } from '@/types';
 
+const { t } = useI18n();
 const page = usePage<PageProps>();
 const prefs = computed(() => page.props.userPrefs);
 const userRole = computed(() => page.props.auth?.user?.role);
@@ -62,32 +65,37 @@ function safeRoute(name: string): string {
 const navItems = computed<NavItem[]>(() => {
     const role = userRole.value;
     const base: NavItem[] = [
-        { label: 'Dashboard', href: route('dashboard'), icon: HomeIcon, routeName: 'dashboard' },
+        {
+            label: t('nav.dashboard'),
+            href: route('dashboard'),
+            icon: HomeIcon,
+            routeName: 'dashboard',
+        },
     ];
 
     if (role === 'student') {
         return [
             ...base,
             {
-                label: 'My Courses',
+                label: t('nav.my_courses'),
                 href: safeRoute('student.courses.index'),
                 icon: BookOpenIcon,
                 routeName: 'student.courses.*',
             },
             {
-                label: 'Assignments',
+                label: t('nav.assignments'),
                 href: safeRoute('student.assignments.index'),
                 icon: ClipboardDocumentListIcon,
                 routeName: 'student.assignments.*',
             },
             {
-                label: 'Grades',
+                label: t('nav.grades'),
                 href: safeRoute('student.grades.index'),
                 icon: AcademicCapIcon,
                 routeName: 'student.grades.*',
             },
             {
-                label: 'Announcements',
+                label: t('nav.announcements'),
                 href: safeRoute('student.announcements.index'),
                 icon: MegaphoneIcon,
                 routeName: 'student.announcements.*',
@@ -99,19 +107,19 @@ const navItems = computed<NavItem[]>(() => {
         return [
             ...base,
             {
-                label: 'My Courses',
+                label: t('nav.my_courses'),
                 href: safeRoute('instructor.courses.index'),
                 icon: BookOpenIcon,
                 routeName: 'instructor.courses.*',
             },
             {
-                label: 'Submissions',
+                label: t('nav.submissions'),
                 href: safeRoute('instructor.submissions.all'),
                 icon: DocumentTextIcon,
                 routeName: 'instructor.submissions.*',
             },
             {
-                label: 'Announcements',
+                label: t('nav.announcements'),
                 href: safeRoute('instructor.announcements.index'),
                 icon: MegaphoneIcon,
                 routeName: 'instructor.announcements.*',
@@ -122,25 +130,25 @@ const navItems = computed<NavItem[]>(() => {
     return [
         ...base,
         {
-            label: 'Users',
+            label: t('nav.users'),
             href: safeRoute('admin.users.index'),
             icon: UsersIcon,
             routeName: 'admin.users.*',
         },
         {
-            label: 'Courses',
+            label: t('nav.courses'),
             href: safeRoute('admin.courses.index'),
             icon: BookOpenIcon,
             routeName: 'admin.courses.*',
         },
         {
-            label: 'Reports',
+            label: t('nav.reports'),
             href: safeRoute('admin.reports.index'),
             icon: ChartBarIcon,
             routeName: 'admin.reports.*',
         },
         {
-            label: 'Audit Logs',
+            label: t('nav.audit_logs'),
             href: safeRoute('admin.audit-logs.index'),
             icon: ClipboardDocumentListIcon,
             routeName: 'admin.audit-logs.*',
@@ -152,7 +160,7 @@ const navItems = computed<NavItem[]>(() => {
             routeName: 'admin.flagged-submissions.*',
         },
         {
-            label: 'Settings',
+            label: t('nav.settings'),
             href: safeRoute('admin.settings.index'),
             icon: Cog6ToothIcon,
             routeName: 'admin.settings.*',
@@ -191,14 +199,14 @@ watchEffect(() => {
     html.classList.toggle('high-contrast', f?.['high-contrast'] ?? p?.high_contrast ?? false);
     html.classList.toggle('reduce-motion', p?.reduced_motion ?? false);
     html.classList.toggle('simplified', f?.['simplified-layout'] ?? p?.simplified_layout ?? false);
-    html.classList.toggle('dyslexia-font', p?.dyslexia_font ?? false);
+    html.classList.toggle('dyslexia-font', false);
     html.classList.toggle('dark', p?.dark_mode ?? false);
 });
 </script>
 
 <template>
     <div>
-        <Toast position="top-right" />
+        <Toast position="top-right" :pt="{ root: { style: 'z-index: 9999' } }" />
 
         <!-- Skip link — first focusable element -->
         <a
@@ -213,7 +221,7 @@ watchEffect(() => {
             id="sidebar"
             aria-label="Main navigation"
             :class="[
-                'fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-800 transition-all duration-300 ease-in-out overflow-visible',
+                'fixed inset-y-0 left-0 z-50 flex flex-col bg-[#f1f3ff] transition-all duration-300 ease-in-out overflow-visible',
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
                 sidebarCollapsed ? 'lg:w-16' : 'lg:w-64',
                 'w-64',
@@ -222,9 +230,9 @@ watchEffect(() => {
             <!-- Logo row -->
             <div class="flex h-16 shrink-0 items-center justify-between px-4">
                 <Link :href="route('dashboard')" class="flex items-center gap-2 overflow-hidden">
-                    <ApplicationLogo class="h-8 w-8 shrink-0 fill-current text-white" />
+                    <ApplicationLogo class="h-8 w-8 shrink-0 fill-current text-[#00174b]" />
                     <span
-                        class="overflow-hidden text-lg font-bold text-white transition-all duration-300"
+                        class="overflow-hidden text-lg font-bold text-[#00174b] transition-all duration-300"
                         :class="sidebarCollapsed ? 'lg:hidden' : 'lg:block'"
                     >
                         Eduno
@@ -232,7 +240,7 @@ watchEffect(() => {
                 </Link>
                 <button
                     type="button"
-                    class="rounded-md p-1 text-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white lg:hidden"
+                    class="rounded-md p-1 text-[#434655] hover:text-[#00174b] focus:outline-none focus:ring-2 focus:ring-[#004ac6] lg:hidden"
                     aria-label="Close navigation"
                     @click="sidebarOpen = false"
                 >
@@ -249,11 +257,11 @@ watchEffect(() => {
                             :title="sidebarCollapsed ? item.label : undefined"
                             :aria-current="route().current(item.routeName) ? 'page' : undefined"
                             :class="[
-                                'flex items-center rounded-md py-2 text-sm font-medium transition-colors',
+                                'flex items-center py-2 text-sm font-medium transition-colors',
                                 sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
                                 route().current(item.routeName)
-                                    ? 'bg-blue-600 text-white'
-                                    : 'text-slate-300 hover:bg-slate-700 hover:text-white',
+                                    ? 'rounded-full bg-[#dbe1ff] text-[#00174b]'
+                                    : 'rounded-lg text-[#434655] hover:bg-[#e1e8fd] hover:text-[#00174b]',
                             ]"
                         >
                             <component
@@ -272,7 +280,7 @@ watchEffect(() => {
             <!-- Collapse toggle — floating tab at sidebar right edge (desktop only) -->
             <button
                 type="button"
-                class="absolute -right-3 top-[4.5rem] hidden h-6 w-6 items-center justify-center rounded-full border border-slate-600 bg-slate-700 text-slate-300 shadow-md transition-colors hover:bg-slate-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white lg:flex"
+                class="absolute -right-3 top-[4.5rem] hidden h-6 w-6 items-center justify-center rounded-full bg-[#f1f3ff] text-[#434655] shadow-sm transition-colors hover:bg-[#e1e8fd] hover:text-[#00174b] focus:outline-none focus:ring-2 focus:ring-[#004ac6] lg:flex"
                 :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
                 @click="toggleCollapse"
             >
@@ -281,12 +289,12 @@ watchEffect(() => {
             </button>
 
             <!-- User section -->
-            <div class="shrink-0 border-t border-slate-700 px-3 py-4">
+            <div class="shrink-0 bg-[#e9edff] px-3 py-4">
                 <div class="mb-3 px-3" :class="sidebarCollapsed ? 'lg:hidden' : ''">
-                    <p class="text-sm font-medium text-white">
+                    <p class="text-sm font-medium text-[#00174b]">
                         {{ $page.props.auth.user.name }}
                     </p>
-                    <p class="text-xs capitalize text-slate-400">
+                    <p class="text-xs capitalize text-[#434655]">
                         {{ $page.props.auth.user.role }}
                     </p>
                 </div>
@@ -296,7 +304,7 @@ watchEffect(() => {
                             :href="route('profile.edit')"
                             :title="sidebarCollapsed ? 'Profile' : undefined"
                             :class="[
-                                'flex items-center rounded-md py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white',
+                                'flex items-center rounded-lg py-2 text-sm text-[#434655] transition-colors hover:bg-[#e1e8fd] hover:text-[#00174b]',
                                 sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
                             ]"
                         >
@@ -309,7 +317,7 @@ watchEffect(() => {
                             :href="route('profile.accessibility.edit')"
                             :title="sidebarCollapsed ? 'Accessibility' : undefined"
                             :class="[
-                                'flex items-center rounded-md py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white',
+                                'flex items-center rounded-lg py-2 text-sm text-[#434655] transition-colors hover:bg-[#e1e8fd] hover:text-[#00174b]',
                                 sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
                             ]"
                         >
@@ -324,7 +332,7 @@ watchEffect(() => {
                             as="button"
                             :title="sidebarCollapsed ? 'Log Out' : undefined"
                             :class="[
-                                'flex w-full items-center rounded-md py-2 text-sm text-slate-300 transition-colors hover:bg-slate-700 hover:text-white',
+                                'flex w-full items-center rounded-lg py-2 text-sm text-[#434655] transition-colors hover:bg-[#e1e8fd] hover:text-[#00174b]',
                                 sidebarCollapsed ? 'lg:justify-center lg:px-2' : 'gap-3 px-3',
                             ]"
                         >
@@ -356,12 +364,12 @@ watchEffect(() => {
         >
             <!-- Top header -->
             <header
-                class="sticky top-0 z-30 flex h-16 items-center gap-4 bg-white px-4 shadow-sm sm:px-6 dark:bg-slate-900 dark:shadow-slate-800"
+                class="sticky top-0 z-30 flex h-16 items-center gap-4 bg-[#f9f9ff]/80 px-4 backdrop-blur-[20px] sm:px-6"
             >
                 <!-- Hamburger (mobile only) -->
                 <button
                     type="button"
-                    class="rounded-md p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden dark:text-slate-300 dark:hover:text-white"
+                    class="rounded-md p-1 text-[#434655] hover:text-[#00174b] focus:outline-none focus:ring-2 focus:ring-[#004ac6] lg:hidden"
                     :aria-expanded="sidebarOpen"
                     aria-controls="sidebar"
                     aria-label="Open navigation"
@@ -382,16 +390,19 @@ watchEffect(() => {
             <!-- Page content -->
             <main
                 id="main-content"
-                class="flex-1 min-w-0 overflow-x-hidden bg-slate-50 pb-16 lg:pb-0 dark:bg-slate-950"
+                class="flex-1 min-w-0 overflow-x-hidden bg-[#f9f9ff] pb-16 lg:pb-0"
             >
                 <slot />
             </main>
         </div>
 
+        <!-- Accessibility FAB -->
+        <AccessibilityFAB />
+
         <!-- Mobile bottom navigation -->
         <nav
             aria-label="Mobile bottom navigation"
-            class="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-stretch bg-slate-800 lg:hidden"
+            class="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-stretch bg-[#f1f3ff] lg:hidden"
             style="padding-bottom: env(safe-area-inset-bottom)"
         >
             <Link
@@ -399,13 +410,18 @@ watchEffect(() => {
                 :key="item.label"
                 :href="item.href"
                 :aria-current="route().current(item.routeName) ? 'page' : undefined"
-                :class="[
-                    'flex flex-1 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors',
-                    route().current(item.routeName) ? 'text-blue-400' : 'text-slate-400',
-                ]"
+                class="flex flex-1 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors"
+                :class="route().current(item.routeName) ? 'text-[#004ac6]' : 'text-[#434655]'"
             >
-                <component :is="item.icon" class="h-5 w-5 shrink-0" aria-hidden="true" />
-                <span>{{ item.label }}</span>
+                <span
+                    :class="[
+                        'flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 transition-colors',
+                        route().current(item.routeName) ? 'bg-[#dbe1ff]' : '',
+                    ]"
+                >
+                    <component :is="item.icon" class="h-5 w-5 shrink-0" aria-hidden="true" />
+                    <span class="max-w-[4rem] truncate">{{ item.label }}</span>
+                </span>
             </Link>
         </nav>
     </div>

@@ -7,10 +7,10 @@ const { prefs, updatePref } = useA11yPrefs();
 <template>
     <section aria-labelledby="a11y-prefs-heading">
         <header>
-            <h2 id="a11y-prefs-heading" class="text-lg font-medium text-gray-900">
+            <h2 id="a11y-prefs-heading" class="text-lg font-medium text-gray-900 dark:text-white">
                 Accessibility Preferences
             </h2>
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Customise how Eduno looks and behaves for your comfort.
             </p>
         </header>
@@ -19,10 +19,13 @@ const { prefs, updatePref } = useA11yPrefs();
             <!-- Dyslexia-friendly font -->
             <div class="flex items-center justify-between">
                 <div>
-                    <label for="dyslexia-font" class="font-medium text-gray-700 text-sm">
+                    <label
+                        for="dyslexia-font"
+                        class="font-medium text-gray-700 text-sm dark:text-gray-300"
+                    >
                         Dyslexia-friendly font
                     </label>
-                    <p id="dyslexia-font-desc" class="text-xs text-gray-500">
+                    <p id="dyslexia-font-desc" class="text-xs text-gray-500 dark:text-slate-400">
                         Uses OpenDyslexic to improve readability.
                     </p>
                 </div>
@@ -47,10 +50,13 @@ const { prefs, updatePref } = useA11yPrefs();
             <!-- Reduced motion -->
             <div class="flex items-center justify-between">
                 <div>
-                    <label for="reduced-motion" class="font-medium text-gray-700 text-sm">
+                    <label
+                        for="reduced-motion"
+                        class="font-medium text-gray-700 text-sm dark:text-gray-300"
+                    >
                         Reduce motion
                     </label>
-                    <p id="reduced-motion-desc" class="text-xs text-gray-500">
+                    <p id="reduced-motion-desc" class="text-xs text-gray-500 dark:text-slate-400">
                         Disables animations and transitions.
                     </p>
                 </div>
@@ -75,10 +81,13 @@ const { prefs, updatePref } = useA11yPrefs();
             <!-- High contrast -->
             <div class="flex items-center justify-between">
                 <div>
-                    <label for="high-contrast" class="font-medium text-gray-700 text-sm">
+                    <label
+                        for="high-contrast"
+                        class="font-medium text-gray-700 text-sm dark:text-gray-300"
+                    >
                         High contrast
                     </label>
-                    <p id="high-contrast-desc" class="text-xs text-gray-500">
+                    <p id="high-contrast-desc" class="text-xs text-gray-500 dark:text-slate-400">
                         Increases visual contrast across the interface.
                     </p>
                 </div>
@@ -104,10 +113,13 @@ const { prefs, updatePref } = useA11yPrefs();
 
     <section aria-labelledby="notification-prefs-heading" class="mt-8">
         <header>
-            <h2 id="notification-prefs-heading" class="text-lg font-medium text-gray-900">
+            <h2
+                id="notification-prefs-heading"
+                class="text-lg font-medium text-gray-900 dark:text-white"
+            >
                 Notification Preferences
             </h2>
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Choose which email notifications you want to receive from Eduno.
             </p>
         </header>
@@ -116,10 +128,16 @@ const { prefs, updatePref } = useA11yPrefs();
             <!-- Email notifications -->
             <div class="flex items-center justify-between">
                 <div>
-                    <label for="email-notifications" class="font-medium text-gray-700 text-sm">
+                    <label
+                        for="email-notifications"
+                        class="font-medium text-gray-700 text-sm dark:text-gray-300"
+                    >
                         Email notifications
                     </label>
-                    <p id="email-notifications-desc" class="text-xs text-gray-500">
+                    <p
+                        id="email-notifications-desc"
+                        class="text-xs text-gray-500 dark:text-slate-400"
+                    >
                         Receive deadline reminders and grade release alerts via email.
                     </p>
                 </div>
@@ -146,10 +164,13 @@ const { prefs, updatePref } = useA11yPrefs();
             <!-- Email digest -->
             <div class="flex items-center justify-between">
                 <div>
-                    <label for="email-digest" class="font-medium text-gray-700 text-sm">
+                    <label
+                        for="email-digest"
+                        class="font-medium text-gray-700 text-sm dark:text-gray-300"
+                    >
                         Email digest for announcements
                     </label>
-                    <p id="email-digest-desc" class="text-xs text-gray-500">
+                    <p id="email-digest-desc" class="text-xs text-gray-500 dark:text-slate-400">
                         Receive a daily digest of instructor announcements instead of individual
                         emails.
                     </p>

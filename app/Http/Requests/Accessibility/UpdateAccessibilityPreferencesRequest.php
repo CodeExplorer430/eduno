@@ -21,7 +21,9 @@ class UpdateAccessibilityPreferencesRequest extends FormRequest
             'high_contrast' => ['required', 'boolean'],
             'reduced_motion' => ['required', 'boolean'],
             'simplified_layout' => ['required', 'boolean'],
-            'language' => ['required', 'in:en'],
+            'dark_mode' => ['required', 'boolean'],
+            'language' => ['required', 'in:en,fil'],
+            'email_notifications' => ['required', 'boolean'],
         ];
     }
 }

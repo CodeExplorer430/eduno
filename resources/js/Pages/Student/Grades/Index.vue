@@ -56,10 +56,10 @@ function scoreBarClass(pct: number): string {
 }
 
 function gradeBadgeClass(pct: number): string {
-    if (pct >= 90) return 'bg-green-100 text-green-700';
-    if (pct >= 75) return 'bg-blue-100 text-blue-700';
-    if (pct >= 60) return 'bg-amber-100 text-amber-700';
-    return 'bg-red-100 text-red-700';
+    if (pct >= 90) return 'bg-green-50 text-green-700';
+    if (pct >= 75) return 'bg-[#dbe1ff] text-[#00174b]';
+    if (pct >= 60) return 'bg-amber-50 text-amber-700';
+    return 'bg-red-50 text-[#ba1a1a]';
 }
 
 function gradeLetter(pct: number): string {
@@ -81,25 +81,23 @@ function gradeLetter(pct: number): string {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-semibold leading-tight text-gray-800">My Grades</h1>
+            <h1 class="text-lg font-semibold text-[#141b2b]">My Grades</h1>
         </template>
 
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             <!-- Average stat card -->
             <div v-if="averageScore !== null" class="mb-6">
-                <div
-                    class="overflow-hidden rounded-xl bg-white px-6 py-5 shadow-sm ring-1 ring-gray-100 sm:max-w-xs"
-                >
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <div class="rounded-2xl bg-white px-6 py-5 sm:max-w-xs">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-[#434655]">
                         Average Score
                     </p>
                     <p
                         class="mt-1 text-3xl font-bold"
-                        :class="averageScore >= 75 ? 'text-green-600' : 'text-red-600'"
+                        :class="averageScore >= 75 ? 'text-green-600' : 'text-[#ba1a1a]'"
                     >
                         {{ averageScore }}%
                     </p>
-                    <p class="mt-0.5 text-sm text-gray-500">
+                    <p class="mt-0.5 text-sm text-[#434655]">
                         Across {{ grades.length }} grade{{ grades.length !== 1 ? 's' : '' }}
                     </p>
                 </div>
@@ -120,17 +118,17 @@ function gradeLetter(pct: number): string {
                     <li
                         v-for="grade in grades"
                         :key="grade.id"
-                        class="overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-2xl bg-white px-5 py-4"
                     >
-                        <p class="text-sm font-semibold text-gray-900">
+                        <p class="text-sm font-semibold text-[#141b2b]">
                             {{ grade.submission?.assignment?.course_section?.course?.title ?? '—' }}
-                            <span class="font-normal text-gray-400 text-xs ml-1">
+                            <span class="ml-1 text-xs font-normal text-[#737686]">
                                 {{
                                     grade.submission?.assignment?.course_section?.section_name ?? ''
                                 }}
                             </span>
                         </p>
-                        <p class="mt-0.5 text-sm text-gray-600">
+                        <p class="mt-0.5 text-sm text-[#434655]">
                             {{ grade.submission?.assignment?.title ?? '—' }}
                         </p>
                         <div class="mt-2 flex items-center gap-3">
@@ -154,17 +152,17 @@ function gradeLetter(pct: number): string {
                                     )
                                 }}
                             </span>
-                            <span class="text-sm font-medium text-gray-800">
+                            <span class="text-sm font-medium text-[#141b2b]">
                                 {{ grade.score }}
-                                <span class="font-normal text-gray-400"
+                                <span class="font-normal text-[#737686]"
                                     >/ {{ grade.submission?.assignment?.max_score ?? '?' }}</span
                                 >
                             </span>
                         </div>
-                        <p v-if="grade.feedback" class="mt-2 line-clamp-2 text-xs text-gray-500">
+                        <p v-if="grade.feedback" class="mt-2 line-clamp-2 text-xs text-[#434655]">
                             {{ grade.feedback }}
                         </p>
-                        <p class="mt-2 text-xs text-gray-400">
+                        <p class="mt-2 text-xs text-[#737686]">
                             {{ formatDate(grade.released_at) }}
                         </p>
                     </li>
@@ -172,57 +170,57 @@ function gradeLetter(pct: number): string {
 
                 <div
                     v-if="grades.length > 0"
-                    class="hidden sm:block overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    class="hidden sm:block overflow-hidden rounded-2xl bg-white"
                 >
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-100" aria-label="My grades">
-                            <thead class="bg-gray-50">
+                        <table class="min-w-full" aria-label="My grades">
+                            <thead class="bg-[#f1f3ff]">
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#434655]"
                                     >
                                         Course
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#434655]"
                                     >
                                         Assignment
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#434655]"
                                     >
                                         Score
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#434655]"
                                     >
                                         Grade
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#434655]"
                                     >
                                         Feedback
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#434655]"
                                     >
                                         Released
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100 bg-white">
+                            <tbody>
                                 <tr
                                     v-for="grade in grades"
                                     :key="grade.id"
-                                    class="transition-colors hover:bg-gray-50"
+                                    class="transition-colors hover:bg-[#f1f3ff]"
                                 >
-                                    <td class="px-6 py-4 text-sm text-gray-800">
+                                    <td class="px-6 py-4 text-sm text-[#141b2b]">
                                         <template
                                             v-if="grade.submission?.assignment?.course_section"
                                         >
@@ -232,22 +230,22 @@ function gradeLetter(pct: number): string {
                                                         .course?.title ?? '—'
                                                 }}
                                             </span>
-                                            <span class="mt-0.5 block text-xs text-gray-500">
+                                            <span class="mt-0.5 block text-xs text-[#434655]">
                                                 {{
                                                     grade.submission.assignment.course_section
                                                         .section_name
                                                 }}
                                             </span>
                                         </template>
-                                        <span v-else class="text-gray-400">—</span>
+                                        <span v-else class="text-[#737686]">—</span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-800">
+                                    <td class="px-6 py-4 text-sm text-[#141b2b]">
                                         {{ grade.submission?.assignment?.title ?? '—' }}
                                     </td>
                                     <td class="px-6 py-4 text-sm">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="h-2 w-24 overflow-hidden rounded-full bg-gray-100"
+                                                class="h-1.5 w-24 overflow-hidden rounded-full bg-[#e1e8fd]"
                                             >
                                                 <div
                                                     role="progressbar"
@@ -276,11 +274,11 @@ function gradeLetter(pct: number): string {
                                                 ></div>
                                             </div>
                                             <span
-                                                class="font-semibold text-gray-900"
+                                                class="font-semibold text-[#141b2b]"
                                                 :aria-label="`Score: ${grade.score} out of ${grade.submission?.assignment?.max_score ?? '?'}`"
                                             >
                                                 {{ grade.score }}
-                                                <span class="font-normal text-gray-400"
+                                                <span class="font-normal text-[#737686]"
                                                     >/
                                                     {{
                                                         grade.submission?.assignment?.max_score ??
@@ -290,17 +288,29 @@ function gradeLetter(pct: number): string {
                                             </span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm font-semibold">
-                                        {{
-                                            gradeLetter(
-                                                scorePercent(
-                                                    grade.score,
-                                                    grade.submission?.assignment?.max_score
+                                    <td class="px-6 py-4 text-sm">
+                                        <span
+                                            class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                                            :class="
+                                                gradeBadgeClass(
+                                                    scorePercent(
+                                                        grade.score,
+                                                        grade.submission?.assignment?.max_score
+                                                    )
                                                 )
-                                            )
-                                        }}
+                                            "
+                                        >
+                                            {{
+                                                gradeLetter(
+                                                    scorePercent(
+                                                        grade.score,
+                                                        grade.submission?.assignment?.max_score
+                                                    )
+                                                )
+                                            }}
+                                        </span>
                                     </td>
-                                    <td class="max-w-xs px-6 py-4 text-sm text-gray-600">
+                                    <td class="max-w-xs px-6 py-4 text-sm text-[#434655]">
                                         <span
                                             v-if="grade.feedback"
                                             class="line-clamp-2"
@@ -308,9 +318,9 @@ function gradeLetter(pct: number): string {
                                         >
                                             {{ grade.feedback }}
                                         </span>
-                                        <span v-else class="text-gray-400">No feedback</span>
+                                        <span v-else class="text-[#737686]">No feedback</span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                    <td class="px-6 py-4 text-sm text-[#434655]">
                                         {{ formatDate(grade.released_at) }}
                                     </td>
                                 </tr>

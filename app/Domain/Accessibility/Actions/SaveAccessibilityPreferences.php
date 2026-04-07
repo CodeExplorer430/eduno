@@ -15,9 +15,9 @@ class SaveAccessibilityPreferences
     {
     }
 
-    public function execute(User $user, string $fontSize, bool $highContrast, bool $reducedMotion, bool $simplifiedLayout, string $language): UserPreference
+    public function execute(User $user, string $fontSize, bool $highContrast, bool $reducedMotion, bool $simplifiedLayout, bool $darkMode, string $language, bool $emailNotifications): UserPreference
     {
-        return DB::transaction(function () use ($user, $fontSize, $highContrast, $reducedMotion, $simplifiedLayout, $language): UserPreference {
+        return DB::transaction(function () use ($user, $fontSize, $highContrast, $reducedMotion, $simplifiedLayout, $darkMode, $language, $emailNotifications): UserPreference {
             /** @var UserPreference $preferences */
             $preferences = UserPreference::updateOrCreate(
                 ['user_id' => $user->id],
@@ -26,7 +26,9 @@ class SaveAccessibilityPreferences
                     'high_contrast' => $highContrast,
                     'reduced_motion' => $reducedMotion,
                     'simplified_layout' => $simplifiedLayout,
+                    'dark_mode' => $darkMode,
                     'language' => $language,
+                    'email_notifications' => $emailNotifications,
                 ]
             );
 
@@ -40,7 +42,9 @@ class SaveAccessibilityPreferences
                     'high_contrast' => $highContrast,
                     'reduced_motion' => $reducedMotion,
                     'simplified_layout' => $simplifiedLayout,
+                    'dark_mode' => $darkMode,
                     'language' => $language,
+                    'email_notifications' => $emailNotifications,
                 ]
             );
 

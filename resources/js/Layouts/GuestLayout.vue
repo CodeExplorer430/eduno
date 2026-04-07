@@ -17,7 +17,7 @@ withDefaults(
         <!-- LEFT PANEL — decorative brand copy, hidden below lg -->
         <aside
             aria-hidden="true"
-            class="hidden lg:flex lg:w-5/12 lg:flex-col lg:justify-between relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-500 p-12 text-white"
+            class="hidden lg:flex lg:w-5/12 lg:flex-col lg:justify-between relative overflow-hidden bg-[linear-gradient(135deg,#004ac6_0%,#2563eb_100%)] p-12 text-white"
         >
             <!-- Decorative blobs -->
             <div
@@ -96,9 +96,12 @@ withDefaults(
         </aside>
 
         <!-- RIGHT PANEL — white form area -->
-        <div class="flex flex-1 flex-col bg-white min-h-screen">
+        <div class="flex flex-1 flex-col bg-white min-h-screen dark:bg-slate-950">
             <!-- Top gradient accent bar -->
-            <div class="h-1 bg-gradient-to-r from-blue-600 to-cyan-500" aria-hidden="true" />
+            <div
+                class="h-1 bg-[linear-gradient(135deg,#004ac6_0%,#2563eb_100%)]"
+                aria-hidden="true"
+            />
 
             <div
                 class="flex flex-1 flex-col items-center justify-center px-6 py-12 sm:px-10 lg:px-16"
@@ -106,14 +109,18 @@ withDefaults(
                 <!-- Mobile-only logo -->
                 <div class="mb-8 lg:hidden">
                     <Link href="/" aria-label="Go to Eduno homepage">
-                        <ApplicationLogo class="h-14 w-14 fill-current text-blue-600" />
+                        <ApplicationLogo class="h-14 w-14 fill-current text-[#004ac6]" />
                     </Link>
                 </div>
 
                 <!-- Optional form heading -->
                 <div v-if="title || subtitle" class="mb-8 w-full max-w-md">
-                    <h1 v-if="title" class="text-2xl font-bold text-gray-900">{{ title }}</h1>
-                    <p v-if="subtitle" class="mt-1 text-sm text-gray-500">{{ subtitle }}</p>
+                    <h1 v-if="title" class="text-2xl font-bold text-[#141b2b]">
+                        {{ title }}
+                    </h1>
+                    <p v-if="subtitle" class="mt-1 text-sm text-[#434655]">
+                        {{ subtitle }}
+                    </p>
                 </div>
 
                 <!-- Form slot -->

@@ -25,7 +25,9 @@ it('saves valid preferences', function () {
         'high_contrast' => true,
         'reduced_motion' => false,
         'simplified_layout' => true,
+        'dark_mode' => false,
         'language' => 'en',
+        'email_notifications' => true,
     ]);
 
     $response->assertRedirect(route('profile.accessibility.edit'));
@@ -49,7 +51,9 @@ it('rejects invalid font_size', function () {
         'high_contrast' => false,
         'reduced_motion' => false,
         'simplified_layout' => false,
+        'dark_mode' => false,
         'language' => 'en',
+        'email_notifications' => true,
     ]);
 
     $response->assertSessionHasErrors('font_size');
@@ -65,7 +69,9 @@ it('creates preferences record when none exists', function () {
         'high_contrast' => false,
         'reduced_motion' => false,
         'simplified_layout' => false,
+        'dark_mode' => false,
         'language' => 'en',
+        'email_notifications' => true,
     ]);
 
     expect(UserPreference::where('user_id', $user->id)->exists())->toBeTrue();
@@ -80,6 +86,7 @@ it('updates existing preferences on subsequent save', function () {
         'reduced_motion' => false,
         'simplified_layout' => false,
         'language' => 'en',
+        'email_notifications' => true,
     ]);
 
     $this->actingAs($user)->patch(route('profile.accessibility.update'), [
@@ -87,7 +94,9 @@ it('updates existing preferences on subsequent save', function () {
         'high_contrast' => true,
         'reduced_motion' => true,
         'simplified_layout' => false,
+        'dark_mode' => false,
         'language' => 'en',
+        'email_notifications' => false,
     ]);
 
     $this->assertDatabaseHas('user_preferences', [
@@ -95,6 +104,7 @@ it('updates existing preferences on subsequent save', function () {
         'font_size' => 'xlarge',
         'high_contrast' => true,
         'reduced_motion' => true,
+        'email_notifications' => false,
     ]);
 
     expect(UserPreference::where('user_id', $user->id)->count())->toBe(1);

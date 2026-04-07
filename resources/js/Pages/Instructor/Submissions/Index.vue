@@ -55,10 +55,13 @@ const filteredSubmissions = computed<Submission[]>(() =>
             <section aria-labelledby="gradebook-heading">
                 <header class="mb-6 flex items-start justify-between gap-4">
                     <div>
-                        <h1 id="gradebook-heading" class="text-xl font-bold text-gray-900">
+                        <h1
+                            id="gradebook-heading"
+                            class="text-xl font-bold text-gray-900 dark:text-white"
+                        >
                             {{ assignment.title }}
                         </h1>
-                        <p class="mt-1 text-sm text-gray-500">
+                        <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
                             {{ assignment.course_section?.course?.title }} —
                             {{ assignment.course_section?.section_name }}
                             &middot; Max score: {{ assignment.max_score }}
@@ -70,7 +73,7 @@ const filteredSubmissions = computed<Submission[]>(() =>
                             'inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500',
                             showFlaggedOnly
                                 ? 'border-amber-400 bg-amber-50 text-amber-700 hover:bg-amber-100'
-                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600',
                         ]"
                         :aria-pressed="showFlaggedOnly"
                         aria-label="Toggle show flagged submissions only"
@@ -81,7 +84,7 @@ const filteredSubmissions = computed<Submission[]>(() =>
                     </button>
                     <a
                         :href="route('instructor.submissions.export', assignment.id)"
-                        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         aria-label="Export submissions as CSV"
                     >
                         Export CSV
@@ -91,67 +94,69 @@ const filteredSubmissions = computed<Submission[]>(() =>
                 <div
                     v-if="filteredSubmissions.length === 0"
                     role="status"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
-                    <p class="text-sm text-gray-500">No submissions yet.</p>
+                    <p class="text-sm text-gray-500 dark:text-slate-400">No submissions yet.</p>
                 </div>
 
                 <div
                     v-else
-                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
                     <div class="overflow-x-auto">
                         <table
-                            class="min-w-full divide-y divide-gray-100"
+                            class="min-w-full divide-y divide-gray-100 dark:divide-slate-700"
                             aria-label="Student submissions"
                         >
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-50 dark:bg-slate-900">
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         Student
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         Submitted
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         Late
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         Attempt
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         Score
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         Status
                                     </th>
                                     <th
                                         scope="col"
-                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                        class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     >
                                         <span class="sr-only">Actions</span>
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100 bg-white">
+                            <tbody
+                                class="divide-y divide-gray-100 bg-white dark:divide-slate-700 dark:bg-slate-800"
+                            >
                                 <SubmissionRow
                                     v-for="sub in filteredSubmissions"
                                     :key="sub.id"

@@ -1,0 +1,2 @@
+E2E test upload fixture file.
+This file is used by submission.spec.ts to test file upload functionality.

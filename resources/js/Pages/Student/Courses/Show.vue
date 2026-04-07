@@ -138,10 +138,10 @@ const submissionStatus = (assignment: Assignment): string => {
 };
 
 const statusBadge: Record<string, string> = {
-    not_submitted: 'bg-gray-100 text-gray-500',
-    submitted: 'bg-blue-100 text-blue-700',
-    graded: 'bg-green-100 text-green-700',
-    returned: 'bg-purple-100 text-purple-700',
+    not_submitted: 'bg-[#f1f3ff] text-[#434655]',
+    submitted: 'bg-[#dbe1ff] text-[#00174b]',
+    graded: 'bg-green-50 text-green-700',
+    returned: 'bg-[#dbe1ff] text-[#004ac6]',
 };
 
 const statusLabel: Record<string, string> = {
@@ -177,36 +177,39 @@ const formatDate = (dateString: string | null): string => {
 
         <div class="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
             <!-- Course hero -->
-            <section
-                aria-labelledby="course-info-heading"
-                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
-            >
-                <div class="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-6">
+            <section aria-labelledby="course-info-heading" class="overflow-hidden rounded-2xl">
+                <div class="bg-[linear-gradient(135deg,#004ac6_0%,#2563eb_100%)] px-6 py-6">
                     <span
-                        class="block text-xs font-semibold uppercase tracking-wider text-blue-100"
+                        class="block text-xs font-semibold uppercase tracking-wider text-white/70"
                     >
                         {{ section.course.code }}
                     </span>
                     <h1 id="course-info-heading" class="mt-1 text-2xl font-bold text-white">
                         {{ section.course.title }}
                     </h1>
+                    <p class="mt-2 text-sm text-white/70">
+                        {{ section.enrollments.length }} student{{
+                            section.enrollments.length === 1 ? '' : 's'
+                        }}
+                        enrolled
+                    </p>
                 </div>
-                <div class="px-6 py-5">
-                    <p v-if="section.course.description" class="mb-4 text-sm text-gray-600">
+                <div class="bg-white px-6 py-5">
+                    <p v-if="section.course.description" class="mb-4 text-sm text-[#434655]">
                         {{ section.course.description }}
                     </p>
                     <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
                         <div>
-                            <dt class="font-medium text-gray-500">Section</dt>
-                            <dd class="mt-0.5 text-gray-800">{{ section.section_name }}</dd>
+                            <dt class="font-medium text-[#434655]">Section</dt>
+                            <dd class="mt-0.5 text-[#141b2b]">{{ section.section_name }}</dd>
                         </div>
                         <div>
-                            <dt class="font-medium text-gray-500">Instructor</dt>
-                            <dd class="mt-0.5 text-gray-800">{{ section.instructor.name }}</dd>
+                            <dt class="font-medium text-[#434655]">Instructor</dt>
+                            <dd class="mt-0.5 text-[#141b2b]">{{ section.instructor.name }}</dd>
                         </div>
                         <div v-if="section.schedule_text">
-                            <dt class="font-medium text-gray-500">Schedule</dt>
-                            <dd class="mt-0.5 text-gray-800">{{ section.schedule_text }}</dd>
+                            <dt class="font-medium text-[#434655]">Schedule</dt>
+                            <dd class="mt-0.5 text-[#141b2b]">{{ section.schedule_text }}</dd>
                         </div>
                     </dl>
                 </div>
@@ -214,7 +217,7 @@ const formatDate = (dateString: string | null): string => {
 
             <!-- Tab bar -->
             <div
-                class="flex gap-1 overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-100"
+                class="flex gap-1 rounded-2xl bg-[#f1f3ff] p-1"
                 role="tablist"
                 aria-label="Course tabs"
             >
@@ -226,11 +229,11 @@ const formatDate = (dateString: string | null): string => {
                     role="tab"
                     :aria-selected="activeTab === tab.key"
                     :aria-controls="`tabpanel-${tab.key}`"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                    class="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-1"
                     :class="
                         activeTab === tab.key
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-gray-600 hover:bg-gray-50'
+                            ? 'bg-white text-[#141b2b] shadow-sm'
+                            : 'text-[#434655] hover:bg-[#e1e8fd] hover:text-[#141b2b]'
                     "
                     @click="setTab(tab.key)"
                 >
@@ -248,40 +251,40 @@ const formatDate = (dateString: string | null): string => {
             >
                 <div
                     v-if="announcements.length === 0"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center"
+                    class="rounded-2xl bg-[#f1f3ff] px-6 py-12 text-center"
                 >
                     <MegaphoneIcon
-                        class="mx-auto mb-3 h-10 w-10 text-gray-300"
+                        class="mx-auto mb-3 h-10 w-10 text-[#737686]"
                         aria-hidden="true"
                     />
-                    <p class="text-sm text-gray-500">No announcements yet.</p>
+                    <p class="text-sm text-[#434655]">No announcements yet.</p>
                 </div>
 
                 <ul v-else class="space-y-4" aria-label="Announcements">
                     <li
                         v-for="announcement in announcements"
                         :key="announcement.id"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-2xl bg-white"
                     >
                         <article :aria-labelledby="`ann-${announcement.id}-title`">
                             <div class="px-6 py-5">
                                 <div class="flex items-start gap-3">
                                     <div
-                                        class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50"
+                                        class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#dbe1ff]"
                                     >
                                         <MegaphoneIcon
-                                            class="h-4 w-4 text-blue-600"
+                                            class="h-4 w-4 text-[#004ac6]"
                                             aria-hidden="true"
                                         />
                                     </div>
                                     <div class="min-w-0">
                                         <h3
                                             :id="`ann-${announcement.id}-title`"
-                                            class="font-semibold text-gray-900"
+                                            class="font-semibold text-[#141b2b]"
                                         >
                                             {{ announcement.title }}
                                         </h3>
-                                        <p class="mt-0.5 text-xs text-gray-500">
+                                        <p class="mt-0.5 text-xs text-[#737686]">
                                             <time
                                                 v-if="announcement.published_at"
                                                 :datetime="announcement.published_at"
@@ -289,7 +292,7 @@ const formatDate = (dateString: string | null): string => {
                                                 {{ formatDate(announcement.published_at) }}
                                             </time>
                                         </p>
-                                        <p class="mt-3 text-sm text-gray-600">
+                                        <p class="mt-3 text-sm text-[#434655]">
                                             {{ announcement.body }}
                                         </p>
                                     </div>
@@ -310,12 +313,9 @@ const formatDate = (dateString: string | null): string => {
             >
                 <!-- Modules -->
                 <section aria-labelledby="modules-heading">
-                    <div class="mb-4 flex items-center gap-3">
-                        <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                        <h2 id="modules-heading" class="text-lg font-semibold text-gray-800">
-                            Course Modules
-                        </h2>
-                    </div>
+                    <h2 id="modules-heading" class="mb-4 text-base font-semibold text-[#141b2b]">
+                        Course Modules
+                    </h2>
 
                     <div role="search" class="mb-4">
                         <label for="material-search" class="sr-only">Search course materials</label>
@@ -324,14 +324,14 @@ const formatDate = (dateString: string | null): string => {
                             v-model="searchQuery"
                             type="search"
                             placeholder="Search modules and lessons…"
-                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full rounded-xl bg-[#f1f3ff] px-4 py-2.5 text-sm text-[#141b2b] placeholder-[#737686] transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             aria-label="Search course materials"
                         />
                     </div>
 
                     <p
                         v-if="searchQuery.trim() && filteredModules.length === 0"
-                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400"
+                        class="rounded-2xl bg-[#f1f3ff] px-6 py-8 text-center text-sm text-[#434655]"
                         role="status"
                     >
                         No modules or lessons match your search.
@@ -341,25 +341,27 @@ const formatDate = (dateString: string | null): string => {
                         <article
                             v-for="module in filteredModules"
                             :key="module.id"
-                            class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+                            class="overflow-hidden rounded-2xl bg-white"
                         >
                             <button
                                 type="button"
-                                class="flex w-full items-center justify-between px-5 py-3 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                                class="flex w-full items-center justify-between px-5 py-3 text-left hover:bg-[#f1f3ff] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#004ac6]"
                                 :aria-expanded="expandedModules.has(module.id)"
                                 :aria-controls="`module-content-${module.id}`"
                                 @click="toggleModule(module.id)"
                             >
                                 <div class="flex items-center gap-3">
                                     <span
-                                        class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700"
+                                        class="flex h-6 w-6 items-center justify-center rounded-full bg-[#dbe1ff] text-xs font-bold text-[#004ac6]"
                                     >
                                         {{ module.order_no }}
                                     </span>
-                                    <h3 class="font-medium text-gray-900">{{ module.title }}</h3>
+                                    <h3 class="font-medium text-[#141b2b]">
+                                        {{ module.title }}
+                                    </h3>
                                 </div>
                                 <ChevronDownIcon
-                                    class="h-5 w-5 text-gray-400 transition-transform"
+                                    class="h-5 w-5 text-[#737686] transition-transform"
                                     :class="expandedModules.has(module.id) ? 'rotate-180' : ''"
                                     aria-hidden="true"
                                 />
@@ -371,23 +373,23 @@ const formatDate = (dateString: string | null): string => {
                             >
                                 <div
                                     v-if="module.lessons.length > 0"
-                                    class="border-t border-gray-100 px-5 py-3"
+                                    class="bg-[#f1f3ff] px-5 py-3"
                                 >
-                                    <ul class="divide-y divide-gray-100" aria-label="Lessons">
+                                    <ul class="space-y-1" aria-label="Lessons">
                                         <li
                                             v-for="lesson in module.lessons"
                                             :key="lesson.id"
-                                            class="py-2 text-sm"
+                                            class="rounded-lg px-3 py-2 text-sm hover:bg-[#e1e8fd]"
                                         >
                                             <div class="flex items-center justify-between">
                                                 <Link
                                                     :href="route('student.lessons.show', lesson.id)"
-                                                    class="rounded font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    class="rounded font-medium text-[#004ac6] hover:text-[#00174b] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                                                 >
                                                     {{ lesson.title }}
                                                 </Link>
                                                 <span
-                                                    class="ms-3 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500"
+                                                    class="ms-3 rounded-full bg-white px-2 py-0.5 text-xs text-[#434655]"
                                                     aria-label="Lesson type"
                                                 >
                                                     {{ lessonTypeLabel(lesson.type) }}
@@ -403,20 +405,20 @@ const formatDate = (dateString: string | null): string => {
                                                 <li
                                                     v-for="resource in lesson.resources"
                                                     :key="resource.id"
-                                                    class="text-xs text-gray-500"
+                                                    class="text-xs text-[#434655]"
                                                 >
-                                                    <span class="font-medium text-gray-700">{{
+                                                    <span class="font-medium text-[#141b2b]">{{
                                                         resource.title
                                                     }}</span>
                                                     <span
                                                         v-if="resource.reading_time_minutes"
-                                                        class="ml-2 inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-600"
+                                                        class="ml-2 inline-flex items-center rounded-full bg-[#dbe1ff] px-2 py-0.5 text-xs text-[#004ac6]"
                                                     >
                                                         {{ resource.reading_time_minutes }} min read
                                                     </span>
                                                     <span
                                                         v-if="resource.accessibility_notes"
-                                                        class="ml-1 text-gray-400"
+                                                        class="ml-1 text-[#737686]"
                                                     >
                                                         — {{ resource.accessibility_notes }}
                                                     </span>
@@ -425,10 +427,7 @@ const formatDate = (dateString: string | null): string => {
                                         </li>
                                     </ul>
                                 </div>
-                                <div
-                                    v-else
-                                    class="border-t border-gray-100 px-5 py-3 text-sm text-gray-400"
-                                >
+                                <div v-else class="bg-[#f1f3ff] px-5 py-3 text-sm text-[#434655]">
                                     No lessons in this module yet.
                                 </div>
                             </div>
@@ -437,7 +436,7 @@ const formatDate = (dateString: string | null): string => {
 
                     <p
                         v-else
-                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400"
+                        class="rounded-2xl bg-[#f1f3ff] px-6 py-8 text-center text-sm text-[#434655]"
                     >
                         No modules have been published for this course yet.
                     </p>
@@ -445,27 +444,27 @@ const formatDate = (dateString: string | null): string => {
 
                 <!-- Assignments -->
                 <section aria-labelledby="assignments-heading">
-                    <div class="mb-4 flex items-center gap-3">
-                        <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                        <h2 id="assignments-heading" class="text-lg font-semibold text-gray-800">
-                            Assignments
-                        </h2>
-                    </div>
+                    <h2
+                        id="assignments-heading"
+                        class="mb-4 text-base font-semibold text-[#141b2b]"
+                    >
+                        Assignments
+                    </h2>
 
                     <div v-if="assignments.length > 0" class="space-y-3">
                         <div
                             v-for="assignment in assignments"
                             :key="assignment.id"
-                            class="flex items-center justify-between overflow-hidden rounded-xl bg-white px-5 py-4 shadow-sm ring-1 ring-gray-100"
+                            class="flex items-center justify-between rounded-2xl bg-white px-5 py-4"
                         >
                             <div>
                                 <Link
                                     :href="route('student.assignments.show', assignment.id)"
-                                    class="font-medium text-gray-900 hover:text-blue-600 focus:outline-none focus:underline"
+                                    class="font-medium text-[#141b2b] hover:text-[#004ac6] focus:outline-none focus:underline"
                                 >
                                     {{ assignment.title }}
                                 </Link>
-                                <p class="mt-0.5 text-xs text-gray-500">
+                                <p class="mt-0.5 text-xs text-[#434655]">
                                     Due {{ formatDate(assignment.due_at) }} &middot;
                                     {{ assignment.max_score }} pts
                                 </p>
@@ -474,7 +473,7 @@ const formatDate = (dateString: string | null): string => {
                                 class="shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium"
                                 :class="
                                     statusBadge[submissionStatus(assignment)] ??
-                                    'bg-gray-100 text-gray-500'
+                                    'bg-[#f1f3ff] text-[#434655]'
                                 "
                             >
                                 {{
@@ -487,7 +486,7 @@ const formatDate = (dateString: string | null): string => {
 
                     <p
                         v-else
-                        class="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-gray-400"
+                        class="rounded-2xl bg-[#f1f3ff] px-6 py-8 text-center text-sm text-[#434655]"
                     >
                         No assignments have been published for this course yet.
                     </p>
@@ -503,36 +502,36 @@ const formatDate = (dateString: string | null): string => {
             >
                 <div class="space-y-4">
                     <!-- Instructor card -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
-                            <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                            <h2 class="font-semibold text-gray-900">Instructor</h2>
+                    <div class="overflow-hidden rounded-2xl bg-white">
+                        <div class="bg-[#f1f3ff] px-6 py-3">
+                            <h2 class="text-sm font-medium text-[#434655]">Instructor</h2>
                         </div>
                         <div class="flex items-center gap-4 px-6 py-5">
                             <span
-                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700"
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#dbe1ff] font-bold text-[#004ac6]"
                                 aria-hidden="true"
                             >
                                 {{ section.instructor.name.charAt(0).toUpperCase() }}
                             </span>
                             <div>
-                                <p class="font-medium text-gray-900">
+                                <p class="font-medium text-[#141b2b]">
                                     {{ section.instructor.name }}
                                 </p>
-                                <p class="text-sm text-gray-500">{{ section.instructor.email }}</p>
+                                <p class="text-sm text-[#434655]">
+                                    {{ section.instructor.email }}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Student count (privacy-preserving) -->
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
-                            <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                            <h2 class="font-semibold text-gray-900">Students</h2>
+                    <div class="overflow-hidden rounded-2xl bg-white">
+                        <div class="bg-[#f1f3ff] px-6 py-3">
+                            <h2 class="text-sm font-medium text-[#434655]">Students</h2>
                         </div>
                         <div class="px-6 py-5">
-                            <p class="text-sm text-gray-600">
-                                <span class="font-semibold text-gray-900">{{
+                            <p class="text-sm text-[#434655]">
+                                <span class="font-semibold text-[#141b2b]">{{
                                     section.enrollments.length
                                 }}</span>
                                 student{{ section.enrollments.length === 1 ? '' : 's' }} enrolled in

@@ -265,7 +265,7 @@ const submissionCount = computed(
 
             <!-- Tab bar -->
             <div
-                class="mb-6 flex gap-1 overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-100"
+                class="mb-6 flex gap-1 overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 role="tablist"
                 aria-label="Section tabs"
             >
@@ -281,7 +281,7 @@ const submissionCount = computed(
                     :class="
                         activeTab === tab.key
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-gray-600 hover:bg-gray-50'
+                            : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-slate-700/50'
                     "
                     @click="setTab(tab.key)"
                 >
@@ -298,7 +298,9 @@ const submissionCount = computed(
                 aria-labelledby="tab-stream"
             >
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-base font-semibold text-gray-800">Announcements</h2>
+                    <h2 class="text-base font-semibold text-gray-800 dark:text-gray-200">
+                        Announcements
+                    </h2>
                     <Link
                         :href="
                             route('instructor.announcements.create') + `?section_id=${section.id}`
@@ -312,20 +314,20 @@ const submissionCount = computed(
 
                 <div
                     v-if="section.announcements.length === 0"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
                     <MegaphoneIcon
-                        class="mx-auto mb-3 h-10 w-10 text-gray-300"
+                        class="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-slate-600"
                         aria-hidden="true"
                     />
-                    <p class="text-sm text-gray-500">No announcements yet.</p>
+                    <p class="text-sm text-gray-500 dark:text-slate-400">No announcements yet.</p>
                 </div>
 
                 <ul v-else class="space-y-4" aria-label="Announcements">
                     <li
                         v-for="announcement in section.announcements"
                         :key="announcement.id"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                     >
                         <article :aria-labelledby="`ann-${announcement.id}-title`">
                             <div class="px-6 py-5">
@@ -342,11 +344,13 @@ const submissionCount = computed(
                                         <div>
                                             <h3
                                                 :id="`ann-${announcement.id}-title`"
-                                                class="font-semibold text-gray-900"
+                                                class="font-semibold text-gray-900 dark:text-white"
                                             >
                                                 {{ announcement.title }}
                                             </h3>
-                                            <p class="mt-0.5 text-xs text-gray-500">
+                                            <p
+                                                class="mt-0.5 text-xs text-gray-500 dark:text-slate-400"
+                                            >
                                                 <span
                                                     class="inline-block rounded-full px-2 py-0.5 text-xs"
                                                     :class="
@@ -384,7 +388,9 @@ const submissionCount = computed(
                                         <template
                                             v-if="announcementConfirmTarget === announcement.id"
                                         >
-                                            <span class="text-gray-600">Delete?</span>
+                                            <span class="text-gray-600 dark:text-gray-400"
+                                                >Delete?</span
+                                            >
                                             <button
                                                 type="button"
                                                 class="rounded text-red-600 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-500"
@@ -395,7 +401,7 @@ const submissionCount = computed(
                                             </button>
                                             <button
                                                 type="button"
-                                                class="rounded text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                class="rounded text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-slate-400 dark:hover:text-gray-200"
                                                 @click="announcementConfirmTarget = null"
                                             >
                                                 No
@@ -412,7 +418,9 @@ const submissionCount = computed(
                                         </button>
                                     </div>
                                 </div>
-                                <p class="mt-3 line-clamp-2 text-sm text-gray-600">
+                                <p
+                                    class="mt-3 line-clamp-2 text-sm text-gray-600 dark:text-gray-400"
+                                >
                                     {{ announcement.body }}
                                 </p>
                             </div>
@@ -431,12 +439,15 @@ const submissionCount = computed(
                 <!-- Modules section -->
                 <section aria-labelledby="modules-heading" class="mb-8">
                     <div class="mb-4 flex items-center justify-between">
-                        <h2 id="modules-heading" class="text-base font-semibold text-gray-800">
+                        <h2
+                            id="modules-heading"
+                            class="text-base font-semibold text-gray-800 dark:text-gray-200"
+                        >
                             Modules
                         </h2>
                         <Link
                             :href="route('instructor.courses.modules.create', section.id)"
-                            class="inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-blue-600 ring-1 ring-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-blue-600 ring-1 ring-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:ring-slate-600 dark:hover:bg-slate-600"
                         >
                             <PlusIcon class="h-4 w-4" aria-hidden="true" />
                             Add Module
@@ -452,7 +463,7 @@ const submissionCount = computed(
                             v-model="searchQuery"
                             type="search"
                             placeholder="Search modules and lessons…"
-                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                             aria-label="Search modules and lessons"
                         />
                     </div>
@@ -474,7 +485,7 @@ const submissionCount = computed(
 
                     <p
                         v-else-if="filteredModules.length === 0"
-                        class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-8 text-center text-sm text-gray-500"
+                        class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-8 text-center text-sm text-gray-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400"
                         role="status"
                     >
                         No modules or lessons match your search.
@@ -484,11 +495,11 @@ const submissionCount = computed(
                         <article
                             v-for="module in filteredModules"
                             :key="module.id"
-                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                             :aria-labelledby="`module-title-${module.id}`"
                         >
                             <header
-                                class="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-5 py-3"
+                                class="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-5 py-3 dark:border-slate-700 dark:bg-slate-900"
                             >
                                 <div class="flex items-center gap-3">
                                     <span
@@ -499,7 +510,7 @@ const submissionCount = computed(
                                     <div>
                                         <h3
                                             :id="`module-title-${module.id}`"
-                                            class="font-semibold text-gray-900"
+                                            class="font-semibold text-gray-900 dark:text-white"
                                         >
                                             {{ module.title }}
                                         </h3>
@@ -536,7 +547,7 @@ const submissionCount = computed(
                                                 module: module.id,
                                             })
                                         "
-                                        class="inline-flex items-center gap-1 rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        class="inline-flex items-center gap-1 rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:text-white"
                                         :aria-label="`Edit module ${module.title}`"
                                     >
                                         <PencilSquareIcon class="h-4 w-4" aria-hidden="true" />
@@ -554,7 +565,10 @@ const submissionCount = computed(
                                 </div>
                             </header>
 
-                            <div v-if="module.lessons.length > 0" class="divide-y divide-gray-100">
+                            <div
+                                v-if="module.lessons.length > 0"
+                                class="divide-y divide-gray-100 dark:divide-slate-700"
+                            >
                                 <div
                                     v-for="lesson in module.lessons"
                                     :key="lesson.id"
@@ -562,11 +576,12 @@ const submissionCount = computed(
                                 >
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-3">
-                                            <span class="text-sm font-medium text-gray-800">{{
-                                                lesson.title
-                                            }}</span>
                                             <span
-                                                class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500"
+                                                class="text-sm font-medium text-gray-800 dark:text-gray-200"
+                                                >{{ lesson.title }}</span
+                                            >
+                                            <span
+                                                class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-slate-700 dark:text-slate-400"
                                                 >{{ lesson.type }}</span
                                             >
                                             <span
@@ -608,7 +623,7 @@ const submissionCount = computed(
                                                         }
                                                     )
                                                 "
-                                                class="inline-flex items-center gap-1 rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                class="inline-flex items-center gap-1 rounded text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:text-white"
                                                 :aria-label="`Edit lesson ${lesson.title}`"
                                             >
                                                 <PencilSquareIcon
@@ -637,7 +652,7 @@ const submissionCount = computed(
                                         <li
                                             v-for="resource in lesson.resources"
                                             :key="resource.id"
-                                            class="flex items-start justify-between text-xs text-gray-600"
+                                            class="flex items-start justify-between text-xs text-gray-600 dark:text-gray-400"
                                         >
                                             <div>
                                                 <span>{{ resource.title }}</span>
@@ -649,7 +664,7 @@ const submissionCount = computed(
                                                 </span>
                                                 <span
                                                     v-if="resource.accessibility_notes"
-                                                    class="ml-1 text-gray-400"
+                                                    class="ml-1 text-gray-400 dark:text-slate-500"
                                                 >
                                                     — {{ resource.accessibility_notes }}
                                                 </span>
@@ -672,7 +687,7 @@ const submissionCount = computed(
                                     </ul>
                                 </div>
                             </div>
-                            <div v-else class="px-5 py-3 text-sm text-gray-400">
+                            <div v-else class="px-5 py-3 text-sm text-gray-400 dark:text-slate-500">
                                 No lessons yet.
                             </div>
                         </article>
@@ -682,12 +697,15 @@ const submissionCount = computed(
                 <!-- Assignments section -->
                 <section aria-labelledby="assignments-heading">
                     <div class="mb-4 flex items-center justify-between">
-                        <h2 id="assignments-heading" class="text-base font-semibold text-gray-800">
+                        <h2
+                            id="assignments-heading"
+                            class="text-base font-semibold text-gray-800 dark:text-gray-200"
+                        >
                             Assignments
                         </h2>
                         <Link
                             :href="route('instructor.courses.assignments.create', section.id)"
-                            class="inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-blue-600 ring-1 ring-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-blue-600 ring-1 ring-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:ring-slate-600 dark:hover:bg-slate-600"
                         >
                             <PlusIcon class="h-4 w-4" aria-hidden="true" />
                             Add Assignment
@@ -696,20 +714,22 @@ const submissionCount = computed(
 
                     <div
                         v-if="assignments.length === 0"
-                        class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-10 text-center"
+                        class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-10 text-center dark:border-slate-600 dark:bg-slate-800"
                     >
-                        <p class="text-sm text-gray-500">No published assignments yet.</p>
+                        <p class="text-sm text-gray-500 dark:text-slate-400">
+                            No published assignments yet.
+                        </p>
                     </div>
 
                     <div v-else class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div
                             v-for="assignment in assignments"
                             :key="assignment.id"
-                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                         >
                             <div class="px-5 py-4">
                                 <div class="flex items-start justify-between gap-2">
-                                    <h3 class="font-medium text-gray-900">
+                                    <h3 class="font-medium text-gray-900 dark:text-white">
                                         {{ assignment.title }}
                                     </h3>
                                     <Link
@@ -720,7 +740,7 @@ const submissionCount = computed(
                                         {{ submissionCount(assignment) }} submitted
                                     </Link>
                                 </div>
-                                <p class="mt-1 text-xs text-gray-500">
+                                <p class="mt-1 text-xs text-gray-500 dark:text-slate-400">
                                     Due: {{ formatDate(assignment.due_at) }} &middot;
                                     {{ assignment.max_score }} pts
                                 </p>
@@ -738,7 +758,7 @@ const submissionCount = computed(
                 aria-labelledby="tab-people"
             >
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-base font-semibold text-gray-800">
+                    <h2 class="text-base font-semibold text-gray-800 dark:text-gray-200">
                         Enrolled Students
                         <span
                             class="ml-2 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700"
@@ -750,49 +770,54 @@ const submissionCount = computed(
 
                 <div
                     v-if="students.length === 0"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
-                    <UsersIcon class="mx-auto mb-3 h-10 w-10 text-gray-300" aria-hidden="true" />
-                    <p class="text-sm text-gray-500">No students enrolled yet.</p>
+                    <UsersIcon
+                        class="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-slate-600"
+                        aria-hidden="true"
+                    />
+                    <p class="text-sm text-gray-500 dark:text-slate-400">
+                        No students enrolled yet.
+                    </p>
                 </div>
 
                 <div
                     v-else
-                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
                     <table
-                        class="min-w-full divide-y divide-gray-100"
+                        class="min-w-full divide-y divide-gray-100 dark:divide-slate-700"
                         aria-label="Enrolled students"
                     >
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 dark:bg-slate-900">
                             <tr>
                                 <th
                                     scope="col"
-                                    class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Student
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Email
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Enrolled
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Action
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody class="divide-y divide-gray-100 dark:divide-slate-700">
                             <tr v-for="student in students" :key="student.id">
                                 <td class="px-5 py-3">
                                     <div class="flex items-center gap-3">
@@ -802,13 +827,16 @@ const submissionCount = computed(
                                         >
                                             {{ student.name.charAt(0).toUpperCase() }}
                                         </span>
-                                        <span class="text-sm font-medium text-gray-900">{{
-                                            student.name
-                                        }}</span>
+                                        <span
+                                            class="text-sm font-medium text-gray-900 dark:text-white"
+                                            >{{ student.name }}</span
+                                        >
                                     </div>
                                 </td>
-                                <td class="px-5 py-3 text-sm text-gray-600">{{ student.email }}</td>
-                                <td class="px-5 py-3 text-sm text-gray-500">
+                                <td class="px-5 py-3 text-sm text-gray-600 dark:text-gray-400">
+                                    {{ student.email }}
+                                </td>
+                                <td class="px-5 py-3 text-sm text-gray-500 dark:text-slate-400">
                                     {{ formatDate(student.created_at) }}
                                 </td>
                                 <td class="px-5 py-3 text-right">
@@ -834,17 +862,19 @@ const submissionCount = computed(
                 role="tabpanel"
                 aria-labelledby="tab-grades"
             >
-                <h2 class="mb-4 text-base font-semibold text-gray-800">Gradebook</h2>
+                <h2 class="mb-4 text-base font-semibold text-gray-800 dark:text-gray-200">
+                    Gradebook
+                </h2>
 
                 <div
                     v-if="students.length === 0 || assignments.length === 0"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center"
+                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center dark:border-slate-600 dark:bg-slate-800"
                 >
                     <TableCellsIcon
-                        class="mx-auto mb-3 h-10 w-10 text-gray-300"
+                        class="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-slate-600"
                         aria-hidden="true"
                     />
-                    <p class="text-sm text-gray-500">
+                    <p class="text-sm text-gray-500 dark:text-slate-400">
                         {{
                             students.length === 0
                                 ? 'No students enrolled.'
@@ -855,14 +885,14 @@ const submissionCount = computed(
 
                 <div
                     v-else
-                    class="overflow-x-auto rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    class="overflow-x-auto rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 >
                     <table class="min-w-full text-sm" aria-label="Gradebook">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 dark:bg-slate-900">
                             <tr>
                                 <th
                                     scope="col"
-                                    class="sticky left-0 bg-gray-50 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="sticky left-0 bg-gray-50 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:bg-slate-900 dark:text-slate-400"
                                 >
                                     Student
                                 </th>
@@ -870,22 +900,22 @@ const submissionCount = computed(
                                     v-for="assignment in assignments"
                                     :key="assignment.id"
                                     scope="col"
-                                    class="max-w-[120px] truncate px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="max-w-[120px] truncate px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                     :title="assignment.title"
                                 >
                                     {{ assignment.title }}
                                     <span
-                                        class="block text-xs font-normal normal-case text-gray-400"
+                                        class="block text-xs font-normal normal-case text-gray-400 dark:text-slate-500"
                                     >
                                         Due {{ formatDate(assignment.due_at) }}
                                     </span>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody class="divide-y divide-gray-100 dark:divide-slate-700">
                             <tr v-for="student in students" :key="student.id">
                                 <td
-                                    class="sticky left-0 bg-white px-5 py-3 font-medium text-gray-900"
+                                    class="sticky left-0 bg-white px-5 py-3 font-medium text-gray-900 dark:bg-slate-800 dark:text-white"
                                 >
                                     {{ student.name }}
                                 </td>
@@ -927,7 +957,7 @@ const submissionCount = computed(
                                             <span v-else>Submitted</span>
                                         </Link>
                                     </template>
-                                    <span v-else class="text-gray-300">—</span>
+                                    <span v-else class="text-gray-300 dark:text-slate-600">—</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -935,7 +965,10 @@ const submissionCount = computed(
                 </div>
 
                 <!-- Legend -->
-                <div class="mt-3 flex items-center gap-4 text-xs text-gray-500" role="note">
+                <div
+                    class="mt-3 flex items-center gap-4 text-xs text-gray-500 dark:text-slate-400"
+                    role="note"
+                >
                     <span class="flex items-center gap-1">
                         <FlagIcon class="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
                         Amber = graded but unreleased
@@ -956,13 +989,17 @@ const submissionCount = computed(
             aria-modal="true"
             aria-labelledby="confirm-dialog-title"
         >
-            <div class="mx-4 max-w-sm rounded-xl bg-white p-6 shadow-xl ring-1 ring-gray-200">
-                <h2 id="confirm-dialog-title" class="font-semibold text-gray-900">Confirm</h2>
-                <p class="mt-2 text-sm text-gray-600">{{ confirm.message }}</p>
+            <div
+                class="mx-4 max-w-sm rounded-xl bg-white p-6 shadow-xl ring-1 ring-gray-200 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <h2 id="confirm-dialog-title" class="font-semibold text-gray-900 dark:text-white">
+                    Confirm
+                </h2>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ confirm.message }}</p>
                 <div class="mt-5 flex justify-end gap-3">
                     <button
                         type="button"
-                        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         @click="closeConfirm"
                     >
                         Cancel

@@ -46,17 +46,17 @@ const submit = (): void => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('instructor.courses.index')"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-gray-200"
                         >
                             Courses
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
                         Edit {{ course.title }}
                     </li>
                 </ol>
@@ -66,15 +66,20 @@ const submit = (): void => {
         <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
             <section
                 aria-labelledby="edit-course-heading"
-                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
             >
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
                     <div>
-                        <h1 id="edit-course-heading" class="font-semibold text-gray-900">
+                        <h1
+                            id="edit-course-heading"
+                            class="font-semibold text-gray-900 dark:text-white"
+                        >
                             Edit Course
                         </h1>
-                        <p class="text-xs text-gray-500">{{ course.title }}</p>
+                        <p class="text-xs text-gray-500 dark:text-slate-400">{{ course.title }}</p>
                     </div>
                 </div>
 

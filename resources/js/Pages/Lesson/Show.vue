@@ -88,11 +88,13 @@ const { formatBytes } = useFileSize();
                         ]"
                     />
                     <div class="mt-1 flex items-center gap-2">
-                        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                        <h2
+                            class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                        >
                             {{ lesson.title }}
                         </h2>
                         <span
-                            class="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-600"
+                            class="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium uppercase text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
                         >
                             {{ lesson.type }}
                         </span>
@@ -109,7 +111,7 @@ const { formatBytes } = useFileSize();
                 <div v-if="canManage" class="flex gap-2">
                     <button
                         type="button"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         :aria-label="lesson.published_at ? 'Unpublish lesson' : 'Publish lesson'"
                         @click="togglePublish"
                     >
@@ -117,7 +119,7 @@ const { formatBytes } = useFileSize();
                     </button>
                     <Link
                         :href="route('lessons.edit', lesson.id)"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         aria-label="Edit lesson"
                     >
                         Edit
@@ -133,7 +135,7 @@ const { formatBytes } = useFileSize();
                     <div class="p-6">
                         <template v-if="lesson.type === 'text'">
                             <div
-                                class="prose prose-sm max-w-none text-gray-700 whitespace-pre-line"
+                                class="prose prose-sm max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-line"
                             >
                                 {{ lesson.content }}
                             </div>
@@ -150,7 +152,7 @@ const { formatBytes } = useFileSize();
                             </a>
                         </template>
                         <template v-else>
-                            <p class="text-sm text-gray-500">
+                            <p class="text-sm text-gray-500 dark:text-slate-400">
                                 {{ lesson.content }}
                             </p>
                         </template>
@@ -159,7 +161,10 @@ const { formatBytes } = useFileSize();
 
                 <!-- Resources -->
                 <section aria-labelledby="resources-heading">
-                    <h3 id="resources-heading" class="text-lg font-semibold text-gray-800">
+                    <h3
+                        id="resources-heading"
+                        class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                    >
                         Resources
                     </h3>
 
@@ -167,7 +172,7 @@ const { formatBytes } = useFileSize();
                         v-if="resources.length === 0"
                         class="mt-4 overflow-hidden bg-white shadow-sm sm:rounded-lg"
                     >
-                        <div class="p-4 text-sm text-gray-500">
+                        <div class="p-4 text-sm text-gray-500 dark:text-slate-400">
                             No resources attached to this lesson.
                         </div>
                     </div>
@@ -179,10 +184,10 @@ const { formatBytes } = useFileSize();
                             class="flex items-center justify-between overflow-hidden bg-white px-4 py-3 shadow-sm sm:rounded-lg"
                         >
                             <div class="min-w-0">
-                                <p class="truncate font-medium text-gray-900">
+                                <p class="truncate font-medium text-gray-900 dark:text-white">
                                     {{ resource.title }}
                                 </p>
-                                <p class="text-xs text-gray-500">
+                                <p class="text-xs text-gray-500 dark:text-slate-400">
                                     {{ resource.mime_type }} &middot;
                                     {{ formatBytes(resource.size_bytes) }}
                                     <span class="ml-1 rounded bg-gray-100 px-1 py-0.5 capitalize">{{
@@ -221,7 +226,10 @@ const { formatBytes } = useFileSize();
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <div class="p-6">
-                        <h3 id="upload-heading" class="mb-4 text-base font-semibold text-gray-800">
+                        <h3
+                            id="upload-heading"
+                            class="mb-4 text-base font-semibold text-gray-800 dark:text-gray-200"
+                        >
                             Upload Resource
                         </h3>
 
@@ -243,7 +251,7 @@ const { formatBytes } = useFileSize();
                                 <div>
                                     <label
                                         for="resource-title"
-                                        class="block text-sm font-medium text-gray-700"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         Title <span aria-hidden="true">*</span>
                                     </label>
@@ -252,7 +260,7 @@ const { formatBytes } = useFileSize();
                                         v-model="uploadForm.title"
                                         type="text"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             uploadForm.errors.title
                                                 ? 'resource-title-error'
@@ -273,17 +281,19 @@ const { formatBytes } = useFileSize();
                                 <div>
                                     <label
                                         for="resource-file"
-                                        class="block text-sm font-medium text-gray-700"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         File <span aria-hidden="true">*</span>
-                                        <span class="ml-1 text-xs text-gray-500">(max 50 MB)</span>
+                                        <span class="ml-1 text-xs text-gray-500 dark:text-slate-400"
+                                            >(max 50 MB)</span
+                                        >
                                     </label>
                                     <input
                                         id="resource-file"
                                         type="file"
                                         required
                                         accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.mp4,.mp3,.png,.jpg,.jpeg,.gif"
-                                        class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        class="mt-1 block w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         :aria-describedby="
                                             uploadForm.errors.file
                                                 ? 'resource-file-error'
@@ -305,7 +315,7 @@ const { formatBytes } = useFileSize();
                                 <div>
                                     <label
                                         for="resource-visibility"
-                                        class="block text-sm font-medium text-gray-700"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     >
                                         Visibility <span aria-hidden="true">*</span>
                                     </label>
@@ -313,7 +323,7 @@ const { formatBytes } = useFileSize();
                                         id="resource-visibility"
                                         v-model="uploadForm.visibility"
                                         required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         :aria-describedby="
                                             uploadForm.errors.visibility
                                                 ? 'visibility-error'
@@ -360,16 +370,21 @@ const { formatBytes } = useFileSize();
         @close="confirmDeleteResourceId = null"
     >
         <div class="p-6">
-            <h2 id="delete-resource-title" class="text-lg font-semibold text-gray-900">
+            <h2
+                id="delete-resource-title"
+                class="text-lg font-semibold text-gray-900 dark:text-white"
+            >
                 Delete Resource?
             </h2>
-            <p class="mt-2 text-sm text-gray-600">
+            <p
+                class="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+            >
                 The file will be permanently removed. This cannot be undone.
             </p>
             <div class="mt-6 flex justify-end gap-3">
                 <button
                     type="button"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     @click="confirmDeleteResourceId = null"
                 >
                     Cancel

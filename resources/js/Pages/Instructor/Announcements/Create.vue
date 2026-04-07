@@ -42,10 +42,14 @@ function submit(): void {
         </template>
 
         <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
-            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+            <div
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                    <h1 class="font-semibold text-gray-900">New Announcement</h1>
+                    <h1 class="font-semibold text-gray-900 dark:text-white">New Announcement</h1>
                 </div>
 
                 <form class="px-6 py-6 space-y-5" novalidate @submit.prevent="submit">
@@ -55,7 +59,7 @@ function submit(): void {
                         <select
                             id="course_section_id"
                             v-model="form.course_section_id"
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                             :aria-describedby="
                                 form.errors.course_section_id ? 'section-error' : undefined
                             "
@@ -99,17 +103,19 @@ function submit(): void {
                             id="body"
                             v-model="form.body"
                             rows="6"
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                             :aria-describedby="form.errors.body ? 'body-error' : undefined"
                             required
                         ></textarea>
                         <InputError id="body-error" class="mt-1" :message="form.errors.body" />
                     </div>
 
-                    <div class="flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
+                    <div
+                        class="flex items-center justify-end gap-3 border-t border-gray-100 pt-4 dark:border-slate-700"
+                    >
                         <a
                             :href="route('instructor.announcements.index')"
-                            class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         >
                             Cancel
                         </a>

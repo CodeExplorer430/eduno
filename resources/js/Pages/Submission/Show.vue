@@ -36,7 +36,7 @@ function releaseGrade(): void {
 
     <main class="mx-auto max-w-3xl px-4 py-8">
         <nav aria-label="Breadcrumb" class="mb-4">
-            <ol class="flex gap-2 text-sm text-gray-500">
+            <ol class="flex gap-2 text-sm text-gray-500 dark:text-slate-400">
                 <li>
                     <Link
                         :href="route('assignments.show', submission.assignment_id)"
@@ -58,7 +58,7 @@ function releaseGrade(): void {
             >
                 ← Previous
             </Link>
-            <span v-else class="text-sm text-gray-400">← Previous</span>
+            <span v-else class="text-sm text-gray-400 dark:text-slate-500">← Previous</span>
 
             <Link
                 v-if="nextSubmissionId"
@@ -67,11 +67,11 @@ function releaseGrade(): void {
             >
                 Next →
             </Link>
-            <span v-else class="text-sm text-gray-400">Next →</span>
+            <span v-else class="text-sm text-gray-400 dark:text-slate-500">Next →</span>
         </nav>
 
         <h1 class="mb-2 text-2xl font-bold">Submission by {{ submission.student?.name }}</h1>
-        <p class="mb-6 text-sm text-gray-500">
+        <p class="mb-6 text-sm text-gray-500 dark:text-slate-400">
             Submitted {{ new Date(submission.submitted_at).toLocaleString() }}
             <span
                 v-if="submission.is_late"
@@ -89,25 +89,39 @@ function releaseGrade(): void {
                 <li
                     v-for="file in submission.files"
                     :key="file.id"
-                    class="flex items-center justify-between rounded border border-gray-200 px-4 py-3 text-sm"
+                    class="flex items-center justify-between rounded border border-gray-200 dark:border-slate-600 px-4 py-3 text-sm"
                 >
-                    <span class="font-medium text-gray-800">{{ file.original_name }}</span>
-                    <span class="text-gray-500">{{ (file.size_bytes / 1024).toFixed(1) }} KB</span>
+                    <span class="font-medium text-gray-800 dark:text-gray-200">{{
+                        file.original_name
+                    }}</span>
+                    <span class="text-gray-500 dark:text-slate-400"
+                        >{{ (file.size_bytes / 1024).toFixed(1) }} KB</span
+                    >
                 </li>
             </ul>
-            <p v-if="!submission.files?.length" class="text-sm text-gray-500" role="status">
+            <p
+                v-if="!submission.files?.length"
+                class="text-sm text-gray-500 dark:text-slate-400"
+                role="status"
+            >
                 No files attached.
             </p>
         </section>
 
         <!-- Instructor: grade form -->
-        <section v-if="isInstructor" class="rounded-lg border border-gray-200 bg-gray-50 p-5">
+        <section
+            v-if="isInstructor"
+            class="rounded-lg border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 p-5"
+        >
             <h2 class="mb-4 text-lg font-semibold">Grade</h2>
 
             <form novalidate @submit.prevent="submitGrade">
                 <div class="space-y-4">
                     <div>
-                        <label for="score" class="block text-sm font-medium text-gray-700">
+                        <label
+                            for="score"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
                             Score <span aria-hidden="true">*</span>
                         </label>
                         <input
@@ -117,7 +131,7 @@ function releaseGrade(): void {
                             min="0"
                             step="0.01"
                             required
-                            class="mt-1 block w-40 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            class="mt-1 block w-40 rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                             :aria-describedby="gradeForm.errors.score ? 'score-error' : undefined"
                             :aria-invalid="!!gradeForm.errors.score"
                         />
@@ -132,14 +146,16 @@ function releaseGrade(): void {
                     </div>
 
                     <div>
-                        <label for="feedback" class="block text-sm font-medium text-gray-700"
+                        <label
+                            for="feedback"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                             >Feedback</label
                         >
                         <textarea
                             id="feedback"
                             v-model="gradeForm.feedback"
                             rows="4"
-                            class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            class="mt-1 block w-full rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                             :aria-describedby="
                                 gradeForm.errors.feedback ? 'feedback-error' : undefined
                             "
@@ -200,8 +216,8 @@ function releaseGrade(): void {
                     </span>
                 </p>
                 <div v-if="submission.grade.feedback" class="mt-3">
-                    <p class="text-sm font-medium text-gray-700">Feedback:</p>
-                    <p class="mt-1 whitespace-pre-wrap text-sm text-gray-800">
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Feedback:</p>
+                    <p class="mt-1 whitespace-pre-wrap text-sm text-gray-800 dark:text-gray-200">
                         {{ submission.grade.feedback }}
                     </p>
                 </div>
@@ -209,7 +225,7 @@ function releaseGrade(): void {
 
             <div
                 v-else
-                class="rounded-lg border border-gray-200 bg-gray-50 p-5 text-sm text-gray-500"
+                class="rounded-lg border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 p-5 text-sm text-gray-500 dark:text-slate-400"
                 role="status"
             >
                 Your grade has not been released yet.

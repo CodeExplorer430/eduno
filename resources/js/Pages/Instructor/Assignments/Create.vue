@@ -79,7 +79,7 @@ const form = useForm<{
 });
 
 const submit = (): void => {
-    form.post(route('instructor.courses.assignments.store', { course: props.section.id }));
+    form.post(route('instructor.courses.assignments.store', props.section.id));
 };
 </script>
 
@@ -89,17 +89,19 @@ const submit = (): void => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('instructor.courses.index')"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-gray-200"
                         >
                             Courses
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800" aria-current="page">Create Assignment</li>
+                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
+                        Create Assignment
+                    </li>
                 </ol>
             </nav>
         </template>
@@ -107,15 +109,20 @@ const submit = (): void => {
         <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
             <section
                 aria-labelledby="create-assignment-heading"
-                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
             >
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
                     <div>
-                        <h1 id="create-assignment-heading" class="font-semibold text-gray-900">
+                        <h1
+                            id="create-assignment-heading"
+                            class="font-semibold text-gray-900 dark:text-white"
+                        >
                             Create Assignment
                         </h1>
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-gray-500 dark:text-slate-400">
                             {{ section.course?.title }} — {{ section.section_name }}
                         </p>
                     </div>
@@ -133,7 +140,7 @@ const submit = (): void => {
                                 id="assignment-title"
                                 v-model="form.title"
                                 type="text"
-                                class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 aria-describedby="assignment-title-error"
                                 :aria-invalid="!!form.errors.title"
                                 required
@@ -154,7 +161,7 @@ const submit = (): void => {
                                 rows="5"
                                 aria-describedby="assignment-instructions-error"
                                 :aria-invalid="!!form.errors.instructions"
-                                class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 placeholder="Describe what students need to do…"
                             ></textarea>
                             <InputError
@@ -171,7 +178,7 @@ const submit = (): void => {
                                     id="assignment-due-at"
                                     v-model="form.due_at"
                                     type="datetime-local"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     aria-describedby="assignment-due-at-error"
                                     :aria-invalid="!!form.errors.due_at"
                                 />
@@ -193,7 +200,7 @@ const submit = (): void => {
                                     type="number"
                                     min="0"
                                     step="0.01"
-                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                     aria-describedby="assignment-max-score-error"
                                     :aria-invalid="!!form.errors.max_score"
                                     required
@@ -211,20 +218,22 @@ const submit = (): void => {
                                 id="assignment-allow-resubmission"
                                 v-model="form.allow_resubmission"
                                 type="checkbox"
-                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800"
                             />
                             <label
                                 for="assignment-allow-resubmission"
-                                class="text-sm text-gray-700"
+                                class="text-sm text-gray-700 dark:text-gray-300"
                             >
                                 Allow resubmission
                             </label>
                         </div>
 
                         <fieldset>
-                            <legend class="mb-2 block text-sm font-medium text-gray-700">
+                            <legend
+                                class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                            >
                                 Accepted File Types
-                                <span class="ml-1 font-normal text-gray-500"
+                                <span class="ml-1 font-normal text-gray-500 dark:text-slate-400"
                                     >(leave all unchecked to accept any type)</span
                                 >
                             </legend>
@@ -239,7 +248,7 @@ const submit = (): void => {
                                     :class="
                                         isSelected(option)
                                             ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                            : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+                                            : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-400 dark:hover:border-slate-500'
                                     "
                                 >
                                     <input
@@ -270,11 +279,11 @@ const submit = (): void => {
                     </div>
 
                     <div
-                        class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4"
+                        class="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 dark:border-slate-700 dark:bg-slate-900"
                     >
                         <Link
                             :href="route('instructor.courses.index')"
-                            class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         >
                             Cancel
                         </Link>

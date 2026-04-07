@@ -29,18 +29,20 @@ const description = computed(() => {
 
 <template>
     <main
-        class="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-16 text-center"
+        class="flex min-h-screen flex-col items-center justify-center bg-gray-50 dark:bg-slate-900 px-4 py-16 text-center"
         role="main"
     >
         <p class="text-8xl font-extrabold text-indigo-600" aria-hidden="true">
             {{ status }}
         </p>
 
-        <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+        <h1
+            class="mt-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl"
+        >
             {{ title }}
         </h1>
 
-        <p class="mt-4 text-base text-gray-600">
+        <p class="mt-4 text-base text-gray-600 dark:text-gray-400 dark:text-slate-500">
             {{ description }}
         </p>
 

@@ -87,13 +87,13 @@ function getInitials(name: string): string {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-bold text-gray-900">Audit Logs</h1>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">Audit Logs</h1>
                 <div class="flex items-center gap-2">
                     <label for="audit-export-format" class="sr-only">Export format</label>
                     <select
                         id="audit-export-format"
                         v-model="exportFormat"
-                        class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     >
                         <option value="csv">CSV</option>
                         <option value="pdf">PDF</option>
@@ -101,7 +101,7 @@ function getInitials(name: string): string {
                     </select>
                     <a
                         :href="exportUrl"
-                        class="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         download
                     >
                         <ArrowDownTrayIcon class="h-4 w-4" aria-hidden="true" />
@@ -115,12 +115,12 @@ function getInitials(name: string): string {
             <!-- Filter bar -->
             <section
                 aria-label="Filter audit logs"
-                class="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-100"
+                class="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
             >
                 <div>
                     <label
                         for="filter_action"
-                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500"
+                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                         >Action</label
                     >
                     <input
@@ -128,13 +128,13 @@ function getInitials(name: string): string {
                         v-model="filterAction"
                         type="text"
                         placeholder="e.g. user.role_changed"
-                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     />
                 </div>
                 <div>
                     <label
                         for="filter_actor"
-                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500"
+                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                         >Actor Email</label
                     >
                     <input
@@ -142,38 +142,38 @@ function getInitials(name: string): string {
                         v-model="filterActorEmail"
                         type="email"
                         placeholder="user@example.com"
-                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     />
                 </div>
                 <div>
                     <label
                         for="filter_from"
-                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500"
+                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                         >From</label
                     >
                     <input
                         id="filter_from"
                         v-model="filterFrom"
                         type="date"
-                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     />
                 </div>
                 <div>
                     <label
                         for="filter_to"
-                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500"
+                        class="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                         >To</label
                     >
                     <input
                         id="filter_to"
                         v-model="filterTo"
                         type="date"
-                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="block rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     />
                 </div>
                 <button
                     type="button"
-                    class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                     @click="applyFilters"
                 >
                     Apply Filters
@@ -181,55 +181,61 @@ function getInitials(name: string): string {
             </section>
 
             <!-- Table -->
-            <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+            <div
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <div
+                    class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                >
                     <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
-                    <h2 class="font-semibold text-gray-900">Log Entries</h2>
+                    <h2 class="font-semibold text-gray-900 dark:text-white">Log Entries</h2>
                 </div>
                 <div class="overflow-x-auto">
                     <table
-                        class="min-w-full divide-y divide-gray-100"
+                        class="min-w-full divide-y divide-gray-100 dark:divide-slate-700"
                         aria-label="Audit log entries"
                     >
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 dark:bg-slate-900">
                             <tr>
                                 <th
                                     scope="col"
-                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Timestamp
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Actor
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Action
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Entity
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+                                    class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
                                 >
                                     Metadata
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 bg-white">
+                        <tbody
+                            class="divide-y divide-gray-100 bg-white dark:divide-slate-700 dark:bg-slate-800"
+                        >
                             <tr v-if="logs.data.length === 0">
                                 <td
                                     colspan="5"
-                                    class="px-6 py-12 text-center text-sm text-gray-400"
+                                    class="px-6 py-12 text-center text-sm text-gray-400 dark:text-slate-500"
                                 >
                                     No audit log entries found.
                                 </td>
@@ -237,9 +243,11 @@ function getInitials(name: string): string {
                             <tr
                                 v-for="log in logs.data"
                                 :key="log.id"
-                                class="transition-colors hover:bg-gray-50"
+                                class="transition-colors hover:bg-gray-50 dark:hover:bg-slate-700/50"
                             >
-                                <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-4 py-3 text-sm text-gray-500 dark:text-slate-400"
+                                >
                                     <time
                                         :datetime="log.created_at"
                                         :title="formatAbsolute(log.created_at)"
@@ -250,36 +258,41 @@ function getInitials(name: string): string {
                                 <td class="px-4 py-3 text-sm">
                                     <div v-if="log.actor" class="flex items-center gap-2">
                                         <div
-                                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-600"
+                                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-600 dark:bg-slate-700 dark:text-gray-300"
                                             aria-hidden="true"
                                         >
                                             {{ getInitials(log.actor.name) }}
                                         </div>
                                         <div>
-                                            <p class="font-medium text-gray-900">
+                                            <p class="font-medium text-gray-900 dark:text-white">
                                                 {{ log.actor.name }}
                                             </p>
-                                            <p class="text-xs text-gray-500">
+                                            <p class="text-xs text-gray-500 dark:text-slate-400">
                                                 {{ log.actor.email }}
                                             </p>
                                         </div>
                                     </div>
-                                    <span v-else class="text-gray-400 italic">System</span>
+                                    <span v-else class="text-gray-400 italic dark:text-slate-500"
+                                        >System</span
+                                    >
                                 </td>
                                 <td class="px-4 py-3">
                                     <span
-                                        class="inline-block rounded bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-700"
+                                        class="inline-block rounded bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-700 dark:bg-slate-700 dark:text-gray-300"
                                     >
                                         {{ log.action }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-xs text-gray-500">
+                                <td class="px-4 py-3 text-xs text-gray-500 dark:text-slate-400">
                                     <p>{{ log.entity_type }}</p>
-                                    <p v-if="log.entity_id" class="text-gray-400">
+                                    <p
+                                        v-if="log.entity_id"
+                                        class="text-gray-400 dark:text-slate-500"
+                                    >
                                         ID: {{ log.entity_id }}
                                     </p>
                                 </td>
-                                <td class="px-4 py-3 text-sm text-gray-500">
+                                <td class="px-4 py-3 text-sm text-gray-500 dark:text-slate-400">
                                     <details v-if="log.metadata">
                                         <summary
                                             class="cursor-pointer text-blue-600 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
@@ -291,7 +304,7 @@ function getInitials(name: string): string {
                                             >{{ JSON.stringify(log.metadata, null, 2) }}</pre
                                         >
                                     </details>
-                                    <span v-else class="text-gray-300">—</span>
+                                    <span v-else class="text-gray-300 dark:text-slate-600">—</span>
                                 </td>
                             </tr>
                         </tbody>

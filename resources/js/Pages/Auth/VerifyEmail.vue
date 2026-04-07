@@ -21,7 +21,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
     <GuestLayout title="Verify your email" subtitle="Check your inbox for a verification link">
         <Head title="Email Verification" />
 
-        <div class="mb-4 text-sm text-gray-600">
+        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500">
             Thanks for signing up! Before getting started, could you verify your email address by
             clicking on the link we just emailed to you? If you didn't receive the email, we will
             gladly send you another.
@@ -47,7 +47,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
                     :href="route('logout')"
                     method="post"
                     as="button"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 underline hover:text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >Log Out</Link
                 >
             </div>

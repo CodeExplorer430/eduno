@@ -21,7 +21,7 @@ function submit(): void {
 
     <main class="mx-auto max-w-2xl px-4 py-8">
         <nav aria-label="Breadcrumb" class="mb-4">
-            <ol class="flex gap-2 text-sm text-gray-500">
+            <ol class="flex gap-2 text-sm text-gray-500 dark:text-slate-400">
                 <li>
                     <Link
                         :href="route('announcements.show', announcement.id)"
@@ -40,7 +40,10 @@ function submit(): void {
         <form novalidate @submit.prevent="submit">
             <div class="space-y-5">
                 <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700">
+                    <label
+                        for="title"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                         Title <span aria-hidden="true">*</span>
                     </label>
                     <input
@@ -49,7 +52,7 @@ function submit(): void {
                         type="text"
                         required
                         autocomplete="off"
-                        class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         :aria-describedby="form.errors.title ? 'title-error' : undefined"
                         :aria-invalid="!!form.errors.title"
                     />
@@ -64,7 +67,10 @@ function submit(): void {
                 </div>
 
                 <div>
-                    <label for="body" class="block text-sm font-medium text-gray-700">
+                    <label
+                        for="body"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                         Body <span aria-hidden="true">*</span>
                     </label>
                     <textarea
@@ -72,7 +78,7 @@ function submit(): void {
                         v-model="form.body"
                         rows="8"
                         required
-                        class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         :aria-describedby="form.errors.body ? 'body-error' : undefined"
                         :aria-invalid="!!form.errors.body"
                     />
@@ -97,7 +103,7 @@ function submit(): void {
                 </button>
                 <Link
                     :href="route('announcements.show', announcement.id)"
-                    class="rounded border border-gray-300 px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                    class="rounded border border-gray-300 dark:border-slate-600 px-5 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                 >
                     Cancel
                 </Link>

@@ -86,8 +86,12 @@ function isPastDue(): boolean {
         <article>
             <header class="mb-6 flex items-start justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ assignment.title }}</h1>
-                    <div class="mt-2 flex flex-wrap gap-3 text-sm text-gray-600">
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                        {{ assignment.title }}
+                    </h1>
+                    <div
+                        class="mt-2 flex flex-wrap gap-3 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
                         <span>Max score: {{ assignment.max_score }}</span>
                         <span v-if="assignment.due_at">
                             Due: {{ new Date(assignment.due_at).toLocaleString() }}
@@ -104,14 +108,14 @@ function isPastDue(): boolean {
                 <div v-if="canManage" class="flex shrink-0 gap-2">
                     <button
                         type="button"
-                        class="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                        class="rounded border border-gray-300 dark:border-slate-600 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                         @click="togglePublish"
                     >
                         {{ assignment.published_at ? 'Unpublish' : 'Publish' }}
                     </button>
                     <Link
                         :href="route('assignments.edit', assignment.id)"
-                        class="rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                        class="rounded border border-gray-300 dark:border-slate-600 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                     >
                         Edit
                     </Link>
@@ -120,7 +124,7 @@ function isPastDue(): boolean {
 
             <section v-if="assignment.instructions" class="mb-8">
                 <h2 class="mb-2 text-lg font-semibold">Instructions</h2>
-                <div class="prose max-w-none text-gray-800">
+                <div class="prose max-w-none text-gray-800 dark:text-gray-200">
                     <p class="whitespace-pre-wrap">{{ assignment.instructions }}</p>
                 </div>
             </section>
@@ -129,18 +133,24 @@ function isPastDue(): boolean {
             <section v-if="canManage && submissions !== undefined">
                 <h2 class="mb-4 text-lg font-semibold">
                     Submissions
-                    <span class="ml-2 text-sm font-normal text-gray-500"
+                    <span class="ml-2 text-sm font-normal text-gray-500 dark:text-slate-400"
                         >({{ submissions.length }})</span
                     >
                 </h2>
 
-                <div v-if="submissions.length === 0" class="text-sm text-gray-500" role="status">
+                <div
+                    v-if="submissions.length === 0"
+                    class="text-sm text-gray-500 dark:text-slate-400"
+                    role="status"
+                >
                     No submissions yet.
                 </div>
 
                 <table v-else class="w-full border-collapse text-sm">
                     <thead>
-                        <tr class="border-b border-gray-200 text-left text-gray-600">
+                        <tr
+                            class="border-b border-gray-200 dark:border-slate-600 text-left text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                        >
                             <th scope="col" class="py-3 pr-4 font-medium">Student</th>
                             <th scope="col" class="py-3 pr-4 font-medium">Submitted</th>
                             <th scope="col" class="py-3 pr-4 font-medium">Attempt</th>
@@ -152,7 +162,7 @@ function isPastDue(): boolean {
                         <tr
                             v-for="submission in submissions"
                             :key="submission.id"
-                            class="border-b border-gray-100 hover:bg-gray-50"
+                            class="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50"
                         >
                             <td class="py-3 pr-4">
                                 <Link
@@ -162,7 +172,9 @@ function isPastDue(): boolean {
                                     {{ submission.student?.name }}
                                 </Link>
                             </td>
-                            <td class="py-3 pr-4 text-gray-600">
+                            <td
+                                class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                            >
                                 {{ new Date(submission.submitted_at).toLocaleString() }}
                                 <StatusBadge
                                     v-if="submission.is_late"
@@ -170,11 +182,19 @@ function isPastDue(): boolean {
                                     class="ml-1"
                                 />
                             </td>
-                            <td class="py-3 pr-4 text-gray-600">#{{ submission.attempt_no }}</td>
-                            <td class="py-3 pr-4 text-gray-600 capitalize">
+                            <td
+                                class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                            >
+                                #{{ submission.attempt_no }}
+                            </td>
+                            <td
+                                class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500 capitalize"
+                            >
                                 {{ submission.status }}
                             </td>
-                            <td class="py-3 text-gray-600">
+                            <td
+                                class="py-3 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                            >
                                 {{ submission.grade ? submission.grade.score : '—' }}
                             </td>
                         </tr>
@@ -184,16 +204,27 @@ function isPastDue(): boolean {
 
             <!-- Student: own submission status / upload form -->
             <section v-else-if="!canManage">
-                <div v-if="mySubmission" class="rounded-lg border border-gray-200 bg-gray-50 p-5">
+                <div
+                    v-if="mySubmission"
+                    class="rounded-lg border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 p-5"
+                >
                     <h2 class="mb-2 text-lg font-semibold">Your Submission</h2>
-                    <p class="text-sm text-gray-600">
+                    <p
+                        class="text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
                         Submitted: {{ new Date(mySubmission.submitted_at).toLocaleString() }}
                         <StatusBadge v-if="mySubmission.is_late" variant="late" class="ml-1" />
                     </p>
-                    <p class="mt-1 text-sm text-gray-600 capitalize">
+                    <p
+                        class="mt-1 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500 capitalize"
+                    >
                         Status: {{ mySubmission.status }}
                     </p>
-                    <p class="mt-1 text-sm text-gray-600">Attempt #{{ mySubmission.attempt_no }}</p>
+                    <p
+                        class="mt-1 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
+                        Attempt #{{ mySubmission.attempt_no }}
+                    </p>
                     <Link
                         :href="route('submissions.show', mySubmission.id)"
                         class="mt-3 inline-block text-sm text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
@@ -215,7 +246,10 @@ function isPastDue(): boolean {
 
                     <form novalidate @submit.prevent="submitAssignment">
                         <div>
-                            <label for="files" class="block text-sm font-medium text-gray-700">
+                            <label
+                                for="files"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                            >
                                 Files <span aria-hidden="true">*</span>
                             </label>
                             <input
@@ -224,17 +258,17 @@ function isPastDue(): boolean {
                                 multiple
                                 accept=".pdf,.doc,.docx,.zip,.png,.jpg,.jpeg"
                                 required
-                                class="mt-1 block w-full text-sm text-gray-600 file:mr-3 file:rounded file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                                class="mt-1 block w-full text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500 file:mr-3 file:rounded file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                                 :aria-describedby="fileErrors ? 'files-error' : undefined"
                                 :aria-invalid="!!fileErrors"
                                 @change="handleFileChange"
                             />
-                            <p class="mt-1 text-xs text-gray-500">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-slate-400">
                                 Accepted: PDF, DOC, DOCX, ZIP, PNG, JPG, JPEG. Max 25 MB per file.
                             </p>
                             <p
                                 v-if="selectedFileSummary"
-                                class="mt-1 text-xs text-gray-500"
+                                class="mt-1 text-xs text-gray-500 dark:text-slate-400"
                                 aria-live="polite"
                             >
                                 {{ selectedFileSummary }}
@@ -262,7 +296,10 @@ function isPastDue(): boolean {
                                     :style="{ width: `${uploadProgress}%` }"
                                 />
                             </div>
-                            <p class="mt-1 text-xs text-gray-500" aria-live="polite">
+                            <p
+                                class="mt-1 text-xs text-gray-500 dark:text-slate-400"
+                                aria-live="polite"
+                            >
                                 Uploading… {{ uploadProgress }}%
                             </p>
                         </div>

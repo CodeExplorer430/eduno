@@ -23,9 +23,9 @@ const form = useForm({
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
+            <h2 class="text-lg font-medium text-gray-900 dark:text-white">Profile Information</h2>
 
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Update your account's profile information and email address.
             </p>
         </header>
@@ -65,13 +65,13 @@ const form = useForm({
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="mt-2 text-sm text-gray-800">
+                <p class="mt-2 text-sm text-gray-800 dark:text-gray-200">
                     Your email address is unverified.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-200"
                     >
                         Click here to re-send the verification email.
                     </Link>
@@ -107,7 +107,7 @@ const form = useForm({
                     id="bio"
                     v-model="form.bio"
                     rows="4"
-                    class="mt-1 block w-full resize-y rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                    class="mt-1 block w-full resize-y rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     aria-describedby="bio-error"
                     maxlength="1000"
                     placeholder="Tell others a bit about yourself…"
@@ -125,7 +125,12 @@ const form = useForm({
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
+                    <p
+                        v-if="form.recentlySuccessful"
+                        class="text-sm text-gray-600 dark:text-gray-400"
+                    >
+                        Saved.
+                    </p>
                 </Transition>
             </div>
         </form>

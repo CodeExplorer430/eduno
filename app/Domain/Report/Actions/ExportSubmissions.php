@@ -35,6 +35,12 @@ class ExportSubmissions
 
     private function escapeCsv(string $value): string
     {
+        // Neutralise formula injection: prefix any value starting with a formula
+        // trigger character so Excel / LibreOffice does not execute it as a formula.
+        if ($value !== '' && preg_match('/^[=+\-@\t\r]/', $value)) {
+            $value = "\t" . $value;
+        }
+
         if (str_contains($value, ',') || str_contains($value, '"') || str_contains($value, "\n")) {
             return '"'.str_replace('"', '""', $value).'"';
         }

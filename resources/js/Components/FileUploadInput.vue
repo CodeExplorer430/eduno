@@ -51,16 +51,16 @@ const removeFile = (index: number): void => {
 <template>
     <div class="space-y-3">
         <div
-            class="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-8 transition hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2"
+            class="flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-8 transition hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:border-slate-600 dark:bg-slate-800/50 dark:hover:border-blue-400"
         >
             <label :for="inputId" class="cursor-pointer text-center">
-                <span class="block text-sm font-medium text-gray-700">
+                <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     <span class="text-blue-600 underline"
                         >Choose file{{ multiple ? 's' : '' }}</span
                     >
                     or drag and drop
                 </span>
-                <span class="mt-1 block text-xs text-gray-500">
+                <span class="mt-1 block text-xs text-gray-500 dark:text-slate-400">
                     {{ accept ? `Accepted formats: ${accept}` : 'Any file type accepted' }}
                 </span>
                 <input
@@ -83,15 +83,15 @@ const removeFile = (index: number): void => {
         <!-- File list -->
         <ul
             v-if="modelValue.length > 0"
-            class="divide-y divide-gray-100 rounded-md border border-gray-200"
+            class="divide-y divide-gray-100 rounded-md border border-gray-200 dark:divide-slate-700 dark:border-slate-600"
         >
             <li
                 v-for="(file, index) in modelValue"
                 :key="`${file.name}-${index}`"
                 class="flex items-center justify-between px-4 py-2 text-sm"
             >
-                <span class="truncate text-gray-800">{{ file.name }}</span>
-                <span class="ms-3 shrink-0 text-xs text-gray-500">{{
+                <span class="truncate text-gray-800 dark:text-gray-200">{{ file.name }}</span>
+                <span class="ms-3 shrink-0 text-xs text-gray-500 dark:text-slate-400">{{
                     formatBytes(file.size)
                 }}</span>
                 <button

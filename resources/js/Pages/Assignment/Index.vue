@@ -39,7 +39,8 @@ function statusLabel(assignment: Assignment): string {
 }
 
 function statusClass(assignment: Assignment): string {
-    if (!assignment.published_at) return 'bg-gray-100 text-gray-600';
+    if (!assignment.published_at)
+        return 'bg-gray-100 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500';
     if (assignment.due_at && new Date(assignment.due_at) < new Date())
         return 'bg-red-100 text-red-700';
     return 'bg-green-100 text-green-700';
@@ -65,7 +66,7 @@ function formatSubmissionDate(dateStr: string): string {
         <header class="mb-6 flex items-center justify-between">
             <div>
                 <nav aria-label="Breadcrumb">
-                    <ol class="flex gap-2 text-sm text-gray-500">
+                    <ol class="flex gap-2 text-sm text-gray-500 dark:text-slate-400">
                         <li>
                             <Link
                                 :href="route('sections.show', section.id)"
@@ -93,7 +94,7 @@ function formatSubmissionDate(dateStr: string): string {
 
         <div
             v-if="assignments.data.length === 0"
-            class="rounded border border-dashed border-gray-300 px-6 py-12 text-center text-gray-500"
+            class="rounded border border-dashed border-gray-300 dark:border-slate-600 px-6 py-12 text-center text-gray-500 dark:text-slate-400"
             role="status"
         >
             No assignments yet.
@@ -101,7 +102,9 @@ function formatSubmissionDate(dateStr: string): string {
 
         <table v-else class="w-full border-collapse text-sm">
             <thead>
-                <tr class="border-b border-gray-200 text-left text-gray-600">
+                <tr
+                    class="border-b border-gray-200 dark:border-slate-600 text-left text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                >
                     <th scope="col" class="py-3 pr-4 font-medium">Title</th>
                     <th scope="col" class="py-3 pr-4 font-medium">Due Date</th>
                     <th scope="col" class="py-3 pr-4 font-medium">Status</th>
@@ -116,7 +119,7 @@ function formatSubmissionDate(dateStr: string): string {
                 <tr
                     v-for="assignment in assignments.data"
                     :key="assignment.id"
-                    class="border-b border-gray-100 hover:bg-gray-50"
+                    class="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50"
                 >
                     <td class="py-3 pr-4">
                         <Link
@@ -126,7 +129,9 @@ function formatSubmissionDate(dateStr: string): string {
                             {{ assignment.title }}
                         </Link>
                     </td>
-                    <td class="py-3 pr-4 text-gray-600">
+                    <td
+                        class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
                         {{ assignment.due_at ? new Date(assignment.due_at).toLocaleString() : '—' }}
                     </td>
                     <td class="py-3 pr-4">
@@ -137,7 +142,11 @@ function formatSubmissionDate(dateStr: string): string {
                             {{ statusLabel(assignment) }}
                         </span>
                     </td>
-                    <td class="py-3 pr-4 text-gray-600">{{ assignment.max_score }}</td>
+                    <td
+                        class="py-3 pr-4 text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+                    >
+                        {{ assignment.max_score }}
+                    </td>
                     <td v-if="!canManage" class="py-3 pr-4">
                         <span
                             v-if="assignment.mySubmission"
@@ -147,7 +156,7 @@ function formatSubmissionDate(dateStr: string): string {
                             {{ assignment.mySubmission.status }} &middot;
                             {{ formatSubmissionDate(assignment.mySubmission.submitted_at) }}
                         </span>
-                        <span v-else class="text-gray-400">—</span>
+                        <span v-else class="text-gray-400 dark:text-slate-500">—</span>
                     </td>
                     <td v-if="canManage" class="py-3">
                         <div class="flex gap-3">
@@ -161,7 +170,7 @@ function formatSubmissionDate(dateStr: string): string {
                             </button>
                             <Link
                                 :href="route('assignments.edit', assignment.id)"
-                                class="text-gray-600 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                                class="text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                                 :aria-label="`Edit ${assignment.title}`"
                             >
                                 Edit
@@ -190,16 +199,21 @@ function formatSubmissionDate(dateStr: string): string {
         @close="confirmDeleteId = null"
     >
         <div class="p-6">
-            <h2 id="delete-assignment-title" class="text-lg font-semibold text-gray-900">
+            <h2
+                id="delete-assignment-title"
+                class="text-lg font-semibold text-gray-900 dark:text-white"
+            >
                 Delete Assignment?
             </h2>
-            <p class="mt-2 text-sm text-gray-600">
+            <p
+                class="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 dark:text-gray-400 dark:text-slate-500"
+            >
                 This will permanently delete the assignment and all its submissions.
             </p>
             <div class="mt-6 flex justify-end gap-3">
                 <button
                     type="button"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     @click="confirmDeleteId = null"
                 >
                     Cancel

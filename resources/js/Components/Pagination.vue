@@ -24,11 +24,11 @@ function decodeLabel(raw: string): string {
                 :class="
                     link.active
                         ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-600 dark:hover:bg-slate-700'
                 "
                 >{{ decodeLabel(link.label) }}</Link
             >
-            <span v-else class="px-3 py-1 text-sm text-gray-400">{{
+            <span v-else class="px-3 py-1 text-sm text-gray-400 dark:text-slate-500">{{
                 decodeLabel(link.label)
             }}</span>
         </template>

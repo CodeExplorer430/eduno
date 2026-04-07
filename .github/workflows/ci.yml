@@ -61,3 +61,55 @@ jobs:
       - run: npm run lint
       - run: npm run format -- --check
       - run: npm run build
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: eduno_e2e
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.4', extensions: 'pgsql, pdo_pgsql, redis', coverage: none }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: 'npm' }
+      - run: cp .env.example .env
+      - run: mkdir -p bootstrap/cache storage/framework/{cache,sessions,testing,views}
+      - run: composer install --no-interaction --prefer-dist
+      - run: npm ci --legacy-peer-deps
+      - run: php artisan key:generate
+      - name: Configure E2E environment
+        run: |
+          echo "APP_URL=http://127.0.0.1:8000" >> .env
+          echo "DB_CONNECTION=pgsql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_DATABASE=eduno_e2e" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=postgres" >> .env
+          echo "REDIS_HOST=127.0.0.1" >> .env
+          echo "CACHE_STORE=array" >> .env
+          echo "SESSION_DRIVER=database" >> .env
+          echo "QUEUE_CONNECTION=sync" >> .env
+          cp .env .env.e2e
+      - run: php artisan migrate --force
+      - run: npm run build
+      - run: npx playwright install chromium --with-deps
+      - run: npm run e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

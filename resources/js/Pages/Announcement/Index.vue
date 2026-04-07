@@ -40,7 +40,7 @@ function executeDelete(): void {
         <header class="mb-6 flex items-center justify-between">
             <div>
                 <nav aria-label="Breadcrumb">
-                    <ol class="flex gap-2 text-sm text-gray-500">
+                    <ol class="flex gap-2 text-sm text-gray-500 dark:text-slate-400">
                         <li>
                             <Link :href="route('courses.index')" class="hover:underline"
                                 >Courses</Link
@@ -73,7 +73,7 @@ function executeDelete(): void {
 
         <div
             v-if="announcements.data.length === 0"
-            class="rounded border border-dashed border-gray-300 px-6 py-12 text-center text-gray-500"
+            class="rounded border border-dashed border-gray-300 dark:border-slate-600 px-6 py-12 text-center text-gray-500 dark:text-slate-400"
             role="status"
         >
             No announcements yet.
@@ -83,14 +83,14 @@ function executeDelete(): void {
             <li
                 v-for="announcement in announcements.data"
                 :key="announcement.id"
-                class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm"
+                class="rounded-lg border border-gray-200 dark:border-slate-600 bg-white p-5 shadow-sm"
             >
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2">
                             <Link
                                 :href="route('announcements.show', announcement.id)"
-                                class="text-lg font-semibold text-gray-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                                class="text-lg font-semibold text-gray-900 dark:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                             >
                                 {{ announcement.title }}
                             </Link>
@@ -98,7 +98,7 @@ function executeDelete(): void {
                                 :class="
                                     announcement.published_at
                                         ? 'bg-green-100 text-green-700'
-                                        : 'bg-gray-100 text-gray-600'
+                                        : 'bg-gray-100 text-gray-600 dark:text-gray-400 dark:text-slate-500'
                                 "
                                 class="rounded-full px-2 py-0.5 text-xs font-medium"
                                 :aria-label="announcement.published_at ? 'Published' : 'Draft'"
@@ -106,7 +106,7 @@ function executeDelete(): void {
                                 {{ announcement.published_at ? 'Published' : 'Draft' }}
                             </span>
                         </div>
-                        <p class="mt-1 text-sm text-gray-500">
+                        <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
                             By {{ announcement.author?.name }} &middot;
                             {{ new Date(announcement.created_at).toLocaleDateString() }}
                         </p>
@@ -124,7 +124,7 @@ function executeDelete(): void {
 
                         <Link
                             :href="route('announcements.edit', announcement.id)"
-                            class="text-sm text-gray-600 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                            class="text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
                             :aria-label="`Edit ${announcement.title}`"
                         >
                             Edit
@@ -153,14 +153,19 @@ function executeDelete(): void {
         @close="confirmDeleteId = null"
     >
         <div class="p-6">
-            <h2 id="delete-announcement-title" class="text-lg font-semibold text-gray-900">
+            <h2
+                id="delete-announcement-title"
+                class="text-lg font-semibold text-gray-900 dark:text-white"
+            >
                 Delete Announcement?
             </h2>
-            <p class="mt-2 text-sm text-gray-600">This will permanently delete the announcement.</p>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500">
+                This will permanently delete the announcement.
+            </p>
             <div class="mt-6 flex justify-end gap-3">
                 <button
                     type="button"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md border border-gray-300 dark:border-slate-600 bg-white px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     @click="confirmDeleteId = null"
                 >
                     Cancel

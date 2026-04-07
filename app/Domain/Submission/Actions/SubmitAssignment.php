@@ -14,6 +14,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Symfony\Component\Mime\MimeTypes;
 
 class SubmitAssignment
 {
@@ -47,7 +48,7 @@ class SubmitAssignment
                     'submission_id' => $submission->id,
                     'file_path' => $storedPath,
                     'original_name' => $file->getClientOriginalName(),
-                    'mime_type' => $file->getMimeType() ?? $file->getClientMimeType(),
+                    'mime_type' => (new MimeTypes())->guessMimeType($file->getRealPath()) ?? 'application/octet-stream',
                     'size_bytes' => $file->getSize(),
                 ]);
             }

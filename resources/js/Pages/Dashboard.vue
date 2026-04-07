@@ -113,14 +113,14 @@ const greeting = computed(() => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Dashboard</h2>
+            <h2 class="text-xl font-semibold leading-tight text-[#141b2b]">Dashboard</h2>
         </template>
 
         <div class="py-12">
             <!-- Greeting banner -->
             <div class="mx-auto mb-8 max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div
-                    class="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-500 px-8 py-6 text-white shadow-sm"
+                    class="relative overflow-hidden rounded-xl bg-[linear-gradient(135deg,#004ac6_0%,#2563eb_100%)] px-8 py-6 text-white"
                 >
                     <!-- Decorative orbs -->
                     <div
@@ -173,7 +173,9 @@ const greeting = computed(() => {
                                     {{ props.latest_grade.score }} /
                                     {{ props.latest_grade.max_score }}
                                 </template>
-                                <span v-else class="text-lg text-gray-400">None yet</span>
+                                <span v-else class="text-lg text-gray-400 dark:text-slate-500"
+                                    >None yet</span
+                                >
                             </StatCard>
                         </div>
                     </section>
@@ -181,33 +183,30 @@ const greeting = computed(() => {
                     <!-- Upcoming Assignments -->
                     <section
                         aria-labelledby="upcoming-assignments-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                        <div class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4">
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
                             <h2
                                 id="upcoming-assignments-heading"
-                                class="font-semibold text-gray-800"
+                                class="font-semibold text-[#141b2b]"
                             >
                                 Upcoming Assignments (next 7 days)
                             </h2>
                         </div>
-                        <div
-                            v-if="(props.upcoming?.length ?? 0) > 0"
-                            class="divide-y divide-gray-100"
-                        >
+                        <div v-if="(props.upcoming?.length ?? 0) > 0" class="">
                             <div
                                 v-for="assignment in props.upcoming"
                                 :key="assignment.id"
-                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-gray-50"
+                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-[#f1f3ff]"
                             >
-                                <span class="flex items-center gap-3 font-medium text-gray-800">
+                                <span class="flex items-center gap-3 font-medium text-[#141b2b]">
                                     <ClockIcon
-                                        class="h-4 w-4 shrink-0 text-gray-400"
+                                        class="h-4 w-4 shrink-0 text-[#737686]"
                                         aria-hidden="true"
                                     />
                                     <span
-                                        class="rounded-full bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-600"
+                                        class="rounded-full bg-[#dbe1ff] px-2 py-0.5 font-mono text-xs text-[#00174b]"
                                     >
                                         {{ assignment.course_code }}
                                     </span>
@@ -221,7 +220,7 @@ const greeting = computed(() => {
                                 </time>
                             </div>
                         </div>
-                        <p v-else class="px-6 py-4 text-sm text-gray-400">
+                        <p v-else class="px-6 py-4 text-sm text-[#737686]">
                             No assignments due in the next 7 days.
                         </p>
                     </section>
@@ -229,49 +228,44 @@ const greeting = computed(() => {
                     <!-- Recent Announcements -->
                     <section
                         aria-labelledby="recent-announcements-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div
-                            class="flex items-center justify-between border-b border-gray-100 px-6 py-4"
-                        >
+                        <div class="flex items-center justify-between bg-[#f1f3ff] px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
                                 <h2
                                     id="recent-announcements-heading"
-                                    class="font-semibold text-gray-800"
+                                    class="font-semibold text-[#141b2b]"
                                 >
                                     Recent Announcements
                                 </h2>
                             </div>
                             <Link
                                 :href="route('student.announcements.index')"
-                                class="rounded text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="rounded text-sm text-[#004ac6] hover:text-[#003ea8] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             >
                                 View all
                             </Link>
                         </div>
-                        <div
-                            v-if="(props.recent_announcements?.length ?? 0) > 0"
-                            class="divide-y divide-gray-100"
-                        >
+                        <div v-if="(props.recent_announcements?.length ?? 0) > 0" class="">
                             <div
                                 v-for="announcement in props.recent_announcements"
                                 :key="announcement.id"
-                                class="flex items-start gap-3 px-6 py-3 transition-colors hover:bg-gray-50"
+                                class="flex items-start gap-3 px-6 py-3 transition-colors hover:bg-[#f1f3ff]"
                             >
                                 <MegaphoneIcon
-                                    class="mt-0.5 h-4 w-4 shrink-0 text-blue-400"
+                                    class="mt-0.5 h-4 w-4 shrink-0 text-[#004ac6]"
                                     aria-hidden="true"
                                 />
                                 <div>
-                                    <p class="text-sm font-medium text-gray-800">
+                                    <p class="text-sm font-medium text-[#141b2b]">
                                         {{ announcement.title }}
                                     </p>
                                     <p
-                                        class="mt-0.5 flex items-center gap-1.5 text-xs text-gray-500"
+                                        class="mt-0.5 flex items-center gap-1.5 text-xs text-[#434655]"
                                     >
                                         <span
-                                            class="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700"
+                                            class="rounded-full bg-[#dbe1ff] px-2 py-0.5 text-xs font-medium text-[#00174b]"
                                         >
                                             {{ announcement.course_section.course.code }}
                                         </span>
@@ -280,7 +274,7 @@ const greeting = computed(() => {
                                 </div>
                             </div>
                         </div>
-                        <p v-else class="px-6 py-4 text-sm text-gray-400">
+                        <p v-else class="px-6 py-4 text-sm text-[#737686]">
                             No recent announcements.
                         </p>
                     </section>
@@ -289,37 +283,37 @@ const greeting = computed(() => {
                     <section
                         v-if="(props.recent_grades?.length ?? 0) > 0"
                         aria-labelledby="recent-grades-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div
-                            class="flex items-center justify-between border-b border-gray-100 px-6 py-4"
-                        >
+                        <div class="flex items-center justify-between bg-[#f1f3ff] px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="h-4 w-1 rounded-full bg-green-500" aria-hidden="true" />
-                                <h2 id="recent-grades-heading" class="font-semibold text-gray-800">
+                                <h2 id="recent-grades-heading" class="font-semibold text-[#141b2b]">
                                     Recent Grades
                                 </h2>
                             </div>
                             <Link
                                 :href="route('student.grades.index')"
-                                class="rounded text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="rounded text-sm text-[#004ac6] hover:text-[#003ea8] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             >
                                 View all
                             </Link>
                         </div>
-                        <div class="divide-y divide-gray-100">
+                        <div class="">
                             <div
                                 v-for="(grade, idx) in props.recent_grades"
                                 :key="idx"
-                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-gray-50"
+                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-[#f1f3ff]"
                             >
                                 <div>
-                                    <p class="font-medium text-gray-800">
+                                    <p class="font-medium text-[#141b2b]">
                                         {{ grade.assignment_title }}
                                     </p>
-                                    <p class="text-xs text-gray-500">{{ grade.course_name }}</p>
+                                    <p class="text-xs text-[#434655]">
+                                        {{ grade.course_name }}
+                                    </p>
                                 </div>
-                                <span class="font-semibold text-gray-900">
+                                <span class="font-semibold text-[#141b2b]">
                                     {{ grade.score }} / {{ grade.max_score }}
                                 </span>
                             </div>
@@ -330,38 +324,36 @@ const greeting = computed(() => {
                     <section
                         v-if="(props.course_summary?.length ?? 0) > 0"
                         aria-labelledby="my-courses-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div
-                            class="flex items-center justify-between border-b border-gray-100 px-6 py-4"
-                        >
+                        <div class="flex items-center justify-between bg-[#f1f3ff] px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
-                                <h2 id="my-courses-heading" class="font-semibold text-gray-800">
+                                <h2 id="my-courses-heading" class="font-semibold text-[#141b2b]">
                                     My Courses
                                 </h2>
                             </div>
                             <Link
                                 :href="route('student.courses.index')"
-                                class="rounded text-sm text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="rounded text-sm text-[#004ac6] hover:text-[#003ea8] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             >
                                 View all
                             </Link>
                         </div>
-                        <ul class="divide-y divide-gray-100" role="list">
+                        <ul class="" role="list">
                             <li
                                 v-for="section in props.course_summary"
                                 :key="section.id"
-                                class="flex items-center gap-3 px-6 py-3 transition-colors hover:bg-gray-50"
+                                class="flex items-center gap-3 px-6 py-3 transition-colors hover:bg-[#f1f3ff]"
                             >
                                 <BookOpenIcon
-                                    class="h-4 w-4 shrink-0 text-gray-400"
+                                    class="h-4 w-4 shrink-0 text-[#737686]"
                                     aria-hidden="true"
                                 />
-                                <span class="text-sm text-gray-800">
+                                <span class="text-sm text-[#141b2b]">
                                     <span class="font-mono font-medium">{{ section.code }}</span>
                                     — {{ section.title }}
-                                    <span class="text-gray-500">({{ section.section_name }})</span>
+                                    <span class="text-[#434655]">({{ section.section_name }})</span>
                                 </span>
                             </li>
                         </ul>
@@ -412,7 +404,7 @@ const greeting = computed(() => {
                     <!-- Unreleased grades reminder banner -->
                     <div
                         v-if="(props.unreleased_grades_count ?? 0) > 0"
-                        class="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4"
+                        class="flex items-start gap-3 rounded-xl bg-amber-50 px-5 py-4"
                         role="status"
                         aria-live="polite"
                     >
@@ -440,29 +432,29 @@ const greeting = computed(() => {
                     <section
                         v-if="(props.sections?.length ?? 0) > 0"
                         aria-labelledby="instructor-sections-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                        <div class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4">
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
                             <h2
                                 id="instructor-sections-heading"
-                                class="font-semibold text-gray-800"
+                                class="font-semibold text-[#141b2b]"
                             >
                                 My Sections
                             </h2>
                         </div>
-                        <ul class="divide-y divide-gray-100" role="list">
+                        <ul class="" role="list">
                             <li
                                 v-for="section in props.sections"
                                 :key="section.id"
-                                class="px-6 py-4 transition-colors hover:bg-gray-50"
+                                class="px-6 py-4 transition-colors hover:bg-[#f1f3ff]"
                             >
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-gray-800">
+                                    <span class="text-sm font-medium text-[#141b2b]">
                                         <span class="font-mono">{{ section.course.code }}</span>
                                         — {{ section.section_name }}
                                     </span>
-                                    <span class="flex gap-4 text-xs text-gray-500">
+                                    <span class="flex gap-4 text-xs text-[#434655]">
                                         <span>{{ section.enrollments_count }} enrolled</span>
                                         <span>{{ section.assignments_count }} assignments</span>
                                     </span>
@@ -473,7 +465,7 @@ const greeting = computed(() => {
                                         :href="
                                             route('instructor.courses.modules.index', section.id)
                                         "
-                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-[#004ac6] hover:text-[#003ea8] focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-1"
                                         :aria-label="`Go to Modules for ${section.section_name}`"
                                     >
                                         <BookOpenIcon class="h-3.5 w-3.5" aria-hidden="true" />
@@ -481,7 +473,7 @@ const greeting = computed(() => {
                                     </Link>
                                     <Link
                                         :href="route('instructor.roster.index', section.id)"
-                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-[#004ac6] hover:text-[#003ea8] focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-1"
                                         :aria-label="`Go to Roster for ${section.section_name}`"
                                     >
                                         <UserGroupIcon class="h-3.5 w-3.5" aria-hidden="true" />
@@ -489,7 +481,7 @@ const greeting = computed(() => {
                                     </Link>
                                     <Link
                                         :href="route('instructor.gradebook.show', section.id)"
-                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                        class="inline-flex items-center gap-1 rounded text-xs font-medium text-[#004ac6] hover:text-[#003ea8] focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-1"
                                         :aria-label="`Go to Gradebook for ${section.section_name}`"
                                     >
                                         <AcademicCapIcon class="h-3.5 w-3.5" aria-hidden="true" />
@@ -503,29 +495,26 @@ const greeting = computed(() => {
                     <!-- Upcoming Deadlines -->
                     <section
                         aria-labelledby="instructor-deadlines-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                        <div class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4">
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
                             <h2
                                 id="instructor-deadlines-heading"
-                                class="font-semibold text-gray-800"
+                                class="font-semibold text-[#141b2b]"
                             >
                                 Upcoming Deadlines (next 7 days)
                             </h2>
                         </div>
-                        <div
-                            v-if="(props.upcoming_deadlines?.length ?? 0) > 0"
-                            class="divide-y divide-gray-100"
-                        >
+                        <div v-if="(props.upcoming_deadlines?.length ?? 0) > 0" class="">
                             <div
                                 v-for="assignment in props.upcoming_deadlines"
                                 :key="assignment.id"
-                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-gray-50"
+                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-[#f1f3ff]"
                             >
-                                <span class="flex items-start gap-3 font-medium text-gray-800">
+                                <span class="flex items-start gap-3 font-medium text-[#141b2b]">
                                     <ClockIcon
-                                        class="h-4 w-4 shrink-0 text-gray-400"
+                                        class="h-4 w-4 shrink-0 text-[#737686]"
                                         aria-hidden="true"
                                     />
                                     {{ assignment.title }}
@@ -538,7 +527,7 @@ const greeting = computed(() => {
                                 </time>
                             </div>
                         </div>
-                        <p v-else class="px-6 py-4 text-sm text-gray-400">
+                        <p v-else class="px-6 py-4 text-sm text-[#737686]">
                             No deadlines in the next 7 days.
                         </p>
                     </section>
@@ -546,28 +535,28 @@ const greeting = computed(() => {
                     <!-- Recent Submissions -->
                     <section
                         aria-labelledby="recent-submissions-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                        <div class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4">
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
-                            <h2 id="recent-submissions-heading" class="font-semibold text-gray-800">
+                            <h2
+                                id="recent-submissions-heading"
+                                class="font-semibold text-[#141b2b]"
+                            >
                                 Recent Submissions
                             </h2>
                         </div>
-                        <div
-                            v-if="(props.recent_submissions?.length ?? 0) > 0"
-                            class="divide-y divide-gray-100"
-                        >
+                        <div v-if="(props.recent_submissions?.length ?? 0) > 0" class="">
                             <div
                                 v-for="submission in props.recent_submissions"
                                 :key="submission.id"
-                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-gray-50"
+                                class="flex items-center justify-between px-6 py-3 text-sm transition-colors hover:bg-[#f1f3ff]"
                             >
                                 <div>
-                                    <p class="font-medium text-gray-800">
+                                    <p class="font-medium text-[#141b2b]">
                                         {{ submission.student.name }}
                                     </p>
-                                    <p class="text-xs text-gray-500">
+                                    <p class="text-xs text-[#434655]">
                                         {{ submission.assignment.title }}
                                     </p>
                                 </div>
@@ -578,7 +567,9 @@ const greeting = computed(() => {
                                 </span>
                             </div>
                         </div>
-                        <p v-else class="px-6 py-4 text-sm text-gray-400">No recent submissions.</p>
+                        <p v-else class="px-6 py-4 text-sm text-[#737686]">
+                            No recent submissions.
+                        </p>
                     </section>
                 </div>
 
@@ -619,54 +610,54 @@ const greeting = computed(() => {
                     <!-- Users by Role -->
                     <section
                         aria-labelledby="users-by-role-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
-                        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
+                        <div class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4">
                             <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true" />
-                            <h2 id="users-by-role-heading" class="font-semibold text-gray-800">
+                            <h2 id="users-by-role-heading" class="font-semibold text-[#141b2b]">
                                 Users by Role
                             </h2>
                         </div>
-                        <dl class="grid grid-cols-3 divide-x divide-gray-100">
+                        <dl class="grid grid-cols-3 gap-px bg-[#e9edff]">
                             <div
                                 v-animateonscroll="{ enterClass: 'animate-fadein' }"
                                 :style="`animation-delay: 0ms`"
-                                class="px-6 py-5 text-center"
+                                class="bg-white px-6 py-5 text-center"
                             >
                                 <UsersIcon
-                                    class="mx-auto mb-2 h-5 w-5 text-gray-400"
+                                    class="mx-auto mb-2 h-5 w-5 text-[#737686]"
                                     aria-hidden="true"
                                 />
-                                <dt class="text-sm font-medium text-gray-500">Students</dt>
-                                <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                                <dt class="text-sm font-medium text-[#434655]">Students</dt>
+                                <dd class="mt-1 text-2xl font-semibold text-[#141b2b]">
                                     {{ props.users_by_role?.student ?? 0 }}
                                 </dd>
                             </div>
                             <div
                                 v-animateonscroll="{ enterClass: 'animate-fadein' }"
                                 :style="`animation-delay: 80ms`"
-                                class="px-6 py-5 text-center"
+                                class="bg-white px-6 py-5 text-center"
                             >
                                 <UsersIcon
-                                    class="mx-auto mb-2 h-5 w-5 text-gray-400"
+                                    class="mx-auto mb-2 h-5 w-5 text-[#737686]"
                                     aria-hidden="true"
                                 />
-                                <dt class="text-sm font-medium text-gray-500">Instructors</dt>
-                                <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                                <dt class="text-sm font-medium text-[#434655]">Instructors</dt>
+                                <dd class="mt-1 text-2xl font-semibold text-[#141b2b]">
                                     {{ props.users_by_role?.instructor ?? 0 }}
                                 </dd>
                             </div>
                             <div
                                 v-animateonscroll="{ enterClass: 'animate-fadein' }"
                                 :style="`animation-delay: 160ms`"
-                                class="px-6 py-5 text-center"
+                                class="bg-white px-6 py-5 text-center"
                             >
                                 <UsersIcon
-                                    class="mx-auto mb-2 h-5 w-5 text-gray-400"
+                                    class="mx-auto mb-2 h-5 w-5 text-[#737686]"
                                     aria-hidden="true"
                                 />
-                                <dt class="text-sm font-medium text-gray-500">Admins</dt>
-                                <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                                <dt class="text-sm font-medium text-[#434655]">Admins</dt>
+                                <dd class="mt-1 text-2xl font-semibold text-[#141b2b]">
                                     {{ props.users_by_role?.admin ?? 0 }}
                                 </dd>
                             </div>
@@ -675,30 +666,30 @@ const greeting = computed(() => {
 
                     <!-- Quick Actions -->
                     <section aria-labelledby="quick-actions-heading">
-                        <h2 id="quick-actions-heading" class="mb-4 font-semibold text-gray-800">
+                        <h2 id="quick-actions-heading" class="mb-4 font-semibold text-[#141b2b]">
                             Quick Actions
                         </h2>
                         <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
                             <Link
                                 :href="route('admin.users.index')"
-                                class="group flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="group flex flex-col items-center gap-3 rounded-xl bg-white px-4 py-6 text-center text-sm font-medium text-[#141b2b] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#f1f3ff] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             >
                                 <div
-                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 transition-colors group-hover:from-blue-100 group-hover:to-blue-200"
+                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#dbe1ff] transition-colors group-hover:bg-[#e1e8fd]"
                                 >
-                                    <UsersIcon class="h-6 w-6 text-blue-600" aria-hidden="true" />
+                                    <UsersIcon class="h-6 w-6 text-[#004ac6]" aria-hidden="true" />
                                 </div>
                                 Manage Users
                             </Link>
                             <Link
                                 :href="route('admin.courses.index')"
-                                class="group flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="group flex flex-col items-center gap-3 rounded-xl bg-white px-4 py-6 text-center text-sm font-medium text-[#141b2b] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#f1f3ff] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             >
                                 <div
-                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 transition-colors group-hover:from-blue-100 group-hover:to-blue-200"
+                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#dbe1ff] transition-colors group-hover:bg-[#e1e8fd]"
                                 >
                                     <BookOpenIcon
-                                        class="h-6 w-6 text-blue-600"
+                                        class="h-6 w-6 text-[#004ac6]"
                                         aria-hidden="true"
                                     />
                                 </div>
@@ -706,13 +697,13 @@ const greeting = computed(() => {
                             </Link>
                             <Link
                                 :href="route('admin.reports.index')"
-                                class="group flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="group flex flex-col items-center gap-3 rounded-xl bg-white px-4 py-6 text-center text-sm font-medium text-[#141b2b] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#f1f3ff] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             >
                                 <div
-                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 transition-colors group-hover:from-blue-100 group-hover:to-blue-200"
+                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#dbe1ff] transition-colors group-hover:bg-[#e1e8fd]"
                                 >
                                     <ChartBarIcon
-                                        class="h-6 w-6 text-blue-600"
+                                        class="h-6 w-6 text-[#004ac6]"
                                         aria-hidden="true"
                                     />
                                 </div>
@@ -720,13 +711,13 @@ const greeting = computed(() => {
                             </Link>
                             <Link
                                 :href="route('admin.audit-logs.index')"
-                                class="group flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-6 text-center text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="group flex flex-col items-center gap-3 rounded-xl bg-white px-4 py-6 text-center text-sm font-medium text-[#141b2b] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#f1f3ff] focus:outline-none focus:ring-2 focus:ring-[#004ac6]"
                             >
                                 <div
-                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 transition-colors group-hover:from-blue-100 group-hover:to-blue-200"
+                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#dbe1ff] transition-colors group-hover:bg-[#e1e8fd]"
                                 >
                                     <ClipboardDocumentListIcon
-                                        class="h-6 w-6 text-blue-600"
+                                        class="h-6 w-6 text-[#004ac6]"
                                         aria-hidden="true"
                                     />
                                 </div>

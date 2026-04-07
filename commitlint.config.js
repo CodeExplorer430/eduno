@@ -25,6 +25,8 @@ export default {
                 'seeder',
                 'factory',
                 'ui',
+                'e2e',
+                'ci',
             ],
         ],
         'type-enum': [

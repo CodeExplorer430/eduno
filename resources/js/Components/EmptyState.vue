@@ -10,12 +10,14 @@ defineProps<{
 
 <template>
     <div
-        class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-20 text-center"
+        class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white py-20 text-center dark:border-slate-600 dark:bg-slate-800/50"
         role="status"
     >
         <component :is="icon" v-if="icon" class="mb-4 h-12 w-12 text-gray-300" aria-hidden="true" />
-        <p class="text-base font-medium text-gray-500">{{ title }}</p>
-        <p v-if="description" class="mt-1 text-sm text-gray-400">{{ description }}</p>
+        <p class="text-base font-medium text-gray-500 dark:text-slate-400">{{ title }}</p>
+        <p v-if="description" class="mt-1 text-sm text-gray-400 dark:text-slate-500">
+            {{ description }}
+        </p>
         <slot />
     </div>
 </template>

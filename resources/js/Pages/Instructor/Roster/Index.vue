@@ -113,17 +113,17 @@ function confirmRemove(): void {
             <!-- Page header -->
             <header class="mb-6 flex flex-wrap items-start justify-between gap-4">
                 <div>
-                    <h1 class="text-xl font-bold text-gray-900">
+                    <h1 class="text-xl font-bold text-gray-900 dark:text-white">
                         Roster
                         <span
                             v-if="props.section.course"
-                            class="text-base font-normal text-gray-500"
+                            class="text-base font-normal text-gray-500 dark:text-slate-400"
                         >
                             — {{ props.section.course.title }} · Section
                             {{ props.section.section_name }}
                         </span>
                     </h1>
-                    <p class="mt-1 text-sm text-gray-500">
+                    <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
                         <span class="font-mono font-medium">{{ props.section.course?.code }}</span>
                         ·
                         <span
@@ -144,7 +144,7 @@ function confirmRemove(): void {
                     v-model="search"
                     type="search"
                     placeholder="Search by name or email…"
-                    class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:max-w-xs"
+                    class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:max-w-xs dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                     aria-label="Search students"
                 />
             </div>
@@ -158,25 +158,28 @@ function confirmRemove(): void {
             />
 
             <!-- Student table -->
-            <div v-else class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100">
-                <table class="min-w-full divide-y divide-gray-100">
-                    <thead class="bg-gray-50">
+            <div
+                v-else
+                class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+            >
+                <table class="min-w-full divide-y divide-gray-100 dark:divide-slate-700">
+                    <thead class="bg-gray-50 dark:bg-slate-900">
                         <tr>
                             <th
                                 scope="col"
-                                class="py-3 pl-6 pr-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
+                                class="py-3 pl-6 pr-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400"
                             >
                                 Name
                             </th>
                             <th
                                 scope="col"
-                                class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
+                                class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400"
                             >
                                 Email
                             </th>
                             <th
                                 scope="col"
-                                class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
+                                class="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400"
                             >
                                 Enrolled On
                             </th>
@@ -185,17 +188,23 @@ function confirmRemove(): void {
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 bg-white">
+                    <tbody
+                        class="divide-y divide-gray-100 bg-white dark:divide-slate-700 dark:bg-slate-800"
+                    >
                         <tr
                             v-for="student in filteredStudents"
                             :key="student.enrollment_id"
-                            class="transition-colors hover:bg-gray-50"
+                            class="transition-colors hover:bg-gray-50 dark:hover:bg-slate-700/50"
                         >
-                            <td class="py-3 pl-6 pr-3 text-sm font-medium text-gray-900">
+                            <td
+                                class="py-3 pl-6 pr-3 text-sm font-medium text-gray-900 dark:text-white"
+                            >
                                 {{ student.name }}
                             </td>
-                            <td class="px-3 py-3 text-sm text-gray-500">{{ student.email }}</td>
-                            <td class="px-3 py-3 text-sm text-gray-500">
+                            <td class="px-3 py-3 text-sm text-gray-500 dark:text-slate-400">
+                                {{ student.email }}
+                            </td>
+                            <td class="px-3 py-3 text-sm text-gray-500 dark:text-slate-400">
                                 {{ new Date(student.enrolled_at).toLocaleDateString() }}
                             </td>
                             <td class="py-3 pl-3 pr-6 text-right text-sm">
@@ -213,7 +222,10 @@ function confirmRemove(): void {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="4" class="py-2 pl-6 text-xs text-gray-400">
+                            <td
+                                colspan="4"
+                                class="py-2 pl-6 text-xs text-gray-400 dark:text-slate-500"
+                            >
                                 {{ filteredStudents.length }}
                                 of
                                 {{ props.students.length }}
@@ -226,7 +238,7 @@ function confirmRemove(): void {
                 <!-- No search results -->
                 <p
                     v-if="filteredStudents.length === 0"
-                    class="py-6 text-center text-sm text-gray-500"
+                    class="py-6 text-center text-sm text-gray-500 dark:text-slate-400"
                     role="status"
                 >
                     No students match "{{ search }}".
@@ -235,14 +247,17 @@ function confirmRemove(): void {
 
             <!-- Add student card -->
             <section
-                class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                class="mt-8 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
                 aria-labelledby="add-student-heading"
             >
-                <div class="border-b border-gray-100 px-6 py-4">
-                    <h2 id="add-student-heading" class="font-semibold text-gray-900">
+                <div class="border-b border-gray-100 px-6 py-4 dark:border-slate-700">
+                    <h2
+                        id="add-student-heading"
+                        class="font-semibold text-gray-900 dark:text-white"
+                    >
                         Add Student
                     </h2>
-                    <p class="mt-0.5 text-sm text-gray-500">
+                    <p class="mt-0.5 text-sm text-gray-500 dark:text-slate-400">
                         Enroll a student by their registered email address.
                     </p>
                 </div>
@@ -252,7 +267,7 @@ function confirmRemove(): void {
                         <div class="flex-1">
                             <label
                                 for="enroll-email"
-                                class="block text-sm font-medium text-gray-700"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
                             >
                                 Student email
                             </label>
@@ -262,7 +277,7 @@ function confirmRemove(): void {
                                 type="email"
                                 autocomplete="off"
                                 placeholder="student@example.com"
-                                class="mt-1 block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="mt-1 block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                                 :class="{ 'border-red-400': enrollForm.errors.email }"
                                 :aria-describedby="
                                     enrollForm.errors.email ? 'enroll-email-error' : undefined
@@ -299,11 +314,14 @@ function confirmRemove(): void {
             aria-modal="true"
             aria-labelledby="confirm-dialog-title"
         >
-            <div class="mx-4 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-                <h3 id="confirm-dialog-title" class="text-base font-semibold text-gray-900">
+            <div class="mx-4 w-full max-w-md rounded-xl bg-white p-6 shadow-xl dark:bg-slate-800">
+                <h3
+                    id="confirm-dialog-title"
+                    class="text-base font-semibold text-gray-900 dark:text-white"
+                >
                     Remove student
                 </h3>
-                <p class="mt-2 text-sm text-gray-600">
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     Remove
                     <span class="font-medium">{{ confirm.studentName }}</span>
                     from this section? They will lose access to course materials.
@@ -311,7 +329,7 @@ function confirmRemove(): void {
                 <div class="mt-6 flex justify-end gap-3">
                     <button
                         type="button"
-                        class="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1"
+                        class="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         @click="closeConfirm"
                     >
                         Cancel
