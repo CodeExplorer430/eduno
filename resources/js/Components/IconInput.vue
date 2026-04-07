@@ -17,14 +17,14 @@ defineEmits<{ 'update:modelValue': [v: string] }>();
     <div class="relative mt-1">
         <component
             :is="icon"
-            class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#737686]"
             aria-hidden="true"
         />
         <input
             :id="id"
             :value="modelValue"
             :type="type ?? 'text'"
-            class="block w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 aria-[invalid=true]:border-red-500 aria-[invalid=true]:focus:ring-red-500"
+            class="block w-full rounded-lg border border-transparent bg-[#f1f3ff] py-2.5 pl-10 pr-3 text-sm text-[#141b2b] placeholder-[#737686] transition focus:border-[#004ac6] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#004ac6] disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-[#ba1a1a] aria-[invalid=true]:focus:ring-[#ba1a1a]"
             v-bind="$attrs"
             @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         />
