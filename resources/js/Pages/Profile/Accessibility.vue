@@ -12,6 +12,7 @@ import {
     ViewColumnsIcon,
     LanguageIcon,
     MoonIcon,
+    BellIcon,
 } from '@heroicons/vue/24/outline';
 import type { UserPreferences } from '@/Types/models';
 import { useAppToast } from '@/composables/useAppToast';
@@ -39,6 +40,7 @@ const form = useForm({
     simplified_layout: props.preferences?.simplified_layout ?? false,
     dark_mode: props.preferences?.dark_mode ?? false,
     language: props.preferences?.language ?? 'en',
+    email_notifications: props.preferences?.email_notifications ?? true,
 });
 
 const appToast = useAppToast();
@@ -332,6 +334,53 @@ function submit(): void {
                                     aria-hidden="true"
                                     class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                                     :class="form.dark_mode ? 'translate-x-5' : 'translate-x-0'"
+                                ></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Email Notifications -->
+                    <div class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
+                        <div class="flex items-center gap-3 px-6 py-5">
+                            <div
+                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dbe1ff]"
+                            >
+                                <BellIcon class="h-5 w-5 text-[#004ac6]" aria-hidden="true" />
+                            </div>
+                            <div class="flex-1">
+                                <label
+                                    for="email_notifications"
+                                    class="block cursor-pointer font-semibold text-[#141b2b] dark:text-white"
+                                >
+                                    {{ t('accessibility.email_notifications') }}
+                                </label>
+                                <p
+                                    id="email_notifications_desc"
+                                    class="text-sm text-[#434655] dark:text-slate-400"
+                                >
+                                    {{ t('accessibility.email_notifications_desc') }}
+                                </p>
+                                <InputError
+                                    class="mt-1"
+                                    :message="form.errors.email_notifications"
+                                />
+                            </div>
+                            <button
+                                id="email_notifications"
+                                type="button"
+                                :aria-pressed="form.email_notifications"
+                                :aria-describedby="'email_notifications_desc'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-[#c3c6d7] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
+                                :class="form.email_notifications ? 'bg-[#004ac6]' : 'bg-[#c3c6d7]'"
+                                @click="form.email_notifications = !form.email_notifications"
+                            >
+                                <span class="sr-only">Toggle email notifications</span>
+                                <span
+                                    aria-hidden="true"
+                                    class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                    :class="
+                                        form.email_notifications ? 'translate-x-5' : 'translate-x-0'
+                                    "
                                 ></span>
                             </button>
                         </div>

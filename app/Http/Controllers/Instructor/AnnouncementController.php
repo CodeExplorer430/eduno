@@ -63,7 +63,7 @@ class AnnouncementController extends Controller
         $this->createAnnouncement->handle($section, $request->validated(), $request->user());
 
         return redirect()->route('instructor.announcements.index')
-            ->with('success', 'Announcement published.');
+            ->with('success', 'Announcement created.');
     }
 
     public function edit(Request $request, Announcement $announcement): Response

@@ -23,6 +23,7 @@ class UpdateAccessibilityPreferencesRequest extends FormRequest
             'simplified_layout' => ['required', 'boolean'],
             'dark_mode' => ['required', 'boolean'],
             'language' => ['required', 'in:en,fil'],
+            'email_notifications' => ['required', 'boolean'],
         ];
     }
 }

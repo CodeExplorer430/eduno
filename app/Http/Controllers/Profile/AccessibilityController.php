@@ -35,6 +35,7 @@ class AccessibilityController extends Controller
             (bool) $validated['simplified_layout'],
             (bool) $validated['dark_mode'],
             $validated['language'],
+            (bool) $validated['email_notifications'],
         );
 
         return redirect()->route('profile.accessibility.edit')

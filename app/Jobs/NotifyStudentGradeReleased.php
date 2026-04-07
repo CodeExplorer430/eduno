@@ -23,6 +23,10 @@ class NotifyStudentGradeReleased implements ShouldQueue
     {
         $student = $this->grade->submission->student;
 
+        if ($student->preferences?->email_notifications === false) {
+            return;
+        }
+
         Mail::to($student->email)->send(new GradeReleasedMail($this->grade));
     }
 

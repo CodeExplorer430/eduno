@@ -12,6 +12,7 @@ vi.mock('@inertiajs/vue3', () => ({
         simplified_layout: false,
         dark_mode: false,
         language: 'en',
+        email_notifications: true,
         patch: vi.fn(),
         processing: false,
         errors: {},
@@ -39,10 +40,10 @@ const props = {
         font_size: 'medium' as const,
         high_contrast: false,
         reduced_motion: false,
-        dyslexia_font: false,
         simplified_layout: false,
         dark_mode: false,
         language: 'en',
+        email_notifications: true,
     },
 };
 

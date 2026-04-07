@@ -4,10 +4,10 @@ export interface UserPreferences {
     font_size: 'small' | 'medium' | 'large' | 'xlarge';
     high_contrast: boolean;
     reduced_motion: boolean;
-    dyslexia_font: boolean;
     simplified_layout: boolean;
     dark_mode: boolean;
     language: string;
+    email_notifications: boolean;
 }
 
 export interface User {

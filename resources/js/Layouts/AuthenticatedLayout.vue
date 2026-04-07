@@ -199,7 +199,7 @@ watchEffect(() => {
     html.classList.toggle('high-contrast', f?.['high-contrast'] ?? p?.high_contrast ?? false);
     html.classList.toggle('reduce-motion', p?.reduced_motion ?? false);
     html.classList.toggle('simplified', f?.['simplified-layout'] ?? p?.simplified_layout ?? false);
-    html.classList.toggle('dyslexia-font', p?.dyslexia_font ?? false);
+    html.classList.toggle('dyslexia-font', false);
     html.classList.toggle('dark', p?.dark_mode ?? false);
 });
 </script>

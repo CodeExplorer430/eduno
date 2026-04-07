@@ -64,6 +64,9 @@ export default {
         dark_mode_desc: 'Switch to a dark color scheme.',
         language: 'Language',
         language_desc: 'Choose your preferred display language.',
+        email_notifications: 'Email Notifications',
+        email_notifications_desc:
+            'Receive email alerts for new submissions, grades, and announcements.',
         save: 'Save Preferences',
         saved: 'Preferences saved.',
     },
