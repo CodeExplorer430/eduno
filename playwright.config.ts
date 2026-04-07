@@ -11,7 +11,7 @@ export default defineConfig({
     reporter: 'html',
     timeout: process.env.CI ? 90_000 : 30_000,
     use: {
-        baseURL: 'http://127.0.0.1:8000',
+        baseURL: 'http://127.0.0.1:8765',
         trace: 'on-first-retry',
         actionTimeout: process.env.CI ? 60_000 : 15_000,
         navigationTimeout: process.env.CI ? 60_000 : 15_000,
@@ -20,8 +20,8 @@ export default defineConfig({
         { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     ],
     webServer: {
-        command: 'php artisan serve --env=e2e',
-        url: 'http://127.0.0.1:8000',
+        command: 'php artisan serve --env=e2e --port=8765',
+        url: 'http://127.0.0.1:8765',
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
     },
