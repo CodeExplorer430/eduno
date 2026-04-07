@@ -31,10 +31,10 @@ interface Props {
 const props = defineProps<Props>();
 
 const statusBadge: Record<string, string> = {
-    submitted: 'bg-blue-100 text-blue-700',
+    submitted: 'bg-[#dbe1ff] text-[#00174b]',
     graded: 'bg-green-100 text-green-700',
     returned: 'bg-purple-100 text-purple-700',
-    late: 'bg-red-100 text-red-700',
+    late: 'bg-red-50 text-[#ba1a1a]',
     pending: 'bg-yellow-100 text-yellow-700',
 };
 
@@ -92,17 +92,17 @@ const toggleFlag = (): void => {
     <AuthenticatedLayout>
         <template #header>
             <nav aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+                <ol class="flex items-center gap-2 text-sm text-[#434655] dark:text-slate-400">
                     <li>
                         <Link
                             :href="route('instructor.submissions.index', submission.assignment.id)"
-                            class="rounded hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-gray-200"
+                            class="rounded hover:text-[#141b2b] focus:outline-none focus:ring-2 focus:ring-[#004ac6] dark:hover:text-gray-200"
                         >
                             Submissions
                         </Link>
                     </li>
                     <li aria-hidden="true">/</li>
-                    <li class="font-medium text-gray-800 dark:text-gray-200" aria-current="page">
+                    <li class="font-medium text-[#141b2b] dark:text-gray-200" aria-current="page">
                         {{ submission.student.name }}
                     </li>
                 </ol>
@@ -127,24 +127,24 @@ const toggleFlag = (): void => {
                 <div class="space-y-6">
                     <section
                         aria-labelledby="submission-details-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
                         <div
-                            class="flex items-center justify-between gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                            class="flex items-center justify-between gap-3 bg-[#f1f3ff] px-6 py-4 dark:bg-slate-900"
                         >
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="h-4 w-1 rounded-full bg-blue-500"
+                                    class="h-4 w-1 rounded-full bg-[#004ac6]"
                                     aria-hidden="true"
                                 ></div>
                                 <div>
                                     <h1
                                         id="submission-details-heading"
-                                        class="font-semibold text-gray-900 dark:text-white"
+                                        class="font-semibold text-[#141b2b] dark:text-white"
                                     >
                                         {{ submission.assignment.title }}
                                     </h1>
-                                    <p class="text-xs text-gray-500 dark:text-slate-400">
+                                    <p class="text-xs text-[#434655] dark:text-slate-400">
                                         Submitted by <strong>{{ submission.student.name }}</strong>
                                     </p>
                                 </div>
@@ -159,7 +159,7 @@ const toggleFlag = (): void => {
                                     :class="
                                         submission.flagged_for_review
                                             ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
-                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-400 dark:hover:bg-slate-600'
+                                            : 'bg-[#f1f3ff] text-[#434655] hover:bg-[#dbe1ff] dark:bg-slate-700 dark:text-gray-400 dark:hover:bg-slate-600'
                                     "
                                     :aria-label="
                                         submission.flagged_for_review
@@ -174,10 +174,10 @@ const toggleFlag = (): void => {
                             </form>
                         </div>
 
-                        <dl class="divide-y divide-gray-100 px-6 dark:divide-slate-700">
+                        <dl class="px-6 dark:divide-slate-700">
                             <div class="flex items-center gap-4 py-3">
                                 <dt
-                                    class="w-28 shrink-0 text-sm font-medium text-gray-500 dark:text-slate-400"
+                                    class="w-28 shrink-0 text-sm font-medium text-[#434655] dark:text-slate-400"
                                 >
                                     Status
                                 </dt>
@@ -186,14 +186,14 @@ const toggleFlag = (): void => {
                                         class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
                                         :class="
                                             statusBadge[submission.status] ??
-                                            'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-400'
+                                            'bg-[#f1f3ff] text-[#434655] dark:bg-slate-700 dark:text-gray-400'
                                         "
                                     >
                                         {{ submission.status }}
                                     </span>
                                     <span
                                         v-if="submission.is_late"
-                                        class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700"
+                                        class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-[#ba1a1a]"
                                     >
                                         Late
                                     </span>
@@ -201,11 +201,11 @@ const toggleFlag = (): void => {
                             </div>
                             <div class="flex items-center gap-4 py-3">
                                 <dt
-                                    class="w-28 shrink-0 text-sm font-medium text-gray-500 dark:text-slate-400"
+                                    class="w-28 shrink-0 text-sm font-medium text-[#434655] dark:text-slate-400"
                                 >
                                     Submitted
                                 </dt>
-                                <dd class="text-sm text-gray-700 dark:text-gray-300">
+                                <dd class="text-sm text-[#141b2b] dark:text-gray-300">
                                     <time :datetime="submission.submitted_at">
                                         {{ formatDate(submission.submitted_at) }}
                                     </time>
@@ -213,11 +213,11 @@ const toggleFlag = (): void => {
                             </div>
                             <div class="flex items-center gap-4 py-3">
                                 <dt
-                                    class="w-28 shrink-0 text-sm font-medium text-gray-500 dark:text-slate-400"
+                                    class="w-28 shrink-0 text-sm font-medium text-[#434655] dark:text-slate-400"
                                 >
                                     Attempt
                                 </dt>
-                                <dd class="text-sm text-gray-700 dark:text-gray-300">
+                                <dd class="text-sm text-[#141b2b] dark:text-gray-300">
                                     #{{ submission.attempt_no }}
                                 </dd>
                             </div>
@@ -226,39 +226,35 @@ const toggleFlag = (): void => {
 
                     <section
                         aria-labelledby="files-heading"
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
+                        class="overflow-hidden rounded-xl bg-white dark:bg-slate-800"
                     >
                         <div
-                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                            class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4 dark:bg-slate-900"
                         >
-                            <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
+                            <div class="h-4 w-1 rounded-full bg-[#004ac6]" aria-hidden="true"></div>
                             <h2
                                 id="files-heading"
-                                class="font-semibold text-gray-900 dark:text-white"
+                                class="font-semibold text-[#141b2b] dark:text-white"
                             >
                                 Submitted Files
                             </h2>
                         </div>
-                        <ul
-                            v-if="submission.files.length > 0"
-                            class="divide-y divide-gray-100 dark:divide-slate-700"
-                            aria-label="Submitted files"
-                        >
+                        <ul v-if="submission.files.length > 0" aria-label="Submitted files">
                             <li
                                 v-for="file in submission.files"
                                 :key="file.id"
-                                class="flex items-center justify-between px-6 py-3"
+                                class="flex items-center justify-between px-6 py-3 hover:bg-[#f1f3ff] transition-colors"
                             >
-                                <span class="truncate text-sm text-gray-800 dark:text-gray-200">{{
+                                <span class="truncate text-sm text-[#141b2b] dark:text-gray-200">{{
                                     file.original_name
                                 }}</span>
                                 <span
-                                    class="ml-4 shrink-0 text-xs text-gray-400 dark:text-slate-500"
+                                    class="ml-4 shrink-0 text-xs text-[#737686] dark:text-slate-500"
                                     >{{ formatBytes(file.size_bytes) }}</span
                                 >
                             </li>
                         </ul>
-                        <p v-else class="px-6 py-4 text-sm text-gray-500 dark:text-slate-400">
+                        <p v-else class="px-6 py-4 text-sm text-[#434655] dark:text-slate-400">
                             No files attached.
                         </p>
                     </section>
@@ -267,13 +263,13 @@ const toggleFlag = (): void => {
                 <!-- Right: grading -->
                 <section
                     aria-labelledby="grading-heading"
-                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100"
+                    class="overflow-hidden rounded-2xl bg-[#f1f3ff]"
                 >
-                    <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
-                        <div class="h-4 w-1 rounded-full bg-blue-500" aria-hidden="true"></div>
+                    <div class="flex items-center gap-3 rounded-t-2xl bg-white px-6 py-4">
+                        <div class="h-4 w-1 rounded-full bg-[#004ac6]" aria-hidden="true"></div>
                         <h2
                             id="grading-heading"
-                            class="font-semibold text-gray-900 dark:text-white"
+                            class="font-semibold text-[#141b2b] dark:text-white"
                         >
                             Grading
                         </h2>
@@ -287,9 +283,9 @@ const toggleFlag = (): void => {
 
                         <div
                             v-if="submission.grade && !submission.grade.released_at"
-                            class="mt-6 border-t border-gray-100 pt-4 dark:border-slate-700"
+                            class="mt-6 pt-4"
                         >
-                            <p class="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                            <p class="mb-3 text-sm text-[#434655] dark:text-gray-400">
                                 Grade is saved but not yet visible to the student.
                             </p>
                             <form @submit.prevent="releaseGrade">
@@ -297,7 +293,7 @@ const toggleFlag = (): void => {
                                     type="submit"
                                     :disabled="releaseForm.processing"
                                     :aria-busy="releaseForm.processing"
-                                    class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
+                                    class="rounded-lg bg-[linear-gradient(135deg,#004ac6_0%,#2563eb_100%)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#004ac6] disabled:opacity-60"
                                 >
                                     <span v-if="releaseForm.processing">Releasing&hellip;</span>
                                     <span v-else>Release Grade to Student</span>

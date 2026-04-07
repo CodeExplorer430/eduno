@@ -41,10 +41,10 @@ function scorePercent(score: number, maxScore: number): number {
 }
 
 function cellClass(cell: GradeCell | null | undefined, maxScore: number): string {
-    if (!cell) return 'text-gray-300';
+    if (!cell) return 'text-[#737686]';
     const pct = scorePercent(cell.score, maxScore);
     if (pct >= 90) return 'text-green-700 bg-green-50';
-    if (pct >= 75) return 'text-blue-700 bg-blue-50';
+    if (pct >= 75) return 'text-[#004ac6] bg-[#dbe1ff]';
     if (pct >= 60) return 'text-amber-700 bg-amber-50';
     return 'text-red-700 bg-red-50';
 }
@@ -74,11 +74,11 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                     <div>
                         <h1
                             id="gradebook-heading"
-                            class="text-xl font-bold text-gray-900 dark:text-white"
+                            class="text-xl font-bold text-[#141b2b] dark:text-white"
                         >
                             Gradebook
                         </h1>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
+                        <p class="mt-1 text-sm text-[#434655] dark:text-slate-400">
                             <span class="font-mono font-medium">{{ section.course.code }}</span>
                             — {{ section.course.title }} · Section {{ section.section_name }}
                         </p>
@@ -86,7 +86,7 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
 
                     <a
                         :href="route('instructor.gradebook.export', section.id)"
-                        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
+                        class="inline-flex items-center gap-2 rounded-lg bg-[#e1e8fd] px-4 py-2 text-sm font-medium text-[#004ac6] hover:bg-[#dbe1ff] focus:outline-none focus:ring-2 focus:ring-[#004ac6] dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
                         aria-label="Export gradebook as CSV"
                     >
                         Export CSV
@@ -97,9 +97,9 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                 <div
                     v-if="students.length === 0"
                     role="status"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center dark:border-slate-600 dark:bg-slate-800"
+                    class="rounded-xl bg-[#f1f3ff] px-6 py-16 text-center dark:bg-slate-800"
                 >
-                    <p class="text-sm text-gray-500 dark:text-slate-400">
+                    <p class="text-sm text-[#434655] dark:text-slate-400">
                         No enrolled students yet.
                     </p>
                 </div>
@@ -108,27 +108,24 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                 <div
                     v-else-if="assignments.length === 0"
                     role="status"
-                    class="rounded-xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center dark:border-slate-600 dark:bg-slate-800"
+                    class="rounded-xl bg-[#f1f3ff] px-6 py-16 text-center dark:bg-slate-800"
                 >
-                    <p class="text-sm text-gray-500">No published assignments yet.</p>
+                    <p class="text-sm text-[#434655]">No published assignments yet.</p>
                 </div>
 
                 <!-- Gradebook matrix -->
-                <div
-                    v-else
-                    class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
-                >
+                <div v-else class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
                     <div class="overflow-x-auto">
                         <table
                             class="min-w-full border-collapse text-sm"
                             :aria-label="`Gradebook for ${section.course.code} ${section.section_name}`"
                         >
                             <!-- Column headers -->
-                            <thead class="bg-gray-50 dark:bg-slate-900">
+                            <thead class="bg-[#f1f3ff] dark:bg-slate-900">
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="sticky left-0 z-10 min-w-[180px] bg-gray-50 px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:bg-slate-900 dark:text-slate-400"
+                                        class="sticky left-0 z-10 min-w-[180px] bg-[#f1f3ff] px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#434655] dark:bg-slate-900 dark:text-slate-400"
                                     >
                                         Student
                                     </th>
@@ -136,20 +133,20 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                                         v-for="assignment in assignments"
                                         :key="assignment.id"
                                         scope="col"
-                                        class="min-w-[110px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
+                                        class="min-w-[110px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-[#434655] dark:text-slate-400"
                                     >
                                         <span class="block truncate" :title="assignment.title">
                                             {{ assignment.title }}
                                         </span>
                                         <span
-                                            class="block font-normal normal-case text-gray-400 dark:text-slate-500"
+                                            class="block font-normal normal-case text-[#737686] dark:text-slate-500"
                                         >
                                             /{{ assignment.max_score }}
                                         </span>
                                     </th>
                                     <th
                                         scope="col"
-                                        class="min-w-[80px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400"
+                                        class="min-w-[80px] px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-[#434655] dark:text-slate-400"
                                     >
                                         Total
                                     </th>
@@ -157,17 +154,15 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                             </thead>
 
                             <!-- Student rows -->
-                            <tbody
-                                class="divide-y divide-gray-100 bg-white dark:divide-slate-700 dark:bg-slate-800"
-                            >
+                            <tbody class="bg-white dark:bg-slate-800">
                                 <tr
                                     v-for="student in students"
                                     :key="student.id"
-                                    class="transition-colors hover:bg-gray-50 dark:hover:bg-slate-700/50"
+                                    class="transition-colors hover:bg-[#f1f3ff] dark:hover:bg-slate-700/50"
                                 >
                                     <!-- Sticky student name -->
                                     <td
-                                        class="sticky left-0 z-10 whitespace-nowrap bg-white px-6 py-3 font-medium text-gray-900 group-hover:bg-gray-50 dark:bg-slate-800 dark:text-white"
+                                        class="sticky left-0 z-10 whitespace-nowrap bg-white px-6 py-3 font-medium text-[#141b2b] dark:bg-slate-800 dark:text-white"
                                     >
                                         {{ student.name }}
                                     </td>
@@ -202,7 +197,7 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                                         </span>
                                         <span
                                             v-else
-                                            class="text-gray-300 dark:text-slate-600"
+                                            class="text-[#737686] dark:text-slate-600"
                                             aria-label="Not submitted"
                                         >
                                             —
@@ -211,7 +206,7 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
 
                                     <!-- Row total -->
                                     <td
-                                        class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300"
+                                        class="px-4 py-3 text-center font-semibold text-[#141b2b] dark:text-gray-300"
                                     >
                                         {{ student.total > 0 ? student.total : '—' }}
                                     </td>
@@ -219,19 +214,17 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                             </tbody>
 
                             <!-- Averages footer -->
-                            <tfoot
-                                class="border-t-2 border-gray-200 bg-gray-50 dark:border-slate-600 dark:bg-slate-900"
-                            >
+                            <tfoot class="bg-[#f1f3ff] dark:bg-slate-900">
                                 <tr>
                                     <td
-                                        class="sticky left-0 z-10 bg-gray-50 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:bg-slate-900 dark:text-slate-400"
+                                        class="sticky left-0 z-10 bg-[#f1f3ff] px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#434655] dark:bg-slate-900 dark:text-slate-400"
                                     >
                                         Average
                                     </td>
                                     <td
                                         v-for="assignment in assignments"
                                         :key="assignment.id"
-                                        class="px-4 py-3 text-center text-xs font-medium text-gray-600"
+                                        class="px-4 py-3 text-center text-xs font-medium text-[#434655]"
                                     >
                                         {{
                                             averages[assignment.id] !== null &&
@@ -250,14 +243,14 @@ function cellClass(cell: GradeCell | null | undefined, maxScore: number): string
                 <!-- Legend -->
                 <div
                     v-if="students.length > 0 && assignments.length > 0"
-                    class="mt-3 flex flex-wrap items-center gap-4 text-xs text-gray-500"
+                    class="mt-3 flex flex-wrap items-center gap-4 text-xs text-[#434655]"
                     aria-label="Score color legend"
                 >
                     <span class="flex items-center gap-1">
                         <span class="h-3 w-3 rounded-full bg-green-500"></span> ≥ 90%
                     </span>
                     <span class="flex items-center gap-1">
-                        <span class="h-3 w-3 rounded-full bg-blue-500"></span> ≥ 75%
+                        <span class="h-3 w-3 rounded-full bg-[#004ac6]"></span> ≥ 75%
                     </span>
                     <span class="flex items-center gap-1">
                         <span class="h-3 w-3 rounded-full bg-amber-500"></span> ≥ 60%

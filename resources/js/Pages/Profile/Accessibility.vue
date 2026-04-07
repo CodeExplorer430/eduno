@@ -60,7 +60,7 @@ function submit(): void {
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            <h1 class="text-xl font-semibold leading-tight text-[#141b2b] dark:text-gray-200">
                 {{ t('accessibility.title') }}
             </h1>
         </template>
@@ -69,27 +69,25 @@ function submit(): void {
             <form aria-label="Accessibility preferences form" novalidate @submit.prevent="submit">
                 <div class="space-y-4">
                     <!-- Font Size -->
-                    <div
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
-                    >
+                    <div class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
                         <div
-                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                            class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4 dark:bg-slate-900"
                         >
                             <div
-                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50"
+                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dbe1ff]"
                             >
                                 <MagnifyingGlassIcon
-                                    class="h-5 w-5 text-blue-600"
+                                    class="h-5 w-5 text-[#004ac6]"
                                     aria-hidden="true"
                                 />
                             </div>
                             <div class="flex-1">
-                                <h2 class="font-semibold text-gray-900 dark:text-white">
+                                <h2 class="font-semibold text-[#141b2b] dark:text-white">
                                     {{ t('accessibility.font_size') }}
                                 </h2>
                                 <p
                                     id="font_size_desc"
-                                    class="text-sm text-gray-500 dark:text-slate-400"
+                                    class="text-sm text-[#434655] dark:text-slate-400"
                                 >
                                     {{ t('accessibility.font_size_desc') }}
                                 </p>
@@ -118,8 +116,8 @@ function submit(): void {
                                         class="inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
                                         :class="
                                             form.font_size === opt.value
-                                                ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                                                : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-400 dark:hover:bg-slate-600'
+                                                ? 'border-[#004ac6] bg-[#dbe1ff] text-[#00174b] dark:bg-blue-900/30 dark:text-blue-300'
+                                                : 'border-[#c3c6d7] bg-white text-[#434655] hover:bg-[#f1f3ff] dark:border-slate-600 dark:bg-slate-700 dark:text-gray-400 dark:hover:bg-slate-600'
                                         "
                                     >
                                         {{ opt.label }}
@@ -129,11 +127,9 @@ function submit(): void {
                             <InputError class="mt-2" :message="form.errors.font_size" />
 
                             <!-- Live Preview -->
-                            <div
-                                class="mt-4 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-900"
-                            >
+                            <div class="mt-4 rounded-lg bg-[#f1f3ff] px-4 py-3 dark:bg-slate-900">
                                 <p
-                                    class="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-slate-500"
+                                    class="mb-1 text-xs font-semibold uppercase tracking-wider text-[#737686] dark:text-slate-500"
                                 >
                                     {{ t('accessibility.preview') }}
                                 </p>
@@ -146,7 +142,7 @@ function submit(): void {
                                             xlarge: '20px',
                                         }[form.font_size],
                                     }"
-                                    class="text-gray-800 dark:text-gray-200"
+                                    class="text-[#141b2b] dark:text-gray-200"
                                 >
                                     {{ t('accessibility.preview_text') }}
                                 </p>
@@ -155,9 +151,7 @@ function submit(): void {
                     </div>
 
                     <!-- High Contrast -->
-                    <div
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
-                    >
+                    <div class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-purple-50"
@@ -181,13 +175,13 @@ function submit(): void {
                             <div class="flex-1">
                                 <label
                                     for="high_contrast"
-                                    class="block font-semibold text-gray-900 cursor-pointer dark:text-white"
+                                    class="block font-semibold text-[#141b2b] cursor-pointer dark:text-white"
                                 >
                                     {{ t('accessibility.high_contrast') }}
                                 </label>
                                 <p
                                     id="high_contrast_desc"
-                                    class="text-sm text-gray-500 dark:text-slate-400"
+                                    class="text-sm text-[#434655] dark:text-slate-400"
                                 >
                                     {{ t('accessibility.high_contrast_desc') }}
                                 </p>
@@ -198,8 +192,8 @@ function submit(): void {
                                 type="button"
                                 :aria-pressed="form.high_contrast"
                                 :aria-describedby="'high_contrast_desc'"
-                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
-                                :class="form.high_contrast ? 'bg-blue-600' : 'bg-gray-300'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-[#c3c6d7] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
+                                :class="form.high_contrast ? 'bg-[#004ac6]' : 'bg-[#c3c6d7]'"
                                 @click="form.high_contrast = !form.high_contrast"
                             >
                                 <span class="sr-only">Toggle high contrast</span>
@@ -213,9 +207,7 @@ function submit(): void {
                     </div>
 
                     <!-- Reduced Motion -->
-                    <div
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
-                    >
+                    <div class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-50"
@@ -225,13 +217,13 @@ function submit(): void {
                             <div class="flex-1">
                                 <label
                                     for="reduced_motion"
-                                    class="block font-semibold text-gray-900 cursor-pointer dark:text-white"
+                                    class="block font-semibold text-[#141b2b] cursor-pointer dark:text-white"
                                 >
                                     {{ t('accessibility.reduced_motion') }}
                                 </label>
                                 <p
                                     id="reduced_motion_desc"
-                                    class="text-sm text-gray-500 dark:text-slate-400"
+                                    class="text-sm text-[#434655] dark:text-slate-400"
                                 >
                                     {{ t('accessibility.reduced_motion_desc') }}
                                 </p>
@@ -242,8 +234,8 @@ function submit(): void {
                                 type="button"
                                 :aria-pressed="form.reduced_motion"
                                 :aria-describedby="'reduced_motion_desc'"
-                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
-                                :class="form.reduced_motion ? 'bg-blue-600' : 'bg-gray-300'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-[#c3c6d7] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
+                                :class="form.reduced_motion ? 'bg-[#004ac6]' : 'bg-[#c3c6d7]'"
                                 @click="form.reduced_motion = !form.reduced_motion"
                             >
                                 <span class="sr-only">Toggle reduce motion</span>
@@ -257,9 +249,7 @@ function submit(): void {
                     </div>
 
                     <!-- Simplified Layout -->
-                    <div
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
-                    >
+                    <div class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-50"
@@ -272,13 +262,13 @@ function submit(): void {
                             <div class="flex-1">
                                 <label
                                     for="simplified_layout"
-                                    class="block font-semibold text-gray-900 cursor-pointer dark:text-white"
+                                    class="block font-semibold text-[#141b2b] cursor-pointer dark:text-white"
                                 >
                                     {{ t('accessibility.simplified_layout') }}
                                 </label>
                                 <p
                                     id="simplified_layout_desc"
-                                    class="text-sm text-gray-500 dark:text-slate-400"
+                                    class="text-sm text-[#434655] dark:text-slate-400"
                                 >
                                     {{ t('accessibility.simplified_layout_desc') }}
                                 </p>
@@ -289,8 +279,8 @@ function submit(): void {
                                 type="button"
                                 :aria-pressed="form.simplified_layout"
                                 :aria-describedby="'simplified_layout_desc'"
-                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
-                                :class="form.simplified_layout ? 'bg-blue-600' : 'bg-gray-300'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-[#c3c6d7] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
+                                :class="form.simplified_layout ? 'bg-[#004ac6]' : 'bg-[#c3c6d7]'"
                                 @click="form.simplified_layout = !form.simplified_layout"
                             >
                                 <span class="sr-only">Toggle simplified layout</span>
@@ -306,9 +296,7 @@ function submit(): void {
                     </div>
 
                     <!-- Dark Mode -->
-                    <div
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
-                    >
+                    <div class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
                         <div class="flex items-center gap-3 px-6 py-5">
                             <div
                                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-50"
@@ -318,13 +306,13 @@ function submit(): void {
                             <div class="flex-1">
                                 <label
                                     for="dark_mode"
-                                    class="block cursor-pointer font-semibold text-gray-900 dark:text-white"
+                                    class="block cursor-pointer font-semibold text-[#141b2b] dark:text-white"
                                 >
                                     {{ t('accessibility.dark_mode') }}
                                 </label>
                                 <p
                                     id="dark_mode_desc"
-                                    class="text-sm text-gray-500 dark:text-slate-400"
+                                    class="text-sm text-[#434655] dark:text-slate-400"
                                 >
                                     {{ t('accessibility.dark_mode_desc') }}
                                 </p>
@@ -335,8 +323,8 @@ function submit(): void {
                                 type="button"
                                 :aria-pressed="form.dark_mode"
                                 :aria-describedby="'dark_mode_desc'"
-                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-gray-300 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
-                                :class="form.dark_mode ? 'bg-blue-600' : 'bg-gray-300'"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-[#c3c6d7] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2 dark:border-slate-600 dark:focus:ring-offset-slate-800"
+                                :class="form.dark_mode ? 'bg-[#004ac6]' : 'bg-[#c3c6d7]'"
                                 @click="form.dark_mode = !form.dark_mode"
                             >
                                 <span class="sr-only">Toggle dark mode</span>
@@ -350,24 +338,22 @@ function submit(): void {
                     </div>
 
                     <!-- Language -->
-                    <div
-                        class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 dark:bg-slate-800 dark:ring-slate-700"
-                    >
+                    <div class="overflow-hidden rounded-xl bg-white dark:bg-slate-800">
                         <div
-                            class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-slate-700"
+                            class="flex items-center gap-3 bg-[#f1f3ff] px-6 py-4 dark:bg-slate-900"
                         >
                             <div
-                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50"
+                                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dbe1ff]"
                             >
-                                <LanguageIcon class="h-5 w-5 text-indigo-600" aria-hidden="true" />
+                                <LanguageIcon class="h-5 w-5 text-[#004ac6]" aria-hidden="true" />
                             </div>
                             <div class="flex-1">
-                                <h2 class="font-semibold text-gray-900 dark:text-white">
+                                <h2 class="font-semibold text-[#141b2b] dark:text-white">
                                     {{ t('accessibility.language') }}
                                 </h2>
                                 <p
                                     id="language_desc"
-                                    class="text-sm text-gray-500 dark:text-slate-400"
+                                    class="text-sm text-[#434655] dark:text-slate-400"
                                 >
                                     {{ t('accessibility.language_desc') }}
                                 </p>
@@ -396,8 +382,8 @@ function submit(): void {
                                         class="inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
                                         :class="
                                             form.language === opt.value
-                                                ? 'border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                                                : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-400 dark:hover:bg-slate-600'
+                                                ? 'border-[#004ac6] bg-[#dbe1ff] text-[#00174b] dark:bg-blue-900/30 dark:text-blue-300'
+                                                : 'border-[#c3c6d7] bg-white text-[#434655] hover:bg-[#f1f3ff] dark:border-slate-600 dark:bg-slate-700 dark:text-gray-400 dark:hover:bg-slate-600'
                                         "
                                     >
                                         {{ opt.label }}
@@ -414,7 +400,7 @@ function submit(): void {
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60"
+                        class="rounded-lg bg-[linear-gradient(135deg,#004ac6_0%,#2563eb_100%)] px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2 disabled:opacity-60"
                     >
                         {{ form.processing ? '…' : t('accessibility.save') }}
                     </button>

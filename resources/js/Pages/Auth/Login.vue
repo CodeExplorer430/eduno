@@ -38,7 +38,7 @@ const submit = () => {
         <div
             v-if="form.hasErrors && !form.errors.email && !form.errors.password"
             role="alert"
-            class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-800"
+            class="mb-4 rounded-md bg-[#ba1a1a]/10 p-4 text-sm text-[#ba1a1a]"
         >
             An error occurred. Please try again.
         </div>
@@ -86,11 +86,9 @@ const submit = () => {
                         v-model="form.remember"
                         type="checkbox"
                         name="remember"
-                        class="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        class="h-4 w-4 rounded border-[#c3c6d7] text-[#004ac6] focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2"
                     />
-                    <span class="text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500"
-                        >Remember me</span
-                    >
+                    <span class="text-sm text-[#434655]">Remember me</span>
                 </label>
             </div>
 
@@ -98,7 +96,7 @@ const submit = () => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 dark:text-gray-400 dark:text-slate-500 underline hover:text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-[#434655] underline hover:text-[#141b2b] focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2"
                 >
                     Forgot your password?
                 </Link>
@@ -117,16 +115,16 @@ const submit = () => {
 
         <!-- OAuth divider -->
         <div class="mt-6 flex items-center gap-3" aria-hidden="true">
-            <div class="h-px flex-1 bg-gray-200"></div>
-            <span class="text-xs text-gray-400 dark:text-slate-500 select-none">or</span>
-            <div class="h-px flex-1 bg-gray-200"></div>
+            <div class="h-px flex-1 bg-[#c3c6d7]"></div>
+            <span class="text-xs text-[#737686] select-none">or</span>
+            <div class="h-px flex-1 bg-[#c3c6d7]"></div>
         </div>
 
         <!-- Google SSO -->
         <a
             :href="route('auth.google.redirect')"
             aria-label="Sign in with Google"
-            class="mt-4 flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm transition hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="mt-4 flex w-full items-center justify-center gap-3 rounded-lg bg-[#f1f3ff] px-4 py-2.5 text-sm font-medium text-[#141b2b] transition hover:bg-[#e1e8fd] focus:outline-none focus:ring-2 focus:ring-[#004ac6] focus:ring-offset-2"
         >
             <!-- Google "G" logo (official brand SVG) -->
             <svg
